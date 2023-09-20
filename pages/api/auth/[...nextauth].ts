@@ -1,10 +1,10 @@
-import NextAuth from "next-auth";
-import { CredentialsProvider } from "next-auth/providers/credentials";
+import NextAuth, { AuthOptions, Awaitable } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
 
 const url = `http://192.168.1.121:9000`;
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -15,7 +15,7 @@ export const authOptions = {
         candidatePassword: { label: "Password", type: "password" },
       },
 
-      async authorize(credentials, req) {
+      async authorize(credentials, req): Promise<any> {
         const { data } = await axios.post(`${url}/auth/login`, {
           loginCredentials: credentials,
         });
@@ -31,8 +31,6 @@ export const authOptions = {
   ],
 
   secret: process.env.NEXTAUTH_SECRET,
-
-  url: process.env.NEXTAUTH_URL,
 
   pages: {
     signIn: "/login",
