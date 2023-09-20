@@ -9,7 +9,7 @@ import Link from "next/link";
 import React from "react";
 
 import axios from "axios";
-import validator from "validator/index";
+import isEmail from "validator/lib/isEmail";
 
 import { useGlobalContext } from "../../context";
 import Loading from "@/components//global/Loading";
@@ -50,7 +50,7 @@ const Register = () => {
     handleLoader(true);
     handleDisable(true);
 
-    if (!validator.isEmail(registerCredentials.email)) {
+    if (!isEmail(registerCredentials.email)) {
       handleMessages(true, "Please enter a valid email.", "warning");
       handleLoader(false);
       handleDisable(false);
