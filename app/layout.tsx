@@ -19,7 +19,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <AppProvider>
       <html lang="en">
-        <body className={`${poppins.variable} font-body scroll-smooth`}>{children}</body>
+        <body
+          className={`${poppins.variable} font-body scroll-smooth scrollbar-thin scrollbar-track-white scrollbar-thumb-secondary-500`}
+        >
+          {children}
+        </body>
       </html>
     </AppProvider>
   );

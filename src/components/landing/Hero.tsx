@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
-import landingImage from "../../../public/landing/SynchroFlow.svg";
+import collaborate from "@/public//landing/Collaborate.svg";
+
 import Link from "next/link";
 
 export default function Hero() {
@@ -10,23 +11,23 @@ export default function Hero() {
         className="max-w-screen-2xl flex flex-col gap-5 justify-center items-center w-full p-5 mt-10
                     t:p-10 l-s:p-20"
       >
-        <div className="flex flex-col gap-1 items-center justify-center t:gap-2">
+        <div className="flex flex-col gap-1 items-center justify-center t:gap-2 l-s:gap-5 w-full">
           <p
-            className="font-extrabold  font-header bg-gradient-to-r 
+            className="font-black  font-header bg-gradient-to-r 
                     from-primary-500 to-primary-800 text-transparent bg-clip-text
-                    text-lg t:text-4xl l-l:text-5xl"
+                    text-lg m-l:text-xl t:text-4xl l-s:text-5xl l-l:text-6xl"
           >
             Structure.Collaborate.Achieve!
           </p>
 
-          <p className="text-center font-medium leading-relaxed text-sm t:text-lg">
+          <p className="text-center leading-relaxed text-sm m-l:text-base  t:text-lg l-s:text-xl text-secondary-500">
             <span className="font-bold">Empowering Productivity, One Sync at a Time: </span>
             Welcome to SynchroFlow - <br className="hidden l-s:flex" /> Your Real-Time Task Management Hub. Conquer
             Tasks Together!
           </p>
         </div>
 
-        <div className="flex flex-col items-center justify-center gap-2 w-full t:flex-row">
+        <div className="flex flex-col items-center justify-center gap-2 w-full t:flex-row t:gap-5">
           <Link
             href="/register"
             className="p-2 rounded-md bg-primary-500 border-2 border-primary-500 t:w-36
@@ -45,11 +46,11 @@ export default function Hero() {
 
         <div className="w-full flex flex-col items-center justify-center ">
           <Image
-            src={landingImage}
+            src={collaborate}
             alt="landing"
             priority
             draggable={false}
-            className="animate-float drop-shadow-lg w-72 t:w-80 l-l:w-96"
+            className="animate-float drop-shadow-md w-72 t:w-80 l-l:w-96 saturate-150"
           />
         </div>
       </div>
