@@ -22,14 +22,14 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-screen h-screen bg-white">
+    <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full min-h-screen h-screen bg-white">
       <div
         className="absolute right-0 bottom-0 bg-secondary-500 w-full h-2/6
                   l-s:h-screen l-s:w-4/12"
       />
 
       <div
-        className="max-w-screen-2xl flex flex-col gap-5 justify-start l-s:justify-center items-center w-full h-full p-5 mt-10
+        className="max-w-screen-2xl flex flex-col gap-5 justify-start l-s:justify-center items-center w-full h-full p-5
                 t:p-10 l-s:p-20 l-s:flex-row"
       >
         <form
@@ -83,7 +83,6 @@ const Login = () => {
             className="animate-float drop-shadow-md :w-96 saturate-150"
           />
         </div>
-        B
       </div>
     </div>
   );

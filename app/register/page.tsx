@@ -79,7 +79,7 @@ const Register = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-screen h-screen bg-white">
+    <div className="absolute flex flex-col items-center justify-center w-full min-h-screen h-screen bg-white">
       {isLoading ? <Loading /> : null}
       {message.active && <Message message={message} handleMessages={handleMessages} />}
 
@@ -88,7 +88,7 @@ const Register = () => {
                   l-s:h-full l-s:w-4/12"
       />
       <div
-        className="max-w-screen-2xl flex flex-col gap-5 justify-start l-s:justify-center items-center w-full h-full p-5 mt-10
+        className="max-w-screen-2xl flex flex-col gap-5 justify-start l-s:justify-center items-center w-full h-full p-5
                 t:p-10 l-s:p-20 l-s:flex-row"
       >
         <form

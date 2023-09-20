@@ -8,7 +8,7 @@ const Hero = () => {
   return (
     <div className="flex flex-col items-center justify-center w-full min-h-screen bg-white">
       <div
-        className="max-w-screen-2xl flex flex-col gap-5 justify-center items-center w-full p-5 mt-10
+        className="max-w-screen-2xl flex flex-col gap-5 justify-center items-center w-full p-5
                     t:p-10 l-s:p-20"
       >
         <div className="flex flex-col gap-1 items-center justify-center t:gap-2 l-s:gap-5 w-full">
