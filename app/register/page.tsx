@@ -9,7 +9,7 @@ import Link from "next/link";
 import React from "react";
 
 import axios from "axios";
-import isEmail from "validator/lib/isEmail";
+import isEmail from "validator/lib/isEmail.js";
 
 import { useGlobalContext } from "../../context";
 import Loading from "@/components//global/Loading";
