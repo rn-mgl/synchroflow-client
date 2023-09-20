@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Offers() {
+const Offers = () => {
   return (
     <div className="flex flex-col items-center justify-start w-full min-h-screen bg-primary-500">
       <div
@@ -18,4 +18,6 @@ export default function Offers() {
       </div>
     </div>
   );
-}
+};
+
+export default Offers;

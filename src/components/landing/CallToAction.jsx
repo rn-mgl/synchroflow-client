@@ -3,7 +3,7 @@ import React from "react";
 import team from "@/public//landing/Team.svg";
 import Image from "next/image";
 
-export default function CallToAction() {
+const CallToAction = () => {
   return (
     <div className="flex flex-col items-center justify-center w-full min-h-screen bg-white">
       <div
@@ -42,4 +42,6 @@ export default function CallToAction() {
       </div>
     </div>
   );
-}
+};
+
+export default CallToAction;

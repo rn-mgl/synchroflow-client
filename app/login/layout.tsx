@@ -1,3 +1,4 @@
+import Logo from "@/components//global/Logo";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -5,5 +6,10 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
+  return (
+    <>
+      <Logo />
+      {children}
+    </>
+  );
 }

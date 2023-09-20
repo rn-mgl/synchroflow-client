@@ -4,7 +4,7 @@ import collaborate from "@/public//landing/Collaborate.svg";
 
 import Link from "next/link";
 
-export default function Hero() {
+const Hero = () => {
   return (
     <div className="flex flex-col items-center justify-center w-full min-h-screen bg-white">
       <div
@@ -56,4 +56,6 @@ export default function Hero() {
       </div>
     </div>
   );
-}
+};
+
+export default Hero;

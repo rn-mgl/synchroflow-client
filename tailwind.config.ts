@@ -38,7 +38,7 @@ const config: Config = {
           200: "#C2C6E8",
           100: "#DFE1F3",
         },
-        sucess: {
+        success: {
           900: "#3B6506",
           800: "#4C7A0B",
           700: "#659711",
@@ -85,14 +85,46 @@ const config: Config = {
       },
       animation: {
         float: "float 3s ease-in-out alternate infinite",
+        loading: "loading 600ms ease-in-out alternate infinite",
+        fadeIn: "fadeIn 150ms ease-in-out",
+        slideIn: "slideIn 500ms ease-in-out",
       },
       keyframes: {
         float: {
           "0%": {
-            transform: "translateY(-3%)",
+            transform: "translateY(-4%)",
           },
           "100%": {
-            transform: "translateY(3%)",
+            transform: "translateY(4%)",
+          },
+        },
+        loading: {
+          "0%": {
+            transform: "translateY(-1rem)",
+          },
+          "100%": {
+            transform: "translateY(1rem)",
+          },
+        },
+
+        fadeIn: {
+          "0%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "1",
+          },
+        },
+
+        slideIn: {
+          "0%": {
+            transform: "translateY(-10vh)",
+          },
+          "80%": {
+            transform: "translateY(2vh)",
+          },
+          "100%": {
+            transform: "translateY(0vh)",
           },
         },
       },
