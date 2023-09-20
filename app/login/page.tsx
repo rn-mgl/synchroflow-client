@@ -49,8 +49,9 @@ const Login = () => {
               name="candidateEmail"
               placeholder="Enter your email"
               type="text"
-              value={loginCredentials.email}
+              value={loginCredentials.candidateEmail}
               onChange={handleLoginCredentials}
+              required={true}
             />
           </div>
 
@@ -61,8 +62,9 @@ const Login = () => {
               name="candidatePassword"
               placeholder="Enter your password"
               type="password"
-              value={loginCredentials.password}
+              value={loginCredentials.candidatePassword}
               onChange={handleLoginCredentials}
+              required={true}
             />
           </div>
 
