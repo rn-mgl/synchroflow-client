@@ -30,6 +30,8 @@ const Login = () => {
   const { data: session } = useSession();
   const user = session?.user;
 
+  console.log(session);
+
   const handleLoginCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
