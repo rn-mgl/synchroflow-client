@@ -13,24 +13,23 @@ import login from "@/public//auth/Login.svg";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineUser } from "react-icons/ai";
-import { useGlobalContext } from "../../context";
 
 const Login = () => {
   const [loginCredentials, setLoginCredentials] = React.useState({ candidateEmail: "", candidatePassword: "" });
+  const [firstLogin, setFirstLogin] = React.useState(false);
 
   const { message, handleMessages } = useMessage();
   const { visiblePassword, toggleVisiblePassword } = useVisiblePassword();
   const { isLoading, handleLoader } = useLoader();
   const { disable, handleDisable } = useDisable();
 
-  const { url } = useGlobalContext();
   const { data: session } = useSession();
+  const router = useRouter();
   const user = session?.user;
-
-  console.log(session);
 
   const handleLoginCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
@@ -48,6 +47,7 @@ const Login = () => {
     e.preventDefault();
     handleLoader(true);
     handleDisable(true);
+    setFirstLogin(true);
     try {
       const data = await signIn("credentials", {
         candidateEmail: loginCredentials.candidateEmail,
@@ -58,21 +58,25 @@ const Login = () => {
         handleMessages(true, "The email and password does not match.", "error");
         handleLoader(false);
         handleDisable(false);
+        setFirstLogin(false);
       }
     } catch (error: any) {
       console.log(error);
       handleLoader(false);
       handleDisable(false);
+      setFirstLogin(false);
       handleMessages(true, error?.response?.data, "error");
     }
   };
 
-  // React.useEffect(() => {
-  //   if (user) {
-  //     handleLoader(false);
-  //     handleDisable(false);
-  //   }
-  // }, [handleDisable, handleLoader, user]);
+  React.useEffect(() => {
+    if (firstLogin && user?.token) {
+      handleLoader(false);
+      handleDisable(false);
+
+      router.push("/hub");
+    }
+  }, [user?.token, router, firstLogin, handleDisable, handleLoader]);
 
   return (
     <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full min-h-screen h-screen bg-white">
