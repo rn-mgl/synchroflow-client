@@ -3,9 +3,9 @@ import React from "react";
 const useDisable = () => {
   const [disable, setDisable] = React.useState(false);
 
-  const handleDisable = (status: boolean) => {
+  const handleDisable = React.useCallback((status: boolean) => {
     setDisable(status);
-  };
+  }, []);
 
   return {
     disable,

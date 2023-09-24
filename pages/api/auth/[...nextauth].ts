@@ -1,4 +1,4 @@
-import NextAuth, { AuthOptions, Awaitable } from "next-auth";
+import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
 
@@ -21,7 +21,7 @@ export const authOptions: AuthOptions = {
         });
 
         if (data) {
-          const user = { name: data.primary };
+          const user = data;
           return user;
         } else {
           return null;
@@ -39,6 +39,22 @@ export const authOptions: AuthOptions = {
 
   session: {
     strategy: "jwt",
+    maxAge: 7 * 24 * 60 * 60,
+  },
+
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.user = user;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token.user) {
+        session.user = token.user;
+      }
+      return session;
+    },
   },
 };
 

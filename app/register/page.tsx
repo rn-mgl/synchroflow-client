@@ -1,7 +1,7 @@
 "use client";
 import useLoader from "@/components//hooks/useLoading";
 import useMessage from "@/components//hooks/useMessage";
-import InputComp from "@/components//input/InputComp";
+import TextComp from "@/components//input/TextComp";
 import signup from "@/public//auth/Signup.svg";
 
 import Image from "next/image";
@@ -11,11 +11,15 @@ import React from "react";
 import axios from "axios";
 import isEmail from "validator/lib/isEmail";
 
-import { useGlobalContext } from "../../context";
 import Loading from "@/components//global/Loading";
-import { useRouter } from "next/navigation";
 import Message from "@/components//global/Message";
 import useDisable from "@/components//hooks/useDisable";
+import PasswordComp from "@/components//input/PasswordComp";
+import { useRouter } from "next/navigation";
+import { useGlobalContext } from "../../context";
+
+import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineUser, AiOutlineMail } from "react-icons/ai";
+import { useVisiblePassword } from "@/components//hooks/useVisiblePassword";
 
 const Register = () => {
   const [registerCredentials, setRegisterCredentials] = React.useState({
@@ -28,6 +32,7 @@ const Register = () => {
   const { message, handleMessages } = useMessage();
   const { isLoading, handleLoader } = useLoader();
   const { disable, handleDisable } = useDisable();
+  const { visiblePassword, toggleVisiblePassword } = useVisiblePassword();
 
   const { url } = useGlobalContext();
   const router = useRouter();
@@ -104,11 +109,10 @@ const Register = () => {
 
           <div className="w-full flex flex-col gap-2">
             <p className="text-xs">Name</p>
-            <InputComp
-              icon={null}
+            <TextComp
+              Icon={AiOutlineUser}
               name="name"
               placeholder="Enter your name"
-              type="text"
               value={registerCredentials.name}
               onChange={handleRegisterCredentials}
               required={true}
@@ -117,11 +121,10 @@ const Register = () => {
 
           <div className="w-full flex flex-col gap-2">
             <p className="text-xs">Surname</p>
-            <InputComp
-              icon={null}
+            <TextComp
+              Icon={AiOutlineUser}
               name="surname"
               placeholder="Enter your surname"
-              type="text"
               value={registerCredentials.surname}
               onChange={handleRegisterCredentials}
               required={true}
@@ -130,11 +133,10 @@ const Register = () => {
 
           <div className="w-full flex flex-col gap-2">
             <p className="text-xs">Email</p>
-            <InputComp
-              icon={null}
+            <TextComp
+              Icon={AiOutlineMail}
               name="email"
               placeholder="Enter your email"
-              type="email"
               value={registerCredentials.email}
               onChange={handleRegisterCredentials}
               required={true}
@@ -143,11 +145,12 @@ const Register = () => {
 
           <div className="w-full flex flex-col gap-2">
             <p className="text-xs">Password</p>
-            <InputComp
-              icon={null}
+            <PasswordComp
+              Icon={visiblePassword ? AiOutlineEyeInvisible : AiOutlineEye}
+              viewPassword={toggleVisiblePassword}
               name="password"
               placeholder="Enter your password"
-              type="password"
+              type={visiblePassword ? "text" : "password"}
               value={registerCredentials.password}
               onChange={handleRegisterCredentials}
               required={true}

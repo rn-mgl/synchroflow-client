@@ -1,7 +1,9 @@
-import "./globals.css";
-import type { Metadata } from "next";
-import { Poppins, Lato } from "next/font/google";
+"use client";
+import { Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
+import { Poppins } from "next/font/google";
 import { AppProvider } from "../context";
+import "./globals.css";
 
 const poppins = Poppins({
   display: "auto",
@@ -10,20 +12,17 @@ const poppins = Poppins({
   variable: "--poppins",
 });
 
-export const metadata: Metadata = {
-  title: "SynchroFlow",
-  description: "Task management tool",
-};
-
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children, params }: { children: React.ReactNode; params: Session }) {
   return (
     <AppProvider>
       <html lang="en">
-        <body
-          className={`${poppins.variable} font-body scroll-smooth scrollbar-thin scrollbar-track-white scrollbar-thumb-secondary-500`}
-        >
-          {children}
-        </body>
+        <SessionProvider session={params}>
+          <body
+            className={`${poppins.variable} font-body scroll-smooth scrollbar-thin scrollbar-track-white scrollbar-thumb-secondary-500`}
+          >
+            {children}
+          </body>
+        </SessionProvider>
       </html>
     </AppProvider>
   );

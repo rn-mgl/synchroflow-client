@@ -1,4 +1,9 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  reactStrictMode: true,
+  env: {
+    NEXTAUTH_SECRET: "41582306921153645163930625375900 ",
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
