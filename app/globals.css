@@ -12,3 +12,13 @@ input[type="password"]::-ms-clear,
 input[type="password"]::-ms-reveal {
   display: none;
 }
+
+button {
+  cursor: pointer;
+}
+
+@layer base {
+  .cstm-scrollbar {
+    @apply scroll-smooth scrollbar-thin scrollbar-track-white scrollbar-thumb-secondary-500;
+  }
+}

@@ -6,11 +6,13 @@ const Hub = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-screen h-screen bg-white">
+    <div className="flex flex-col items-center justify-center w-full min-h-screen h-screen bg-neutral-100 overflow-y-auto">
       <div
-        className="max-w-screen-2xl flex flex-col gap-5 justify-center bg-neutral-100 h-full
+        className="max-w-screen-2xl flex flex-col gap-5 justify-center  h-full
         items-center w-full p-5 t:p-10"
-      ></div>
+      >
+        <div className="flex w-full h-full"></div>
+      </div>
     </div>
   );
 };

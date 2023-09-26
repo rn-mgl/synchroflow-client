@@ -17,11 +17,7 @@ export default function RootLayout({ children, params }: { children: React.React
     <AppProvider>
       <html lang="en">
         <SessionProvider session={params}>
-          <body
-            className={`${poppins.variable} font-body scroll-smooth scrollbar-thin scrollbar-track-white scrollbar-thumb-secondary-500`}
-          >
-            {children}
-          </body>
+          <body className={`${poppins.variable} font-body cstm-scrollbar`}>{children}</body>
         </SessionProvider>
       </html>
     </AppProvider>

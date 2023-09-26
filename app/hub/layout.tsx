@@ -1,5 +1,4 @@
-import Logo from "@/components//global/Logo";
-import SideNav from "@/components//global/SideNav";
+import Nav from "@/components//global/Nav";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -8,9 +7,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <SideNav />
-      {children}
-    </>
+    <div className="fixed top-0 left-0 w-full h-screen flex flex-col">
+      <Nav>{children}</Nav>
+    </div>
   );
 }
