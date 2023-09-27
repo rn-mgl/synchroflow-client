@@ -47,51 +47,57 @@ const Hub = () => {
         className="max-w-screen-2xl flex flex-col gap-5 justify-start h-auto
         items-center w-full p-5 t:p-10"
       >
-        <div className="flex flex-col gap-5 w-full justify-start items-center">
-          <div className="flex flex-col w-full items-center justify-center gap-5 l-s:flex-row">
-            <div
-              className="w-full rounded-lg bg-secondary-500 flex flex-col h-full
-                    p-4 text-white gap-2 l-s:w-4/12"
-            >
-              <div className="flex flex-col gap-2 items-center justify-center">
-                <p>Ongoing Tasks</p>
-                <p className="text-4xl font-medium">65</p>
-              </div>
+        <div
+          className="grid grid-cols-1 grid-rows-4 t:grid-cols-2 t:grid-rows-2 gap-5 
+                    l-s:grid-cols-2 l-s:grid-rows-2 l-l:grid-cols-3 l-l:grid-rows-3"
+        >
+          <div
+            className="w-full rounded-lg bg-secondary-500 flex flex-col
+                    p-5 text-white gap-2 l-l:row-span-1"
+          >
+            <div className="flex flex-col gap-2 items-center justify-center">
+              <p>Ongoing Tasks</p>
+              <p className="text-4xl font-medium">65</p>
+            </div>
 
-              <div className="h-44 flex flex-col items-center justify-center">
-                <Pie data={pieData} updateMode="active" />
-              </div>
+            <div className="h-48 flex flex-col items-center justify-center">
+              <Pie data={pieData} updateMode="active" />
+            </div>
+          </div>
+
+          <div
+            className="w-full rounded-lg bg-neutral-200 flex flex-col 
+                    p-5 text-secondary-500 gap-2"
+          >
+            <div className="flex flex-col gap-2 items-center justify-center">
+              <p>To do</p>
             </div>
 
             <div
-              className="w-full rounded-lg bg-neutral-200 flex flex-col 
-                    p-4 text-secondary-500 gap-2 h-full l-s:w-8/12"
+              className="h-full flex flex-col items-center justify-center p-5 
+                    bg-neutral-50 rounded-md"
             >
-              <div className="flex flex-col gap-2 items-center justify-center">
-                <p>To do</p>
-              </div>
-
-              <div
-                className="h-52 flex flex-col items-center justify-center p-5 
-                    bg-neutral-50 rounded-md mt-auto"
-              >
+              <div className="w-full h-48 mt-auto">
                 <Line data={lineData} updateMode="active" options={{ maintainAspectRatio: false }} />
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col items-center justify-center l-s:w-4/12 l-s:ml-auto gap-5">
+          <div className="h-full">
             <Calendar allowPartialRange={false} />
+          </div>
 
-            <div className="flex flex-col gap-5 items-start justify-center p-5 bg-white w-full rounded-lg">
-              <div className="flex flex-row w-full">
-                <p className="text-sm">Task Today</p>
-              </div>
-
-              <div className="bg-neutral-200 rounded-lg w-full h-40" />
-
-              <p className="font-semibold">Task Title</p>
+          <div
+            className="flex flex-col gap-5 items-start justify-center p-5 
+                        bg-white w-full rounded-lg h-full l-l:col-start-3 l-l:row-span-2"
+          >
+            <div className="flex flex-row w-full">
+              <p className="text-sm">Task Today</p>
             </div>
+
+            <div className="bg-neutral-200 rounded-lg w-full h-full" />
+
+            <p className="font-semibold">Task Title</p>
           </div>
         </div>
       </div>
