@@ -129,7 +129,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             onClick={() => toggleIsVisible("link")}
             href="/hub"
             className={`flex flex-row items-center justify-center gap-4 
-                      w-full p-4 hover:bg-neutral-200 rounded-lg text-secondary-500 transition-all ${
+                      w-full p-4 hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
                         path === "/hub"
                           ? "opacity-100 bg-gradient-to-br from-primary-500 to-primary-900 text-white"
                           : "opacity-50"
@@ -145,7 +145,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             onClick={() => toggleIsVisible("link")}
             href="/hub/tasks"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
-                      hover:bg-neutral-200 rounded-lg text-secondary-500 transition-all ${
+                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
                         path?.includes("tasks")
                           ? "opacity-100 bg-gradient-to-br from-primary-500 to-primary-900 text-white"
                           : "opacity-50"
@@ -161,7 +161,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             onClick={() => toggleIsVisible("link")}
             href="/hub/associates"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
-                      hover:bg-neutral-200 rounded-lg text-secondary-500 transition-all ${
+                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
                         path?.includes("associates")
                           ? "opacity-100 bg-gradient-to-br from-primary-500 to-primary-900 text-white"
                           : "opacity-50"
@@ -177,7 +177,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             onClick={() => toggleIsVisible("link")}
             href="/hub/messages"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
-                      hover:bg-neutral-200 rounded-lg text-secondary-500 transition-all ${
+                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
                         path?.includes("messages")
                           ? "opacity-100 bg-gradient-to-br from-primary-500 to-primary-900 text-white"
                           : "opacity-50"
@@ -193,7 +193,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             onClick={() => toggleIsVisible("link")}
             href="/hub/settings"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
-                      hover:bg-neutral-200 rounded-lg text-secondary-500 transition-all ${
+                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
                         path?.includes("settings")
                           ? "opacity-100 bg-gradient-to-br from-primary-500 to-primary-900 text-white"
                           : "opacity-50"
@@ -208,7 +208,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 
         <button
           onClick={logOut}
-          className="flex flex-row items-center justify-center gap-4 w-full p-4 hover:bg-neutral-200 rounded-lg
+          className="flex flex-row items-center justify-center gap-4 w-full p-4 hover:bg-neutral-150 rounded-lg
                         text-secondary-500 transition-all opacity-50 mt-auto"
         >
           <div>
@@ -258,7 +258,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 
         <div
           className="w-full h-full flex flex-col overflow-y-auto justify-start 
-                    cstm-scrollbar bg-neutral-100"
+                    cstm-scrollbar bg-neutral-50"
         >
           {children}
         </div>

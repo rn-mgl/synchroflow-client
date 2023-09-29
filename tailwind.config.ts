@@ -16,6 +16,9 @@ const config: Config = {
         body: "var(--poppins)",
       },
       colors: {
+        neutral: {
+          150: "rgb(238, 238, 238)",
+        },
         primary: {
           900: "#10197A",
           800: "#1A2793",
