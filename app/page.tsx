@@ -4,7 +4,6 @@ import Offers from "@/components//landing/Offers";
 import CallToAction from "@/components//landing/CallToAction";
 import React from "react";
 import { Metadata } from "next";
-import { useSession } from "next-auth/react";
 
 export const metadata: Metadata = {
   title: "SynchroFlow",
