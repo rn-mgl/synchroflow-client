@@ -7,7 +7,7 @@ const CallToAction = () => {
   return (
     <div className="flex flex-col items-center justify-center w-full min-h-screen bg-white">
       <div
-        className="max-w-screen-xl flex flex-col gap-5 justify-center items-center w-full p-5 mt-10
+        className="max-w-screen-xl flex flex-col gap-5 justify-center items-center w-full p-5
                 t:p-10 l-s:p-20"
       >
         <p

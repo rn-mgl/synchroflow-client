@@ -53,7 +53,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
       if (using === "button") {
         return !prev;
       } else if (using === "link") {
-        // do not close if on laptop view if nav is not closed
+        // will not close if on laptop view if nav is not closed
         if (window.innerWidth >= 1024) {
           return prev && true;
         } else {
@@ -104,16 +104,12 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
                       isVisible ? "flex l-s:w-[20rem]" : "hidden l-s:flex l-s:w-[6rem]"
                     } `}
       >
-        <div className={`flex flex-row gap-2 items-center justify-center relative px-2.5`}>
+        <div className="flex flex-row gap-2 items-center justify-center relative px-2.5">
           <button
             onClick={() => toggleIsVisible("button")}
             className={`p-2 border-[1px] rounded-full border-inherit ${isVisible ? "mr-auto" : "l-s:mx-auto"}`}
           >
-            {isVisible ? (
-              <AiOutlineClose className="text-lg text-secondary-300" />
-            ) : (
-              <AiOutlineMenu className="text-lg text-secondary-300" />
-            )}
+            <AiOutlineMenu className="text-lg text-secondary-300" />
           </button>
 
           <p

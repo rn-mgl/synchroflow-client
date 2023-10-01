@@ -1,8 +1,7 @@
 import Logo from "@/components//global/Logo";
+import CallToAction from "@/components//landing/CallToAction";
 import Hero from "@/components//landing/Hero";
 import Offers from "@/components//landing/Offers";
-import CallToAction from "@/components//landing/CallToAction";
-import React from "react";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {

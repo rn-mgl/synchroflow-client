@@ -2,13 +2,14 @@
 import { useSession } from "next-auth/react";
 import React from "react";
 
-import { Chart, ArcElement, ChartData } from "chart.js/auto";
+import { Chart, ArcElement } from "chart.js/auto";
 import { Line, Pie } from "react-chartjs-2";
 import Calendar from "react-calendar";
 import { BsChevronDown, BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
 const Hub = () => {
   const { data: session } = useSession();
+  const user = session?.user;
 
   Chart.register(ArcElement);
   Chart.defaults.font.family = "Poppins, sans-serif";
@@ -43,13 +44,13 @@ const Hub = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-start w-full">
+    <div className="flex flex-col items-center justify-start w-full ">
       <div
-        className="max-w-screen-2xl flex flex-col gap-5 justify-start h-auto
-        items-center w-full p-5 t:p-10"
+        className="max-w-screen-2xl flex flex-col gap-5 justify-start h-auto 
+        items-center w-full"
       >
         <div
-          className="grid grid-cols-1 grid-rows-6 t:grid-cols-2 t:grid-rows-2 gap-5 
+          className="grid grid-cols-1 grid-rows-6 t:grid-cols-2 t:grid-rows-2 gap-5  p-5 t:p-10 
                     l-s:grid-cols-2 l-s:grid-rows-2 l-l:grid-cols-3 l-l:grid-rows-3"
         >
           <div
@@ -91,7 +92,7 @@ const Hub = () => {
           </div>
 
           <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 l-l:order-5 l-l:row-start-2 l-l:col-span-2">
-            <div className="flex flex-row gap-2 items-center justify-between font-semibold">
+            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
               <p>Latest Associates</p>
               <div className="flex flex-row gap-2 items-center justify-between">
                 <button>
@@ -127,7 +128,7 @@ const Hub = () => {
           </div>
 
           <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 l-l:order-6 l-l:col-span-2">
-            <div className="flex flex-row gap-2 items-center justify-between font-semibold">
+            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
               <p>Upcoming Tasks</p>
               <div className="flex flex-row gap-2 items-center justify-between">
                 <button>
@@ -154,7 +155,7 @@ const Hub = () => {
                         bg-white w-full rounded-lg h-full l-l:col-start-3 l-l:row-span-2 l-l:order-4"
           >
             <div className="flex flex-row w-full">
-              <p className="text-sm">Task Today</p>
+              <p className="text-sm font-semibold">Task Today</p>
             </div>
 
             <div className="bg-neutral-150 rounded-lg w-full h-full l-l:h-3/6" />
