@@ -2,7 +2,10 @@ import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
 
-const url = `http://192.168.1.121:9000`;
+const local = "http://192.168.1.121:9000";
+const prod = "https://synchroflow-server.onrender.com";
+
+const url = local;
 
 export const authOptions: AuthOptions = {
   providers: [

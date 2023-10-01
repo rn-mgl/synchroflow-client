@@ -11,7 +11,7 @@ interface AppContextData {
 const AppContext = React.createContext<AppContextData | null>(null);
 
 const local = "http://192.168.1.121:9000";
-const prod = "";
+const prod = "https://synchroflow-server.onrender.com";
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const url = local;
