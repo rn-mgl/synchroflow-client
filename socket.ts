@@ -1,5 +1,6 @@
 import { io } from "socket.io-client";
 
-const URL = process.env.NODE_ENV === "production" ? undefined : "http://localhost:3000";
+const local = "http://192.168.1.121:9000";
+const prod = "https://synchroflow-server.onrender.com";
 
-export const socket = io("http://192.168.1.121:9000", { autoConnect: false });
+export const socket = io(prod, { autoConnect: false });
