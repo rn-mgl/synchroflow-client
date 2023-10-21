@@ -253,7 +253,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
         </div>
 
         <div
-          className="w-full h-full flex flex-col overflow-y-auto justify-start 
+          className="w-full h-screen flex flex-col overflow-y-auto justify-start 
                     cstm-scrollbar bg-neutral-50"
         >
           {children}

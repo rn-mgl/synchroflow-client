@@ -1,9 +1,9 @@
 "use client";
 import SearchFilter from "@/components//filter/SearchFilter";
-import TaskCards from "@/components//tasks/TaskCards";
+import TasksScroller from "@/components//tasks/TasksScroller";
 import React from "react";
-import { AiOutlineClockCircle, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
-import { BsChevronLeft, BsChevronRight, BsFilter } from "react-icons/bs";
+import { AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
+import { BsFilter } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
 
 const Tasks = () => {
@@ -20,7 +20,7 @@ const Tasks = () => {
     <div className="flex flex-col items-center justify-start w-full h-full">
       <div
         className="max-w-screen-2xl flex flex-col justify-start 
-                items-center w-full  h-full"
+                items-center w-full h-full"
       >
         <div className="flex flex-col w-full items-center justify-start p-5 t:p-10 gap-5 h-auto">
           <div className="bg-white w-full p-5 flex flex-col gap-5 rounded-lg h-fit">
@@ -69,41 +69,9 @@ const Tasks = () => {
             </div>
           </div>
 
-          <div className=" w-full flex flex-col gap-5 rounded-lg items-center h-full">
-            <div className="flex flex-row justify-between w-full">
-              <p className="font-semibold">Today&apos;s Tasks</p>
-              <div className="flex flex-row gap-2 items-center justify-between">
-                <button>
-                  <BsChevronLeft />
-                </button>
-                <button>
-                  <BsChevronRight />
-                </button>
-              </div>
-            </div>
+          <TasksScroller label="Today's Task" />
 
-            <TaskCards title="Title" type="Type" deadline={20} progress={90} />
-          </div>
-
-          <div className=" w-full flex flex-col gap-5 rounded-lg items-center h-full">
-            <div className="flex flex-row justify-between w-full">
-              <p className="font-semibold">New Task</p>
-              <div className="flex flex-row gap-2 items-center justify-between">
-                <button>
-                  <BsChevronLeft />
-                </button>
-                <button>
-                  <BsChevronRight />
-                </button>
-              </div>
-            </div>
-
-            <TaskCards title="Title" type="Type" deadline={20} progress={90} />
-
-            <TaskCards title="Title" type="Type" deadline={20} progress={90} />
-
-            <TaskCards title="Title" type="Type" deadline={20} progress={90} />
-          </div>
+          <TasksScroller label="New Task" />
         </div>
       </div>
     </div>
