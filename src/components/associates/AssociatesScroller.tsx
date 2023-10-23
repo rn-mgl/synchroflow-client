@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
-import TaskCards from "./TaskCards";
+import AssociateCards from "./AssociateCards";
 
 interface Props {
   label: string;
@@ -9,7 +9,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-const TasksScroller: React.FC<Props> = (props) => {
+const AssociatesScroller: React.FC<Props> = (props) => {
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const [activePage, setActivePage] = React.useState(0);
   const [scrollRange, setScrollRange] = React.useState(0);
@@ -55,7 +55,7 @@ const TasksScroller: React.FC<Props> = (props) => {
       <div className="relative flex flex-row gap-5 w-full h-full overflow-x-hidden items-center justify-start">
         <div
           ref={scrollRef}
-          style={{ translate: `${activePage * 340 * -1}px 0px` }}
+          style={{ translate: `${activePage * 276 * -1}px 0px` }}
           className="absolute w-full h-full flex flex-row gap-5 items-center justify-start transition-all task-scroller p-2"
         >
           {props.children}
@@ -65,4 +65,4 @@ const TasksScroller: React.FC<Props> = (props) => {
   );
 };
 
-export default TasksScroller;
+export default AssociatesScroller;
