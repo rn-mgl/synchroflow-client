@@ -6,8 +6,6 @@ interface Props {
   type: string;
   progress: number;
   deadline: number | null;
-  activePage: number;
-  page: number;
 }
 
 const profilePictures = new Array(20).fill(1);
@@ -25,24 +23,10 @@ const TaskCards: React.FC<Props> = (props) => {
     );
   });
 
-  let pos = "";
-
-  if (props.activePage === props.page) {
-    pos = "translate-x-0";
-  }
-
-  if (props.activePage > props.page) {
-    pos = "-translate-x-full";
-  }
-
-  if (props.activePage < props.page) {
-    pos = "translate-x-full";
-  }
-
   return (
-    <div className={`flex flex-row gap-5 justify-center w-full h-full absolute transition-all duration-75 ${pos}`}>
+    <div className="flex flex-row gap-5 justify-center min-w-[20rem] w-80 h-full select-none">
       <div className="bg-white w-full p-5 rounded-lg h-full flex flex-col gap-2">
-        <div className="bg-primary-100 w-full h-full rounded-2xl">{props.page}</div>
+        <div className="bg-primary-100 w-full h-full rounded-2xl" />
 
         <div className="flex flex-col gap-1">
           <p className="font-bold">{props.title}</p>

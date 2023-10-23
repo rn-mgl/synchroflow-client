@@ -7,31 +7,29 @@ interface Props {
   label: string;
 }
 
-const tasks = [1, 2, 3, 4, 5];
+const tasks = [1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5];
 
 const TasksScroller: React.FC<Props> = (props) => {
+  const scrollRef = React.useRef<HTMLDivElement>(null);
   const [activePage, setActivePage] = React.useState(0);
+  const [scrollRange, setScrollRange] = React.useState(0);
 
   const handleNextPage = () => {
-    setActivePage((prev) => (prev + 1 > tasks.length - 1 ? tasks.length - 1 : prev + 1));
+    if (scrollRange < 4740) {
+      setActivePage((prev) => (prev + 1 > tasks.length ? tasks.length : prev + 1));
+      setScrollRange((prev) => prev + 340);
+    }
   };
 
   const handlePrevPage = () => {
-    setActivePage((prev) => (prev - 1 < 0 ? 0 : prev - 1));
+    if (scrollRange > 0) {
+      setActivePage((prev) => (prev - 1 < 0 ? 0 : prev - 1));
+      setScrollRange((prev) => prev - 340);
+    }
   };
 
   const mappedTaskCards = tasks.map((task, index) => {
-    return (
-      <TaskCards
-        key={index}
-        title="Title"
-        type="Type"
-        deadline={20}
-        progress={90}
-        activePage={activePage}
-        page={index}
-      />
-    );
+    return <TaskCards key={index} title="Title" type="Type" deadline={20} progress={90} />;
   });
 
   return (
@@ -39,16 +37,32 @@ const TasksScroller: React.FC<Props> = (props) => {
       <div className="flex flex-row justify-between w-full">
         <p className="font-semibold">{props.label}</p>
         <div className="flex flex-row gap-2 items-center justify-between">
-          <button onClick={handlePrevPage}>
+          <button
+            className="hover:bg-secondary-500 hover:bg-opacity-10 p-2 
+                      rounded-full flex flex-col items-center justify-center"
+            onClick={handlePrevPage}
+          >
             <BsChevronLeft />
           </button>
-          <button onClick={handleNextPage}>
+          <button
+            className="hover:bg-secondary-500 hover:bg-opacity-10 p-2 
+                      rounded-full flex flex-col items-center justify-center"
+            onClick={handleNextPage}
+          >
             <BsChevronRight />
           </button>
         </div>
       </div>
 
-      <div className="relative flex flex-row gap-5 w-full h-full overflow-hidden">{mappedTaskCards}</div>
+      <div className="relative flex flex-row gap-5 w-full h-full overflow-x-auto scrollbar-none items-center justify-start">
+        <div
+          ref={scrollRef}
+          style={{ translate: `${activePage * 340 * -1}px 0px` }}
+          className="absolute w-full h-full flex flex-row gap-5 items-center justify-start transition-all"
+        >
+          {mappedTaskCards}
+        </div>
+      </div>
     </div>
   );
 };
