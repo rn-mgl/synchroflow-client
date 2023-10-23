@@ -2,7 +2,7 @@
 import SearchFilter from "@/components//filter/SearchFilter";
 import TasksScroller from "@/components//tasks/TasksScroller";
 import React from "react";
-import { AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
+import { AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
 import { BsFilter } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
 
@@ -68,6 +68,17 @@ const Tasks = () => {
               </div>
             </div>
           </div>
+
+          <button
+            className="w-full p-2 rounded-md bg-primary-500 text-white font-medium 
+                    t:w-fit t:px-4 t:mr-auto flex flex-row items-center justify-center gap-2
+                    hover:shadow-md"
+          >
+            <div>
+              <AiOutlinePlus />
+            </div>
+            Create Task
+          </button>
 
           <TasksScroller label="Today's Task" />
 

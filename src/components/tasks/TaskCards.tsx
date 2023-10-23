@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 
@@ -25,8 +26,8 @@ const TaskCards: React.FC<Props> = (props) => {
 
   return (
     <div className="flex flex-row gap-5 justify-center min-w-[20rem] w-80 h-full select-none">
-      <div className="bg-white w-full p-5 rounded-lg h-full flex flex-col gap-2">
-        <div className="bg-primary-100 w-full h-full rounded-2xl" />
+      <div className="bg-white w-full p-5 rounded-lg h-full flex flex-col gap-2 hover:shadow-md">
+        <Link href={`/hub/tasks/123`} className="bg-primary-100 w-full h-full rounded-2xl" />
 
         <div className="flex flex-col gap-1">
           <p className="font-bold">{props.title}</p>

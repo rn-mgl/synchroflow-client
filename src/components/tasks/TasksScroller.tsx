@@ -7,7 +7,7 @@ interface Props {
   label: string;
 }
 
-const tasks = [1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5];
+const tasks = [1, 2, 3, 4, 5];
 
 const TasksScroller: React.FC<Props> = (props) => {
   const scrollRef = React.useRef<HTMLDivElement>(null);
@@ -15,9 +15,11 @@ const TasksScroller: React.FC<Props> = (props) => {
   const [scrollRange, setScrollRange] = React.useState(0);
 
   const handleNextPage = () => {
-    if (scrollRange < 4740) {
-      setActivePage((prev) => (prev + 1 > tasks.length ? tasks.length : prev + 1));
-      setScrollRange((prev) => prev + 340);
+    if (scrollRef.current) {
+      if (scrollRange < scrollRef.current?.scrollWidth - 340) {
+        setActivePage((prev) => (prev + 1 > tasks.length ? tasks.length : prev + 1));
+        setScrollRange((prev) => prev + 340);
+      }
     }
   };
 
@@ -33,7 +35,7 @@ const TasksScroller: React.FC<Props> = (props) => {
   });
 
   return (
-    <div className="w-full flex flex-col gap-5 rounded-lg items-center h-80">
+    <div className="w-full flex flex-col gap-2 rounded-lg items-center h-80">
       <div className="flex flex-row justify-between w-full">
         <p className="font-semibold">{props.label}</p>
         <div className="flex flex-row gap-2 items-center justify-between">
@@ -54,11 +56,11 @@ const TasksScroller: React.FC<Props> = (props) => {
         </div>
       </div>
 
-      <div className="relative flex flex-row gap-5 w-full h-full overflow-x-auto scrollbar-none items-center justify-start">
+      <div className="relative flex flex-row gap-5 w-full h-full overflow-x-hidden items-center justify-start">
         <div
           ref={scrollRef}
           style={{ translate: `${activePage * 340 * -1}px 0px` }}
-          className="absolute w-full h-full flex flex-row gap-5 items-center justify-start transition-all"
+          className="absolute w-full h-full flex flex-row gap-5 items-center justify-start transition-all task-scroller p-2"
         >
           {mappedTaskCards}
         </div>
