@@ -10,8 +10,8 @@ interface Props {
 
 const AssociateCards: React.FC<Props> = (props) => {
   return (
-    <div className="flex flex-row gap-5 justify-center min-w-[16rem] w-80 h-full select-none ">
-      <div className="bg-white w-full p-5 rounded-lg h-full flex flex-col gap-2 hover:shadow-md overflow-y-auto">
+    <div className="flex flex-row gap-4 justify-center min-w-[16rem] w-80 h-full select-none ">
+      <div className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md overflow-y-auto">
         <div className="flex flex-row gap-1 items-center justify-center">
           <div className="bg-primary-100 w-12 min-w-[3rem] h-12 min-h-[3rem] rounded-full mr-auto" />
           <div className="flex flex-col gap-1">

@@ -25,8 +25,8 @@ const TaskCards: React.FC<Props> = (props) => {
   });
 
   return (
-    <div className="flex flex-row gap-5 justify-center min-w-[20rem] w-80 h-full select-none">
-      <div className="bg-white w-full p-5 rounded-lg h-full flex flex-col gap-2 hover:shadow-md">
+    <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-full select-none">
+      <div className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md">
         <Link href={`/hub/tasks/123`} className="bg-primary-100 w-full h-full rounded-2xl" />
 
         <div className="flex flex-col gap-1">

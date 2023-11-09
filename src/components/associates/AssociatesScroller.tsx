@@ -52,11 +52,11 @@ const AssociatesScroller: React.FC<Props> = (props) => {
         </div>
       </div>
 
-      <div className="relative flex flex-row gap-5 w-full h-full overflow-x-hidden items-center justify-start">
+      <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
         <div
           ref={scrollRef}
           style={{ translate: `${activePage * 276 * -1}px 0px` }}
-          className="absolute w-full h-full flex flex-row gap-5 items-center justify-start transition-all task-scroller p-2"
+          className="absolute w-full h-full flex flex-row gap-4 items-center justify-start transition-all task-scroller p-2"
         >
           {props.children}
         </div>

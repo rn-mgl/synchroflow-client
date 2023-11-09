@@ -47,7 +47,7 @@ const Verify = () => {
     <div className="flex flex-col items-center justify-center w-full min-h-screen h-screen bg-white">
       {message.active ? <Message message={message} handleMessages={handleMessages} /> : null}
       <div
-        className="max-w-screen-2xl flex flex-col gap-5 justify-center items-center w-full h-full p-5
+        className="max-w-screen-2xl flex flex-col gap-4 justify-center items-center w-full h-full p-4
             t:p-10 l-s:p-20"
       >
         <div className="w-full flex flex-col items-center justify-center">

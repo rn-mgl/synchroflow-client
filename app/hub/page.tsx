@@ -46,16 +46,16 @@ const Hub = () => {
   return (
     <div className="flex flex-col items-center justify-start w-full ">
       <div
-        className="max-w-screen-2xl flex flex-col gap-5 justify-start h-auto 
+        className="max-w-screen-2xl flex flex-col gap-4 justify-start h-auto 
         items-center w-full"
       >
         <div
-          className="grid grid-cols-1 grid-rows-6 t:grid-cols-2 t:grid-rows-2 gap-5  p-5 t:p-10 
+          className="grid grid-cols-1 grid-rows-6 t:grid-cols-2 t:grid-rows-2 gap-4  p-4 t:p-10 
                     l-s:grid-cols-2 l-s:grid-rows-2 l-l:grid-cols-3 l-l:grid-rows-3"
         >
           <div
             className="w-full rounded-lg bg-secondary-500 flex flex-col
-                    p-5 text-white gap-2 l-l:row-span-1 l-l:order-1"
+                    p-4 text-white gap-2 l-l:row-span-1 l-l:order-1"
           >
             <div className="flex flex-col gap-2 items-center justify-center">
               <p className="text-xs font-semibold">Ongoing Tasks</p>
@@ -69,7 +69,7 @@ const Hub = () => {
 
           <div
             className="w-full rounded-lg bg-neutral-150 flex flex-col 
-                    p-5 text-secondary-500 gap-2 l-l:order-2"
+                    p-4 text-secondary-500 gap-2 l-l:order-2"
           >
             <div className="flex flex-row gap-2 items-center justify-between text-xs font-semibold">
               <p>To do</p>
@@ -82,7 +82,7 @@ const Hub = () => {
             </div>
 
             <div
-              className="h-full flex flex-col items-center justify-center p-5 
+              className="h-full flex flex-col items-center justify-center p-4 
                     bg-neutral-50 rounded-md"
             >
               <div className="w-full h-48 mt-auto">
@@ -106,22 +106,22 @@ const Hub = () => {
 
             <div className="grid grid-cols-1 grid-rows-2 gap-2 h-full l-l:grid-cols-2">
               <div
-                className=" flex flex-col items-center justify-center p-5 
+                className=" flex flex-col items-center justify-center p-4 
               bg-white rounded-md row-span-1"
               ></div>
 
               <div
-                className="flex flex-col items-center justify-center p-5 
+                className="flex flex-col items-center justify-center p-4 
               bg-white rounded-md row-span-1"
               ></div>
 
               <div
-                className="flex-col items-center justify-center p-5 
+                className="flex-col items-center justify-center p-4 
               bg-white rounded-md row-span-1 hidden l-l:flex"
               ></div>
 
               <div
-                className="flex-col items-center justify-center p-5 
+                className="flex-col items-center justify-center p-4 
               bg-white rounded-md row-span-1 hidden l-l:flex"
               ></div>
             </div>
@@ -141,7 +141,7 @@ const Hub = () => {
             </div>
 
             <div
-              className="h-full flex flex-col items-center justify-center p-5 
+              className="h-full flex flex-col items-center justify-center p-4 
               bg-white rounded-md"
             ></div>
           </div>
@@ -151,7 +151,7 @@ const Hub = () => {
           </div>
 
           <div
-            className="flex flex-col gap-5 items-start justify-start p-5 
+            className="flex flex-col gap-4 items-start justify-start p-4 
                         bg-white w-full rounded-lg h-full l-l:col-start-3 l-l:row-span-2 l-l:order-4"
           >
             <div className="flex flex-row w-full">

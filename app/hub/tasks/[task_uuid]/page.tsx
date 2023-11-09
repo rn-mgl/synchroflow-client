@@ -16,7 +16,7 @@ const SingleTask = () => {
         className="max-w-screen-2xl flex flex-col justify-start 
             items-center w-full h-full"
       >
-        <div className="flex flex-col p-5 items-center justify-start w-full h-auto t:p-10  gap-5">
+        <div className="flex flex-col p-4 items-center justify-start w-full h-auto t:p-10  gap-4">
           <Link href="/hub/tasks" className="mr-auto hover:bg-secondary-500 hover:bg-opacity-10 p-2 rounded-full">
             <BsArrowLeft className="text-lg" />
           </Link>
@@ -41,7 +41,7 @@ const SingleTask = () => {
                   </button>
                 </div>
 
-                <div className="flex flex-row gap-5 text-sm">
+                <div className="flex flex-row gap-4 text-sm">
                   <div className="flex flex-row items-center justify-center gap-1">
                     <div>
                       <AiOutlineUser className="text-lg text-secondary-400" />

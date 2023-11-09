@@ -93,13 +93,13 @@ const Register = () => {
                   l-s:h-full l-s:w-4/12"
       />
       <div
-        className="max-w-screen-2xl flex flex-col gap-5 justify-start l-s:justify-center items-center w-full h-full p-5
+        className="max-w-screen-2xl flex flex-col gap-4 justify-start l-s:justify-center items-center w-full h-full p-4
                 t:p-10 l-s:p-20 l-s:flex-row"
       >
         <form
           onSubmit={(e) => submitRegistration(e)}
-          className="relative z-20 w-full flex flex-col items-center justify-center gap-5 backdrop-blur-md my-auto
-                      bg-primary-300 bg-opacity-10 p-5 rounded-xl border-primary-300 border-2 border-opacity-30
+          className="relative z-20 w-full flex flex-col items-center justify-center gap-4 backdrop-blur-md my-auto
+                      bg-primary-300 bg-opacity-10 p-4 rounded-xl border-primary-300 border-2 border-opacity-30
                       max-w-lg t:p-10"
         >
           <div className="text-left w-full">

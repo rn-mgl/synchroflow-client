@@ -14,10 +14,10 @@ const Sending = () => {
   return (
     <div className="flex flex-col items-center justify-center w-full min-h-screen h-screen bg-white">
       <div
-        className="max-w-screen-2xl flex flex-col gap-5 justify-center items-center w-full h-full p-5
+        className="max-w-screen-2xl flex flex-col gap-4 justify-center items-center w-full h-full p-4
                 t:p-10 l-s:p-20 l-s:flex-row"
       >
-        <div className="w-full h-full my-auto flex flex-col items-center justify-center gap-5">
+        <div className="w-full h-full my-auto flex flex-col items-center justify-center gap-4">
           <div className="w-full flex flex-col items-center justify-center">
             <Image
               src={sending}

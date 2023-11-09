@@ -29,12 +29,12 @@ const Tasks = () => {
         className="max-w-screen-2xl flex flex-col justify-start 
                 items-center w-full h-full"
       >
-        <div className="flex flex-col w-full items-center justify-start p-5 t:p-10 gap-5 h-auto">
-          <div className="bg-white w-full p-5 flex flex-col gap-5 rounded-lg h-fit">
+        <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
+          <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit">
             <p className="font-semibold text-xl">Explore Task</p>
 
             <div className="flex flex-row justify-center h-full w-full">
-              <div className="flex flex-row gap-5 h-fit w-full">
+              <div className="flex flex-row gap-4 h-fit w-full">
                 <div className="max-w-screen-m-m w-full mr-auto h-fit">
                   <SearchFilter
                     placeholder="Search Task"

@@ -8,10 +8,10 @@ const Hero = () => {
   return (
     <div className="flex flex-col items-center justify-center w-full min-h-screen bg-white">
       <div
-        className="max-w-screen-2xl flex flex-col gap-5 justify-center items-center w-full p-5
+        className="max-w-screen-2xl flex flex-col gap-4 justify-center items-center w-full p-4
                     t:p-10 l-s:p-20"
       >
-        <div className="flex flex-col gap-1 items-center justify-center t:gap-2 l-s:gap-5 w-full">
+        <div className="flex flex-col gap-1 items-center justify-center t:gap-2 l-s:gap-4 w-full">
           <p
             className="font-black  font-header bg-gradient-to-r 
                     from-primary-500 to-primary-800 text-transparent bg-clip-text
@@ -27,7 +27,7 @@ const Hero = () => {
           </p>
         </div>
 
-        <div className="flex flex-col items-center justify-center gap-2 w-full t:flex-row t:gap-5">
+        <div className="flex flex-col items-center justify-center gap-2 w-full t:flex-row t:gap-4">
           <Link
             href="/register"
             className="p-2 rounded-md bg-primary-500 border-2 border-primary-500 t:w-36
