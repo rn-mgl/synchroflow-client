@@ -19,7 +19,7 @@ const Notification = () => {
   };
 
   return (
-    <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit">
+    <div className="bg-white w-full p-4 flex flex-col gap-10 rounded-lg h-fit">
       <div className="flex flex-col w-full items-start justify-center gap-4 text-sm">
         <CheckBoxComp isActive={status.messages} label="Messages" onClick={() => handleStatus("messages")} />
 
@@ -37,6 +37,13 @@ const Notification = () => {
           onClick={() => handleStatus("associateInvites")}
         />
       </div>
+
+      <button
+        className="bg-primary-500 text-white font-semibold 
+                        p-2 rounded-lg t:w-fit t:px-10"
+      >
+        Save Changes
+      </button>
     </div>
   );
 };
