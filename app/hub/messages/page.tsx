@@ -31,13 +31,16 @@ const Messages = () => {
   });
 
   return (
-    <div className="flex flex-col items-center justify-start w-full h-full">
+    <div
+      className="flex flex-col items-center justify-start w-full 
+                l-l:h-[90vh] l-l:max-h-[90vh] p-4 t:p-10 l-l:overflow-hidden"
+    >
       <div
-        className="max-w-screen-2xl flex flex-col justify-start 
-            items-center w-full h-full"
+        className="max-w-screen-2xl flex flex-col justify-start
+            items-center w-full h-full "
       >
-        <div className="grid grid-cols-1 w-full p-4 t:p-10 gap-4 h-auto l-s:grid-cols-3">
-          <div className="w-full flex flex-col gap-4 items-center l-s:col-span-1">
+        <div className="grid grid-cols-1 w-full h-full gap-4 l-l:grid-cols-3">
+          <div className="w-full h-full flex flex-col gap-4 items-center l-l:col-span-1 overflow-hidden">
             <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit ">
               <p className="font-semibold text-xl">Messages</p>
 
@@ -53,13 +56,16 @@ const Messages = () => {
               </div>
             </div>
 
-            <div className="bg-white w-full flex flex-col gap-4 p-4 rounded-lg h-full l-s:col-span-1">
+            <div
+              className="bg-white w-full flex flex-col gap-4 p-4 rounded-lg 
+                        h-full l-l:col-span-1 overflow-y-auto cstm-scrollbar"
+            >
               {mappedMessagePreviews}
             </div>
           </div>
 
           <div
-            className="hidden l-s:col-span-2 bg-white w-full p-4 l-s:flex 
+            className="hidden l-l:col-span-2 w-full p-4 l-l:flex bg-white
                         flex-col gap-4 rounded-lg h-full sticky top-0 z-10"
           ></div>
         </div>

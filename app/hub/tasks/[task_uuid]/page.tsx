@@ -11,7 +11,7 @@ import { BsArrowLeft } from "react-icons/bs";
 
 const SingleTask = () => {
   return (
-    <div className="flex flex-col items-center justify-start w-full h-full">
+    <div className="flex flex-col items-center justify-start w-full h-auto">
       <div
         className="max-w-screen-2xl flex flex-col justify-start 
             items-center w-full h-full"
