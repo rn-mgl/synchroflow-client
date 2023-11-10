@@ -2,7 +2,8 @@
 import SearchFilter from "@/components//filter/SearchFilter";
 import MessagePreview from "@/components//messages/MessagePreview";
 import React from "react";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlinePaperClip, AiOutlineSearch } from "react-icons/ai";
+import { BsFillSendFill } from "react-icons/bs";
 
 const Messages = () => {
   const [searchInput, setSearchInput] = React.useState("");
@@ -16,9 +17,8 @@ const Messages = () => {
 
   const mappedMessagePreviews = new Array(20).fill(1).map((message, index) => {
     return (
-      <>
+      <React.Fragment key={index}>
         <MessagePreview
-          key={index}
           image=""
           message="flex flex-col items-center justify-start w-full h-full"
           name={`${index} Test Name Only`}
@@ -26,7 +26,7 @@ const Messages = () => {
           dateSent={new Date().toLocaleDateString()}
         />
         <div className="w-full h-[0.5px] min-h-[0.5px] bg-secondary-100" />
-      </>
+      </React.Fragment>
     );
   });
 
@@ -65,9 +65,36 @@ const Messages = () => {
           </div>
 
           <div
-            className="hidden l-l:col-span-2 w-full p-4 l-l:flex bg-white
-                        flex-col gap-4 rounded-lg h-full sticky top-0 z-10"
-          ></div>
+            className="hidden l-l:col-span-2 w-full l-l:flex bg-white p-4
+                        flex-col-reverse gap-4 rounded-lg h-full sticky top-0 z-10"
+          >
+            <div className="flex flex-row w-full gap-4">
+              <div className="flex flex-row items-center justify-center rounded-md w-full gap-4 bg-neutral-100 p-2">
+                <div
+                  contentEditable={true}
+                  placeholder="Send your message..."
+                  className="border-none outline-none cstm-scrollbar h-auto w-full max-h-[10rem] overflow-y-auto"
+                >
+                  Send your message...
+                </div>
+              </div>
+
+              <div className="flex flex-row gap-2 items-center justify-center mt-auto">
+                <button
+                  className="p-4 hover:bg-primary-100 transition-all outline-none
+                rounded-lg flex flex-col items-center justify-center"
+                >
+                  <AiOutlinePaperClip className="text-secondary-500 text-lg" />
+                </button>
+                <button
+                  className="p-4 bg-primary-500 transition-all outline-none
+                rounded-lg flex flex-col items-center justify-center"
+                >
+                  <BsFillSendFill className="text-white text-lg" />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

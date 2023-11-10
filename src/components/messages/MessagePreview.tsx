@@ -1,5 +1,6 @@
 import React from "react";
 import { BsCheck, BsCheckAll, BsDot } from "react-icons/bs";
+import Link from "next/link";
 
 interface Props {
   image: string;
@@ -11,12 +12,12 @@ interface Props {
 
 const MessagePreview: React.FC<Props> = (props) => {
   return (
-    <div
+    <button
       className="w-full p-2 rounded-lg hover:bg-neutral-50 
-                flex flex-row gap-2 transition-all"
+                flex flex-row items-center gap-2 transition-all"
     >
       <div className="min-h-[3rem] min-w-[3rem] rounded-full bg-primary-100" />
-      <div className="w-full flex flex-col justify-between items-center">
+      <div className="w-full h-full flex flex-col justify-between items-center">
         <div className="flex flex-row justify-between items-center w-full ">
           <p className="font-bold text-sm max-w-[15ch] truncate t:w-full l-s:max-w-[12ch]">{props.name}</p>
           <p className="text-xs">{props.dateSent}</p>
@@ -37,7 +38,7 @@ const MessagePreview: React.FC<Props> = (props) => {
           </div>
         </div>
       </div>
-    </div>
+    </button>
   );
 };
 

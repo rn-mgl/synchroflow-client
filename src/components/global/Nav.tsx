@@ -101,9 +101,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
         className={`fixed  top-0 left-0 w-full h-full z-20 l-s:z-0 bg-white px-4 py-7 flex 
                     flex-col gap-10 t:w-6/12 l-s:border-r-[1px] l-s:static animate-fadeIn transition-all 
                     duration-75 overflow-y-auto cstm-scrollbar overflow-x-clip ${
-                      isVisible
-                        ? "flex l-s:w-[20rem] l-s:min-w-[20rem]"
-                        : "hidden l-s:flex l-s:w-[6rem] l-s:min-w-[6rem]"
+                      isVisible ? "flex l-s:w-72 l-s:min-w-[18rem]" : "hidden l-s:flex l-s:w-[6rem] l-s:min-w-[6rem]"
                     } `}
       >
         <div className="flex flex-row gap-2 items-center justify-center relative px-2.5">
