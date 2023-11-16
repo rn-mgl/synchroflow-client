@@ -1,14 +1,15 @@
 "use client";
 import SearchFilter from "@/components//filter/SearchFilter";
 import CreateTask from "@/components//tasks/CreateTask";
-import TaskCards from "@/components//tasks/TaskCards";
-import TasksScroller from "@/components//tasks/TasksScroller";
+import dynamic from "next/dynamic";
 import React from "react";
 import { AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
 import { BsFilter } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
 
-const tasks = [1, 2, 3, 4, 5];
+const MainTasks = dynamic(() => import("@/components//tasks/GetTasks"), {
+  loading: () => <p>Loading...</p>,
+});
 
 const Tasks = () => {
   const [searchInput, setSearchInput] = React.useState("");
@@ -24,10 +25,6 @@ const Tasks = () => {
   const toggleCanCreateTask = () => {
     setCanCreateTask((prev) => !prev);
   };
-
-  const mappedTaskCards = tasks.map((task, index) => {
-    return <TaskCards key={index} title="Title" type="Type" deadline={20} progress={90} />;
-  });
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">
@@ -96,13 +93,9 @@ const Tasks = () => {
             Create Task
           </button>
 
-          <TasksScroller label="Today's Task" tasks={tasks}>
-            {mappedTaskCards}
-          </TasksScroller>
+          <MainTasks type="my" />
 
-          <TasksScroller label="Today's Task" tasks={tasks}>
-            {mappedTaskCards}
-          </TasksScroller>
+          <MainTasks type="collaborated" />
         </div>
       </div>
     </div>

@@ -1,30 +1,29 @@
 "use client";
 import React from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
-import TaskCards from "./TaskCards";
 
 interface Props {
   label: string;
-  tasks: number[];
+  tasksLength: number;
   children: React.ReactNode;
 }
 
 const TasksScroller: React.FC<Props> = (props) => {
   const scrollRef = React.useRef<HTMLDivElement>(null);
   const [activePage, setActivePage] = React.useState(0);
-  const [scrollRange, setScrollRange] = React.useState(0);
+  const [scrollRange, setScrollRange] = React.useState(340);
 
   const handleNextPage = () => {
     if (scrollRef.current) {
       if (scrollRange < scrollRef.current?.scrollWidth - 340) {
-        setActivePage((prev) => (prev + 1 > props.tasks.length ? props.tasks.length : prev + 1));
+        setActivePage((prev) => (prev + 1 > props.tasksLength ? props.tasksLength : prev + 1));
         setScrollRange((prev) => prev + 340);
       }
     }
   };
 
   const handlePrevPage = () => {
-    if (scrollRange > 0) {
+    if (scrollRange > 340) {
       setActivePage((prev) => (prev - 1 < 0 ? 0 : prev - 1));
       setScrollRange((prev) => prev - 340);
     }
