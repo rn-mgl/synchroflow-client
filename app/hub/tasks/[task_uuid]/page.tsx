@@ -66,16 +66,6 @@ const SingleTask = () => {
                   design hierarchies. Then try to make it yourself with your imagination and inspiration.
                 </p>
               </div>
-
-              <div className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500">
-                <p className="text-2xl font-medium ">Description</p>
-
-                <p className="leading-relaxed">
-                  Follow the video tutorial above. Understand how to use each tool in the Figma application. Also learn
-                  how to make a good and correct design. Starting from spacing, typography, content, and many other
-                  design hierarchies. Then try to make it yourself with your imagination and inspiration.
-                </p>
-              </div>
             </div>
 
             <div className="flex flex-col items-center justify-start w-full h-full gap-10 col-span-1 ">

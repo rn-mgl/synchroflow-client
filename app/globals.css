@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  .cstm-scrollbar {
+    @apply scroll-smooth scrollbar-thin scrollbar-track-white scrollbar-thumb-secondary-500;
+  }
+}
+
 * {
   font-smooth: "always";
   padding: 0px;
@@ -66,9 +72,7 @@ button {
 abbr[title] {
   text-decoration: none;
 }
-/* .react-calendar__month-view__days__day--weekend {
-  color: #d10000;
- } */
+
 .react-calendar__tile {
   border-radius: 0.2rem;
   width: 1.5rem;
@@ -125,12 +129,6 @@ abbr[title] {
 }
 .react-calendar__month-view__days__day--neighboringMonth {
   opacity: 0.5;
-}
-
-@layer base {
-  .cstm-scrollbar {
-    @apply scroll-smooth scrollbar-thin scrollbar-track-white scrollbar-thumb-secondary-500;
-  }
 }
 
 input[type="range"] {

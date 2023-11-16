@@ -10,7 +10,7 @@ import PasswordComp from "@/components//input/PasswordComp";
 import TextComp from "@/components//input/TextComp";
 
 import login from "@/public//auth/Login.svg";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -48,6 +48,9 @@ const Login = () => {
     handleLoader(true);
     handleDisable(true);
     setFirstLogin(true);
+
+    signOut({ redirect: false });
+
     try {
       const data = await signIn("credentials", {
         candidateEmail: loginCredentials.candidateEmail,

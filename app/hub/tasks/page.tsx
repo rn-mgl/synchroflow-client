@@ -1,5 +1,6 @@
 "use client";
 import SearchFilter from "@/components//filter/SearchFilter";
+import CreateTask from "@/components//tasks/CreateTask";
 import TaskCards from "@/components//tasks/TaskCards";
 import TasksScroller from "@/components//tasks/TasksScroller";
 import React from "react";
@@ -11,12 +12,17 @@ const tasks = [1, 2, 3, 4, 5];
 
 const Tasks = () => {
   const [searchInput, setSearchInput] = React.useState("");
+  const [canCreateTask, setCanCreateTask] = React.useState(false);
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
 
     setSearchInput(value);
+  };
+
+  const toggleCanCreateTask = () => {
+    setCanCreateTask((prev) => !prev);
   };
 
   const mappedTaskCards = tasks.map((task, index) => {
@@ -30,6 +36,8 @@ const Tasks = () => {
                 items-center w-full h-full"
       >
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
+          {canCreateTask ? <CreateTask toggleCanCreateTask={toggleCanCreateTask} /> : null}
+
           <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit">
             <p className="font-semibold text-xl">Explore Task</p>
 
@@ -77,6 +85,7 @@ const Tasks = () => {
           </div>
 
           <button
+            onClick={toggleCanCreateTask}
             className="w-full p-2 rounded-md bg-primary-500 text-white font-medium 
                     t:w-fit t:px-4 t:mr-auto flex flex-row items-center justify-center gap-2
                     hover:shadow-md"
