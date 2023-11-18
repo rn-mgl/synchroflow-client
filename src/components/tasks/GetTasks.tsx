@@ -11,7 +11,7 @@ interface TasksProps {
   main_task_title: string;
   main_task_subtitle: string;
   main_task_status: string;
-  main_task_end_date: Date;
+  main_task_end_date: string;
   main_task_uuid: string;
 }
 
