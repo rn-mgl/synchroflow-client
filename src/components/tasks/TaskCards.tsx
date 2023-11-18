@@ -3,18 +3,19 @@ import React from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { localizeDate } from "../utils/dateUtils";
 
-interface Props {
+interface TaskCardProps {
   title: string;
   banner: string;
   subTitle: string;
   status: string;
+  taskUUID: string;
   deadline: Date;
 }
 
 const profilePictures = new Array(20).fill(1);
 const profilePicsLen = profilePictures.length;
 
-const TaskCards: React.FC<Props> = (props) => {
+const TaskCards: React.FC<TaskCardProps> = (props) => {
   const mappedProfilePictures = profilePictures.slice(0, profilePicsLen < 5 ? profilePicsLen : 5).map((pics, index) => {
     return (
       <div
@@ -30,7 +31,7 @@ const TaskCards: React.FC<Props> = (props) => {
     <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-full select-none">
       <div className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md">
         <Link
-          href={`/hub/tasks/123`}
+          href={`/hub/tasks/${props.taskUUID}`}
           style={{ backgroundImage: `url(${props.banner})` }}
           className="bg-primary-100 w-full h-full rounded-2xl bg-center bg-cover"
         />

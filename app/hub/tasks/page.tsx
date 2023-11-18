@@ -7,7 +7,7 @@ import { AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
 import { BsFilter } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
 
-const MainTasks = dynamic(() => import("@/components//tasks/GetTasks"), {
+const DynamicMainTasks = dynamic(() => import("@/components//tasks/GetTasks"), {
   loading: () => <p>Loading...</p>,
 });
 
@@ -93,9 +93,9 @@ const Tasks = () => {
             Create Task
           </button>
 
-          <MainTasks type="my" />
+          <DynamicMainTasks type="my" />
 
-          <MainTasks type="collaborated" />
+          <DynamicMainTasks type="collaborated" />
         </div>
       </div>
     </div>

@@ -13,7 +13,7 @@ const monthMapping = {
   12: "December",
 };
 
-export const localizeDate = (date: Date, shorten: boolean) => {
+export const localizeDate = (date: string, shorten: boolean) => {
   const newDate = new Date(date).toLocaleDateString();
 
   const splitDate = newDate.split("/");
@@ -23,7 +23,7 @@ export const localizeDate = (date: Date, shorten: boolean) => {
   const year = splitDate[2];
 
   if (shorten) {
-    month = month.slice(0, 3);
+    month = month?.slice(0, 3) + ".";
   }
 
   return `${month} ${day}, ${year}`;

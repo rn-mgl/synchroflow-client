@@ -12,6 +12,7 @@ interface TasksProps {
   main_task_subtitle: string;
   main_task_status: string;
   main_task_end_date: Date;
+  main_task_uuid: string;
 }
 
 interface GetTasksProps {
@@ -54,6 +55,7 @@ const GetTasks: React.FC<GetTasksProps> = (props) => {
         subTitle={task.main_task_subtitle}
         status={task.main_task_status}
         deadline={task.main_task_end_date}
+        taskUUID={task.main_task_uuid}
       />
     );
   });

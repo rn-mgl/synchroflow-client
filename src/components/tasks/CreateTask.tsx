@@ -124,7 +124,7 @@ const CreateTask: React.FC<Props> = (props) => {
         </div>
 
         <div className="w-full flex flex-col items-start justify-center gap-2">
-          <p>Title</p>
+          <p className="text-xs">Title</p>
           <TextComp
             name="mainTaskTitle"
             placeholder="Task Title..."
@@ -136,7 +136,7 @@ const CreateTask: React.FC<Props> = (props) => {
         </div>
 
         <div className="w-full flex flex-col items-start justify-center gap-2">
-          <p>Sub Title</p>
+          <p className="text-xs">Sub Title</p>
           <TextComp
             name="mainTaskSubtitle"
             placeholder="Task Sub Title..."
@@ -148,7 +148,7 @@ const CreateTask: React.FC<Props> = (props) => {
         </div>
 
         <div className="w-full flex flex-col items-start justify-center gap-2">
-          <p>Description</p>
+          <p className="text-xs">Description</p>
           <TextAreaComp
             name="mainTaskDescription"
             placeholder="Task Description..."
@@ -160,7 +160,7 @@ const CreateTask: React.FC<Props> = (props) => {
         </div>
 
         <div className="w-full flex flex-col items-start justify-center gap-2">
-          <p>Priority</p>
+          <p className="text-xs">Priority</p>
           <SelectComp
             name="maintTaskPriority"
             value={mainTaskData.maintTaskPriority}
@@ -174,7 +174,7 @@ const CreateTask: React.FC<Props> = (props) => {
         </div>
 
         <div className="w-full flex flex-col items-start justify-center gap-2">
-          <p>Start Date</p>
+          <p className="text-xs">Start Date</p>
           <DateComp
             name="mainTaskStartDate"
             required={true}
@@ -184,7 +184,7 @@ const CreateTask: React.FC<Props> = (props) => {
         </div>
 
         <div className="w-full flex flex-col items-start justify-center gap-2">
-          <p>End Date</p>
+          <p className="text-xs">End Date</p>
           <DateComp
             name="mainTaskEndDate"
             required={true}

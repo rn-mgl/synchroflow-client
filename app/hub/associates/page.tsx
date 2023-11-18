@@ -20,11 +20,11 @@ const Associates = () => {
   };
 
   const mappedRecentAssociateCards = tasks.map((task, index) => {
-    return <AssociateCards key={index} title="Name" type="Position" deadline={20} progress={90} />;
+    return <AssociateCards key={index} name="Name" role="Position" deadline={20} />;
   });
 
   const mappedAssociateCards = tasks.map((task, index) => {
-    return <AssociateCards key={index} title="Name" type="Position" deadline={20} progress={90} />;
+    return <AssociateCards key={index} name="Name" role="Position" deadline={20} />;
   });
 
   return (

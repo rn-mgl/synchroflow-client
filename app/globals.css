@@ -169,3 +169,9 @@ input[type="range"]::-moz-range-thumb {
   height: 1rem;
   width: 1rem;
 }
+
+.cstm-scrollbar::-webkit-scrollbar,
+.cstm-scrollbar::-webkit-scrollbar-thumb,
+.cstm-scrollbar::-webkit-scrollbar-track {
+  border-radius: 100vh;
+}

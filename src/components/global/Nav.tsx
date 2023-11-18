@@ -12,11 +12,11 @@ import Message from "./Message";
 import {
   AiOutlineBell,
   AiOutlineBuild,
-  AiOutlineClose,
   AiOutlineLogout,
   AiOutlineMail,
   AiOutlineMenu,
   AiOutlineSchedule,
+  AiOutlineSend,
   AiOutlineSetting,
   AiOutlineTeam,
 } from "react-icons/ai";
@@ -99,7 +99,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 
       <div
         className={`fixed  top-0 left-0 w-full h-full z-20 l-s:z-0 bg-white px-4 py-7 flex 
-                    flex-col gap-10 t:w-6/12 l-s:border-r-[1px] l-s:static animate-fadeIn transition-all 
+                    flex-col gap-8 t:w-6/12 l-s:border-r-[1px] l-s:static animate-fadeIn transition-all 
                     duration-75 overflow-y-auto cstm-scrollbar overflow-x-clip ${
                       isVisible ? "flex l-s:w-72 l-s:min-w-[18rem]" : "hidden l-s:flex l-s:w-[6rem] l-s:min-w-[6rem]"
                     } `}
@@ -180,7 +180,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
                       }`}
           >
             <div>
-              <AiOutlineMail className="text-2xl" />
+              <AiOutlineSend className="text-2xl" />
             </div>
             <p className={`font-medium mr-auto ${isVisible ? "l-s:flex" : "l-s:hidden"}`}>Messages</p>
           </Link>
@@ -199,6 +199,22 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
               <AiOutlineSetting className="text-2xl" />
             </div>
             <p className={`font-medium mr-auto ${isVisible ? "l-s:flex" : "l-s:hidden"}`}>Settings</p>
+          </Link>
+
+          <Link
+            onClick={() => toggleIsVisible("link")}
+            href="/hub/invites"
+            className={`flex flex-row items-center justify-center gap-4 w-full p-4 
+                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
+                        path?.includes("invites")
+                          ? "opacity-100 bg-gradient-to-br from-primary-500 to-primary-900 text-white"
+                          : "opacity-50"
+                      } mt-auto`}
+          >
+            <div>
+              <AiOutlineMail className="text-2xl" />
+            </div>
+            <p className={`font-medium mr-auto ${isVisible ? "l-s:flex" : "l-s:hidden"}`}>Invites</p>
           </Link>
         </div>
 

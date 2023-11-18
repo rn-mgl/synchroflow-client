@@ -2,9 +2,8 @@ import React from "react";
 import { AiFillStar, AiOutlineFileText } from "react-icons/ai";
 
 interface Props {
-  title: string;
-  type: string;
-  progress: number;
+  name: string;
+  role: string;
   deadline: number | null;
 }
 
@@ -14,9 +13,9 @@ const AssociateCards: React.FC<Props> = (props) => {
       <div className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md overflow-y-auto">
         <div className="flex flex-row gap-1 items-center justify-center">
           <div className="bg-primary-100 w-12 min-w-[3rem] h-12 min-h-[3rem] rounded-full mr-auto" />
-          <div className="flex flex-col gap-1">
-            <p className="font-bold">{props.title}</p>
-            <p className="text-xs">{props.type}</p>
+          <div className="flex flex-col gap-1 items-end">
+            <p className="font-bold truncate max-w-[15ch]">{props.name}</p>
+            <p className="text-xs max-w-[20ch] truncate">{props.role}</p>
           </div>
         </div>
 
