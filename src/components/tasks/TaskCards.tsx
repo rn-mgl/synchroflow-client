@@ -9,7 +9,7 @@ interface TaskCardProps {
   subTitle: string;
   status: string;
   taskUUID: string;
-  deadline: Date;
+  deadline: string;
 }
 
 const profilePictures = new Array(20).fill(1);
