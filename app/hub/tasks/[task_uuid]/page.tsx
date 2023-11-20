@@ -36,6 +36,7 @@ const SingleTask = () => {
     main_task_title: "",
     main_task_uuid: "",
   });
+  const [collaborators, setCollaborators] = React.useState([{ name: "", surname: "", image: "" }]);
   const [canInvite, setCanInvite] = React.useState(false);
 
   const params = useParams();
@@ -64,9 +65,45 @@ const SingleTask = () => {
     }
   }, [url, user?.token, params?.task_uuid]);
 
+  const getSingleTaskCollborators = React.useCallback(async () => {
+    if (user?.token) {
+      try {
+        const { data } = await axios.get(`${url}/main_task_collaborators`, {
+          headers: { Authorization: user?.token },
+          params: { mainTaskUUID: params?.task_uuid },
+        });
+
+        if (data) {
+          console.log(data);
+          setCollaborators(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [url, user?.token, params?.task_uuid]);
+
+  const mappedCollaborators = collaborators.map((collaborator, index) => {
+    return (
+      <div key={index} className="flex flex-row gap-2 items-center justify-start w-full">
+        <div
+          style={{ backgroundImage: `url(${collaborator.image})` }}
+          className="w-8 h-8 bg-primary-200 rounded-full bg-center bg-cover"
+        />
+        <p>
+          {collaborator.name} {collaborator.surname}
+        </p>
+      </div>
+    );
+  });
+
   React.useEffect(() => {
     getSingleTask();
   }, [getSingleTask]);
+
+  React.useEffect(() => {
+    getSingleTaskCollborators();
+  }, [getSingleTaskCollborators]);
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">
@@ -93,6 +130,7 @@ const SingleTask = () => {
               mainTaskStartDate={taskData.main_task_start_date}
               mainTaskSubtitle={taskData.main_task_subtitle}
               mainTaskTitle={taskData.main_task_title}
+              collaboratorCount={collaborators.length}
               toggleCanInvite={toggleCanInvite}
             />
 
@@ -137,7 +175,7 @@ const SingleTask = () => {
                     </div>
 
                     <p>Follow the video tutorial above.</p>
-                  </div>{" "}
+                  </div>
                   <div className="flex flex-row gap-2 items-center justify-start w-full">
                     <div>
                       <AiFillCaretRight />
@@ -148,29 +186,9 @@ const SingleTask = () => {
                 </div>
               </div>
               <div className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500">
-                <p className="text-2xl font-medium ">Associates</p>
+                <p className="text-2xl font-medium ">{collaborators.length > 1 ? "Collaborators" : "Collaborator"}</p>
 
-                <div className="flex flex-col gap-2 w-full">
-                  <div className="flex flex-row gap-2 items-center justify-start w-full">
-                    <div className="w-8 h-8 bg-primary-200 rounded-full" /> <p>Associated User</p>
-                  </div>
-
-                  <div className="flex flex-row gap-2 items-center justify-start w-full">
-                    <div className="w-8 h-8 bg-primary-200 rounded-full" /> <p>Associated User</p>
-                  </div>
-
-                  <div className="flex flex-row gap-2 items-center justify-start w-full">
-                    <div className="w-8 h-8 bg-primary-200 rounded-full" /> <p>Associated User</p>
-                  </div>
-
-                  <div className="flex flex-row gap-2 items-center justify-start w-full">
-                    <div className="w-8 h-8 bg-primary-200 rounded-full" /> <p>Associated User</p>
-                  </div>
-
-                  <div className="flex flex-row gap-2 items-center justify-start w-full">
-                    <div className="w-8 h-8 bg-primary-200 rounded-full" /> <p>Associated User</p>
-                  </div>
-                </div>
+                <div className="flex flex-col gap-2 w-full">{mappedCollaborators}</div>
               </div>
             </div>
           </div>

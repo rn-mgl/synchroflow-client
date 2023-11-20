@@ -17,6 +17,7 @@ interface SingleTaskDataProps {
   mainTaskStartDate: string;
   mainTaskEndDate: string;
   mainTaskDescription: string;
+  collaboratorCount: number;
   toggleCanInvite: () => void;
 }
 
@@ -82,7 +83,7 @@ const SingleTaskMainData: React.FC<SingleTaskDataProps> = (props) => {
             <div>
               <AiOutlineUser className="text-lg text-secondary-400" />
             </div>
-            5 Associates
+            {props.collaboratorCount} {props.collaboratorCount > 1 ? "Associates" : "Associate"}
           </div>
           |
           <button
