@@ -1,22 +1,23 @@
 "use client";
 import SearchFilter from "@/components//filter/SearchFilter";
+import useTasks from "@/components//hooks/useTasks";
 import CreateTask from "@/components//tasks/CreateTask";
-import dynamic from "next/dynamic";
+import TaskCards from "@/components//tasks/TaskCards";
+import TasksScroller from "@/components//tasks/TasksScroller";
+import { useSession } from "next-auth/react";
 import React from "react";
 import { AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
 import { BsFilter } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
 
-const DynamicMainTasks = dynamic(() => import("@/components//tasks/GetTasks"), {
-  loading: () => <p>Loading...</p>,
-});
-
 const Tasks = () => {
   const [searchInput, setSearchInput] = React.useState("");
   const [canCreateTask, setCanCreateTask] = React.useState(false);
+  const { myTasks, collaboratedTasks, getMyTasks, getCollaboratedTasks } = useTasks();
+
+  const { data: session } = useSession();
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.name;
     const value = e.target.value;
 
     setSearchInput(value);
@@ -26,6 +27,42 @@ const Tasks = () => {
     setCanCreateTask((prev) => !prev);
   };
 
+  const mappedMyTaskCards = myTasks.map((task, index) => {
+    return (
+      <TaskCards
+        key={index}
+        banner={task.main_task_banner}
+        title={task.main_task_title}
+        subTitle={task.main_task_subtitle}
+        status={task.main_task_status}
+        deadline={task.main_task_end_date}
+        taskUUID={task.main_task_uuid}
+      />
+    );
+  });
+
+  const mappedCollaboratedTaskCards = collaboratedTasks.map((task, index) => {
+    return (
+      <TaskCards
+        key={index}
+        banner={task.main_task_banner}
+        title={task.main_task_title}
+        subTitle={task.main_task_subtitle}
+        status={task.main_task_status}
+        deadline={task.main_task_end_date}
+        taskUUID={task.main_task_uuid}
+      />
+    );
+  });
+
+  React.useEffect(() => {
+    getMyTasks();
+  }, [getMyTasks]);
+
+  React.useEffect(() => {
+    getCollaboratedTasks();
+  }, [getCollaboratedTasks]);
+
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">
       <div
@@ -33,7 +70,13 @@ const Tasks = () => {
                 items-center w-full h-full"
       >
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
-          {canCreateTask ? <CreateTask toggleCanCreateTask={toggleCanCreateTask} /> : null}
+          {canCreateTask ? (
+            <CreateTask
+              toggleCanCreateTask={toggleCanCreateTask}
+              getMyTasks={getMyTasks}
+              getCollaboratedTasks={getCollaboratedTasks}
+            />
+          ) : null}
 
           <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit">
             <p className="font-semibold text-xl">Explore Task</p>
@@ -93,9 +136,9 @@ const Tasks = () => {
             Create Task
           </button>
 
-          <DynamicMainTasks type="my" />
+          <TasksScroller label="Today's Task">{mappedMyTaskCards}</TasksScroller>
 
-          <DynamicMainTasks type="collaborated" />
+          <TasksScroller label="Today's Collaboration">{mappedCollaboratedTaskCards}</TasksScroller>
         </div>
       </div>
     </div>

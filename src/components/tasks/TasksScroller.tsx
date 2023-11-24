@@ -1,10 +1,8 @@
 "use client";
 import React from "react";
-import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
 interface Props {
   label: string;
-  tasksLength: number;
   children: React.ReactNode;
 }
 

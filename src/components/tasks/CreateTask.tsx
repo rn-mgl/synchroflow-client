@@ -1,22 +1,24 @@
 "use client";
-import React, { use } from "react";
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import React from "react";
 import { AiFillPicture, AiOutlineAccountBook, AiOutlineClose, AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
+import { useGlobalContext } from "../../../context";
+import Loading from "../global/Loading";
+import useFile from "../hooks/useFile";
+import useLoader from "../hooks/useLoading";
 import DateComp from "../input/DateComp";
 import SelectComp from "../input/SelectComp";
 import TextAreaComp from "../input/TextAreaComp";
 import TextComp from "../input/TextComp";
-import useFile from "../hooks/useFile";
-import axios from "axios";
-import { useGlobalContext } from "../../../context";
-import { useSession } from "next-auth/react";
-import useLoader from "../hooks/useLoading";
-import Loading from "../global/Loading";
 
-interface Props {
+interface CreateTaskProps {
   toggleCanCreateTask: () => void;
+  getMyTasks: () => Promise<void>;
+  getCollaboratedTasks: () => Promise<void>;
 }
 
-const CreateTask: React.FC<Props> = (props) => {
+const CreateTask: React.FC<CreateTaskProps> = (props) => {
   const [mainTaskData, setMainTaskData] = React.useState({
     mainTaskTitle: "",
     mainTaskBanner: null,
@@ -59,7 +61,8 @@ const CreateTask: React.FC<Props> = (props) => {
         { headers: { Authorization: user?.token } }
       );
       if (data) {
-        console.log(data);
+        await props.getMyTasks();
+        await props.getCollaboratedTasks();
         props.toggleCanCreateTask();
       }
     } catch (error) {
