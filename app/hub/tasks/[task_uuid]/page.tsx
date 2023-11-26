@@ -2,6 +2,8 @@
 import { useGlobalContext } from "@/base/context";
 import SendTaskInvite from "@/components//invites/SendTaskInvite";
 import AssignSubTask from "@/components//tasks/AssignSubTask";
+import AsssignedSubTasks from "@/components//tasks/AsssignedSubTasks";
+import CreatedSubTasks from "@/components//tasks/CreatedSubTasks";
 import SingleTaskMainData from "@/components//tasks/SingleTaskMainData";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -80,7 +82,6 @@ const SingleTask = () => {
         });
 
         if (data) {
-          console.log(data);
           setCollaborators(data);
         }
       } catch (error) {
@@ -153,56 +154,9 @@ const SingleTask = () => {
             />
 
             <div className="flex flex-col items-center justify-start w-full h-full gap-8 col-span-1 ">
-              <p className="mr-auto">Your Tasks</p>
+              <p className="mr-auto">{isTaskCreator ? "Created Sub Tasks" : "Your Sub Tasks"}</p>
 
-              <div className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500">
-                <p className="text-2xl font-medium ">Details</p>
-
-                <div className="flex flex-col gap-2 w-full">
-                  <div className="flex flex-row gap-2 items-center justify-start w-full">
-                    <div>
-                      <AiFillCaretRight />
-                    </div>
-
-                    <p>Follow the video tutorial above.</p>
-                  </div>
-                  <div className="flex flex-row gap-2 items-center justify-start w-full">
-                    <div>
-                      <AiFillCaretRight />
-                    </div>
-
-                    <p>Follow the video tutorial above.</p>
-                  </div>
-                  <div className="flex flex-row gap-2 items-center justify-start w-full">
-                    <div>
-                      <AiFillCaretRight />
-                    </div>
-
-                    <p>Follow the video tutorial above.</p>
-                  </div>
-                  <div className="flex flex-row gap-2 items-center justify-start w-full">
-                    <div>
-                      <AiFillCaretRight />
-                    </div>
-
-                    <p>Follow the video tutorial above.</p>
-                  </div>
-                  <div className="flex flex-row gap-2 items-center justify-start w-full">
-                    <div>
-                      <AiFillCaretRight />
-                    </div>
-
-                    <p>Follow the video tutorial above.</p>
-                  </div>
-                  <div className="flex flex-row gap-2 items-center justify-start w-full">
-                    <div>
-                      <AiFillCaretRight />
-                    </div>
-
-                    <p>Follow the video tutorial above.</p>
-                  </div>
-                </div>
-              </div>
+              {isTaskCreator ? <CreatedSubTasks /> : <AsssignedSubTasks />}
 
               <div className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500">
                 <div className="text-2xl flex flex-row w-full justify-between items-center">
@@ -216,8 +170,8 @@ const SingleTask = () => {
                     <AiOutlinePlus /> Sub Task
                   </button>
                 </div>
-
                 <div className="flex flex-col gap-2 w-full">{mappedCollaborators}</div>
+                AsssignedSubTasks
               </div>
             </div>
           </div>
