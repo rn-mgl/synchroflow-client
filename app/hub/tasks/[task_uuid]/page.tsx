@@ -1,13 +1,14 @@
 "use client";
 import { useGlobalContext } from "@/base/context";
 import SendTaskInvite from "@/components//invites/SendTaskInvite";
+import AssignSubTask from "@/components//tasks/AssignSubTask";
 import SingleTaskMainData from "@/components//tasks/SingleTaskMainData";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
-import { AiFillCaretRight } from "react-icons/ai";
+import { AiFillCaretRight, AiOutlinePlus } from "react-icons/ai";
 import { BsArrowLeft } from "react-icons/bs";
 
 interface SingleTaskData {
@@ -36,8 +37,9 @@ const SingleTask = () => {
     main_task_title: "",
     main_task_uuid: "",
   });
-  const [collaborators, setCollaborators] = React.useState([{ name: "", surname: "", image: "" }]);
+  const [collaborators, setCollaborators] = React.useState([{ name: "", surname: "", image: "", user_uuid: "" }]);
   const [canInvite, setCanInvite] = React.useState(false);
+  const [canAssignSubTask, setCanAssignSubTask] = React.useState(false);
 
   const params = useParams();
   const { url } = useGlobalContext();
@@ -47,6 +49,10 @@ const SingleTask = () => {
 
   const toggleCanInvite = () => {
     setCanInvite((prev) => !prev);
+  };
+
+  const toggleCanAssignSubTask = () => {
+    setCanAssignSubTask((prev) => !prev);
   };
 
   const getSingleTask = React.useCallback(async () => {
@@ -85,14 +91,19 @@ const SingleTask = () => {
 
   const mappedCollaborators = collaborators.map((collaborator, index) => {
     return (
-      <div key={index} className="flex flex-row gap-2 items-center justify-start w-full">
-        <div
-          style={{ backgroundImage: `url(${collaborator.image})` }}
-          className="w-8 h-8 bg-primary-200 rounded-full bg-center bg-cover"
-        />
-        <p>
-          {collaborator.name} {collaborator.surname}
-        </p>
+      <div key={index} className="flex flex-col gap-2 items-center justify-start w-full">
+        <div className="flex flex-row gap-2 items-center justify-start w-full">
+          <div
+            style={{ backgroundImage: `url(${collaborator.image})` }}
+            className="w-8 h-8 min-w-[2rem] min-h-[2rem] bg-primary-200 rounded-full bg-center bg-cover"
+          />
+          <div className="flex flex-row w-full items-center justify-between">
+            <p>
+              {collaborator.name} {collaborator.surname}
+            </p>
+          </div>
+        </div>
+        {index !== collaborators.length - 1 ? <div className="w-full h-[1px] bg-secondary-200" /> : null}
       </div>
     );
   });
@@ -112,6 +123,13 @@ const SingleTask = () => {
             items-center w-full h-full"
       >
         {canInvite ? <SendTaskInvite taskUUID={taskData.main_task_uuid} toggleCanInvite={toggleCanInvite} /> : null}
+        {canAssignSubTask ? (
+          <AssignSubTask
+            toggleCanAssignSubTask={toggleCanAssignSubTask}
+            getSingleTaskCollborators={getSingleTaskCollborators}
+          />
+        ) : null}
+
         <div className="flex flex-col p-4 items-center justify-start w-full h-auto t:p-10  gap-4">
           <Link
             href="/hub/tasks"
@@ -185,8 +203,19 @@ const SingleTask = () => {
                   </div>
                 </div>
               </div>
+
               <div className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500">
-                <p className="text-2xl font-medium ">{collaborators.length > 1 ? "Collaborators" : "Collaborator"}</p>
+                <div className="text-2xl flex flex-row w-full justify-between items-center">
+                  <p className="font-medium">{collaborators.length > 1 ? "Collaborators" : "Collaborator"}</p>
+
+                  <button
+                    onClick={toggleCanAssignSubTask}
+                    className="flex flex-row gap-1 items-center text-xs text-primary-500
+                      hover:underline hover:underline-offset-2"
+                  >
+                    <AiOutlinePlus /> Sub Task
+                  </button>
+                </div>
 
                 <div className="flex flex-col gap-2 w-full">{mappedCollaborators}</div>
               </div>

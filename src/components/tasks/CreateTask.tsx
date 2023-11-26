@@ -11,6 +11,7 @@ import DateComp from "../input/DateComp";
 import SelectComp from "../input/SelectComp";
 import TextAreaComp from "../input/TextAreaComp";
 import TextComp from "../input/TextComp";
+import { MdTitle, MdOutlineSubtitles, MdSubtitles } from "react-icons/md";
 
 interface CreateTaskProps {
   toggleCanCreateTask: () => void;
@@ -134,7 +135,7 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
             required={true}
             value={mainTaskData.mainTaskTitle}
             onChange={handleTaskData}
-            Icon={AiOutlineAccountBook}
+            Icon={MdTitle}
           />
         </div>
 
@@ -146,7 +147,7 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
             required={true}
             value={mainTaskData.mainTaskSubtitle}
             onChange={handleTaskData}
-            Icon={AiOutlineAccountBook}
+            Icon={MdSubtitles}
           />
         </div>
 
