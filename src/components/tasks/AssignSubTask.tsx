@@ -2,10 +2,10 @@
 import { useGlobalContext } from "@/base/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
 import React from "react";
 import { AiOutlineClose, AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import SubTaskData from "./SubTaskData";
-import { useParams } from "next/navigation";
 
 interface CollaboratorsStateProps {
   name: string;
@@ -19,7 +19,6 @@ interface CollaboratorsStateProps {
 interface AssignSubTaskProps {
   handleSelectedSubTask: (subTaskUUID: string) => void;
   selectedSubTask: string;
-  collaborators: Array<CollaboratorsStateProps>;
 }
 
 const AssignSubTask: React.FC<AssignSubTaskProps> = (props) => {

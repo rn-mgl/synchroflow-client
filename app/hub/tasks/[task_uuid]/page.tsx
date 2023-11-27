@@ -42,9 +42,6 @@ interface CollaboratorsStateProps {
   name: string;
   surname: string;
   image: string;
-  user_uuid: string;
-  sub_task_collaborator_uuid: string;
-  is_sub_task_collaborator: boolean;
 }
 
 const SingleTask = () => {
@@ -188,11 +185,7 @@ const SingleTask = () => {
           <CreateSubTask toggleCanCreateSubTask={toggleCanCreateSubTask} getCreatedSubTasks={getCreatedSubTasks} />
         ) : null}
         {selectedSubTask ? (
-          <AssignSubTask
-            selectedSubTask={selectedSubTask}
-            collaborators={collaborators}
-            handleSelectedSubTask={handleSelectedSubTask}
-          />
+          <AssignSubTask selectedSubTask={selectedSubTask} handleSelectedSubTask={handleSelectedSubTask} />
         ) : null}
 
         <div className="flex flex-col p-4 items-center justify-start w-full h-auto t:p-10  gap-4">
