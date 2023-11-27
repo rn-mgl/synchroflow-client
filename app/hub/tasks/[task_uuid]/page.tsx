@@ -130,7 +130,9 @@ const SingleTask = () => {
         console.log(error);
       }
     }
-  }, [url, user?.token]);
+  }, [url, user?.token, params?.task_uuid]);
+
+  console.log(createdSubTasks);
 
   const getAssignedSubTasks = React.useCallback(async () => {
     if (user?.token) {
