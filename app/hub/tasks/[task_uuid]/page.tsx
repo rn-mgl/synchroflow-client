@@ -3,6 +3,7 @@ import { useGlobalContext } from "@/base/context";
 import SendTaskInvite from "@/components//invites/SendTaskInvite";
 import AssignSubTask from "@/components//tasks/AssignSubTask";
 import AsssignedSubTasks from "@/components//tasks/AsssignedSubTasks";
+import CreateSubTask from "@/components//tasks/CreateSubTask";
 import CreatedSubTasks from "@/components//tasks/CreatedSubTasks";
 import SingleTaskMainData from "@/components//tasks/SingleTaskMainData";
 import axios from "axios";
@@ -10,7 +11,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
-import { AiFillCaretRight, AiOutlinePlus } from "react-icons/ai";
+import { AiOutlinePlus } from "react-icons/ai";
 import { BsArrowLeft } from "react-icons/bs";
 
 interface SingleTaskData {
@@ -26,6 +27,24 @@ interface SingleTaskData {
   main_task_uuid: string;
 }
 
+interface AssignedSubTasksStateProps {
+  sub_task_title: string;
+  sub_task_subtitle: string;
+}
+
+interface CreatedSubTasksStateProps {
+  sub_task_title: string;
+  sub_task_subtitle: string;
+  sub_task_uuid: string;
+}
+
+interface CollaboratorsStateProps {
+  name: string;
+  surname: string;
+  image: string;
+  user_uuid: string;
+}
+
 const SingleTask = () => {
   const [taskData, setTaskData] = React.useState<SingleTaskData>({
     main_task_banner: "",
@@ -39,9 +58,12 @@ const SingleTask = () => {
     main_task_title: "",
     main_task_uuid: "",
   });
-  const [collaborators, setCollaborators] = React.useState([{ name: "", surname: "", image: "", user_uuid: "" }]);
+  const [collaborators, setCollaborators] = React.useState<Array<CollaboratorsStateProps>>([]);
+  const [createdSubTasks, setCreatedSubTasks] = React.useState<Array<CreatedSubTasksStateProps>>([]);
+  const [assignedSubTasks, setAssignedSubTasks] = React.useState<Array<AssignedSubTasksStateProps>>([]);
+  const [selectedSubTask, setSelectedSubTask] = React.useState("");
   const [canInvite, setCanInvite] = React.useState(false);
-  const [canAssignSubTask, setCanAssignSubTask] = React.useState(false);
+  const [canCreateSubTask, setCanCreateSubTask] = React.useState(false);
 
   const params = useParams();
   const { url } = useGlobalContext();
@@ -53,8 +75,12 @@ const SingleTask = () => {
     setCanInvite((prev) => !prev);
   };
 
-  const toggleCanAssignSubTask = () => {
-    setCanAssignSubTask((prev) => !prev);
+  const toggleCanCreateSubTask = () => {
+    setCanCreateSubTask((prev) => !prev);
+  };
+
+  const handleSelectedSubTask = (subTaskUUID: string) => {
+    setSelectedSubTask((prev) => (prev === subTaskUUID ? "" : subTaskUUID));
   };
 
   const getSingleTask = React.useCallback(async () => {
@@ -90,6 +116,38 @@ const SingleTask = () => {
     }
   }, [url, user?.token, params?.task_uuid]);
 
+  const getCreatedSubTasks = React.useCallback(async () => {
+    if (user?.token) {
+      try {
+        const { data } = await axios.get(`${url}/sub_tasks`, {
+          headers: { Authorization: user?.token },
+          params: { type: "main task", mainTaskUUID: params?.task_uuid },
+        });
+        if (data) {
+          setCreatedSubTasks(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [url, user?.token]);
+
+  const getAssignedSubTasks = React.useCallback(async () => {
+    if (user?.token) {
+      try {
+        const { data } = await axios.get(`${url}/sub_tasks`, {
+          headers: { Authorization: user?.token },
+          params: { type: "collaborated" },
+        });
+        if (data) {
+          setAssignedSubTasks(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [url, user?.token]);
+
   const mappedCollaborators = collaborators.map((collaborator, index) => {
     return (
       <div key={index} className="flex flex-col gap-2 items-center justify-start w-full">
@@ -124,10 +182,14 @@ const SingleTask = () => {
             items-center w-full h-full"
       >
         {canInvite ? <SendTaskInvite taskUUID={taskData.main_task_uuid} toggleCanInvite={toggleCanInvite} /> : null}
-        {canAssignSubTask ? (
+        {canCreateSubTask ? (
+          <CreateSubTask toggleCanCreateSubTask={toggleCanCreateSubTask} getCreatedSubTasks={getCreatedSubTasks} />
+        ) : null}
+        {selectedSubTask ? (
           <AssignSubTask
-            toggleCanAssignSubTask={toggleCanAssignSubTask}
-            getSingleTaskCollborators={getSingleTaskCollborators}
+            selectedSubTask={selectedSubTask}
+            collaborators={collaborators}
+            handleSelectedSubTask={handleSelectedSubTask}
           />
         ) : null}
 
@@ -154,24 +216,36 @@ const SingleTask = () => {
             />
 
             <div className="flex flex-col items-center justify-start w-full h-full gap-8 col-span-1 ">
-              <p className="mr-auto">{isTaskCreator ? "Created Sub Tasks" : "Your Sub Tasks"}</p>
-
-              {isTaskCreator ? <CreatedSubTasks /> : <AsssignedSubTasks />}
-
-              <div className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500">
-                <div className="text-2xl flex flex-row w-full justify-between items-center">
-                  <p className="font-medium">{collaborators.length > 1 ? "Collaborators" : "Collaborator"}</p>
+              <div className="flex flex-col items-center justify-start w-full gap-2 col-span-1 ">
+                <div className="flex flex-row w-full items-center justify-between">
+                  <p className="text-2xl font-medium mr-auto">
+                    {isTaskCreator ? "Created Sub Tasks" : "Your Sub Tasks"}
+                  </p>
 
                   <button
-                    onClick={toggleCanAssignSubTask}
+                    onClick={toggleCanCreateSubTask}
                     className="flex flex-row gap-1 items-center text-xs text-primary-500
-                      hover:underline hover:underline-offset-2"
+                      hover:underline hover:underline-offset-2 whitespace-nowrap"
                   >
                     <AiOutlinePlus /> Sub Task
                   </button>
                 </div>
+
+                {isTaskCreator ? (
+                  <CreatedSubTasks
+                    getCreatedSubTasks={getCreatedSubTasks}
+                    handleSelectedSubTask={handleSelectedSubTask}
+                    createdSubTasks={createdSubTasks}
+                  />
+                ) : (
+                  <AsssignedSubTasks getAssignedSubTasks={getAssignedSubTasks} assignedSubTasks={assignedSubTasks} />
+                )}
+              </div>
+
+              <div className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500">
+                <p className="font-medium text-2xl">{collaborators.length > 1 ? "Collaborators" : "Collaborator"}</p>
+
                 <div className="flex flex-col gap-2 w-full">{mappedCollaborators}</div>
-                AsssignedSubTasks
               </div>
             </div>
           </div>

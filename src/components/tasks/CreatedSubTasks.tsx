@@ -1,46 +1,34 @@
 "use client";
-import { useGlobalContext } from "@/base/context";
-import axios from "axios";
-import { useSession } from "next-auth/react";
 import React from "react";
 import { AiFillCaretRight } from "react-icons/ai";
+import { BsFillDiamondFill } from "react-icons/bs";
 
-interface CreatedSubTasksProps {
+interface CreatedSubTasksStateProps {
   sub_task_title: string;
   sub_task_subtitle: string;
+  sub_task_uuid: string;
 }
 
-const CreatedSubTasks = () => {
-  const [createdSubTasks, setCreatedSubTasks] = React.useState<Array<CreatedSubTasksProps>>([]);
+interface CreatedSubTasksProps {
+  getCreatedSubTasks: () => Promise<void>;
+  handleSelectedSubTask: (subTaskUUID: string) => void;
+  createdSubTasks: Array<CreatedSubTasksStateProps>;
+}
 
-  const { url } = useGlobalContext();
-  const { data: session } = useSession();
-  const user = session?.user;
-
-  const getCreatedSubTasks = React.useCallback(async () => {
-    if (user?.token) {
-      try {
-        const { data } = await axios.get(`${url}/sub_tasks`, {
-          headers: { Authorization: user?.token },
-          params: { type: "my" },
-        });
-        if (data) {
-          setCreatedSubTasks(data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }, [url, user?.token]);
-
-  const mappedCreatedSubtasks = createdSubTasks.map((subtask, index) => {
+const CreatedSubTasks: React.FC<CreatedSubTasksProps> = ({ getCreatedSubTasks, ...props }) => {
+  const mappedCreatedSubtasks = props.createdSubTasks.map((subTask, index) => {
     return (
-      <div className="flex flex-row gap-2 items-center justify-start w-full" key={index}>
+      <button
+        onClick={() => props.handleSelectedSubTask(subTask.sub_task_uuid)}
+        className="flex flex-row gap-2 items-center justify-start 
+                  w-full p-2 bg-primary-500 text-white rounded-md"
+        key={index}
+      >
         <div>
-          <AiFillCaretRight />
+          <BsFillDiamondFill className="text-xs" />
         </div>
-        <p>{subtask.sub_task_title}</p>
-      </div>
+        <p>{subTask.sub_task_title}</p>
+      </button>
     );
   });
 
@@ -49,9 +37,10 @@ const CreatedSubTasks = () => {
   }, [getCreatedSubTasks]);
 
   return (
-    <div className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500">
-      <p className="text-2xl font-medium ">Details</p>
-
+    <div
+      className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500 
+                  max-h-[15rem] overflow-y-auto cstm-scrollbar-2"
+    >
       {mappedCreatedSubtasks}
     </div>
   );

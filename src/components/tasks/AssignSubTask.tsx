@@ -1,85 +1,115 @@
 "use client";
-import React from "react";
-import { AiOutlineAccountBook, AiOutlineClose } from "react-icons/ai";
-import TextComp from "../input/TextComp";
-import TextAreaComp from "../input/TextAreaComp";
-import SelectComp from "../input/SelectComp";
-import DateComp from "../input/DateComp";
-import useLoader from "../hooks/useLoading";
 import { useGlobalContext } from "@/base/context";
-import { useSession } from "next-auth/react";
 import axios from "axios";
-import Loading from "../global/Loading";
+import { useSession } from "next-auth/react";
+import React from "react";
+import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
+import SubTaskData from "./SubTaskData";
 import { useParams } from "next/navigation";
-import { MdSubtitles, MdTitle } from "react-icons/md";
+
+interface CollaboratorsStateProps {
+  name: string;
+  surname: string;
+  image: string;
+  user_uuid: string;
+}
 
 interface AssignSubTaskProps {
-  toggleCanAssignSubTask: () => void;
-  getSingleTaskCollborators: () => Promise<void>;
+  handleSelectedSubTask: (subTaskUUID: string) => void;
+  selectedSubTask: string;
+  collaborators: Array<CollaboratorsStateProps>;
 }
 
 const AssignSubTask: React.FC<AssignSubTaskProps> = (props) => {
-  const [subTaskData, setSubTaskData] = React.useState({
-    subTaskTitle: "",
-    subTaskSubtitle: "",
-    subTaskDescription: "",
-    subTaskPriority: "important",
-    subTaskStartDate: undefined,
-    subTaskEndDate: undefined,
-  });
-  const { isLoading, handleLoader } = useLoader();
-  const params = useParams();
+  const [activePage, setActivePage] = React.useState<"details" | "associates">("details");
+  const [collaborators, setCollaborators] = React.useState<Array<CollaboratorsStateProps>>([]);
 
   const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+  const params = useParams();
 
-  const handleTaskData = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    setSubTaskData((prev) => {
-      return {
-        ...prev,
-        [name]: value,
-      };
-    });
+  const handleActivePage = (page: "details" | "associates") => {
+    setActivePage(page);
   };
 
-  const createSubTask = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    handleLoader(true);
+  const assignSubTask = async (collaboratorUUID: string) => {
     try {
       const { data } = await axios.post(
-        `${url}/sub_tasks`,
-        { subTaskData, mainTaskUUID: params?.task_uuid },
+        `${url}/sub_task_collaborators`,
+        { subTaskUUID: props.selectedSubTask, collaboratorUUID },
         { headers: { Authorization: user?.token } }
       );
       if (data) {
-        await props.getSingleTaskCollborators();
-        props.toggleCanAssignSubTask();
+        props.handleSelectedSubTask(props.selectedSubTask);
       }
     } catch (error) {
-      handleLoader(false);
       console.log(error);
     }
   };
 
+  const getSingleTaskCollborators = React.useCallback(async () => {
+    if (user?.token) {
+      try {
+        const { data } = await axios.get(`${url}/sub_task_collaborators`, {
+          headers: { Authorization: user?.token },
+          params: { subTaskUUID: props.selectedSubTask },
+        });
+
+        if (data) {
+          setCollaborators(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [url, user?.token, props.selectedSubTask]);
+
+  const mappedCollaborators = collaborators.map((collaborator, index) => {
+    return (
+      <div key={index} className="flex flex-col gap-2 items-center justify-start w-full">
+        <div className="flex flex-row gap-2 items-center justify-start w-full">
+          <div
+            style={{ backgroundImage: `url(${collaborator.image})` }}
+            className="w-8 h-8 min-w-[2rem] min-h-[2rem] bg-primary-200 rounded-full bg-center bg-cover"
+          />
+          <div className="flex flex-row w-full items-center justify-between text-sm">
+            <p className="truncate max-w-[12ch] m-l:max-w-[20ch] t:max-w-none">
+              {collaborator.name} {collaborator.surname}
+            </p>
+
+            <button
+              onClick={() => assignSubTask(collaborator.user_uuid)}
+              className="flex flex-row gap-2 text-primary-500 items-center hover:underline 
+                    hover:underline-offset-2 transition-all"
+            >
+              <AiOutlinePlus /> Assign
+            </button>
+          </div>
+        </div>
+        {index !== props.collaborators.length - 1 ? <div className="w-full h-[1px] bg-secondary-200" /> : null}
+      </div>
+    );
+  });
+
+  console.log(collaborators);
+
+  React.useEffect(() => {
+    getSingleTaskCollborators();
+  }, [getSingleTaskCollborators]);
+
   return (
     <div
       className="w-full h-full fixed top-0 left-0 backdrop-blur-md z-20 animate-fadeIn
-            bg-gradient-to-br from-[#546FFF33] to-[#8E92BC33]
-            flex flex-col items-center justify-start p-4 t:p-10"
+        bg-gradient-to-br from-[#546FFF33] to-[#8E92BC33]
+        flex flex-col items-center justify-start p-4 t:p-10"
     >
-      {isLoading ? <Loading /> : null}
-
-      <form
-        onSubmit={(e) => createSubTask(e)}
-        className="w-full bg-white h-full rounded-lg flex flex-col p-4 t:p-10 gap-4
+      <div
+        className="w-full bg-white h-fit rounded-lg flex flex-col p-4 t:p-10 gap-4
                   max-w-screen-t overflow-y-auto cstm-scrollbar items-center justify-start"
       >
         <button
-          onClick={props.toggleCanAssignSubTask}
+          onClick={() => props.handleSelectedSubTask(props.selectedSubTask)}
           type="button"
           className="ml-auto hover:bg-primary-500 rounded-full 
                     hover:bg-opacity-20 transition-all p-2"
@@ -87,84 +117,34 @@ const AssignSubTask: React.FC<AssignSubTaskProps> = (props) => {
           <AiOutlineClose className="text-secondary-500" />
         </button>
 
-        <div className="w-full flex flex-col items-start justify-center gap-2">
-          <p className="text-xs">Title</p>
-          <TextComp
-            name="subTaskTitle"
-            placeholder="Task Title..."
-            required={true}
-            value={subTaskData.subTaskTitle}
-            onChange={handleTaskData}
-            Icon={MdTitle}
-          />
-        </div>
+        <div className="w-full flex flex-col gap-8 items-center justify-start">
+          <div className="flex flex-row w-full justify-between">
+            <button
+              onClick={() => handleActivePage("details")}
+              className={`p-2 text-sm transition-all t:w-28 ${
+                activePage === "details" && "border-b-2 border-primary-500 text-primary-500"
+              }`}
+            >
+              Details
+            </button>
 
-        <div className="w-full flex flex-col items-start justify-center gap-2">
-          <p className="text-xs">Sub Title</p>
-          <TextComp
-            name="subTaskSubtitle"
-            placeholder="Task Sub Title..."
-            required={true}
-            value={subTaskData.subTaskSubtitle}
-            onChange={handleTaskData}
-            Icon={MdSubtitles}
-          />
-        </div>
+            <button
+              onClick={() => handleActivePage("associates")}
+              className={`p-2 text-sm transition-all t:w-28 ${
+                activePage === "associates" && "border-b-2 border-primary-500 text-primary-500"
+              }`}
+            >
+              Associates
+            </button>
+          </div>
 
-        <div className="w-full flex flex-col items-start justify-center gap-2">
-          <p className="text-xs">Description</p>
-          <TextAreaComp
-            name="subTaskDescription"
-            placeholder="Task Description..."
-            value={subTaskData.subTaskDescription}
-            rows={5}
-            required={true}
-            onChange={handleTaskData}
-          />
+          {activePage === "details" ? (
+            <SubTaskData selectedSubTask={props.selectedSubTask} />
+          ) : (
+            <div className="flex flex-col w-full gap-4">{mappedCollaborators}</div>
+          )}
         </div>
-
-        <div className="w-full flex flex-col items-start justify-center gap-2">
-          <p className="text-xs">Priority</p>
-          <SelectComp
-            name="subTaskPriority"
-            value={subTaskData.subTaskPriority}
-            onChange={handleTaskData}
-            labelValuePair={[
-              { label: "Critical Task", value: "critical" },
-              { label: "Important Task", value: "important" },
-              { label: "Non-Essential Tasks", value: "none" },
-            ]}
-          />
-        </div>
-
-        <div className="w-full flex flex-col items-start justify-center gap-2">
-          <p className="text-xs">Start Date</p>
-          <DateComp
-            name="subTaskStartDate"
-            required={true}
-            value={subTaskData.subTaskStartDate}
-            onChange={handleTaskData}
-          />
-        </div>
-
-        <div className="w-full flex flex-col items-start justify-center gap-2">
-          <p className="text-xs">End Date</p>
-          <DateComp
-            name="subTaskEndDate"
-            required={true}
-            value={subTaskData.subTaskEndDate}
-            onChange={handleTaskData}
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="bg-primary-500 rounded-lg text-white 
-                    font-bold p-2 w-full"
-        >
-          Assign
-        </button>
-      </form>
+      </div>
     </div>
   );
 };

@@ -28,3 +28,16 @@ export const localizeDate = (date: string, shorten: boolean) => {
 
   return `${month} ${day}, ${year}`;
 };
+
+export const localizeTime = (time: string) => {
+  const localTime = new Date(time).toLocaleTimeString();
+  const timeSplit = localTime.split(":");
+  const timeOfDaySplit = localTime.split(" ");
+  const hour = timeSplit[0];
+  const minute = timeSplit[1];
+  const timeOfDay = timeOfDaySplit[1];
+
+  const stringedTime = `${hour}:${minute} ${timeOfDay}`;
+
+  return stringedTime;
+};

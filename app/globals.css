@@ -6,6 +6,9 @@
   .cstm-scrollbar {
     @apply scroll-smooth scrollbar-thin scrollbar-track-white scrollbar-thumb-secondary-500;
   }
+  .cstm-scrollbar-2 {
+    @apply scroll-smooth scrollbar-thin scrollbar-track-white scrollbar-thumb-secondary-300;
+  }
 }
 
 * {
@@ -172,6 +175,9 @@ input[type="range"]::-moz-range-thumb {
 
 .cstm-scrollbar::-webkit-scrollbar,
 .cstm-scrollbar::-webkit-scrollbar-thumb,
-.cstm-scrollbar::-webkit-scrollbar-track {
+.cstm-scrollbar::-webkit-scrollbar-track,
+.cstm-scrollbar-2::-webkit-scrollbar,
+.cstm-scrollbar-2::-webkit-scrollbar-thumb,
+.cstm-scrollbar-2::-webkit-scrollbar-track {
   border-radius: 100vh;
 }
