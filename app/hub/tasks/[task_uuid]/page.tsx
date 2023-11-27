@@ -43,6 +43,8 @@ interface CollaboratorsStateProps {
   surname: string;
   image: string;
   user_uuid: string;
+  sub_task_collaborator_uuid: string;
+  is_sub_task_collaborator: boolean;
 }
 
 const SingleTask = () => {
