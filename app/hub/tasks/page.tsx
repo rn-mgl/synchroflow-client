@@ -3,7 +3,6 @@ import SearchFilter from "@/components//filter/SearchFilter";
 import useTasks from "@/components//hooks/useTasks";
 import CreateTask from "@/components//tasks/CreateTask";
 import TaskCards from "@/components//tasks/TaskCards";
-import TasksScroller from "@/components//tasks/TasksScroller";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
@@ -136,9 +135,35 @@ const Tasks = () => {
             Create Task
           </button>
 
-          <TasksScroller label="Today's Task">{mappedMyTaskCards}</TasksScroller>
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-80">
+            <div className="flex flex-row justify-between w-full">
+              <p className="font-semibold">Today&apos;s Task</p>
+            </div>
 
-          <TasksScroller label="Today's Collaboration">{mappedCollaboratedTaskCards}</TasksScroller>
+            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
+              <div
+                className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
+                transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
+              >
+                {mappedMyTaskCards}
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-80">
+            <div className="flex flex-row justify-between w-full">
+              <p className="font-semibold">Today&apos;s Collaboration</p>
+            </div>
+
+            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
+              <div
+                className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
+                transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
+              >
+                {mappedCollaboratedTaskCards}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

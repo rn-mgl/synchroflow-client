@@ -79,7 +79,7 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
           href={`/hub/tasks/${props.taskUUID}`}
           style={{ backgroundImage: `url(${props.banner})` }}
           className="bg-primary-100 w-full h-full rounded-2xl bg-center bg-cover
-                      hover:shadow-[0rem_0.2rem_0.4rem_#141522_inset] transition-all"
+                      hover:shadow-[0rem_0.2rem_0.4rem_#14152233_inset] transition-all"
         />
 
         <div className="w-full flex flex-row justify-between">

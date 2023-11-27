@@ -9,6 +9,7 @@ const nextConfig = {
     NEXTAUTH_URL: local,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
   },
+  images: { remotePatterns: [{ hostname: "res.cloudinary.com" }] },
 };
 
 module.exports = nextConfig;

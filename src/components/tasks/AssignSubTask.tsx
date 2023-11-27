@@ -3,7 +3,7 @@ import { useGlobalContext } from "@/base/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
-import { AiOutlineClose, AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import SubTaskData from "./SubTaskData";
 import { useParams } from "next/navigation";
 
@@ -12,6 +12,8 @@ interface CollaboratorsStateProps {
   surname: string;
   image: string;
   user_uuid: string;
+  sub_task_collaborator_uuid: string;
+  is_sub_task_collaborator: boolean;
 }
 
 interface AssignSubTaskProps {
@@ -48,12 +50,25 @@ const AssignSubTask: React.FC<AssignSubTaskProps> = (props) => {
     }
   };
 
+  const revokeAssignedSubTask = async (collaboratorUUID: string) => {
+    try {
+      const { data } = await axios.delete(`${url}/sub_task_collaborators/${collaboratorUUID}`, {
+        headers: { Authorization: user?.token },
+      });
+      if (data) {
+        props.handleSelectedSubTask(props.selectedSubTask);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const getSingleTaskCollborators = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/sub_task_collaborators`, {
+        const { data } = await axios.get(`${url}/main_task_collaborators`, {
           headers: { Authorization: user?.token },
-          params: { subTaskUUID: props.selectedSubTask },
+          params: { mainTaskUUID: params?.task_uuid },
         });
 
         if (data) {
@@ -63,7 +78,7 @@ const AssignSubTask: React.FC<AssignSubTaskProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, user?.token, props.selectedSubTask]);
+  }, [url, user?.token, params?.task_uuid]);
 
   const mappedCollaborators = collaborators.map((collaborator, index) => {
     return (
@@ -78,21 +93,28 @@ const AssignSubTask: React.FC<AssignSubTaskProps> = (props) => {
               {collaborator.name} {collaborator.surname}
             </p>
 
-            <button
-              onClick={() => assignSubTask(collaborator.user_uuid)}
-              className="flex flex-row gap-2 text-primary-500 items-center hover:underline 
+            {collaborator.is_sub_task_collaborator ? (
+              <button
+                onClick={() => revokeAssignedSubTask(collaborator.sub_task_collaborator_uuid)}
+                className="flex flex-row gap-2 text-error-500 items-center hover:underline 
                     hover:underline-offset-2 transition-all"
-            >
-              <AiOutlinePlus /> Assign
-            </button>
+              >
+                <AiOutlineMinus /> Revoke
+              </button>
+            ) : (
+              <button
+                onClick={() => assignSubTask(collaborator.user_uuid)}
+                className="flex flex-row gap-2 text-primary-500 items-center hover:underline 
+                    hover:underline-offset-2 transition-all"
+              >
+                <AiOutlinePlus /> Assign
+              </button>
+            )}
           </div>
         </div>
-        {index !== props.collaborators.length - 1 ? <div className="w-full h-[1px] bg-secondary-200" /> : null}
       </div>
     );
   });
-
-  console.log(collaborators);
 
   React.useEffect(() => {
     getSingleTaskCollborators();
