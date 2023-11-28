@@ -10,15 +10,24 @@ import Message from "../global/Message";
 import useLoader from "../hooks/useLoading";
 import useMessage from "../hooks/useMessage";
 import TextAreaComp from "../input/TextAreaComp";
+import { useParams } from "next/navigation";
 
 interface SendTaskInviteProps {
   taskUUID: string;
   toggleCanInvite: () => void;
 }
 
+interface AssociatesStateProps {
+  name: string;
+  surname: string;
+  user_uuid: string;
+}
+
 const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
   const [inviteMessage, setInviteMessage] = React.useState("");
-  const [associates, setAssociates] = React.useState([{ name: "", surname: "", user_uuid: "" }]);
+  const [associates, setAssociates] = React.useState<Array<AssociatesStateProps>>([
+    { name: "", surname: "", user_uuid: "" },
+  ]);
   const [associatesToInvite, setAssociatesToInvite] = React.useState<string[]>([]);
   const [searchFilter, setSearchFilter] = React.useState({ searchKey: "name", toSearch: "" });
 
@@ -28,6 +37,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
   const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+  const params = useParams();
 
   const handleInviteMessage = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
@@ -56,7 +66,10 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
   const getAssociates = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/associates`, { headers: { Authorization: user?.token } });
+        const { data } = await axios.get(`${url}/main_task_invites`, {
+          headers: { Authorization: user?.token },
+          params: { type: "invite associates", mainTaskUUID: params?.task_uuid },
+        });
 
         if (data) {
           setAssociates(data);
@@ -65,7 +78,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, user?.token]);
+  }, [url, user?.token, params?.task_uuid]);
 
   const mappedAssociates = associates.map((associate, index) => {
     return (
@@ -80,6 +93,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
             <AiFillCheckCircle className="text-lg text-primary-500" />
           </div>
         ) : null}
+
         <div className="bg-neutral-50 w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md overflow-y-auto">
           <div className="flex flex-row gap-1 items-center justify-center">
             <div className="bg-primary-100 w-12 min-w-[3rem] h-12 min-h-[3rem] rounded-full mr-auto" />
@@ -117,7 +131,14 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
   });
 
   const sendInvite = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     handleLoader(true);
+
+    if (associatesToInvite.length < 1) {
+      handleLoader(false);
+      handleMessages(true, "Please select an associate before sending an invite.", "error");
+      return;
+    }
 
     try {
       e.preventDefault();
@@ -131,6 +152,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
       if (data) {
         handleMessages(true, "Invite sent successfully", "info");
         handleLoader(false);
+        props.toggleCanInvite();
       }
     } catch (error) {
       handleLoader(false);
