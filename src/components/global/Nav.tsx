@@ -187,22 +187,6 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 
           <Link
             onClick={() => toggleIsVisible("link")}
-            href="/hub/settings"
-            className={`flex flex-row items-center justify-center gap-4 w-full p-4 
-                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
-                        path?.includes("settings")
-                          ? "opacity-100 bg-gradient-to-br from-primary-500 to-primary-900 text-white"
-                          : "opacity-50"
-                      } mt-auto`}
-          >
-            <div>
-              <AiOutlineSetting className="text-2xl" />
-            </div>
-            <p className={`font-medium mr-auto ${isVisible ? "l-s:flex" : "l-s:hidden"}`}>Settings</p>
-          </Link>
-
-          <Link
-            onClick={() => toggleIsVisible("link")}
             href="/hub/invites"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
                       hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
@@ -215,6 +199,22 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
               <AiOutlineMail className="text-2xl" />
             </div>
             <p className={`font-medium mr-auto ${isVisible ? "l-s:flex" : "l-s:hidden"}`}>Invites</p>
+          </Link>
+
+          <Link
+            onClick={() => toggleIsVisible("link")}
+            href="/hub/settings"
+            className={`flex flex-row items-center justify-center gap-4 w-full p-4 
+                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
+                        path?.includes("settings")
+                          ? "opacity-100 bg-gradient-to-br from-primary-500 to-primary-900 text-white"
+                          : "opacity-50"
+                      } mt-auto`}
+          >
+            <div>
+              <AiOutlineSetting className="text-2xl" />
+            </div>
+            <p className={`font-medium mr-auto ${isVisible ? "l-s:flex" : "l-s:hidden"}`}>Settings</p>
           </Link>
         </div>
 
