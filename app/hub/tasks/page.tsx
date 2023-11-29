@@ -12,7 +12,16 @@ import { LuLayoutDashboard } from "react-icons/lu";
 const Tasks = () => {
   const [searchInput, setSearchInput] = React.useState("");
   const [canCreateTask, setCanCreateTask] = React.useState(false);
-  const { myTasks, collaboratedTasks, getMyTasks, getCollaboratedTasks } = useTasks();
+  const {
+    myTasksToday,
+    collaboratedTasksToday,
+    collaboratedTasks,
+    myTasks,
+    getCollaboratedTasksToday,
+    getMyTasksToday,
+    getMyTasks,
+    getCollaboratedTasks,
+  } = useTasks();
 
   const { data: session } = useSession();
 
@@ -25,6 +34,34 @@ const Tasks = () => {
   const toggleCanCreateTask = () => {
     setCanCreateTask((prev) => !prev);
   };
+
+  const mappedMyTaskCardsToday = myTasksToday.map((task, index) => {
+    return (
+      <TaskCards
+        key={index}
+        banner={task.main_task_banner}
+        title={task.main_task_title}
+        subTitle={task.main_task_subtitle}
+        status={task.main_task_status}
+        deadline={task.main_task_end_date}
+        taskUUID={task.main_task_uuid}
+      />
+    );
+  });
+
+  const mappedCollaboratedTaskCardsToday = collaboratedTasksToday.map((task, index) => {
+    return (
+      <TaskCards
+        key={index}
+        banner={task.main_task_banner}
+        title={task.main_task_title}
+        subTitle={task.main_task_subtitle}
+        status={task.main_task_status}
+        deadline={task.main_task_end_date}
+        taskUUID={task.main_task_uuid}
+      />
+    );
+  });
 
   const mappedMyTaskCards = myTasks.map((task, index) => {
     return (
@@ -61,6 +98,14 @@ const Tasks = () => {
   React.useEffect(() => {
     getCollaboratedTasks();
   }, [getCollaboratedTasks]);
+
+  React.useEffect(() => {
+    getMyTasksToday();
+  }, [getMyTasksToday]);
+
+  React.useEffect(() => {
+    getCollaboratedTasksToday();
+  }, [getCollaboratedTasksToday]);
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">
@@ -145,7 +190,7 @@ const Tasks = () => {
                 className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
                 transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
               >
-                {mappedMyTaskCards}
+                {mappedMyTaskCardsToday}
               </div>
             </div>
           </div>
@@ -153,6 +198,36 @@ const Tasks = () => {
           <div className="w-full flex flex-col gap-2 rounded-lg items-center h-80">
             <div className="flex flex-row justify-between w-full">
               <p className="font-semibold">Today&apos;s Collaboration</p>
+            </div>
+
+            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
+              <div
+                className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
+                transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
+              >
+                {mappedCollaboratedTaskCardsToday}
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-80">
+            <div className="flex flex-row justify-between w-full">
+              <p className="font-semibold">My Tasks</p>
+            </div>
+
+            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
+              <div
+                className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
+                transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
+              >
+                {mappedMyTaskCards}
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-80">
+            <div className="flex flex-row justify-between w-full">
+              <p className="font-semibold">My Collaborations</p>
             </div>
 
             <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
