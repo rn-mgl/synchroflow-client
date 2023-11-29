@@ -1,17 +1,17 @@
 "use client";
-import AssociatesScroller from "@/components//associates/AssociatesScroller";
 import AssociateCards from "@/components//associates/AssociateCards";
+import AssociateDetails from "@/components//associates/AssociateDetails";
+import RecentAssociateCards from "@/components//associates/RecentAssociateCards";
 import SearchFilter from "@/components//filter/SearchFilter";
+import useAssociates from "@/components//hooks/useAssociates";
 import React from "react";
 import { AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
 import { BsFilter } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
-import useAssociates from "@/components//hooks/useAssociates";
-
-const tasks = [1, 2, 3, 4, 5];
 
 const Associates = () => {
   const [searchInput, setSearchInput] = React.useState("");
+  const [selectedAssociate, setSelectedAssociate] = React.useState("");
   const { allAssociates, recentAssociates, getAllAssociates, getRecentAssociates } = useAssociates();
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,9 +20,13 @@ const Associates = () => {
     setSearchInput(value);
   };
 
+  const handleSelectedAssociate = (associateUUID: string) => {
+    setSelectedAssociate((prev) => (prev !== associateUUID ? associateUUID : ""));
+  };
+
   const mappedRecentAssociateCards = recentAssociates.map((task, index) => {
     return (
-      <AssociateCards
+      <RecentAssociateCards
         key={index}
         name={task.name}
         surname={task.surname}
@@ -30,6 +34,7 @@ const Associates = () => {
         status={task.status}
         role={task.role}
         deadline={20}
+        handleSelectedAssociate={() => handleSelectedAssociate(task.user_uuid)}
       />
     );
   });
@@ -44,6 +49,7 @@ const Associates = () => {
         status={task.status}
         role={task.role}
         deadline={20}
+        handleSelectedAssociate={() => handleSelectedAssociate(task.user_uuid)}
       />
     );
   });
@@ -62,6 +68,9 @@ const Associates = () => {
         className="max-w-screen-2xl flex flex-col justify-start 
                 items-center w-full h-full"
       >
+        {selectedAssociate ? (
+          <AssociateDetails handleSelectedAssociate={() => handleSelectedAssociate(selectedAssociate)} />
+        ) : null}
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
           <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit">
             <p className="font-semibold text-xl">Explore Associates</p>
@@ -120,13 +129,35 @@ const Associates = () => {
             Add Associates
           </button>
 
-          <AssociatesScroller label="Recent Associates" tasks={tasks}>
-            {mappedRecentAssociateCards}
-          </AssociatesScroller>
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-44">
+            <div className="flex flex-row justify-between w-full">
+              <p className="font-semibold">Recent Associates</p>
+            </div>
 
-          <AssociatesScroller label="Associates" tasks={tasks}>
-            {mappedAssociateCards}
-          </AssociatesScroller>
+            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
+              <div
+                className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
+                  transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
+              >
+                {mappedRecentAssociateCards}
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-72">
+            <div className="flex flex-row justify-between w-full">
+              <p className="font-semibold">Associates</p>
+            </div>
+
+            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
+              <div
+                className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
+                  transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
+              >
+                {mappedAssociateCards}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

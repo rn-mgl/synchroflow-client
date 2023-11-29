@@ -1,7 +1,7 @@
 import React from "react";
 import { AiFillStar, AiOutlineFileText } from "react-icons/ai";
 
-interface AssociateCardsProps {
+interface RecentAssociateCardsProps {
   name: string;
   surname: string;
   image: string;
@@ -11,11 +11,11 @@ interface AssociateCardsProps {
   handleSelectedAssociate: () => void;
 }
 
-const AssociateCards: React.FC<AssociateCardsProps> = (props) => {
+const RecentAssociateCards: React.FC<RecentAssociateCardsProps> = (props) => {
   return (
     <button
       onClick={props.handleSelectedAssociate}
-      className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-full select-none"
+      className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-full select-none "
     >
       <div className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md overflow-y-auto">
         <div className="flex flex-row gap-1 items-center justify-center">
@@ -32,9 +32,7 @@ const AssociateCards: React.FC<AssociateCardsProps> = (props) => {
           </div>
         </div>
 
-        <p className="text-xs my-auto text-justify leading-relaxed indent-10">{props.status}</p>
-
-        <div className="flex flex-row justify-between items-center">
+        <div className="flex flex-row justify-between items-center mt-auto">
           <div className="flex flex-row gap-1 items-center justify-center text-xs">
             <div>
               <AiOutlineFileText className="text-sm" />
@@ -56,4 +54,4 @@ const AssociateCards: React.FC<AssociateCardsProps> = (props) => {
   );
 };
 
-export default AssociateCards;
+export default RecentAssociateCards;
