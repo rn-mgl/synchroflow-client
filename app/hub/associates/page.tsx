@@ -24,32 +24,32 @@ const Associates = () => {
     setSelectedAssociate((prev) => (prev !== associateUUID ? associateUUID : ""));
   };
 
-  const mappedRecentAssociateCards = recentAssociates.map((task, index) => {
+  const mappedRecentAssociateCards = recentAssociates.map((associate, index) => {
     return (
       <RecentAssociateCards
         key={index}
-        name={task.name}
-        surname={task.surname}
-        image={task.image}
-        status={task.status}
-        role={task.role}
+        name={associate.name}
+        surname={associate.surname}
+        image={associate.image}
+        status={associate.status}
+        role={associate.role}
         deadline={20}
-        handleSelectedAssociate={() => handleSelectedAssociate(task.user_uuid)}
+        handleSelectedAssociate={() => handleSelectedAssociate(associate.associate_uuid)}
       />
     );
   });
 
-  const mappedAssociateCards = allAssociates.map((task, index) => {
+  const mappedAssociateCards = allAssociates.map((associate, index) => {
     return (
       <AssociateCards
         key={index}
-        name={task.name}
-        surname={task.surname}
-        image={task.image}
-        status={task.status}
-        role={task.role}
+        name={associate.name}
+        surname={associate.surname}
+        image={associate.image}
+        status={associate.status}
+        role={associate.role}
         deadline={20}
-        handleSelectedAssociate={() => handleSelectedAssociate(task.user_uuid)}
+        handleSelectedAssociate={() => handleSelectedAssociate(associate.associate_uuid)}
       />
     );
   });
@@ -69,7 +69,10 @@ const Associates = () => {
                 items-center w-full h-full"
       >
         {selectedAssociate ? (
-          <AssociateDetails handleSelectedAssociate={() => handleSelectedAssociate(selectedAssociate)} />
+          <AssociateDetails
+            handleSelectedAssociate={() => handleSelectedAssociate(selectedAssociate)}
+            associateUUID={selectedAssociate}
+          />
         ) : null}
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
           <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit">

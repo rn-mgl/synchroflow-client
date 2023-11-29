@@ -7,7 +7,7 @@ interface AssociatesProps {
   name: string;
   surname: string;
   email: string;
-  user_uuid: string;
+  associate_uuid: string;
   image: string;
   status: string;
   role: string;
@@ -15,10 +15,10 @@ interface AssociatesProps {
 
 export default function useAssociates() {
   const [recentAssociates, setRecentAssociates] = React.useState<Array<AssociatesProps>>([
-    { name: "", surname: "", email: "", user_uuid: "", image: "", status: "", role: "" },
+    { name: "", surname: "", email: "", associate_uuid: "", image: "", status: "", role: "" },
   ]);
   const [allAssociates, setAllAssociates] = React.useState<Array<AssociatesProps>>([
-    { name: "", surname: "", email: "", user_uuid: "", image: "", status: "", role: "" },
+    { name: "", surname: "", email: "", associate_uuid: "", image: "", status: "", role: "" },
   ]);
 
   const { url } = useGlobalContext();

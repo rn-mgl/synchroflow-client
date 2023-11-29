@@ -1,11 +1,62 @@
+"use client";
+
+import { useGlobalContext } from "@/base/context";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 
-interface CreateTaskProps {
+interface AssociateProps {
+  associateUUID: string;
   handleSelectedAssociate: () => void;
 }
 
-const AssociateDetails: React.FC<CreateTaskProps> = (props) => {
+interface AssociateDataStateProps {
+  name: string;
+  surname: string;
+  email: string;
+  image: string;
+  status: string;
+  role: string;
+  tasks: number;
+  rating: number;
+}
+
+const AssociateDetails: React.FC<AssociateProps> = (props) => {
+  const [associateData, setAssociateData] = React.useState({
+    name: "",
+    surname: "",
+    email: "",
+    image: "",
+    status: "",
+    role: "",
+    tasks: "",
+    rating: "",
+  });
+
+  const { url } = useGlobalContext();
+  const { data: session } = useSession();
+  const user = session?.user;
+
+  const getAssociate = React.useCallback(async () => {
+    if (user?.token) {
+      try {
+        const { data } = await axios.get(`${url}/associates/${props.associateUUID}`, {
+          headers: { Authorization: user?.token },
+        });
+        if (data) {
+          setAssociateData(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [url, props.associateUUID, user?.token]);
+
+  React.useEffect(() => {
+    getAssociate();
+  }, [getAssociate]);
+
   return (
     <div
       className="w-full h-full fixed top-0 left-0 backdrop-blur-md z-20 animate-fadeIn
@@ -24,6 +75,35 @@ const AssociateDetails: React.FC<CreateTaskProps> = (props) => {
         >
           <AiOutlineClose className="text-secondary-500" />
         </button>
+
+        <div className="w-full flex flex-col gap-2">
+          <div
+            className="w-full rounded-md h-20 bg-gradient-to-br from-primary-500 to-primary-200 
+                    relative flex flex-col items-center"
+          >
+            <div
+              style={{ backgroundImage: `url(${associateData.image})` }}
+              className="w-16 min-w-[4rem] h-16 min-h-[4rem] rounded-full bg-secondary-100 bg-center 
+                    bg-cover border-4 border-white absolute bottom-0 translate-y-8"
+            />
+          </div>
+
+          <div className="w-full flex flex-col items-center justify-center gap-2 text-center mt-8">
+            <p className="text-xl font-semibold">
+              {associateData.name} {associateData.surname}
+            </p>
+            <p className="text-sm">{associateData.email}</p>
+            <p className="text-sm italic font-light">{associateData.role}</p>
+          </div>
+
+          <div className="w-full h-[2.5px] bg-primary-200" />
+
+          <p className="text-sm italic">{associateData.status}</p>
+
+          <div className="w-full h-[2.5px] bg-primary-200" />
+
+          <p className="text-sm">{associateData.rating}</p>
+        </div>
       </div>
     </div>
   );
