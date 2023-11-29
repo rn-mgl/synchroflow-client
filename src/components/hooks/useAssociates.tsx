@@ -9,14 +9,16 @@ interface AssociatesProps {
   email: string;
   user_uuid: string;
   image: string;
+  status: string;
+  role: string;
 }
 
 export default function useAssociates() {
   const [recentAssociates, setRecentAssociates] = React.useState<Array<AssociatesProps>>([
-    { name: "", surname: "", email: "", user_uuid: "", image: "" },
+    { name: "", surname: "", email: "", user_uuid: "", image: "", status: "", role: "" },
   ]);
   const [allAssociates, setAllAssociates] = React.useState<Array<AssociatesProps>>([
-    { name: "", surname: "", email: "", user_uuid: "", image: "" },
+    { name: "", surname: "", email: "", user_uuid: "", image: "", status: "", role: "" },
   ]);
 
   const { url } = useGlobalContext();

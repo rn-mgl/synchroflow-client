@@ -6,6 +6,7 @@ interface Props {
   surname: string;
   image: string;
   role: string;
+  status: string;
   deadline: number | null;
 }
 
@@ -27,10 +28,7 @@ const AssociateCards: React.FC<Props> = (props) => {
           </div>
         </div>
 
-        <p className="text-xs my-auto text-justify leading-relaxed indent-10">
-          Follow the video tutorial above. Understand how to use each tool in the Figma application. Also learn how to
-          make a good and correct design.
-        </p>
+        <p className="text-xs my-auto text-justify leading-relaxed indent-10">{props.status}</p>
 
         <div className="flex flex-row justify-between items-center mt-4">
           <div className="flex flex-row gap-1 items-center justify-center text-xs">

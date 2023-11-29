@@ -15,7 +15,6 @@ const Associates = () => {
   const { allAssociates, recentAssociates, getAllAssociates, getRecentAssociates } = useAssociates();
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.name;
     const value = e.target.value;
 
     setSearchInput(value);
@@ -28,7 +27,8 @@ const Associates = () => {
         name={task.name}
         surname={task.surname}
         image={task.image}
-        role="Position"
+        status={task.status}
+        role={task.role}
         deadline={20}
       />
     );
@@ -41,7 +41,8 @@ const Associates = () => {
         name={task.name}
         surname={task.surname}
         image={task.image}
-        role="Position"
+        status={task.status}
+        role={task.role}
         deadline={20}
       />
     );
