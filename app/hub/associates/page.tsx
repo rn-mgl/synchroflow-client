@@ -6,11 +6,13 @@ import React from "react";
 import { AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
 import { BsFilter } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
+import useAssociates from "@/components//hooks/useAssociates";
 
 const tasks = [1, 2, 3, 4, 5];
 
 const Associates = () => {
   const [searchInput, setSearchInput] = React.useState("");
+  const { allAssociates, recentAssociates, getAllAssociates, getRecentAssociates } = useAssociates();
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
@@ -19,13 +21,39 @@ const Associates = () => {
     setSearchInput(value);
   };
 
-  const mappedRecentAssociateCards = tasks.map((task, index) => {
-    return <AssociateCards key={index} name="Name" role="Position" deadline={20} />;
+  const mappedRecentAssociateCards = recentAssociates.map((task, index) => {
+    return (
+      <AssociateCards
+        key={index}
+        name={task.name}
+        surname={task.surname}
+        image={task.image}
+        role="Position"
+        deadline={20}
+      />
+    );
   });
 
-  const mappedAssociateCards = tasks.map((task, index) => {
-    return <AssociateCards key={index} name="Name" role="Position" deadline={20} />;
+  const mappedAssociateCards = allAssociates.map((task, index) => {
+    return (
+      <AssociateCards
+        key={index}
+        name={task.name}
+        surname={task.surname}
+        image={task.image}
+        role="Position"
+        deadline={20}
+      />
+    );
   });
+
+  React.useEffect(() => {
+    getAllAssociates();
+  }, [getAllAssociates]);
+
+  React.useEffect(() => {
+    getRecentAssociates();
+  }, [getRecentAssociates]);
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">
