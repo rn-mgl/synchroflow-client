@@ -17,28 +17,28 @@ const MESSAGE_STYLE = {
   success: "bg-success-200 border-success-500 text-success-800",
 };
 
-const Message: React.FC<MessageProps> = (props) => {
+const Message: React.FC<MessageProps> = ({ message, handleMessages }) => {
   React.useEffect(() => {
-    if (props.message.active) {
+    if (message.active) {
       let timeoutId: NodeJS.Timeout;
 
       timeoutId = setTimeout(() => {
-        props.handleMessages(false, "", "info");
+        handleMessages(false, "", "info");
       }, 5000);
 
       return () => clearTimeout(timeoutId);
     }
-  }, [props]);
+  }, [message.active, handleMessages]);
 
   const handleMessage = () => {
-    props.handleMessages(false, "", "info");
+    handleMessages(false, "", "info");
   };
 
   return (
     <div
       className={`fixed top-5 p-2 rounded-md z-[100]
                  w-10/12 border-2 whitespace-normal text-center flex flex-col items-center 
-                 justify-start gap-2 text-sm ${MESSAGE_STYLE[props.message.type as keyof object]}
+                 justify-start gap-2 text-sm ${MESSAGE_STYLE[message.type as keyof object]}
                  animate-slideIn max-w-lg`}
     >
       <button
@@ -48,7 +48,7 @@ const Message: React.FC<MessageProps> = (props) => {
       >
         <IoClose className="scale-150" />
       </button>
-      <p className="font-medium">{props.message.msg}</p>
+      <p className="font-medium">{message.msg}</p>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 "use client";
+import AddAssociate from "@/components//associates/AddAssociate";
 import AssociateCards from "@/components//associates/AssociateCards";
 import RecentAssociateCards from "@/components//associates/RecentAssociateCards";
 import SearchFilter from "@/components//filter/SearchFilter";
@@ -13,6 +14,7 @@ const Associates = () => {
   const [searchInput, setSearchInput] = React.useState("");
   const [selectedAssociate, setSelectedAssociate] = React.useState("");
   const [canDisconnect, setCanDisconnect] = React.useState(false);
+  const [canAddAssociate, setCanAddAssociate] = React.useState(false);
   const { allAssociates, recentAssociates, getAllAssociates, getRecentAssociates } = useAssociates();
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,6 +29,10 @@ const Associates = () => {
 
   const toggleCanDisconnect = () => {
     setCanDisconnect((prev) => !prev);
+  };
+
+  const toggleCanAddAssociate = () => {
+    setCanAddAssociate((prev) => !prev);
   };
 
   const mappedRecentAssociateCards = recentAssociates.map((associate, index) => {
@@ -91,6 +97,8 @@ const Associates = () => {
             }}
           />
         ) : null}
+
+        {canAddAssociate ? <AddAssociate toggleCanAddAssociate={toggleCanAddAssociate} /> : null}
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
           <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit">
             <p className="font-semibold text-xl">Explore Associates</p>
@@ -139,6 +147,7 @@ const Associates = () => {
           </div>
 
           <button
+            onClick={toggleCanAddAssociate}
             className="w-full p-2 rounded-md bg-primary-500 text-white font-medium 
                     t:w-fit t:px-4 t:mr-auto flex flex-row items-center justify-center gap-2
                     hover:shadow-md"
