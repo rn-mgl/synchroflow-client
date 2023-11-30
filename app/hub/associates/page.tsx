@@ -34,6 +34,8 @@ const Associates = () => {
         status={associate.status}
         role={associate.role}
         deadline={20}
+        selectedAssociate={selectedAssociate}
+        associateUUID={associate.associate_uuid}
         handleSelectedAssociate={() => handleSelectedAssociate(associate.associate_uuid)}
       />
     );
@@ -49,6 +51,8 @@ const Associates = () => {
         status={associate.status}
         role={associate.role}
         deadline={20}
+        selectedAssociate={selectedAssociate}
+        associateUUID={associate.associate_uuid}
         handleSelectedAssociate={() => handleSelectedAssociate(associate.associate_uuid)}
       />
     );
@@ -68,12 +72,6 @@ const Associates = () => {
         className="max-w-screen-2xl flex flex-col justify-start 
                 items-center w-full h-full"
       >
-        {selectedAssociate ? (
-          <AssociateDetails
-            handleSelectedAssociate={() => handleSelectedAssociate(selectedAssociate)}
-            associateUUID={selectedAssociate}
-          />
-        ) : null}
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
           <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit">
             <p className="font-semibold text-xl">Explore Associates</p>

@@ -76,15 +76,16 @@ const AssociateDetails: React.FC<AssociateProps> = (props) => {
           <AiOutlineClose className="text-secondary-500" />
         </button>
 
-        <div className="w-full flex flex-col gap-2">
+        <div className="w-full flex flex-col gap-4">
           <div
             className="w-full rounded-md h-20 bg-gradient-to-br from-primary-500 to-primary-200 
-                    relative flex flex-col items-center"
+                    relative flex flex-col items-center t:h-32"
           >
             <div
               style={{ backgroundImage: `url(${associateData.image})` }}
               className="w-16 min-w-[4rem] h-16 min-h-[4rem] rounded-full bg-secondary-100 bg-center 
-                    bg-cover border-4 border-white absolute bottom-0 translate-y-8"
+                        bg-cover border-4 border-white absolute bottom-0 translate-y-8
+                        t:w-24 t:h-24 t:min-w-[6rem] t:min-h-[6rem] t:translate-y-11"
             />
           </div>
 
@@ -93,14 +94,11 @@ const AssociateDetails: React.FC<AssociateProps> = (props) => {
               {associateData.name} {associateData.surname}
             </p>
             <p className="text-sm">{associateData.email}</p>
-            <p className="text-sm italic font-light">{associateData.role}</p>
           </div>
 
-          <div className="w-full h-[2.5px] bg-primary-200" />
-
-          <p className="text-sm italic">{associateData.status}</p>
-
-          <div className="w-full h-[2.5px] bg-primary-200" />
+          <div className="w-full rounded-md p-4 bg-neutral-100 t:w-6/12">
+            <p className="text-sm italic">&quot;{associateData.status}&quot;</p>
+          </div>
 
           <p className="text-sm">{associateData.rating}</p>
         </div>
