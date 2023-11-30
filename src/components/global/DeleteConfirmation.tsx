@@ -1,20 +1,45 @@
+import { useGlobalContext } from "@/base/context";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 
-interface ConfirmationProps {
+interface DeleteConfirmationProps {
   title: string;
   message: string;
+  apiRoute: string;
   toggleConfirmation: () => void;
+  refetchData: () => Promise<void>;
 }
 
-const Confirmation: React.FC<ConfirmationProps> = (props) => {
+const DeleteConfirmation: React.FC<DeleteConfirmationProps> = (props) => {
+  const { url } = useGlobalContext();
+  const { data: session } = useSession();
+  const user = session?.user;
+
+  const deleteData = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.delete(`${url}/${props.apiRoute}`, { headers: { Authorization: user?.token } });
+      if (data) {
+        props.toggleConfirmation();
+        await props.refetchData();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(props.apiRoute);
+
   return (
     <div
       className="w-full h-full fixed top-0 left-0 backdrop-blur-md z-20 animate-fadeIn
         bg-gradient-to-br from-[#546FFF33] to-[#8E92BC33]
         flex flex-col items-center justify-start p-4 t:p-10"
     >
-      <div
+      <form
+        onSubmit={(e) => deleteData(e)}
         className="w-full bg-white h-fit rounded-lg flex flex-col p-4 t:p-10 gap-4
                   max-w-screen-m-l overflow-y-auto cstm-scrollbar items-center justify-start
                   my-auto text-center"
@@ -33,21 +58,24 @@ const Confirmation: React.FC<ConfirmationProps> = (props) => {
 
         <div className="w-full flex flex-row gap-4">
           <button
+            type="button"
+            onClick={props.toggleConfirmation}
             className="w-full rounded-md font-medium  
                         p-2 text-sm text-primary-500 border-2 border-primary-500"
           >
             No
           </button>
           <button
+            type="submit"
             className="w-full rounded-md font-medium bg-primary-500 
                         p-2 text-sm text-white border-2 border-primary-500"
           >
             Yes
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
 
-export default Confirmation;
+export default DeleteConfirmation;

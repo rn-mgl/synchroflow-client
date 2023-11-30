@@ -1,9 +1,8 @@
 "use client";
 import AssociateCards from "@/components//associates/AssociateCards";
-import AssociateDetails from "@/components//associates/AssociateDetails";
 import RecentAssociateCards from "@/components//associates/RecentAssociateCards";
 import SearchFilter from "@/components//filter/SearchFilter";
-import Confirmation from "@/components//global/Confirmation";
+import DeleteConfirmation from "@/components//global/DeleteConfirmation";
 import useAssociates from "@/components//hooks/useAssociates";
 import React from "react";
 import { AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
@@ -81,10 +80,15 @@ const Associates = () => {
                 items-center w-full h-full"
       >
         {canDisconnect ? (
-          <Confirmation
+          <DeleteConfirmation
             title="Confirm Associate Disconnection"
             message="are you sure you want to disconnect with this associate?"
+            apiRoute={`associates/${selectedAssociate}`}
             toggleConfirmation={toggleCanDisconnect}
+            refetchData={async () => {
+              getAllAssociates();
+              getRecentAssociates();
+            }}
           />
         ) : null}
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
