@@ -3,10 +3,13 @@ import { useGlobalContext } from "@/base/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
-import { AiOutlineClose } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
 import AssociateCardsInvite from "./AssociateCardsInvite";
 import useMessage from "../hooks/useMessage";
 import Message from "../global/Message";
+import SearchFilter from "../filter/SearchFilter";
+import { LuLayoutDashboard } from "react-icons/lu";
+import { BsFilter } from "react-icons/bs";
 
 interface AddAssociateProps {
   toggleCanAddAssociate: () => void;
@@ -25,6 +28,7 @@ interface AssociateStateProps {
 }
 
 const AddAssociate: React.FC<AddAssociateProps> = (props) => {
+  const [searchInput, setSearchInput] = React.useState("");
   const [users, setUsers] = React.useState<Array<AssociateStateProps>>([
     {
       name: "",
@@ -43,6 +47,12 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
   const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+
+  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    setSearchInput(value);
+  };
 
   const getUsers = React.useCallback(async () => {
     if (user?.token) {
@@ -130,6 +140,52 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
         >
           <AiOutlineClose className="text-secondary-500" />
         </button>
+
+        <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit">
+          <p className="font-semibold text-xl">Explore Potential Associates</p>
+
+          <div className="flex flex-row justify-center h-full w-full">
+            <div className="flex flex-row gap-4 h-fit w-full">
+              <div className="max-w-screen-m-m w-full mr-auto h-fit">
+                <SearchFilter
+                  placeholder="Search Associates"
+                  name="searchInput"
+                  onChange={handleSearchInput}
+                  required={false}
+                  value={searchInput}
+                  Icon={AiOutlineSearch}
+                />
+              </div>
+
+              <button
+                className="p-2 rounded-lg border-[1px] w-16 flex flex-col items-center justify-center
+                        t:hidden"
+              >
+                <AiOutlineTool className="text-base text-secondary-300 t:text-lg l-s:text-xl" />
+              </button>
+
+              <button
+                className="hidden p-2 rounded-lg border-[1px] flex-row gap-2
+                        items-center justify-between t:flex font-medium px-6"
+              >
+                <div>
+                  <LuLayoutDashboard className="text-base text-secondary-300 t:text-lg l-s:text-xl" />
+                </div>
+                <p className="text-xs">Category</p>
+              </button>
+
+              <button
+                className="hidden p-2 rounded-lg border-[1px] flex-row gap-2
+                        items-center justify-between t:flex font-medium px-6"
+              >
+                <div>
+                  <BsFilter className="text-base text-secondary-300 t:text-lg l-s:text-xl" />
+                </div>
+                <p className="text-xs">Sort by: {`Deadline`}</p>
+              </button>
+            </div>
+          </div>
+        </div>
 
         <div
           className="w-full grid grid-cols-1 t:grid-cols-2 gap-4 overflow-y-auto 
