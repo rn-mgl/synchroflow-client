@@ -12,14 +12,18 @@ interface AssociateCardsProps {
   selectedAssociate: string;
   associateUUID: string;
   handleSelectedAssociate: () => void;
+  toggleCanDisconnect: () => void;
 }
 
 const AssociateCards: React.FC<AssociateCardsProps> = (props) => {
   const isSelected = props.selectedAssociate === props.associateUUID;
   return (
-    <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-full select-none relative">
-      {isSelected && <AssociateCardFlyoutMenu />}
-      <div className="bg-white w-full p-4 rounded-lg h-full flex flex-row gap-2 hover:shadow-md overflow-y-auto items-start">
+    <div className="flex flex-row gap-4 justify-center h-full select-none relative ">
+      {isSelected && <AssociateCardFlyoutMenu toggleCanDisconnect={props.toggleCanDisconnect} />}
+      <div
+        className="bg-white p-4 rounded-lg h-full flex flex-row gap-2 
+                    hover:shadow-md overflow-y-auto items-start min-w-[20rem] w-80"
+      >
         <div className="w-full h-full flex flex-col gap-2">
           <div className="flex flex-row gap-1 items-center justify-center">
             <div

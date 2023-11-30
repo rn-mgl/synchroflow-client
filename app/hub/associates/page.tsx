@@ -3,6 +3,7 @@ import AssociateCards from "@/components//associates/AssociateCards";
 import AssociateDetails from "@/components//associates/AssociateDetails";
 import RecentAssociateCards from "@/components//associates/RecentAssociateCards";
 import SearchFilter from "@/components//filter/SearchFilter";
+import Confirmation from "@/components//global/Confirmation";
 import useAssociates from "@/components//hooks/useAssociates";
 import React from "react";
 import { AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
@@ -12,6 +13,7 @@ import { LuLayoutDashboard } from "react-icons/lu";
 const Associates = () => {
   const [searchInput, setSearchInput] = React.useState("");
   const [selectedAssociate, setSelectedAssociate] = React.useState("");
+  const [canDisconnect, setCanDisconnect] = React.useState(false);
   const { allAssociates, recentAssociates, getAllAssociates, getRecentAssociates } = useAssociates();
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,6 +24,10 @@ const Associates = () => {
 
   const handleSelectedAssociate = (associateUUID: string) => {
     setSelectedAssociate((prev) => (prev !== associateUUID ? associateUUID : ""));
+  };
+
+  const toggleCanDisconnect = () => {
+    setCanDisconnect((prev) => !prev);
   };
 
   const mappedRecentAssociateCards = recentAssociates.map((associate, index) => {
@@ -37,6 +43,7 @@ const Associates = () => {
         selectedAssociate={selectedAssociate}
         associateUUID={associate.associate_uuid}
         handleSelectedAssociate={() => handleSelectedAssociate(associate.associate_uuid)}
+        toggleCanDisconnect={toggleCanDisconnect}
       />
     );
   });
@@ -54,6 +61,7 @@ const Associates = () => {
         selectedAssociate={selectedAssociate}
         associateUUID={associate.associate_uuid}
         handleSelectedAssociate={() => handleSelectedAssociate(associate.associate_uuid)}
+        toggleCanDisconnect={toggleCanDisconnect}
       />
     );
   });
@@ -72,6 +80,13 @@ const Associates = () => {
         className="max-w-screen-2xl flex flex-col justify-start 
                 items-center w-full h-full"
       >
+        {canDisconnect ? (
+          <Confirmation
+            title="Confirm Associate Disconnection"
+            message="are you sure you want to disconnect with this associate?"
+            toggleConfirmation={toggleCanDisconnect}
+          />
+        ) : null}
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
           <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit">
             <p className="font-semibold text-xl">Explore Associates</p>

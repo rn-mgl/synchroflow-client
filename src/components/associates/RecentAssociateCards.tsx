@@ -11,6 +11,7 @@ interface RecentAssociateCardsProps {
   selectedAssociate: string;
   associateUUID: string;
   handleSelectedAssociate: () => void;
+  toggleCanDisconnect: () => void;
 }
 
 const RecentAssociateCards: React.FC<RecentAssociateCardsProps> = (props) => {
