@@ -1,6 +1,10 @@
 "use client";
 
 import { useGlobalContext } from "@/base/context";
+import ReceivedAssociateInvitesCard from "@/components//invites/ReceivedAssociateInvitesCard";
+import ReceivedTaskInvitesCard from "@/components//invites/ReceivedTaskInvitesCard";
+import SentAssociateInvitesCard from "@/components//invites/SentAssociateInvitesCard";
+import SentTaskInvitesCard from "@/components//invites/SentTaskInvitesCard";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
@@ -79,6 +83,22 @@ const Invites = () => {
     }
   }, [url, user?.token]);
 
+  const mappedSentTaskInvites = receivedAssociateInvites.map((associateInvite, index) => {
+    return <SentTaskInvitesCard key={index} />;
+  });
+
+  const mappedReceivedTaskInvites = receivedAssociateInvites.map((associateInvite, index) => {
+    return <ReceivedTaskInvitesCard key={index} />;
+  });
+
+  const mappedSentAssociateInvites = receivedAssociateInvites.map((associateInvite, index) => {
+    return <SentAssociateInvitesCard key={index} />;
+  });
+
+  const mappedReceivedAssociateInvites = receivedAssociateInvites.map((associateInvite, index) => {
+    return <ReceivedAssociateInvitesCard key={index} />;
+  });
+
   React.useEffect(() => {
     getSentTaskInvites();
   }, [getSentTaskInvites]);
@@ -102,7 +122,7 @@ const Invites = () => {
             items-center w-full h-full"
       >
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-44">
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-[17rem]">
             <div className="flex flex-row justify-between w-full">
               <p className="font-semibold">Sent Task Invites</p>
             </div>
@@ -112,14 +132,14 @@ const Invites = () => {
                 className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
                   transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
               >
-                {/* {mappedRecentAssociateCards} */}
+                {mappedSentTaskInvites}
               </div>
             </div>
           </div>
         </div>
 
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-44">
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-[17rem] ">
             <div className="flex flex-row justify-between w-full">
               <p className="font-semibold">Received Task Invites</p>
             </div>
@@ -129,14 +149,14 @@ const Invites = () => {
                 className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
                   transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
               >
-                {/* {mappedRecentAssociateCards} */}
+                {mappedReceivedTaskInvites}
               </div>
             </div>
           </div>
         </div>
 
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-44">
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-[17rem]">
             <div className="flex flex-row justify-between w-full">
               <p className="font-semibold">Sent Associate Invites</p>
             </div>
@@ -146,14 +166,14 @@ const Invites = () => {
                 className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
                   transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
               >
-                {/* {mappedRecentAssociateCards} */}
+                {mappedSentAssociateInvites}
               </div>
             </div>
           </div>
         </div>
 
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-44">
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-[17rem]">
             <div className="flex flex-row justify-between w-full">
               <p className="font-semibold">Received Associate Invites</p>
             </div>
@@ -163,7 +183,7 @@ const Invites = () => {
                 className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
                   transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
               >
-                {/* {mappedRecentAssociateCards} */}
+                {mappedReceivedAssociateInvites}
               </div>
             </div>
           </div>
