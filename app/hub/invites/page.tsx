@@ -22,6 +22,66 @@ const Invites = () => {
     getReceivedAssociateInvites,
   } = useInvites();
 
+  const { url } = useGlobalContext();
+  const { data: session } = useSession();
+  const user = session?.user;
+
+  const removeSentTaskInvites = async () => {
+    try {
+      const { data } = await axios.delete(`${url}/main_task_invites`, {
+        headers: { Authorization: user?.token },
+        params: { type: "sent" },
+      });
+      if (data) {
+        getSentTaskInvites();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateReceivedTaskInvites = async () => {
+    try {
+      const { data } = await axios.patch(`${url}/main_task_invites`, {
+        headers: { Authorization: user?.token },
+        params: { type: "received" },
+      });
+      if (data) {
+        getReceivedTaskInvites();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeSentAssociateInvites = async () => {
+    try {
+      const { data } = await axios.delete(`${url}/associate_invites`, {
+        headers: { Authorization: user?.token },
+        params: { type: "sent" },
+      });
+      if (data) {
+        getSentAssociateInvites();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const updateReceivedAssociateInvites = async () => {
+    try {
+      const { data } = await axios.patch(`${url}/associate_invites`, {
+        headers: { Authorization: user?.token },
+        params: { type: "received" },
+      });
+      if (data) {
+        getReceivedAssociateInvites();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const mappedSentTaskInvites = sentTaskInvites.map((taskInvite, index) => {
     return (
       <SentTaskInvitesCard
@@ -33,6 +93,7 @@ const Invites = () => {
         main_task_title={taskInvite.main_task_title}
         main_task_banner={taskInvite.main_task_banner}
         main_task_priority={taskInvite.main_task_priority}
+        removeSentTaskInvites={removeSentTaskInvites}
       />
     );
   });
@@ -48,6 +109,7 @@ const Invites = () => {
         main_task_title={taskInvite.main_task_title}
         main_task_banner={taskInvite.main_task_banner}
         main_task_priority={taskInvite.main_task_priority}
+        updateReceivedTaskInvites={updateReceivedTaskInvites}
       />
     );
   });
@@ -60,6 +122,7 @@ const Invites = () => {
         name={associateInvite.name}
         surname={associateInvite.surname}
         email={associateInvite.email}
+        removeSentAssociateInvites={removeSentAssociateInvites}
       />
     );
   });
@@ -72,6 +135,7 @@ const Invites = () => {
         name={associateInvite.name}
         surname={associateInvite.surname}
         email={associateInvite.email}
+        updateReceivedAssociateInvites={updateReceivedAssociateInvites}
       />
     );
   });

@@ -9,6 +9,7 @@ interface SendTaskInvitesProps {
   main_task_title: string;
   main_task_banner: string;
   main_task_priority: "critical" | "important" | "none";
+  removeSentTaskInvites: () => Promise<void>;
 }
 
 const SentTaskInvitesCard: React.FC<SendTaskInvitesProps> = (props) => {

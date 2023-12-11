@@ -8,6 +8,7 @@ interface SendAssociateInvitesProps {
   name: string;
   surname: string;
   email: string;
+  removeSentAssociateInvites: () => Promise<void>;
 }
 
 const SentAssociateInvitesCard: React.FC<SendAssociateInvitesProps> = (props) => {

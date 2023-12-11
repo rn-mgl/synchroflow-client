@@ -6,6 +6,7 @@ interface ReceivedAssociateInvitesProps {
   name: string;
   surname: string;
   email: string;
+  updateReceivedAssociateInvites: () => Promise<void>;
 }
 
 const ReceivedAssociateInvitesCard: React.FC<ReceivedAssociateInvitesProps> = (props) => {
