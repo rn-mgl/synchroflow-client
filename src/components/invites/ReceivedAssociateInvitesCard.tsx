@@ -6,7 +6,7 @@ interface ReceivedAssociateInvitesProps {
   name: string;
   surname: string;
   email: string;
-  updateReceivedAssociateInvites: () => Promise<void>;
+  updateReceivedAssociateInvites: (type: "accept" | "decline") => Promise<void>;
 }
 
 const ReceivedAssociateInvitesCard: React.FC<ReceivedAssociateInvitesProps> = (props) => {
@@ -29,12 +29,14 @@ const ReceivedAssociateInvitesCard: React.FC<ReceivedAssociateInvitesProps> = (p
 
         <div className="flex flex-col gap-2 w-full items-center justify-center mt-auto">
           <button
+            onClick={() => props.updateReceivedAssociateInvites("accept")}
             className="w-full p-2 rounded-lg bg-primary-500 text-white font-bold 
                       hover:shadow-md transition-all"
           >
             Accept
           </button>
           <button
+            onClick={() => props.updateReceivedAssociateInvites("decline")}
             className="w-full p-2 rounded-lg bg-secondary-100 text-secondary-600 font-bold 
                       hover:shadow-md transition-all"
           >

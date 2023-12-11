@@ -31,6 +31,7 @@ const SentAssociateInvitesCard: React.FC<SendAssociateInvitesProps> = (props) =>
 
         <div className="flex flex-col gap-2 w-full items-center justify-center mt-auto">
           <button
+            onClick={props.removeSentAssociateInvites}
             className="w-full p-2 rounded-lg bg-secondary-100 text-secondary-600 font-bold
                     hover:shadow-md transition-all"
           >

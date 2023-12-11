@@ -40,7 +40,7 @@ const Invites = () => {
     }
   };
 
-  const updateReceivedTaskInvites = async () => {
+  const updateReceivedTaskInvites = async (type: "accept" | "decline") => {
     try {
       const { data } = await axios.patch(`${url}/main_task_invites`, {
         headers: { Authorization: user?.token },
@@ -68,7 +68,7 @@ const Invites = () => {
     }
   };
 
-  const updateReceivedAssociateInvites = async () => {
+  const updateReceivedAssociateInvites = async (type: "accept" | "decline") => {
     try {
       const { data } = await axios.patch(`${url}/associate_invites`, {
         headers: { Authorization: user?.token },
