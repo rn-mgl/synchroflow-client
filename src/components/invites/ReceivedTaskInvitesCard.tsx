@@ -1,4 +1,5 @@
 import React from "react";
+import { PRIORITY_STYLE } from "../utils/taskUtils";
 
 interface ReceivedTaskInvitesProps {
   name: string;
@@ -7,7 +8,7 @@ interface ReceivedTaskInvitesProps {
   main_task_invite_uuid: string;
   main_task_title: string;
   main_task_banner: string;
-  main_task_priority: string;
+  main_task_priority: "critical" | "important" | "none";
 }
 
 const ReceivedTaskInvitesCard: React.FC<ReceivedTaskInvitesProps> = (props) => {
@@ -22,7 +23,9 @@ const ReceivedTaskInvitesCard: React.FC<ReceivedTaskInvitesProps> = (props) => {
 
         <div className="w-full flex flex-row justify-between">
           <p className="font-bold truncate">{props.main_task_title}</p>
-          <p className="font-bold truncate text-primary-500">{props.main_task_priority}</p>
+          <p className={`font-medium truncate ${PRIORITY_STYLE[props.main_task_priority]}`}>
+            {props.main_task_priority}
+          </p>
         </div>
 
         <div className="w-full flex flex-row justify-between gap-4 text-xs">
@@ -33,8 +36,18 @@ const ReceivedTaskInvitesCard: React.FC<ReceivedTaskInvitesProps> = (props) => {
         </div>
 
         <div className="flex flex-col gap-2 w-full items-center justify-center mt-auto">
-          <button className="w-full p-2 rounded-lg bg-primary-500 text-white font-bold">Accept</button>
-          <button className="w-full p-2 rounded-lg bg-secondary-100 text-secondary-600 font-bold">Decline</button>
+          <button
+            className="w-full p-2 rounded-lg bg-primary-500 text-white font-bold 
+                      hover:shadow-md transition-all"
+          >
+            Accept
+          </button>
+          <button
+            className="w-full p-2 rounded-lg bg-secondary-100 text-secondary-600 font-bold 
+                      hover:shadow-md transition-all"
+          >
+            Decline
+          </button>
         </div>
       </div>
     </div>

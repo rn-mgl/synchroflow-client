@@ -1,7 +1,5 @@
-import React from "react";
-import { localizeDate } from "../utils/dateUtils";
-import { AiOutlineCalendar, AiOutlineClockCircle } from "react-icons/ai";
 import Image from "next/image";
+import React from "react";
 
 interface ReceivedAssociateInvitesProps {
   image: string;
@@ -29,8 +27,18 @@ const ReceivedAssociateInvitesCard: React.FC<ReceivedAssociateInvitesProps> = (p
         </div>
 
         <div className="flex flex-col gap-2 w-full items-center justify-center mt-auto">
-          <button className="w-full p-2 rounded-lg bg-primary-500 text-white font-bold">Accept</button>
-          <button className="w-full p-2 rounded-lg bg-secondary-100 text-secondary-600 font-bold">Decline</button>
+          <button
+            className="w-full p-2 rounded-lg bg-primary-500 text-white font-bold 
+                      hover:shadow-md transition-all"
+          >
+            Accept
+          </button>
+          <button
+            className="w-full p-2 rounded-lg bg-secondary-100 text-secondary-600 font-bold 
+                      hover:shadow-md transition-all"
+          >
+            Decline
+          </button>
         </div>
       </div>
     </div>

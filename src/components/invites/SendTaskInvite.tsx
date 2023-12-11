@@ -2,6 +2,7 @@
 import { useGlobalContext } from "@/base/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
 import React from "react";
 import { AiFillCheckCircle, AiFillStar, AiOutlineClose, AiOutlineFileText, AiOutlineUser } from "react-icons/ai";
 import SearchFilter from "../filter/SearchFilter";
@@ -10,7 +11,6 @@ import Message from "../global/Message";
 import useLoader from "../hooks/useLoading";
 import useMessage from "../hooks/useMessage";
 import TextAreaComp from "../input/TextAreaComp";
-import { useParams } from "next/navigation";
 
 interface SendTaskInviteProps {
   taskUUID: string;
