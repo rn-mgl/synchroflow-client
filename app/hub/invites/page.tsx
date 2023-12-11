@@ -9,11 +9,51 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
 
+interface InvitesStateProps {
+  image: string;
+  name: string;
+  surname: string;
+  email: string;
+}
+
+interface TaskInvitesStateProps extends InvitesStateProps {
+  main_task_banner: string;
+  main_task_title: string;
+  main_task_invite_uuid: string;
+  main_task_priority: string;
+}
+
 const Invites = () => {
-  const [sentTaskInvites, setSentTaskInvites] = React.useState([]);
-  const [receivedTaskInvites, setReceivedTaskInvites] = React.useState([]);
-  const [sentAssociateInvites, setSentAssociateInvites] = React.useState([]);
-  const [receivedAssociateInvites, setReceivedAssociateInvites] = React.useState([]);
+  const [sentTaskInvites, setSentTaskInvites] = React.useState<Array<TaskInvitesStateProps>>([
+    {
+      image: "",
+      name: "",
+      surname: "",
+      email: "",
+      main_task_invite_uuid: "",
+      main_task_title: "",
+      main_task_banner: "",
+      main_task_priority: "",
+    },
+  ]);
+  const [receivedTaskInvites, setReceivedTaskInvites] = React.useState<Array<TaskInvitesStateProps>>([
+    {
+      image: "",
+      name: "",
+      surname: "",
+      email: "",
+      main_task_invite_uuid: "",
+      main_task_title: "",
+      main_task_banner: "",
+      main_task_priority: "",
+    },
+  ]);
+  const [sentAssociateInvites, setSentAssociateInvites] = React.useState<Array<InvitesStateProps>>([
+    { image: "", name: "", surname: "", email: "" },
+  ]);
+  const [receivedAssociateInvites, setReceivedAssociateInvites] = React.useState<Array<InvitesStateProps>>([
+    { image: "", name: "", surname: "", email: "" },
+  ]);
 
   const { url } = useGlobalContext();
   const { data: session } = useSession();
@@ -83,20 +123,58 @@ const Invites = () => {
     }
   }, [url, user?.token]);
 
-  const mappedSentTaskInvites = receivedAssociateInvites.map((associateInvite, index) => {
-    return <SentTaskInvitesCard key={index} />;
+  const mappedSentTaskInvites = sentTaskInvites.map((taskInvite, index) => {
+    return (
+      <SentTaskInvitesCard
+        key={index}
+        name={taskInvite.name}
+        surname={taskInvite.surname}
+        email={taskInvite.email}
+        main_task_invite_uuid={taskInvite.main_task_invite_uuid}
+        main_task_title={taskInvite.main_task_title}
+        main_task_banner={taskInvite.main_task_banner}
+        main_task_priority={taskInvite.main_task_priority}
+      />
+    );
   });
 
-  const mappedReceivedTaskInvites = receivedAssociateInvites.map((associateInvite, index) => {
-    return <ReceivedTaskInvitesCard key={index} />;
+  const mappedReceivedTaskInvites = receivedTaskInvites.map((taskInvite, index) => {
+    return (
+      <ReceivedTaskInvitesCard
+        key={index}
+        name={taskInvite.name}
+        surname={taskInvite.surname}
+        email={taskInvite.email}
+        main_task_invite_uuid={taskInvite.main_task_invite_uuid}
+        main_task_title={taskInvite.main_task_title}
+        main_task_banner={taskInvite.main_task_banner}
+        main_task_priority={taskInvite.main_task_priority}
+      />
+    );
   });
 
-  const mappedSentAssociateInvites = receivedAssociateInvites.map((associateInvite, index) => {
-    return <SentAssociateInvitesCard key={index} />;
+  const mappedSentAssociateInvites = sentAssociateInvites.map((associateInvite, index) => {
+    return (
+      <SentAssociateInvitesCard
+        key={index}
+        image={associateInvite.image}
+        name={associateInvite.name}
+        surname={associateInvite.surname}
+        email={associateInvite.email}
+      />
+    );
   });
 
   const mappedReceivedAssociateInvites = receivedAssociateInvites.map((associateInvite, index) => {
-    return <ReceivedAssociateInvitesCard key={index} />;
+    return (
+      <ReceivedAssociateInvitesCard
+        key={index}
+        image={associateInvite.image}
+        name={associateInvite.name}
+        surname={associateInvite.surname}
+        email={associateInvite.email}
+      />
+    );
   });
 
   React.useEffect(() => {
@@ -122,7 +200,7 @@ const Invites = () => {
             items-center w-full h-full"
       >
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-[17rem]">
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-[26rem]">
             <div className="flex flex-row justify-between w-full">
               <p className="font-semibold">Sent Task Invites</p>
             </div>
@@ -139,7 +217,7 @@ const Invites = () => {
         </div>
 
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-[17rem] ">
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-[26rem] ">
             <div className="flex flex-row justify-between w-full">
               <p className="font-semibold">Received Task Invites</p>
             </div>
@@ -156,7 +234,7 @@ const Invites = () => {
         </div>
 
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-[17rem]">
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-[26rem]">
             <div className="flex flex-row justify-between w-full">
               <p className="font-semibold">Sent Associate Invites</p>
             </div>
@@ -173,7 +251,7 @@ const Invites = () => {
         </div>
 
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-[17rem]">
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-[26rem]">
             <div className="flex flex-row justify-between w-full">
               <p className="font-semibold">Received Associate Invites</p>
             </div>
