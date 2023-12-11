@@ -26,12 +26,12 @@ const Invites = () => {
   const { data: session } = useSession();
   const user = session?.user;
 
-  const removeSentTaskInvites = async () => {
+  const removeSentTaskInvites = async (inviteUUID: string) => {
     try {
-      const { data } = await axios.delete(`${url}/main_task_invites`, {
+      const { data } = await axios.delete(`${url}/main_task_invites/${inviteUUID}`, {
         headers: { Authorization: user?.token },
-        params: { type: "sent" },
       });
+
       if (data) {
         getSentTaskInvites();
       }
@@ -54,12 +54,13 @@ const Invites = () => {
     }
   };
 
-  const removeSentAssociateInvites = async () => {
+  const removeSentAssociateInvites = async (inviteUUID: string) => {
     try {
-      const { data } = await axios.delete(`${url}/associate_invites`, {
+      const { data } = await axios.delete(`${url}/associate_invites/${inviteUUID}`, {
         headers: { Authorization: user?.token },
         params: { type: "sent" },
       });
+
       if (data) {
         getSentAssociateInvites();
       }
@@ -93,7 +94,7 @@ const Invites = () => {
         main_task_title={taskInvite.main_task_title}
         main_task_banner={taskInvite.main_task_banner}
         main_task_priority={taskInvite.main_task_priority}
-        removeSentTaskInvites={removeSentTaskInvites}
+        removeSentTaskInvites={() => removeSentTaskInvites(taskInvite.main_task_invite_uuid)}
       />
     );
   });
@@ -122,7 +123,7 @@ const Invites = () => {
         name={associateInvite.name}
         surname={associateInvite.surname}
         email={associateInvite.email}
-        removeSentAssociateInvites={removeSentAssociateInvites}
+        removeSentAssociateInvites={() => removeSentAssociateInvites(associateInvite.associate_invite_uuid)}
       />
     );
   });

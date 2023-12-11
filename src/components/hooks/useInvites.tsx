@@ -17,6 +17,10 @@ interface TaskInvitesStateProps extends InvitesStateProps {
   main_task_priority: "critical" | "important" | "none";
 }
 
+interface AssociateInvitesStateProps extends InvitesStateProps {
+  associate_invite_uuid: string;
+}
+
 export default function useInvites() {
   const [sentTaskInvites, setSentTaskInvites] = React.useState<Array<TaskInvitesStateProps>>([
     {
@@ -42,11 +46,11 @@ export default function useInvites() {
       main_task_priority: "none",
     },
   ]);
-  const [sentAssociateInvites, setSentAssociateInvites] = React.useState<Array<InvitesStateProps>>([
-    { image: "", name: "", surname: "", email: "" },
+  const [sentAssociateInvites, setSentAssociateInvites] = React.useState<Array<AssociateInvitesStateProps>>([
+    { image: "", name: "", surname: "", email: "", associate_invite_uuid: "" },
   ]);
-  const [receivedAssociateInvites, setReceivedAssociateInvites] = React.useState<Array<InvitesStateProps>>([
-    { image: "", name: "", surname: "", email: "" },
+  const [receivedAssociateInvites, setReceivedAssociateInvites] = React.useState<Array<AssociateInvitesStateProps>>([
+    { image: "", name: "", surname: "", email: "", associate_invite_uuid: "" },
   ]);
 
   const { url } = useGlobalContext();

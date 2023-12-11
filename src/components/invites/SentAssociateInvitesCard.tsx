@@ -1,7 +1,5 @@
-import React from "react";
-import { AiOutlineCalendar, AiOutlineClockCircle } from "react-icons/ai";
-import { localizeDate } from "../utils/dateUtils";
 import Image from "next/image";
+import React from "react";
 
 interface SendAssociateInvitesProps {
   image: string;
