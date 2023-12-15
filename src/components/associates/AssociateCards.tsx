@@ -8,6 +8,7 @@ interface AssociateCardsProps {
   selectedAssociate: string;
   associateUUID: string;
   targetIdentity: "of" | "is";
+  deadline: number;
   handleSelectedAssociate: () => void;
   toggleCanDisconnect: () => void;
 }

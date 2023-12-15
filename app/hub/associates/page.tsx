@@ -47,6 +47,7 @@ const Associates = () => {
         selectedAssociate={selectedAssociate}
         associateUUID={associate.associate_uuid}
         targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
+        deadline={1}
         handleSelectedAssociate={() => handleSelectedAssociate(associate.associate_uuid)}
         toggleCanDisconnect={toggleCanDisconnect}
       />
@@ -61,6 +62,7 @@ const Associates = () => {
         selectedAssociate={selectedAssociate}
         associateUUID={associate.associate_uuid}
         targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
+        deadline={1}
         handleSelectedAssociate={() => handleSelectedAssociate(associate.associate_uuid)}
         toggleCanDisconnect={toggleCanDisconnect}
       />
