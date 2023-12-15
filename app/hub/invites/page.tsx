@@ -34,20 +34,22 @@ const Invites = () => {
 
       if (data) {
         getSentTaskInvites();
+        getReceivedTaskInvites();
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const updateReceivedTaskInvites = async (type: "accept" | "decline") => {
+  const acceptReceivedTaskInvites = async (mainTaskUUID: string, collaboratorUUID: string, inviteUUID: string) => {
     try {
-      const { data } = await axios.patch(`${url}/main_task_invites`, {
-        headers: { Authorization: user?.token },
-        params: { type: "received" },
-      });
+      const { data } = await axios.post(
+        `${url}/main_task_collaborators`,
+        { mainTaskUUID, collaboratorUUID },
+        { headers: { Authorization: user?.token } }
+      );
       if (data) {
-        getReceivedTaskInvites();
+        await removeSentTaskInvites(inviteUUID);
       }
     } catch (error) {
       console.log(error);
@@ -63,20 +65,18 @@ const Invites = () => {
 
       if (data) {
         getSentAssociateInvites();
+        getReceivedAssociateInvites();
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const updateReceivedAssociateInvites = async (type: "accept" | "decline") => {
+  const acceptReceivedAssociateInvites = async (userUUID: string, inviteUUID: string) => {
     try {
-      const { data } = await axios.patch(`${url}/associate_invites`, {
-        headers: { Authorization: user?.token },
-        params: { type: "received" },
-      });
+      const { data } = await axios.post(`${url}/associates`, { userUUID }, { headers: { Authorization: user?.token } });
       if (data) {
-        getReceivedAssociateInvites();
+        await removeSentAssociateInvites(inviteUUID);
       }
     } catch (error) {
       console.log(error);
@@ -110,7 +110,10 @@ const Invites = () => {
         main_task_title={taskInvite.main_task_title}
         main_task_banner={taskInvite.main_task_banner}
         main_task_priority={taskInvite.main_task_priority}
-        updateReceivedTaskInvites={updateReceivedTaskInvites}
+        declineReceivedTaskInvites={() => removeSentTaskInvites(taskInvite.main_task_invite_uuid)}
+        acceptReceivedTaskInvites={() =>
+          acceptReceivedTaskInvites(taskInvite.main_task_uuid, taskInvite.user_uuid, taskInvite.main_task_invite_uuid)
+        }
       />
     );
   });
@@ -136,7 +139,10 @@ const Invites = () => {
         name={associateInvite.name}
         surname={associateInvite.surname}
         email={associateInvite.email}
-        updateReceivedAssociateInvites={updateReceivedAssociateInvites}
+        declineReceivedAssociateInvites={() => removeSentAssociateInvites(associateInvite.associate_invite_uuid)}
+        acceptReceivedAssociateInvites={() =>
+          acceptReceivedAssociateInvites(associateInvite.user_uuid, associateInvite.associate_invite_uuid)
+        }
       />
     );
   });

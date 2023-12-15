@@ -9,7 +9,8 @@ interface ReceivedTaskInvitesProps {
   main_task_title: string;
   main_task_banner: string;
   main_task_priority: "critical" | "important" | "none";
-  updateReceivedTaskInvites: (type: "accept" | "decline") => Promise<void>;
+  acceptReceivedTaskInvites: () => Promise<void>;
+  declineReceivedTaskInvites: () => Promise<void>;
 }
 
 const ReceivedTaskInvitesCard: React.FC<ReceivedTaskInvitesProps> = (props) => {
@@ -38,14 +39,14 @@ const ReceivedTaskInvitesCard: React.FC<ReceivedTaskInvitesProps> = (props) => {
 
         <div className="flex flex-col gap-2 w-full items-center justify-center mt-auto">
           <button
-            onClick={() => props.updateReceivedTaskInvites("accept")}
+            onClick={props.acceptReceivedTaskInvites}
             className="w-full p-2 rounded-lg bg-primary-500 text-white font-bold 
                       hover:shadow-md transition-all"
           >
             Accept
           </button>
           <button
-            onClick={() => props.updateReceivedTaskInvites("decline")}
+            onClick={props.declineReceivedTaskInvites}
             className="w-full p-2 rounded-lg bg-secondary-100 text-secondary-600 font-bold 
                       hover:shadow-md transition-all"
           >

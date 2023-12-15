@@ -15,10 +15,13 @@ interface TaskInvitesStateProps extends InvitesStateProps {
   main_task_title: string;
   main_task_invite_uuid: string;
   main_task_priority: "critical" | "important" | "none";
+  main_task_uuid: string;
+  user_uuid: string;
 }
 
 interface AssociateInvitesStateProps extends InvitesStateProps {
   associate_invite_uuid: string;
+  user_uuid: string;
 }
 
 export default function useInvites() {
@@ -32,6 +35,8 @@ export default function useInvites() {
       main_task_title: "",
       main_task_banner: "",
       main_task_priority: "none",
+      main_task_uuid: "",
+      user_uuid: "",
     },
   ]);
   const [receivedTaskInvites, setReceivedTaskInvites] = React.useState<Array<TaskInvitesStateProps>>([
@@ -44,13 +49,15 @@ export default function useInvites() {
       main_task_title: "",
       main_task_banner: "",
       main_task_priority: "none",
+      main_task_uuid: "",
+      user_uuid: "",
     },
   ]);
   const [sentAssociateInvites, setSentAssociateInvites] = React.useState<Array<AssociateInvitesStateProps>>([
-    { image: "", name: "", surname: "", email: "", associate_invite_uuid: "" },
+    { image: "", name: "", surname: "", email: "", associate_invite_uuid: "", user_uuid: "" },
   ]);
   const [receivedAssociateInvites, setReceivedAssociateInvites] = React.useState<Array<AssociateInvitesStateProps>>([
-    { image: "", name: "", surname: "", email: "", associate_invite_uuid: "" },
+    { image: "", name: "", surname: "", email: "", associate_invite_uuid: "", user_uuid: "" },
   ]);
 
   const { url } = useGlobalContext();

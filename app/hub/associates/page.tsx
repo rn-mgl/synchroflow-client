@@ -23,6 +23,8 @@ const Associates = () => {
     setSearchInput(value);
   };
 
+  console.log(allAssociates);
+
   const handleSelectedAssociate = (associateUUID: string) => {
     setSelectedAssociate((prev) => (prev !== associateUUID ? associateUUID : ""));
   };
