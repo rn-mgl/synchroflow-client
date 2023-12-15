@@ -1,22 +1,25 @@
 import React from "react";
 import { AiFillStar, AiOutlineFileText, AiOutlineMore } from "react-icons/ai";
 import AssociateCardFlyoutMenu from "./AssociateCardFlyoutMenu";
+import { AssociatesProps } from "../hooks/useAssociates";
 
 interface AssociateCardsProps {
-  name: string;
-  surname: string;
-  image: string;
-  role: string;
-  status: string;
-  deadline: number | null;
+  associate: AssociatesProps;
   selectedAssociate: string;
   associateUUID: string;
+  targetIdentity: "of" | "is";
   handleSelectedAssociate: () => void;
   toggleCanDisconnect: () => void;
 }
 
 const AssociateCards: React.FC<AssociateCardsProps> = (props) => {
   const isSelected = props.selectedAssociate === props.associateUUID;
+  const image = props.associate[`${props.targetIdentity}_image`];
+  const name = props.associate[`${props.targetIdentity}_name`];
+  const surname = props.associate[`${props.targetIdentity}_surname`];
+  const role = props.associate[`${props.targetIdentity}_role`];
+  const status = props.associate[`${props.targetIdentity}_status`];
+
   return (
     <div className="flex flex-row gap-4 justify-center h-full select-none relative ">
       {isSelected && <AssociateCardFlyoutMenu toggleCanDisconnect={props.toggleCanDisconnect} />}
@@ -27,18 +30,18 @@ const AssociateCards: React.FC<AssociateCardsProps> = (props) => {
         <div className="w-full h-full flex flex-col gap-2">
           <div className="flex flex-row gap-1 items-center justify-center">
             <div
-              style={{ backgroundImage: `url(${props.image})` }}
+              style={{ backgroundImage: `url(${image})` }}
               className="bg-primary-100 w-12 min-w-[3rem] h-12 min-h-[3rem] rounded-full mr-auto
                         bg-center bg-cover"
             />
             <div className="flex flex-col gap-1 items-end">
-              <p className="font-bold truncate max-w-[20ch]">
-                {props.name} {props.surname}
+              <p className="font-bold truncate max-w-[16ch]">
+                {name} {surname}
               </p>
-              <p className="text-xs max-w-[20ch] truncate">{props.role}</p>
+              <p className="text-xs max-w-[20ch] truncate">{role}</p>
             </div>
           </div>
-          <p className="text-xs my-auto text-justify leading-relaxed indent-10">{props.status}</p>
+          <p className="text-xs my-auto text-justify leading-relaxed indent-10">{status}</p>
           <div className="flex flex-row justify-between items-center">
             <div className="flex flex-row gap-1 items-center justify-center text-xs">
               <div>

@@ -5,6 +5,7 @@ import RecentAssociateCards from "@/components//associates/RecentAssociateCards"
 import SearchFilter from "@/components//filter/SearchFilter";
 import DeleteConfirmation from "@/components//global/DeleteConfirmation";
 import useAssociates from "@/components//hooks/useAssociates";
+import { useSession } from "next-auth/react";
 import React from "react";
 import { AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
 import { BsFilter } from "react-icons/bs";
@@ -17,13 +18,14 @@ const Associates = () => {
   const [canAddAssociate, setCanAddAssociate] = React.useState(false);
   const { allAssociates, recentAssociates, getAllAssociates, getRecentAssociates } = useAssociates();
 
+  const { data: session } = useSession();
+  const user = session?.user;
+
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
 
     setSearchInput(value);
   };
-
-  console.log(allAssociates);
 
   const handleSelectedAssociate = (associateUUID: string) => {
     setSelectedAssociate((prev) => (prev !== associateUUID ? associateUUID : ""));
@@ -41,14 +43,10 @@ const Associates = () => {
     return (
       <RecentAssociateCards
         key={index}
-        name={associate.name}
-        surname={associate.surname}
-        image={associate.image}
-        status={associate.status}
-        role={associate.role}
-        deadline={20}
+        associate={associate}
         selectedAssociate={selectedAssociate}
         associateUUID={associate.associate_uuid}
+        targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
         handleSelectedAssociate={() => handleSelectedAssociate(associate.associate_uuid)}
         toggleCanDisconnect={toggleCanDisconnect}
       />
@@ -59,14 +57,10 @@ const Associates = () => {
     return (
       <AssociateCards
         key={index}
-        name={associate.name}
-        surname={associate.surname}
-        image={associate.image}
-        status={associate.status}
-        role={associate.role}
-        deadline={20}
+        associate={associate}
         selectedAssociate={selectedAssociate}
         associateUUID={associate.associate_uuid}
+        targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
         handleSelectedAssociate={() => handleSelectedAssociate(associate.associate_uuid)}
         toggleCanDisconnect={toggleCanDisconnect}
       />
