@@ -8,11 +8,13 @@ interface Props {
   message: string;
   status: "sent" | "read" | "unread";
   dateSent: string;
+  handleSelectedMessage: () => void;
 }
 
 const MessagePreview: React.FC<Props> = (props) => {
   return (
     <button
+      onClick={props.handleSelectedMessage}
       className="w-full p-2 rounded-lg hover:bg-neutral-50 
                 flex flex-row items-center gap-2 transition-all"
     >
