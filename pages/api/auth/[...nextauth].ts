@@ -5,7 +5,7 @@ import axios from "axios";
 const local = "http://192.168.1.121:9000";
 const prod = "https://synchroflow-server.onrender.com";
 
-const url = prod;
+const url = local;
 
 export const authOptions: AuthOptions = {
   providers: [

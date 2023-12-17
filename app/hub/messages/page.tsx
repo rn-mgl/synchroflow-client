@@ -1,8 +1,10 @@
 "use client";
 import SearchFilter from "@/components//filter/SearchFilter";
+import useAssociates from "@/components//hooks/useAssociates";
 import ActiveMessagePanel from "@/components//messages/ActiveMessagePanel";
 import MessagePreview from "@/components//messages/MessagePreview";
 import StandByMessagePanel from "@/components//messages/StandByMessagePanel";
+import { useSession } from "next-auth/react";
 import React from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 
@@ -10,6 +12,10 @@ const Messages = () => {
   const [searchInput, setSearchInput] = React.useState("");
   const [selectedMessage, setSelectedMessage] = React.useState("");
   const [messageData, setMessageData] = React.useState("");
+  const { allAssociates, getAllAssociates } = useAssociates();
+
+  const { data: session } = useSession();
+  const user = session?.user;
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -27,21 +33,22 @@ const Messages = () => {
     setSelectedMessage((prev) => (prev === messageUUID && type === "back" ? "" : messageUUID));
   };
 
-  const mappedMessagePreviews = new Array(20).fill(1).map((message, index) => {
+  const mappedAssociatePreviews = allAssociates.map((associate, index) => {
     return (
       <React.Fragment key={index}>
         <MessagePreview
-          image=""
-          message="flex flex-col items-center justify-start w-full h-full"
-          name={`${index} Test Name Only`}
-          status="sent"
-          dateSent={new Date().toLocaleDateString()}
+          associate={associate}
+          targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
           handleSelectedMessage={() => handleSelectedMessage(`${index}`, "preview")}
         />
-        <div className="w-full h-[0.5px] min-h-[0.5px] bg-secondary-100" />
+        {allAssociates.length - 1 !== index && <div className="w-full h-[0.5px] min-h-[0.5px] bg-secondary-100" />}
       </React.Fragment>
     );
   });
+
+  React.useEffect(() => {
+    getAllAssociates();
+  }, [getAllAssociates]);
 
   return (
     <div
@@ -76,7 +83,7 @@ const Messages = () => {
               className="bg-white w-full flex flex-col gap-4 p-4 rounded-lg 
                         h-full l-s:col-span-1 overflow-y-auto cstm-scrollbar"
             >
-              {mappedMessagePreviews}
+              {mappedAssociatePreviews}
             </div>
           </div>
 
