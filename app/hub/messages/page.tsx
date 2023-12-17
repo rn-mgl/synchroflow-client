@@ -1,25 +1,48 @@
 "use client";
+import { useGlobalContext } from "@/base/context";
 import SearchFilter from "@/components//filter/SearchFilter";
-import useAssociates from "@/components//hooks/useAssociates";
 import ActiveMessagePanel from "@/components//messages/ActiveMessagePanel";
 import MessagePreview from "@/components//messages/MessagePreview";
 import StandByMessagePanel from "@/components//messages/StandByMessagePanel";
+import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { AiOutlineSearch } from "react-icons/ai";
+
+interface MessageRoomsStateProps {
+  image: string;
+  name: string;
+  surname: string;
+  private_message_room: string;
+  private_message: string;
+  private_message_file: string;
+  private_message_from: number;
+  user_uuid: string;
+}
 
 const Messages = () => {
   const [searchInput, setSearchInput] = React.useState("");
   const [selectedMessage, setSelectedMessage] = React.useState("");
   const [messageData, setMessageData] = React.useState("");
-  const { allAssociates, getAllAssociates } = useAssociates();
+  const [privateMessageRooms, setPrivateMessageRooms] = React.useState<Array<MessageRoomsStateProps>>([
+    {
+      image: "",
+      name: "",
+      surname: "",
+      private_message_room: "",
+      private_message: "",
+      private_message_file: "",
+      private_message_from: -1,
+      user_uuid: "",
+    },
+  ]);
 
+  const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-
     setSearchInput(value);
   };
 
@@ -33,22 +56,47 @@ const Messages = () => {
     setSelectedMessage((prev) => (prev === messageUUID && type === "back" ? "" : messageUUID));
   };
 
-  const mappedAssociatePreviews = allAssociates.map((associate, index) => {
+  const getPrivateMessageRooms = React.useCallback(async () => {
+    if (user?.token) {
+      try {
+        const { data } = await axios.get(`${url}/private_message_rooms`, { headers: { Authorization: user?.token } });
+
+        if (data) {
+          setPrivateMessageRooms(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [url, user?.token]);
+
+  const mappedMessageRoomPreviews = privateMessageRooms.map((room, index) => {
     return (
       <React.Fragment key={index}>
         <MessagePreview
-          associate={associate}
-          targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
-          handleSelectedMessage={() => handleSelectedMessage(`${index}`, "preview")}
+          image={room.image}
+          name={room.name}
+          surname={room.surname}
+          status="sent"
+          latestMessage={room.private_message}
+          latestFile={room.private_message_file}
+          dateSent={new Date().toLocaleDateString()}
+          isSelected={selectedMessage === room.private_message_room}
+          isSender={room.private_message_from === user?.id}
+          handleSelectedMessage={() => handleSelectedMessage(room.private_message_room, "preview")}
         />
-        {allAssociates.length - 1 !== index && <div className="w-full h-[0.5px] min-h-[0.5px] bg-secondary-100" />}
+        {privateMessageRooms.length - 1 !== index && (
+          <div className="w-full h-[0.5px] min-h-[0.5px] bg-secondary-100" />
+        )}
       </React.Fragment>
     );
   });
 
   React.useEffect(() => {
-    getAllAssociates();
-  }, [getAllAssociates]);
+    getPrivateMessageRooms();
+  }, [getPrivateMessageRooms]);
+
+  console.log(privateMessageRooms);
 
   return (
     <div
@@ -83,7 +131,7 @@ const Messages = () => {
               className="bg-white w-full flex flex-col gap-4 p-4 rounded-lg 
                         h-full l-s:col-span-1 overflow-y-auto cstm-scrollbar"
             >
-              {mappedAssociatePreviews}
+              {mappedMessageRoomPreviews}
             </div>
           </div>
 
