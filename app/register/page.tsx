@@ -1,6 +1,6 @@
 "use client";
 import useLoader from "@/components//hooks/useLoading";
-import useMessage from "@/components//hooks/useMessage";
+import useNotification from "@/components//hooks/useNotification";
 import TextComp from "@/components//input/TextComp";
 import signup from "@/public//auth/Signup.svg";
 
@@ -29,7 +29,7 @@ const Register = () => {
     password: "",
   });
 
-  const { message, handleMessages } = useMessage();
+  const { message, handleMessages } = useNotification();
   const { isLoading, handleLoader } = useLoader();
   const { disable, handleDisable } = useDisable();
   const { visiblePassword, toggleVisiblePassword } = useVisiblePassword();

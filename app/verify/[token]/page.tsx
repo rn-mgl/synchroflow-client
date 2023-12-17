@@ -9,7 +9,7 @@ import { useParams } from "next/navigation";
 import React from "react";
 import { useGlobalContext } from "../../../context";
 import { BsArrowRight } from "react-icons/bs";
-import useMessage from "@/components//hooks/useMessage";
+import useNotification from "@/components//hooks/useNotification";
 import Message from "@/components//global/Message";
 
 const VERIFICATION_STATUS = {
@@ -23,7 +23,7 @@ const Verify = () => {
 
   const { url } = useGlobalContext();
   const params = useParams();
-  const { message, handleMessages } = useMessage();
+  const { message, handleMessages } = useNotification();
 
   const verifyAccount = React.useCallback(async () => {
     try {

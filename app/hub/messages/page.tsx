@@ -1,43 +1,28 @@
 "use client";
-import { useGlobalContext } from "@/base/context";
 import SearchFilter from "@/components//filter/SearchFilter";
+import useMessage from "@/components//hooks/useMessage";
 import ActiveMessagePanel from "@/components//messages/ActiveMessagePanel";
 import MessagePreview from "@/components//messages/MessagePreview";
 import StandByMessagePanel from "@/components//messages/StandByMessagePanel";
-import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 
-interface MessageRoomsStateProps {
-  image: string;
-  name: string;
-  surname: string;
-  private_message_room: string;
-  private_message: string;
-  private_message_file: string;
-  private_message_from: number;
-  user_uuid: string;
-}
-
 const Messages = () => {
   const [searchInput, setSearchInput] = React.useState("");
-  const [selectedMessage, setSelectedMessage] = React.useState("");
-  const [messageData, setMessageData] = React.useState("");
-  const [privateMessageRooms, setPrivateMessageRooms] = React.useState<Array<MessageRoomsStateProps>>([
-    {
-      image: "",
-      name: "",
-      surname: "",
-      private_message_room: "",
-      private_message: "",
-      private_message_file: "",
-      private_message_from: -1,
-      user_uuid: "",
-    },
-  ]);
+  const {
+    selectedMessageRoom,
+    message,
+    roomMessages,
+    privateMessageRooms,
+    activeRoom,
+    getPrivateMessageRooms,
+    getMessageRoom,
+    setMessageData,
+    setSelectedMessageData,
+    setActiveRoomData,
+  } = useMessage();
 
-  const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -48,27 +33,38 @@ const Messages = () => {
 
   const handleMessageInput = (e: React.FormEvent<HTMLDivElement>) => {
     const inputText = e.target as HTMLElement;
-
     setMessageData(inputText.textContent ? inputText.textContent : "");
   };
 
   const handleSelectedMessage = (messageUUID: string, type: "back" | "preview") => {
-    setSelectedMessage((prev) => (prev === messageUUID && type === "back" ? "" : messageUUID));
+    setSelectedMessageData(messageUUID, type);
+
+    const newActiveRoomData = privateMessageRooms.find((room) => room.private_message_room === messageUUID) || {
+      image: "",
+      name: "",
+      surname: "",
+      private_message_room: "",
+      private_message: "",
+      private_message_file: "",
+      private_message_from: -1,
+      user_uuid: "",
+    };
+
+    setActiveRoomData(
+      type === "back"
+        ? {
+            image: "",
+            name: "",
+            surname: "",
+            private_message_room: "",
+            private_message: "",
+            private_message_file: "",
+            private_message_from: -1,
+            user_uuid: "",
+          }
+        : newActiveRoomData
+    );
   };
-
-  const getPrivateMessageRooms = React.useCallback(async () => {
-    if (user?.token) {
-      try {
-        const { data } = await axios.get(`${url}/private_message_rooms`, { headers: { Authorization: user?.token } });
-
-        if (data) {
-          setPrivateMessageRooms(data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }, [url, user?.token]);
 
   const mappedMessageRoomPreviews = privateMessageRooms.map((room, index) => {
     return (
@@ -81,7 +77,7 @@ const Messages = () => {
           latestMessage={room.private_message}
           latestFile={room.private_message_file}
           dateSent={new Date().toLocaleDateString()}
-          isSelected={selectedMessage === room.private_message_room}
+          isSelected={selectedMessageRoom === room.private_message_room}
           isSender={room.private_message_from === user?.id}
           handleSelectedMessage={() => handleSelectedMessage(room.private_message_room, "preview")}
         />
@@ -96,7 +92,9 @@ const Messages = () => {
     getPrivateMessageRooms();
   }, [getPrivateMessageRooms]);
 
-  console.log(privateMessageRooms);
+  React.useEffect(() => {
+    getMessageRoom();
+  }, [getMessageRoom]);
 
   return (
     <div
@@ -135,10 +133,13 @@ const Messages = () => {
             </div>
           </div>
 
-          {selectedMessage ? (
+          {selectedMessageRoom ? (
             <ActiveMessagePanel
-              messageData={messageData}
-              handleSelectedMessage={() => handleSelectedMessage(`${selectedMessage}`, "back")}
+              activeRoom={activeRoom}
+              roomMessages={roomMessages}
+              message={message}
+              selectedMessageRoom={selectedMessageRoom}
+              handleSelectedMessage={() => handleSelectedMessage(`${selectedMessageRoom}`, "back")}
               handleMessageInput={handleMessageInput}
             />
           ) : (

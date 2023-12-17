@@ -37,7 +37,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = (props) => {
 
         <div className="flex flex-row justify-between items-center w-full text-xs">
           <p className="truncate max-w-[20ch] t:max-w-[40ch] l-s:max-w-[25ch]">
-            <span className=" text-primary-500"> {props.isSender ? "You: " : props.name}</span>
+            <span> {props.isSender && "You: "}</span>
             <span> {props.latestMessage}</span>
           </p>
           <div>

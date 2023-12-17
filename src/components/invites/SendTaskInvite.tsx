@@ -9,7 +9,7 @@ import SearchFilter from "../filter/SearchFilter";
 import Loading from "../global/Loading";
 import Message from "../global/Message";
 import useLoader from "../hooks/useLoading";
-import useMessage from "../hooks/useMessage";
+import useNotification from "../hooks/useNotification";
 import TextAreaComp from "../input/TextAreaComp";
 
 interface SendTaskInviteProps {
@@ -32,7 +32,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
   const [searchFilter, setSearchFilter] = React.useState({ searchKey: "name", toSearch: "" });
 
   const { isLoading, handleLoader } = useLoader();
-  const { message, handleMessages } = useMessage();
+  const { message, handleMessages } = useNotification();
 
   const { url } = useGlobalContext();
   const { data: session } = useSession();

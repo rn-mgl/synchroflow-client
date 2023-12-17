@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import { AiOutlineClose, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
 import AssociateCardsInvite from "./AssociateCardsInvite";
-import useMessage from "../hooks/useMessage";
+import useNotification from "../hooks/useNotification";
 import Message from "../global/Message";
 import SearchFilter from "../filter/SearchFilter";
 import { LuLayoutDashboard } from "react-icons/lu";
@@ -42,7 +42,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
       is_invited: false,
     },
   ]);
-  const { message, handleMessages } = useMessage();
+  const { message, handleMessages } = useNotification();
 
   const { url } = useGlobalContext();
   const { data: session } = useSession();

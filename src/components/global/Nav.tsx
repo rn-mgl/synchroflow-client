@@ -6,7 +6,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useGlobalContext } from "../../../context";
-import useMessage from "../hooks/useMessage";
+import useNotification from "../hooks/useNotification";
 import Message from "./Message";
 
 import {
@@ -41,7 +41,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
   });
 
   const [isVisible, setIsVisible] = React.useState(false);
-  const { message, handleMessages } = useMessage();
+  const { message, handleMessages } = useNotification();
   const { url } = useGlobalContext();
   const { data: session } = useSession();
   const path = usePathname();

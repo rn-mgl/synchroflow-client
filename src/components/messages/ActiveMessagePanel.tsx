@@ -1,13 +1,38 @@
+"use client";
+
 import { AiOutlinePaperClip } from "react-icons/ai";
 import { BsArrowLeft, BsFillSendFill } from "react-icons/bs";
+import { MessageRoomsStateProps, RoomMessagesStateProps } from "../hooks/useMessage";
+import { useSession } from "next-auth/react";
 
 interface ActiveMessagePanelProps {
-  messageData: string;
+  activeRoom: MessageRoomsStateProps;
+  roomMessages: Array<RoomMessagesStateProps>;
+  message: string;
+  selectedMessageRoom: string;
   handleSelectedMessage: () => void;
   handleMessageInput: (e: React.FormEvent<HTMLDivElement>) => void;
 }
 
 const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
+  const { data: session } = useSession();
+  const user = session?.user;
+
+  const mappedMessages = props.roomMessages.map((message, index) => {
+    const isSender = message.private_message_from === user?.id;
+
+    return (
+      <div
+        className={`w-fit max-w-[70%] break-words rounded-md p-1 text-white t:max-w-[50%]
+                  ${isSender ? "ml-auto bg-primary-500" : "mr-auto bg-secondary-500"}`}
+        key={index}
+      >
+        {message.private_message} {message.private_message}
+        {message.private_message}
+      </div>
+    );
+  });
+
   return (
     <div
       className="l-s:col-span-2 w-full bg-white flex rounded-lg
@@ -22,12 +47,21 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
           <BsArrowLeft className="text-primary-500" />
         </button>
 
-        <p className="font-medium max-w-[20ch] truncate t:max-w-none t:truncate">Name Second Name Surname</p>
+        <p className="font-bold max-w-[20ch] truncate t:max-w-none t:truncate">
+          {props.activeRoom.name} {props.activeRoom.surname}
+        </p>
+      </div>
+
+      <div
+        className="flex flex-col-reverse w-full h-full p-4 items-center justify-start
+                  gap-4"
+      >
+        {mappedMessages}
       </div>
 
       <div
         className=" l-s:col-span-2 w-full l-s:flex p-4 flex
-                flex-col-reverse gap-4 h-full top-0 z-10"
+                flex-col-reverse gap-4 top-0 z-10"
       >
         <div className="flex flex-row w-full gap-4">
           <div className="flex flex-row items-center justify-center rounded-md w-full gap-4 bg-neutral-100 p-2">
@@ -40,20 +74,20 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
               <p>
                 <br />
               </p>
-              {props.messageData === "" ? <div className="absolute top-0 opacity-50">Aa</div> : null}
+              {props.message === "" ? <div className="absolute top-0 opacity-50">Aa</div> : null}
             </div>
           </div>
 
-          <div className="flex flex-row gap-2 items-center justify-center mt-auto">
+          <div className="flex flex-row gap-2 items-center justify-center mt-auto t:gap-4">
             <button
               className="p-2 hover:bg-primary-100 transition-all outline-none
-                rounded-lg flex flex-col items-center justify-center"
+                rounded-lg flex flex-col items-center justify-center t:p-4"
             >
               <AiOutlinePaperClip className="text-secondary-500 text-lg" />
             </button>
             <button
               className="p-2 bg-primary-500 transition-all outline-none
-                rounded-lg flex flex-col items-center justify-center"
+                rounded-lg flex flex-col items-center justify-center t:p-4"
             >
               <BsFillSendFill className="text-white text-lg" />
             </button>
