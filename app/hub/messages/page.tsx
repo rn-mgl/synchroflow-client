@@ -16,11 +16,13 @@ const Messages = () => {
     roomMessages,
     privateMessageRooms,
     activeRoom,
+    messageRef,
     getPrivateMessageRooms,
     getMessageRoom,
     setMessageData,
     setSelectedMessageData,
     setActiveRoomData,
+    sendMessage,
   } = useMessage();
 
   const { data: session } = useSession();
@@ -33,7 +35,8 @@ const Messages = () => {
 
   const handleMessageInput = (e: React.FormEvent<HTMLDivElement>) => {
     const inputText = e.target as HTMLElement;
-    setMessageData(inputText.textContent ? inputText.textContent : "");
+
+    setMessageData(inputText.innerText ? inputText.innerText : "");
   };
 
   const handleSelectedMessage = (messageUUID: string, type: "back" | "preview") => {
@@ -103,7 +106,7 @@ const Messages = () => {
     >
       <div
         className="max-w-screen-2xl flex flex-col justify-start
-            items-center w-full h-full "
+            items-center w-full h-full l-s:overflow-hidden"
       >
         <div className="grid grid-cols-1 w-full h-full gap-4 l-s:grid-cols-3">
           <div
@@ -138,9 +141,11 @@ const Messages = () => {
               activeRoom={activeRoom}
               roomMessages={roomMessages}
               message={message}
+              messageRef={messageRef}
               selectedMessageRoom={selectedMessageRoom}
               handleSelectedMessage={() => handleSelectedMessage(`${selectedMessageRoom}`, "back")}
               handleMessageInput={handleMessageInput}
+              sendMessage={sendMessage}
             />
           ) : (
             <StandByMessagePanel />

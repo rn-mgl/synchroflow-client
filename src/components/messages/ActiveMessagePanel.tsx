@@ -4,14 +4,17 @@ import { AiOutlinePaperClip } from "react-icons/ai";
 import { BsArrowLeft, BsFillSendFill } from "react-icons/bs";
 import { MessageRoomsStateProps, RoomMessagesStateProps } from "../hooks/useMessage";
 import { useSession } from "next-auth/react";
+import { RefObject } from "react";
 
 interface ActiveMessagePanelProps {
   activeRoom: MessageRoomsStateProps;
   roomMessages: Array<RoomMessagesStateProps>;
   message: string;
+  messageRef: RefObject<HTMLDivElement>;
   selectedMessageRoom: string;
   handleSelectedMessage: () => void;
   handleMessageInput: (e: React.FormEvent<HTMLDivElement>) => void;
+  sendMessage: () => void;
 }
 
 const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
@@ -23,11 +26,10 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
 
     return (
       <div
-        className={`w-fit max-w-[70%] break-words rounded-md p-1 text-white t:max-w-[50%]
+        className={`w-fit max-w-[70%] rounded-md p-1 text-white t:max-w-[50%]
                   ${isSender ? "ml-auto bg-primary-500" : "mr-auto bg-secondary-500"}`}
         key={index}
       >
-        {message.private_message} {message.private_message}
         {message.private_message}
       </div>
     );
@@ -35,9 +37,9 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
 
   return (
     <div
-      className="l-s:col-span-2 w-full bg-white flex rounded-lg
+      className="l-s:col-span-2 w-full bg-white flex rounded-lg 
                 flex-col h-full top-0 z-20 fixed left-2/4 -translate-x-2/4 animate-fadeIn
-                l-s:static l-s:order-2 l-s:left-0 l-s:translate-x-0"
+                l-s:static l-s:order-2 l-s:left-0 l-s:translate-x-0 l-s:overflow-hidden"
     >
       <div
         className="flex flex-row w-full items-center justify-start p-4 border-b-[1px] 
@@ -54,7 +56,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
 
       <div
         className="flex flex-col-reverse w-full h-full p-4 items-center justify-start
-                  gap-4"
+                  gap-4 overflow-y-auto cstm-scrollbar whitespace-pre-wrap"
       >
         {mappedMessages}
       </div>
@@ -68,6 +70,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
             <div
               onInput={(e) => props.handleMessageInput(e)}
               contentEditable={true}
+              ref={props.messageRef}
               className="border-none outline-none cstm-scrollbar h-auto w-full max-h-[12rem] overflow-y-auto 
                         relative whitespace-pre-wrap break-words"
             >
@@ -86,6 +89,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
               <AiOutlinePaperClip className="text-secondary-500 text-lg" />
             </button>
             <button
+              onClick={props.sendMessage}
               className="p-2 bg-primary-500 transition-all outline-none
                 rounded-lg flex flex-col items-center justify-center t:p-4"
             >

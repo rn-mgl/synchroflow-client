@@ -26,7 +26,8 @@ export interface RoomMessagesStateProps {
 
 export default function useMessage() {
   const [selectedMessageRoom, setSelectedMessage] = React.useState("");
-  const [message, setMessage] = React.useState("");
+  const [message, setMessage] = React.useState(""); // used a separate use state for message to have realtime update on div content
+  const messageRef = React.useRef<HTMLDivElement>(null); // used a separate use ref to clear div content after sending message
   const [roomMessages, setRoomMessages] = React.useState<Array<RoomMessagesStateProps>>([
     {
       image: "",
@@ -117,16 +118,48 @@ export default function useMessage() {
     []
   );
 
+  const sendMessage = async () => {
+    if (message === "") {
+      return;
+    }
+
+    try {
+      const { data } = await axios.post(
+        `${url}/private_messages`,
+        {
+          messageRoom: selectedMessageRoom,
+          messageToUUID: activeRoom.user_uuid,
+          message,
+          messageFile: null,
+        },
+        { headers: { Authorization: user?.token } }
+      );
+
+      if (data) {
+        if (messageRef.current) {
+          messageRef.current.innerText = "\n";
+        }
+        setMessage("");
+
+        await getMessageRoom();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     selectedMessageRoom,
     message,
     roomMessages,
     privateMessageRooms,
     activeRoom,
+    messageRef,
     getPrivateMessageRooms,
     getMessageRoom,
     setMessageData,
     setSelectedMessageData,
     setActiveRoomData,
+    sendMessage,
   };
 }

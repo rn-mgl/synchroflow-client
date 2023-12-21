@@ -29,17 +29,10 @@ const MessagePreview: React.FC<MessagePreviewProps> = (props) => {
       />
       <div className="w-full h-full flex flex-col justify-between items-center">
         <div className="flex flex-row justify-center items-center w-full gap-4">
-          <p className="font-bold text-sm max-w-[12ch] truncate l-s:max-w-none mr-auto">
+          <p className="font-bold text-sm max-w-[12ch] truncate mr-auto  l-l:max-w-[20ch]">
             {props.name} {props.surname}
           </p>
-          <p className="text-xs">{props.dateSent}</p>
-        </div>
 
-        <div className="flex flex-row justify-between items-center w-full text-xs">
-          <p className="truncate max-w-[20ch] t:max-w-[40ch] l-s:max-w-[25ch]">
-            <span> {props.isSender && "You: "}</span>
-            <span> {props.latestMessage}</span>
-          </p>
           <div>
             {props.status === "read" ? (
               <BsCheckAll className="text-primary-500 text-xl" />
@@ -51,6 +44,15 @@ const MessagePreview: React.FC<MessagePreviewProps> = (props) => {
               <BsDot className="text-neutral-400 text-xl" />
             )}
           </div>
+        </div>
+
+        <div className="flex flex-row justify-between items-center w-full text-xs">
+          <p className="truncate max-w-[10ch] t:max-w-[40ch] l-s:max-w-[10ch] l-l:max-w-[25ch]">
+            <span> {props.isSender && "You: "}</span>
+            <span> {props.latestMessage} </span>
+          </p>
+
+          <p className="text-xs">{props.dateSent}</p>
         </div>
       </div>
     </button>
