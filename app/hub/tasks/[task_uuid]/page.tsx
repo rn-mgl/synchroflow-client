@@ -217,13 +217,15 @@ const SingleTask = () => {
                     {isTaskCreator ? "Created Sub Tasks" : "Your Sub Tasks"}
                   </p>
 
-                  <button
-                    onClick={toggleCanCreateSubTask}
-                    className="flex flex-row gap-1 items-center text-xs text-primary-500
+                  {isTaskCreator ? (
+                    <button
+                      onClick={toggleCanCreateSubTask}
+                      className="flex flex-row gap-1 items-center text-xs text-primary-500
                       hover:underline hover:underline-offset-2 whitespace-nowrap"
-                  >
-                    <AiOutlinePlus /> Sub Task
-                  </button>
+                    >
+                      <AiOutlinePlus /> Sub Task
+                    </button>
+                  ) : null}
                 </div>
 
                 {isTaskCreator ? (

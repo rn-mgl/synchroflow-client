@@ -21,12 +21,15 @@ interface AssociatesStateProps {
   name: string;
   surname: string;
   user_uuid: string;
+  status: string;
+  role: string;
+  image: string;
 }
 
 const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
   const [inviteMessage, setInviteMessage] = React.useState("");
   const [associates, setAssociates] = React.useState<Array<AssociatesStateProps>>([
-    { name: "", surname: "", user_uuid: "" },
+    { name: "", surname: "", user_uuid: "", status: "", role: "", image: "" },
   ]);
   const [associatesToInvite, setAssociatesToInvite] = React.useState<string[]>([]);
   const [searchFilter, setSearchFilter] = React.useState({ searchKey: "name", toSearch: "" });
@@ -96,19 +99,19 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
 
         <div className="bg-neutral-50 w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md overflow-y-auto">
           <div className="flex flex-row gap-1 items-center justify-center">
-            <div className="bg-primary-100 w-12 min-w-[3rem] h-12 min-h-[3rem] rounded-full mr-auto" />
+            <div
+              style={{ backgroundImage: `url(${associate.image})` }}
+              className="bg-primary-100 w-12 min-w-[3rem] h-12 min-h-[3rem] rounded-full mr-auto bg-center bg-contain"
+            />
             <div className="flex flex-col gap-1 items-end">
-              <p className="font-bold truncate max-w-[15ch]">
+              <p className="font-bold truncate max-w-[15ch] l-s:max-w-[20ch]">
                 {associate.name} {associate.surname}
               </p>
-              <p className="text-xs max-w-[20ch] truncate">template role</p>
+              <p className="text-xs max-w-[20ch] truncate">{associate.role}</p>
             </div>
           </div>
 
-          <p className="text-xs my-auto text-justify leading-relaxed indent-10">
-            Follow the video tutorial above. Understand how to use each tool in the Figma application. Also learn how to
-            make a good and correct design.
-          </p>
+          <p className="text-xs my-auto text-justify leading-relaxed indent-10">{associate.status}</p>
 
           <div className="flex flex-row justify-between items-center mt-4">
             <div className="flex flex-row gap-1 items-center justify-center text-xs">

@@ -38,6 +38,7 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
         });
         if (data) {
           setCollaborators(data);
+          console.log(data);
         }
       } catch (error) {
         console.log(error);
@@ -103,7 +104,7 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
           </div>
 
           <div className="flex flex-row gap-2 items-center justify-center relative">
-            {collaborators.length ? mappedCollaborators : <p>-</p>}
+            {collaborators.length ? mappedCollaborators : <p className="opacity-50">?</p>}
           </div>
         </div>
       </div>

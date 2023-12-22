@@ -85,15 +85,19 @@ const SingleTaskMainData: React.FC<SingleTaskDataProps> = (props) => {
             </div>
             {props.collaboratorCount} {props.collaboratorCount > 1 ? "Associates" : "Associate"}
           </div>
-          |
-          <button
-            onClick={props.toggleCanInvite}
-            className="text-primary-500 flex flex-row items-center 
+          {props.isTaskCreator ? (
+            <>
+              |
+              <button
+                onClick={props.toggleCanInvite}
+                className="text-primary-500 flex flex-row items-center 
               justify-center gap-1 hover:underline underline-offset-2"
-          >
-            <AiOutlinePlus className="text-xs" />
-            Invite
-          </button>
+              >
+                <AiOutlinePlus className="text-xs" />
+                Invite
+              </button>
+            </>
+          ) : null}
         </div>
 
         <div className="flex flex-row gap-2 items-center text-sm">
