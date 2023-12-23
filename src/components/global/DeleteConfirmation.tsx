@@ -1,6 +1,7 @@
 import { useGlobalContext } from "@/base/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 
@@ -9,28 +10,33 @@ interface DeleteConfirmationProps {
   message: string;
   apiRoute: string;
   toggleConfirmation: () => void;
-  refetchData: () => Promise<void>;
+  refetchData?: () => Promise<void>;
+  redirectLink?: string;
 }
 
 const DeleteConfirmation: React.FC<DeleteConfirmationProps> = (props) => {
   const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+  const router = useRouter();
 
   const deleteData = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const { data } = await axios.delete(`${url}/${props.apiRoute}`, { headers: { Authorization: user?.token } });
       if (data) {
+        if (props.refetchData) {
+          await props.refetchData();
+        }
+        if (props.redirectLink) {
+          router.push(props.redirectLink);
+        }
         props.toggleConfirmation();
-        await props.refetchData();
       }
     } catch (error) {
       console.log(error);
     }
   };
-
-  console.log(props.apiRoute);
 
   return (
     <div

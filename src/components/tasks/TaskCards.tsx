@@ -4,6 +4,7 @@ import { AiOutlineClockCircle } from "react-icons/ai";
 import { localizeDate } from "../utils/dateUtils";
 import { useGlobalContext } from "@/base/context";
 import { useSession } from "next-auth/react";
+import { TbMoodX } from "react-icons/tb";
 import axios from "axios";
 
 interface TaskCardProps {
@@ -38,7 +39,6 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
         });
         if (data) {
           setCollaborators(data);
-          console.log(data);
         }
       } catch (error) {
         console.log(error);
@@ -104,7 +104,13 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
           </div>
 
           <div className="flex flex-row gap-2 items-center justify-center relative">
-            {collaborators.length ? mappedCollaborators : <p className="opacity-50">?</p>}
+            {collaborators.length ? (
+              mappedCollaborators
+            ) : (
+              <div className="opacity-50">
+                <TbMoodX className="text-xl" />
+              </div>
+            )}
           </div>
         </div>
       </div>

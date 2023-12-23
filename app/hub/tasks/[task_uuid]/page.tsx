@@ -1,5 +1,6 @@
 "use client";
 import { useGlobalContext } from "@/base/context";
+import DeleteConfirmation from "@/components//global/DeleteConfirmation";
 import SendTaskInvite from "@/components//invites/SendTaskInvite";
 import AssignSubTask from "@/components//tasks/AssignSubTask";
 import AsssignedSubTasks from "@/components//tasks/AsssignedSubTasks";
@@ -63,6 +64,7 @@ const SingleTask = () => {
   const [selectedSubTask, setSelectedSubTask] = React.useState("");
   const [canInvite, setCanInvite] = React.useState(false);
   const [canCreateSubTask, setCanCreateSubTask] = React.useState(false);
+  const [canDeleteTask, setCanDeleteTask] = React.useState(false);
 
   const params = useParams();
   const { url } = useGlobalContext();
@@ -76,6 +78,10 @@ const SingleTask = () => {
 
   const toggleCanCreateSubTask = () => {
     setCanCreateSubTask((prev) => !prev);
+  };
+
+  const toggleCanDeleteTask = () => {
+    setCanDeleteTask((prev) => !prev);
   };
 
   const handleSelectedSubTask = (subTaskUUID: string) => {
@@ -181,11 +187,23 @@ const SingleTask = () => {
             items-center w-full h-full"
       >
         {canInvite ? <SendTaskInvite taskUUID={taskData.main_task_uuid} toggleCanInvite={toggleCanInvite} /> : null}
+
         {canCreateSubTask ? (
           <CreateSubTask toggleCanCreateSubTask={toggleCanCreateSubTask} getCreatedSubTasks={getCreatedSubTasks} />
         ) : null}
+
         {selectedSubTask ? (
           <AssignSubTask selectedSubTask={selectedSubTask} handleSelectedSubTask={handleSelectedSubTask} />
+        ) : null}
+
+        {canDeleteTask ? (
+          <DeleteConfirmation
+            apiRoute={`main_tasks/${params?.task_uuid}`}
+            toggleConfirmation={toggleCanDeleteTask}
+            redirectLink="/hub/tasks"
+            title="Delete Task"
+            message="are you sure you want to delete this task?"
+          />
         ) : null}
 
         <div className="flex flex-col p-4 items-center justify-start w-full h-auto t:p-10  gap-4">
@@ -208,6 +226,7 @@ const SingleTask = () => {
               mainTaskTitle={taskData.main_task_title}
               collaboratorCount={collaborators.length}
               toggleCanInvite={toggleCanInvite}
+              toggleCanDeleteTask={toggleCanDeleteTask}
             />
 
             <div className="flex flex-col items-center justify-start w-full h-full gap-8 col-span-1 ">

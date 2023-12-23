@@ -56,7 +56,7 @@ const SubTaskData: React.FC<SubTaskDataProps> = (props) => {
   }, [getSubtask]);
 
   return (
-    <div className="flex flex-col gap-4 w-full items-center justify-start">
+    <div className="flex flex-col gap-4 w-full items-center justify-start animate-fadeIn">
       <div className="w-full gap-2 flex flex-col">
         <p className="text-xs font-light">Title</p>
         <p className="p-2 border-b-2 border-primary-500 capitalize">{subTaskData.sub_task_title}</p>

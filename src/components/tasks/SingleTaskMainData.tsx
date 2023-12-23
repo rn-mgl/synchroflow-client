@@ -19,6 +19,7 @@ interface SingleTaskDataProps {
   mainTaskDescription: string;
   collaboratorCount: number;
   toggleCanInvite: () => void;
+  toggleCanDeleteTask: () => void;
 }
 
 const SingleTaskMainData: React.FC<SingleTaskDataProps> = (props) => {
@@ -35,43 +36,45 @@ const SingleTaskMainData: React.FC<SingleTaskDataProps> = (props) => {
       <div className="flex flex-col gap-2 items-start justify-start w-full">
         <div className="flex flex-row w-full justify-between items-center">
           <p className="text-2xl font-medium text-secondary-500">{props.mainTaskTitle}</p>
-          <div>
-            {props.isTaskCreator ? (
-              <div className="relative flex self-end group">
+
+          {props.isTaskCreator ? (
+            <div className="relative flex self-end group">
+              <button
+                className="hover:bg-secondary-100 p-2 
+                      rounded-lg transition-all"
+              >
+                <AiOutlineEllipsis className="text-lg" />
+              </button>
+
+              <div
+                className="w-40 absolute hidden group-hover:flex 
+                    flex-col items-start justify-center gap-2
+                    -translate-x-[10rem] bg-secondary-200 p-2 rounded-md
+                    text-sm transition-all delay-200"
+              >
                 <button
-                  className="hover:bg-secondary-500 hover:bg-opacity-10 p-2 
-                      rounded-full transition-all"
+                  className="flex flex-row w-full items-center justify-between 
+                      hover:bg-secondary-300 hover:text-white p-1 rounded-sm
+                      transition-all"
                 >
-                  <AiOutlineEllipsis className="text-lg" />
+                  Edit
+                  <AiOutlineEdit />
                 </button>
 
-                <div
-                  className="w-40 absolute hidden group-hover:flex 
-                    flex-col items-start justify-center gap-2
-                    -translate-x-[10.2rem] bg-neutral-200 p-2 rounded-md
-                    text-sm transition-all delay-200"
+                <div className=" w-full min-h-[1px] h-[1px] bg-secondary-400" />
+
+                <button
+                  onClick={props.toggleCanDeleteTask}
+                  className="flex flex-row w-full items-center justify-between 
+                      hover:bg-secondary-300 hover:text-white p-1 rounded-sm
+                      transition-all"
                 >
-                  <button
-                    className="flex flex-row w-full items-center justify-between 
-                      hover:bg-neutral-300 p-1 rounded-sm"
-                  >
-                    Edit
-                    <AiOutlineEdit />
-                  </button>
-
-                  <div className=" w-full min-h-[1px] h-[1px] bg-neutral-400" />
-
-                  <button
-                    className="flex flex-row w-full items-center justify-between 
-                      hover:bg-neutral-300 p-1 rounded-sm"
-                  >
-                    Delete
-                    <AiOutlineDelete />
-                  </button>
-                </div>
+                  Delete
+                  <AiOutlineDelete />
+                </button>
               </div>
-            ) : null}
-          </div>
+            </div>
+          ) : null}
         </div>
 
         <div className="flex flex-row gap-2 text-secondary-400 text-sm">

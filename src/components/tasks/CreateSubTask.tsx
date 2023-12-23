@@ -75,7 +75,7 @@ const CreateSubTask: React.FC<CreateSubTaskProps> = (props) => {
 
       <form
         onSubmit={(e) => createSubTask(e)}
-        className="w-full bg-white h-fit rounded-lg flex flex-col p-4 t:p-10 gap-4
+        className="w-full bg-white h-fit rounded-lg flex flex-col p-4 t:p-10 gap-4 my-auto
                   max-w-screen-t overflow-y-auto cstm-scrollbar items-center justify-start"
       >
         <button

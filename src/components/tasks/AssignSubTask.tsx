@@ -23,7 +23,16 @@ interface AssignSubTaskProps {
 
 const AssignSubTask: React.FC<AssignSubTaskProps> = (props) => {
   const [activePage, setActivePage] = React.useState<"details" | "associates">("details");
-  const [collaborators, setCollaborators] = React.useState<Array<CollaboratorsStateProps>>([]);
+  const [collaborators, setCollaborators] = React.useState<Array<CollaboratorsStateProps>>([
+    {
+      name: "",
+      surname: "",
+      image: "",
+      user_uuid: "",
+      sub_task_collaborator_uuid: "",
+      is_sub_task_collaborator: false,
+    },
+  ]);
 
   const { url } = useGlobalContext();
   const { data: session } = useSession();
@@ -42,7 +51,7 @@ const AssignSubTask: React.FC<AssignSubTaskProps> = (props) => {
         { headers: { Authorization: user?.token } }
       );
       if (data) {
-        props.handleSelectedSubTask(props.selectedSubTask);
+        await getAllSubTaskCollaborators();
       }
     } catch (error) {
       console.log(error);
@@ -55,19 +64,19 @@ const AssignSubTask: React.FC<AssignSubTaskProps> = (props) => {
         headers: { Authorization: user?.token },
       });
       if (data) {
-        props.handleSelectedSubTask(props.selectedSubTask);
+        await getAllSubTaskCollaborators();
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getSingleTaskCollborators = React.useCallback(async () => {
+  const getAllSubTaskCollaborators = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/main_task_collaborators`, {
+        const { data } = await axios.get(`${url}/sub_task_collaborators`, {
           headers: { Authorization: user?.token },
-          params: { mainTaskUUID: params?.task_uuid },
+          params: { subTaskUUID: props.selectedSubTask, mainTaskUUID: params?.task_uuid },
         });
 
         if (data) {
@@ -77,7 +86,7 @@ const AssignSubTask: React.FC<AssignSubTaskProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, user?.token, params?.task_uuid]);
+  }, [url, user?.token, props.selectedSubTask, params?.task_uuid]);
 
   const mappedCollaborators = collaborators.map((collaborator, index) => {
     return (
@@ -116,8 +125,8 @@ const AssignSubTask: React.FC<AssignSubTaskProps> = (props) => {
   });
 
   React.useEffect(() => {
-    getSingleTaskCollborators();
-  }, [getSingleTaskCollborators]);
+    getAllSubTaskCollaborators();
+  }, [getAllSubTaskCollaborators]);
 
   return (
     <div
@@ -126,7 +135,7 @@ const AssignSubTask: React.FC<AssignSubTaskProps> = (props) => {
         flex flex-col items-center justify-start p-4 t:p-10"
     >
       <div
-        className="w-full bg-white h-fit rounded-lg flex flex-col p-4 t:p-10 gap-4
+        className="w-full bg-white h-fit rounded-lg flex flex-col p-4 t:p-10 gap-4 my-auto
                   max-w-screen-t overflow-y-auto cstm-scrollbar items-center justify-start"
       >
         <button
@@ -162,7 +171,7 @@ const AssignSubTask: React.FC<AssignSubTaskProps> = (props) => {
           {activePage === "details" ? (
             <SubTaskData selectedSubTask={props.selectedSubTask} />
           ) : (
-            <div className="flex flex-col w-full gap-4">{mappedCollaborators}</div>
+            <div className="flex flex-col w-full gap-4 animate-fadeIn">{mappedCollaborators}</div>
           )}
         </div>
       </div>
