@@ -12,26 +12,43 @@ import DateComp from "../input/DateComp";
 import SelectComp from "../input/SelectComp";
 import TextAreaComp from "../input/TextAreaComp";
 import TextComp from "../input/TextComp";
+import { dateTimeForInput, localizeTime } from "../utils/dateUtils";
+import { useParams } from "next/navigation";
 
-interface CreateTaskProps {
-  toggleCanCreateTask: () => void;
-  getMyTasks: () => Promise<void>;
-  getCollaboratedTasks: () => Promise<void>;
+interface SingleTaskData {
+  main_task_banner: string | null;
+  main_task_by: number;
+  main_task_description: string;
+  main_main_task_priority: string;
+  main_task_start_date: string;
+  main_task_end_date: string;
+  main_task_status: string;
+  main_task_subtitle: string;
+  main_task_title: string;
+  main_task_uuid: string;
 }
 
-const CreateTask: React.FC<CreateTaskProps> = (props) => {
+interface EditTaskProps {
+  toggleCanEditTask: () => void;
+  taskData: SingleTaskData;
+  getSingleTask: () => Promise<void>;
+}
+
+const EditTask: React.FC<EditTaskProps> = (props) => {
   const [mainTaskData, setMainTaskData] = React.useState({
-    mainTaskTitle: "",
-    mainTaskBanner: null,
-    mainTaskSubtitle: "",
-    mainTaskDescription: "",
-    maintTaskPriority: "important",
-    mainTaskStartDate: undefined,
-    mainTaskEndDate: undefined,
+    mainTaskTitle: props.taskData.main_task_title,
+    mainTaskBanner: props.taskData.main_task_banner,
+    mainTaskSubtitle: props.taskData.main_task_subtitle,
+    mainTaskDescription: props.taskData.main_task_description,
+    maintTaskStatus: props.taskData.main_task_status,
+    mainTaskPriority: props.taskData.main_main_task_priority,
+    mainTaskStartDate: props.taskData.main_task_start_date,
+    mainTaskEndDate: props.taskData.main_task_end_date,
   });
   const { rawFile, imageData, removeRawFile, selectedImageViewer, uploadFile } = useFile();
   const { isLoading, handleLoader } = useLoader();
 
+  const params = useParams();
   const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
@@ -48,23 +65,36 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
     });
   };
 
-  const createMainTask = async (e: React.FormEvent<HTMLFormElement>) => {
+  const removeUploadedFile = () => {
+    setMainTaskData((prev) => {
+      return {
+        ...prev,
+        mainTaskBanner: null,
+      };
+    });
+  };
+
+  const editMainTask = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleLoader(true);
     try {
-      const bannerURL = await uploadFile(rawFile.current?.files);
+      let bannerURL = null;
+      if (rawFile.current?.files) {
+        bannerURL = await uploadFile(rawFile.current?.files);
+      }
 
-      mainTaskData.mainTaskBanner = bannerURL;
+      if (bannerURL) {
+        mainTaskData.mainTaskBanner = bannerURL;
+      }
 
-      const { data } = await axios.post(
-        `${url}/main_tasks`,
+      const { data } = await axios.patch(
+        `${url}/main_tasks/${params?.task_uuid}`,
         { mainTaskData },
         { headers: { Authorization: user?.token } }
       );
       if (data) {
-        await props.getMyTasks();
-        await props.getCollaboratedTasks();
-        props.toggleCanCreateTask();
+        props.toggleCanEditTask();
+        await props.getSingleTask();
       }
     } catch (error) {
       handleLoader(false);
@@ -80,12 +110,12 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
     >
       {isLoading ? <Loading /> : null}
       <form
-        onSubmit={(e) => createMainTask(e)}
+        onSubmit={(e) => editMainTask(e)}
         className="w-full bg-white h-full rounded-lg flex flex-col p-4 t:p-10 gap-4
                   max-w-screen-t overflow-y-auto cstm-scrollbar items-center justify-start"
       >
         <button
-          onClick={props.toggleCanCreateTask}
+          onClick={props.toggleCanEditTask}
           type="button"
           className="ml-auto hover:bg-primary-500 rounded-full 
                     hover:bg-opacity-20 transition-all p-2"
@@ -95,11 +125,13 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
 
         <div className="flex flex-col w-full items-center justify-center">
           <div
-            style={{ backgroundImage: `url(${imageData.url})` }}
+            style={{ backgroundImage: `url(${imageData.url ? imageData.url : mainTaskData.mainTaskBanner})` }}
             className="w-full h-40 rounded-xl flex flex-col items-center justify-center
                       border-2 border-primary-200 bg-center bg-cover"
           >
-            {rawFile.current?.value ? null : <AiFillPicture className="text-primary-200 text-4xl" />}
+            {rawFile.current?.value || mainTaskData.mainTaskBanner ? null : (
+              <AiFillPicture className="text-primary-200 text-4xl" />
+            )}
           </div>
 
           <div className="flex flex-row w-full items-center justify-between py-2">
@@ -114,13 +146,17 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
                 className="hidden peer"
                 onChange={(e) => selectedImageViewer(e)}
               />
-              {rawFile.current?.value ? null : (
+              {rawFile.current?.value || mainTaskData.mainTaskBanner ? null : (
                 <AiOutlinePlus className="text-primary-500 peer-checked animate-fadeIn" />
               )}
             </label>
 
-            {rawFile.current?.value ? (
-              <button type="button" className="animate-fadeIn" onClick={removeRawFile}>
+            {rawFile.current?.value || mainTaskData.mainTaskBanner ? (
+              <button
+                type="button"
+                className="animate-fadeIn"
+                onClick={rawFile.current?.value ? removeRawFile : removeUploadedFile}
+              >
                 <AiOutlineDelete className="text-primary-500" />
               </button>
             ) : null}
@@ -167,7 +203,7 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
           <p className="text-xs">Priority</p>
           <SelectComp
             name="maintTaskPriority"
-            value={mainTaskData.maintTaskPriority}
+            value={mainTaskData.mainTaskPriority}
             onChange={handleTaskData}
             labelValuePair={[
               { label: "Critical Task", value: "critical" },
@@ -178,11 +214,25 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
         </div>
 
         <div className="w-full flex flex-col items-start justify-center gap-2">
+          <p className="text-xs">Status</p>
+          <SelectComp
+            name="maintTaskStatus"
+            value={mainTaskData.maintTaskStatus}
+            onChange={handleTaskData}
+            labelValuePair={[
+              { label: "Ongoing", value: "ongoing" },
+              { label: "Hold", value: "hold" },
+              { label: "Done", value: "done" },
+            ]}
+          />
+        </div>
+
+        <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Start Date</p>
           <DateComp
             name="mainTaskStartDate"
             required={true}
-            value={mainTaskData.mainTaskStartDate}
+            value={dateTimeForInput(mainTaskData.mainTaskStartDate)}
             onChange={handleTaskData}
           />
         </div>
@@ -192,7 +242,7 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
           <DateComp
             name="mainTaskEndDate"
             required={true}
-            value={mainTaskData.mainTaskEndDate}
+            value={dateTimeForInput(mainTaskData.mainTaskEndDate)}
             onChange={handleTaskData}
           />
         </div>
@@ -202,11 +252,11 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
           className="bg-primary-500 rounded-lg text-white 
                     font-bold p-2 w-full"
         >
-          Post
+          Update
         </button>
       </form>
     </div>
   );
 };
 
-export default CreateTask;
+export default EditTask;

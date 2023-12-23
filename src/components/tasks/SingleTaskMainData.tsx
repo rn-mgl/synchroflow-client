@@ -20,6 +20,7 @@ interface SingleTaskDataProps {
   collaboratorCount: number;
   toggleCanInvite: () => void;
   toggleCanDeleteTask: () => void;
+  toggleCanEditTask: () => void;
 }
 
 const SingleTaskMainData: React.FC<SingleTaskDataProps> = (props) => {
@@ -53,6 +54,7 @@ const SingleTaskMainData: React.FC<SingleTaskDataProps> = (props) => {
                     text-sm transition-all delay-200"
               >
                 <button
+                  onClick={props.toggleCanEditTask}
                   className="flex flex-row w-full items-center justify-between 
                       hover:bg-secondary-300 hover:text-white p-1 rounded-sm
                       transition-all"

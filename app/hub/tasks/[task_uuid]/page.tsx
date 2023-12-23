@@ -6,6 +6,7 @@ import AssignSubTask from "@/components//tasks/AssignSubTask";
 import AsssignedSubTasks from "@/components//tasks/AsssignedSubTasks";
 import CreateSubTask from "@/components//tasks/CreateSubTask";
 import CreatedSubTasks from "@/components//tasks/CreatedSubTasks";
+import EditTask from "@/components//tasks/EditTask";
 import SingleTaskMainData from "@/components//tasks/SingleTaskMainData";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -22,7 +23,7 @@ interface SingleTaskData {
   main_main_task_priority: string;
   main_task_start_date: string;
   main_task_end_date: string;
-  main_tast_status: string;
+  main_task_status: string;
   main_task_subtitle: string;
   main_task_title: string;
   main_task_uuid: string;
@@ -53,7 +54,7 @@ const SingleTask = () => {
     main_main_task_priority: "",
     main_task_start_date: "",
     main_task_end_date: "",
-    main_tast_status: "",
+    main_task_status: "",
     main_task_subtitle: "",
     main_task_title: "",
     main_task_uuid: "",
@@ -65,6 +66,7 @@ const SingleTask = () => {
   const [canInvite, setCanInvite] = React.useState(false);
   const [canCreateSubTask, setCanCreateSubTask] = React.useState(false);
   const [canDeleteTask, setCanDeleteTask] = React.useState(false);
+  const [canEditTask, setCanEditTask] = React.useState(false);
 
   const params = useParams();
   const { url } = useGlobalContext();
@@ -82,6 +84,10 @@ const SingleTask = () => {
 
   const toggleCanDeleteTask = () => {
     setCanDeleteTask((prev) => !prev);
+  };
+
+  const toggleCanEditTask = () => {
+    setCanEditTask((prev) => !prev);
   };
 
   const handleSelectedSubTask = (subTaskUUID: string) => {
@@ -206,6 +212,10 @@ const SingleTask = () => {
           />
         ) : null}
 
+        {canEditTask ? (
+          <EditTask taskData={taskData} toggleCanEditTask={toggleCanEditTask} getSingleTask={getSingleTask} />
+        ) : null}
+
         <div className="flex flex-col p-4 items-center justify-start w-full h-auto t:p-10  gap-4">
           <Link
             href="/hub/tasks"
@@ -227,6 +237,7 @@ const SingleTask = () => {
               collaboratorCount={collaborators.length}
               toggleCanInvite={toggleCanInvite}
               toggleCanDeleteTask={toggleCanDeleteTask}
+              toggleCanEditTask={toggleCanEditTask}
             />
 
             <div className="flex flex-col items-center justify-start w-full h-full gap-8 col-span-1 ">
