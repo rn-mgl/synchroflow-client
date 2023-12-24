@@ -7,6 +7,7 @@ import React from "react";
 import { AiOutlineClose, AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import SubTaskData from "./SubTaskData";
 import DeleteConfirmation from "../global/DeleteConfirmation";
+import EditSubTask from "./EditSubTask";
 
 interface CollaboratorsStateProps {
   name: string;
@@ -200,6 +201,11 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
           message="are you sure you want to delete this task?"
         />
       ) : null}
+
+      {canEditSubTask ? (
+        <EditSubTask subTaskData={subTaskData} getSubTask={getSubtask} toggleCanEditSubTask={toggleCanEditSubTask} />
+      ) : null}
+
       <div
         className="w-full bg-white h-full  rounded-lg flex flex-col t:p-10 gap-4 my-auto
                   max-w-screen-t items-center justify-start"

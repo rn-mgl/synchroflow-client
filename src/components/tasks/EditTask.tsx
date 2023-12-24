@@ -15,7 +15,7 @@ import TextComp from "../input/TextComp";
 import { dateTimeForInput, localizeTime } from "../utils/dateUtils";
 import { useParams } from "next/navigation";
 
-interface SingleTaskData {
+interface SingleTaskDataStateProps {
   main_task_banner: string | null;
   main_task_by: number;
   main_task_description: string;
@@ -30,7 +30,7 @@ interface SingleTaskData {
 
 interface EditTaskProps {
   toggleCanEditTask: () => void;
-  taskData: SingleTaskData;
+  taskData: SingleTaskDataStateProps;
   getSingleTask: () => Promise<void>;
 }
 
@@ -40,7 +40,7 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
     mainTaskBanner: props.taskData.main_task_banner,
     mainTaskSubtitle: props.taskData.main_task_subtitle,
     mainTaskDescription: props.taskData.main_task_description,
-    maintTaskStatus: props.taskData.main_task_status,
+    mainTaskStatus: props.taskData.main_task_status,
     mainTaskPriority: props.taskData.main_main_task_priority,
     mainTaskStartDate: props.taskData.main_task_start_date,
     mainTaskEndDate: props.taskData.main_task_end_date,
@@ -216,8 +216,8 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Status</p>
           <SelectComp
-            name="maintTaskStatus"
-            value={mainTaskData.maintTaskStatus}
+            name="mainTaskStatus"
+            value={mainTaskData.mainTaskStatus}
             onChange={handleTaskData}
             labelValuePair={[
               { label: "Ongoing", value: "ongoing" },

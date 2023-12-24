@@ -17,7 +17,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { BsArrowLeft } from "react-icons/bs";
 import SingleSubTask from "@/components//tasks/SingleSubTask";
 
-interface SingleTaskData {
+interface SingleTaskDataStateProps {
   main_task_banner: string | null;
   main_task_by: number;
   main_task_description: string;
@@ -48,7 +48,7 @@ interface CollaboratorsStateProps {
 }
 
 const SingleTask = () => {
-  const [taskData, setTaskData] = React.useState<SingleTaskData>({
+  const [taskData, setTaskData] = React.useState<SingleTaskDataStateProps>({
     main_task_banner: "",
     main_task_by: -1,
     main_task_description: "",
