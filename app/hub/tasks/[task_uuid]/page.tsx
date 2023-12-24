@@ -2,7 +2,7 @@
 import { useGlobalContext } from "@/base/context";
 import DeleteConfirmation from "@/components//global/DeleteConfirmation";
 import SendTaskInvite from "@/components//invites/SendTaskInvite";
-import AssignSubTask from "@/components//tasks/AssignSubTask";
+import AssignSubTask from "@/components//tasks/SingleSubTask";
 import AsssignedSubTasks from "@/components//tasks/AsssignedSubTasks";
 import CreateSubTask from "@/components//tasks/CreateSubTask";
 import CreatedSubTasks from "@/components//tasks/CreatedSubTasks";
@@ -15,6 +15,7 @@ import { useParams } from "next/navigation";
 import React from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BsArrowLeft } from "react-icons/bs";
+import SingleSubTask from "@/components//tasks/SingleSubTask";
 
 interface SingleTaskData {
   main_task_banner: string | null;
@@ -199,7 +200,11 @@ const SingleTask = () => {
         ) : null}
 
         {selectedSubTask ? (
-          <AssignSubTask selectedSubTask={selectedSubTask} handleSelectedSubTask={handleSelectedSubTask} />
+          <SingleSubTask
+            selectedSubTask={selectedSubTask}
+            handleSelectedSubTask={handleSelectedSubTask}
+            getCreatedSubTasks={getCreatedSubTasks}
+          />
         ) : null}
 
         {canDeleteTask ? (

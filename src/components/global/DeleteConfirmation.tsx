@@ -46,38 +46,42 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = (props) => {
     >
       <form
         onSubmit={(e) => deleteData(e)}
-        className="w-full bg-white h-fit rounded-lg flex flex-col p-4 t:p-10 gap-4
+        className="w-full bg-white h-fit rounded-lg flex flex-col gap-4 
                   max-w-screen-m-l overflow-y-auto cstm-scrollbar items-center justify-start
                   my-auto text-center"
       >
-        <button
-          onClick={props.toggleConfirmation}
-          type="button"
-          className="ml-auto hover:bg-primary-500 rounded-full 
-                    hover:bg-opacity-20 transition-all p-2"
-        >
-          <AiOutlineClose className="text-secondary-500" />
-        </button>
-
-        <p className="font-semibold text-primary-500 text-sm">{props.title}</p>
-        <p className="text-xs">{props.message}</p>
-
-        <div className="w-full flex flex-row gap-4">
+        <div className="flex flex-col items-center justify-end w-full border-b-[1px] p-4">
           <button
-            type="button"
             onClick={props.toggleConfirmation}
-            className="w-full rounded-md font-medium  
+            type="button"
+            className="ml-auto hover:bg-primary-500 rounded-full 
+                    hover:bg-opacity-20 transition-all p-2"
+          >
+            <AiOutlineClose className="text-secondary-500" />
+          </button>
+        </div>
+
+        <div className="flex flex-col gap-4 p-4 items-center justify-center">
+          <p className="font-semibold text-primary-500 text-sm">{props.title}</p>
+          <p className="text-xs">{props.message}</p>
+
+          <div className="w-full flex flex-row gap-4">
+            <button
+              type="button"
+              onClick={props.toggleConfirmation}
+              className="w-full rounded-md font-medium  
                         p-2 text-sm text-primary-500 border-2 border-primary-500"
-          >
-            No
-          </button>
-          <button
-            type="submit"
-            className="w-full rounded-md font-medium bg-primary-500 
+            >
+              No
+            </button>
+            <button
+              type="submit"
+              className="w-full rounded-md font-medium bg-primary-500 
                         p-2 text-sm text-white border-2 border-primary-500"
-          >
-            Yes
-          </button>
+            >
+              Yes
+            </button>
+          </div>
         </div>
       </form>
     </div>

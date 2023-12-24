@@ -1,11 +1,9 @@
 "use client";
-import { useGlobalContext } from "@/base/context";
-import axios from "axios";
-import { useSession } from "next-auth/react";
 import React from "react";
 import { localizeDate, localizeTime } from "../utils/dateUtils";
 
-interface SubTaskDataStateProps {
+interface SubTaskDataProps {
+  selectedSubTask: string;
   date_created: string;
   sub_task_title: string;
   sub_task_subtitle: string;
@@ -14,97 +12,70 @@ interface SubTaskDataStateProps {
   sub_task_start_date: string;
   sub_task_end_date: string;
   sub_task_priority: string;
-}
-
-interface SubTaskDataProps {
-  selectedSubTask: string;
+  toggleCanEditSubTask: () => void;
+  toggleCanDeleteSubTask: () => void;
 }
 
 const SubTaskData: React.FC<SubTaskDataProps> = (props) => {
-  const [subTaskData, setSubTaskData] = React.useState<SubTaskDataStateProps>({
-    date_created: "",
-    sub_task_title: "",
-    sub_task_subtitle: "",
-    sub_task_description: "",
-    sub_task_status: "",
-    sub_task_start_date: "",
-    sub_task_end_date: "",
-    sub_task_priority: "",
-  });
-
-  const { url } = useGlobalContext();
-  const { data: session } = useSession();
-  const user = session?.user;
-
-  const getSubtask = React.useCallback(async () => {
-    if (user?.token) {
-      try {
-        const { data } = await axios.get(`${url}/sub_tasks/${props.selectedSubTask}`, {
-          headers: { Authorization: user?.token },
-        });
-        if (data) {
-          setSubTaskData(data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }, [props.selectedSubTask, url, user?.token]);
-
-  React.useEffect(() => {
-    getSubtask();
-  }, [getSubtask]);
-
   return (
     <div className="flex flex-col gap-4 w-full items-center justify-start animate-fadeIn">
-      <div className="w-full gap-2 flex flex-col">
+      <div className="w-full gap-2 flex flex-col border-b-2 border-primary-500 p-2">
         <p className="text-xs font-light">Title</p>
-        <p className="p-2 border-b-2 border-primary-500 capitalize">{subTaskData.sub_task_title}</p>
+        <p className="capitalize">{props.sub_task_title}</p>
       </div>
 
-      <div className="w-full gap-2 flex flex-col">
+      <div className="w-full gap-2 flex flex-col border-b-2 border-primary-500 p-2">
         <p className="text-xs font-light">Sub Title</p>
-        <p className="p-2 border-b-2 border-primary-500 capitalize">{subTaskData.sub_task_subtitle}</p>
+        <p className="capitalize">{props.sub_task_subtitle}</p>
       </div>
 
-      <div className="w-full gap-2 flex flex-col">
+      <div className="w-full gap-2 flex flex-col max-h-80 overflow-y-auto cstm-scrollbar-2 border-b-2 border-primary-500 p-2">
         <p className="text-xs font-light">Description</p>
-        <p className="p-2 border-b-2 border-primary-500 capitalize">{subTaskData.sub_task_description}</p>
+        <p className="capitalize whitespace-pre-wrap break-words">{props.sub_task_description}</p>
       </div>
 
       <div className="flex flex-row w-full gap-4 items-center">
-        <div className="w-full gap-2 flex flex-col">
+        <div className="w-full gap-2 flex flex-col border-b-2 border-primary-500 p-2">
           <p className="text-xs font-light">Status</p>
-          <p className="p-2 border-b-2 border-primary-500 capitalize">{subTaskData.sub_task_status}</p>
+          <p className="capitalize">{props.sub_task_status}</p>
         </div>
-        <div className="w-full gap-2 flex flex-col">
+        <div className="w-full gap-2 flex flex-col border-b-2 border-primary-500 p-2">
           <p className="text-xs font-light">Priority</p>
-          <p className="p-2 border-b-2 border-primary-500 capitalize">{subTaskData.sub_task_priority}</p>
+          <p className="capitalize">{props.sub_task_priority}</p>
         </div>
       </div>
 
       <div className="flex flex-col w-full gap-4 items-center t:flex-row">
-        <div className="w-full gap-2 flex flex-col">
+        <div className="w-full gap-2 flex flex-col border-b-2 border-primary-500 p-2">
           <p className="text-xs font-light">Start Date</p>
-          <p className="p-2 border-b-2 border-primary-500 capitalize">
-            {localizeDate(subTaskData.sub_task_start_date, false)} | {localizeTime(subTaskData.sub_task_start_date)}
+          <p className="capitalize">
+            {localizeDate(props.sub_task_start_date, false)} | {localizeTime(props.sub_task_start_date)}
           </p>
         </div>
-        <div className="w-full gap-2 flex flex-col">
+        <div className="w-full gap-2 flex flex-col border-b-2 border-primary-500 p-2">
           <p className="text-xs font-light">End Date</p>
-          <p className="p-2 border-b-2 border-primary-500 capitalize">
-            {localizeDate(subTaskData.sub_task_end_date, false)} | {localizeTime(subTaskData.sub_task_end_date)}
+          <p className="capitalize">
+            {localizeDate(props.sub_task_end_date, false)} | {localizeTime(props.sub_task_end_date)}
           </p>
         </div>
       </div>
 
-      <button
-        type="submit"
-        className="bg-primary-500 rounded-lg text-white 
+      <div className="flex flex-col gap-4 items-center justify-center w-full t:flex-row">
+        <button
+          onClick={props.toggleCanEditSubTask}
+          className="bg-primary-500 border-2 border-primary-500 rounded-lg text-white 
         font-bold p-2 w-full"
-      >
-        Edit
-      </button>
+        >
+          Edit
+        </button>
+        <button
+          onClick={props.toggleCanDeleteSubTask}
+          className="border-2 border-primary-500 rounded-lg text-primary-500 
+        font-bold p-2 w-full"
+        >
+          Delete
+        </button>
+      </div>
     </div>
   );
 };
