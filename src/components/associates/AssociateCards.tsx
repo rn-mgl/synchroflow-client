@@ -8,7 +8,6 @@ interface AssociateCardsProps {
   selectedAssociate: string;
   associateUUID: string;
   targetIdentity: "of" | "is";
-  deadline: number;
   handleSelectedAssociate: () => void;
   toggleCanDisconnect: () => void;
 }
@@ -20,6 +19,7 @@ const AssociateCards: React.FC<AssociateCardsProps> = (props) => {
   const surname = props.associate[`${props.targetIdentity}_surname`];
   const role = props.associate[`${props.targetIdentity}_role`];
   const status = props.associate[`${props.targetIdentity}_status`];
+  const tasks = props.associate[`${props.targetIdentity}_task_count`];
 
   return (
     <div className="flex flex-row gap-4 justify-center h-full select-none relative ">
@@ -49,7 +49,7 @@ const AssociateCards: React.FC<AssociateCardsProps> = (props) => {
                 <AiOutlineFileText className="text-sm" />
               </div>
               <p>
-                {props.deadline} {typeof props.deadline === "number" && props.deadline > 1 ? "Tasks" : "Task"}
+                {tasks} {typeof tasks === "number" && tasks > 1 ? "Tasks" : "Task"}
               </p>
             </div>
 

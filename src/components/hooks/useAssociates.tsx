@@ -18,6 +18,8 @@ export interface AssociatesProps {
   is_image: string;
   is_status: string;
   is_role: string;
+  is_task_count: number;
+  of_task_count: number;
   associate_uuid: string;
   associate_of: number;
   associate_is: number;
@@ -40,6 +42,8 @@ export default function useAssociates() {
       is_image: "",
       is_status: "",
       is_role: "",
+      is_task_count: 0,
+      of_task_count: 0,
       associate_uuid: "",
       associate_of: -1,
       associate_is: -1,
@@ -61,6 +65,8 @@ export default function useAssociates() {
       is_image: "",
       is_status: "",
       is_role: "",
+      is_task_count: 0,
+      of_task_count: 0,
       associate_uuid: "",
       associate_of: -1,
       associate_is: -1,

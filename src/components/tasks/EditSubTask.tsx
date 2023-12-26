@@ -2,7 +2,6 @@
 import { useGlobalContext } from "@/base/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useParams } from "next/navigation";
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { MdSubtitles, MdTitle } from "react-icons/md";
