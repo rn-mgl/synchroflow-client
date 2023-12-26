@@ -1,6 +1,5 @@
 import React from "react";
-import { AiFillStar, AiOutlineFileText, AiOutlineMinus, AiOutlineMore, AiOutlinePlus } from "react-icons/ai";
-import AssociateCardFlyoutMenu from "./AssociateCardFlyoutMenu";
+import { AiFillStar, AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 
 interface AssociateCardsProps {
   name: string;
