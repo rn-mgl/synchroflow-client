@@ -11,13 +11,13 @@ interface MessagePreviewProps {
   dateSent: string;
   isSelected: boolean;
   isSender: boolean;
-  handleSelectedMessage: () => void;
+  handleSelectedMessageRoom: () => void;
 }
 
 const MessagePreview: React.FC<MessagePreviewProps> = (props) => {
   return (
     <button
-      onClick={props.handleSelectedMessage}
+      onClick={props.handleSelectedMessageRoom}
       className={`w-full p-2 rounded-lg hover:bg-neutral-50 
                 flex flex-row items-center gap-2 transition-all
                 ${props.isSelected && "bg-primary-100"}`}

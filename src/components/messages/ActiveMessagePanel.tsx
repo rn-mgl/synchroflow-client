@@ -1,10 +1,11 @@
 "use client";
 
-import { AiOutlinePaperClip } from "react-icons/ai";
-import { BsArrowLeft, BsFillSendFill } from "react-icons/bs";
-import { MessageRoomsStateProps, RoomMessagesStateProps } from "../hooks/useMessage";
 import { useSession } from "next-auth/react";
 import { RefObject } from "react";
+import { AiOutlineMore, AiOutlinePaperClip } from "react-icons/ai";
+import { BsArrowLeft, BsFillSendFill } from "react-icons/bs";
+import { MessageRoomsStateProps, RoomMessagesStateProps } from "../hooks/useMessage";
+import { localizeDate, localizeTime } from "../utils/dateUtils";
 
 interface ActiveMessagePanelProps {
   activeRoom: MessageRoomsStateProps;
@@ -12,8 +13,10 @@ interface ActiveMessagePanelProps {
   message: string;
   messageRef: RefObject<HTMLDivElement>;
   selectedMessageRoom: string;
-  handleSelectedMessage: () => void;
+  selectedMessage: string;
+  handleSelectedMessageRoom: () => void;
   handleMessageInput: (e: React.FormEvent<HTMLDivElement>) => void;
+  handleSelectedMessage: (messageUUID: string) => void;
   sendMessage: () => void;
 }
 
@@ -26,11 +29,36 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
 
     return (
       <div
-        className={`w-fit max-w-[70%] rounded-md p-1 text-white t:max-w-[50%]
-                  ${isSender ? "ml-auto bg-primary-500" : "mr-auto bg-secondary-500"}`}
         key={index}
+        onClick={() => props.handleSelectedMessage(message.private_message_uuid)}
+        className={`w-fit max-w-[70%] rounded-md  t:max-w-[50%] flex  ustify-center
+                   group relative flex-col ${isSender ? "ml-auto" : "mr-auto"}`}
       >
-        {message.private_message}
+        <div className={`w-fit flex relative ${isSender ? "flex-row-reverse ml-auto" : "flex-row mr-auto"}`}>
+          <div
+            className={`rounded-md p-1 flex flex-row items-center justify-center w-full ${
+              isSender ? " bg-primary-500" : " bg-secondary-500"
+            } `}
+          >
+            <p className={`text-white ${isSender ? "text-right" : "text-left"}`}> {message.private_message}</p>
+          </div>
+          <button
+            className={`hidden group-hover:flex animate-fadeIn absolute top-2/4 -translate-y-2/4 p-2
+                    hover:bg-secondary-100 hover:rounded-lg transition-all
+                    ${isSender ? "left-0 -translate-x-8" : "right-0 translate-x-8"}`}
+          >
+            <AiOutlineMore className="text-secondary-500" />
+          </button>
+        </div>
+
+        {props.selectedMessage === message.private_message_uuid ? (
+          <p
+            className={`whitespace-nowrap text-xs font-light 
+                    ${isSender ? "text-right ml-auto" : "text-left mr-auto"}`}
+          >
+            Sent {localizeDate(message.date_sent, true)} | {localizeTime(message.date_sent)}
+          </p>
+        ) : null}
       </div>
     );
   });
@@ -45,7 +73,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
         className="flex flex-row w-full items-center justify-start p-4 border-b-[1px] 
                 border-b-primary-100 gap-4"
       >
-        <button onClick={props.handleSelectedMessage}>
+        <button onClick={props.handleSelectedMessageRoom}>
           <BsArrowLeft className="text-primary-500" />
         </button>
 

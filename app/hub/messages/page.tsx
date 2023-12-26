@@ -17,11 +17,13 @@ const Messages = () => {
     privateMessageRooms,
     activeRoom,
     messageRef,
+    selectedMessage,
     getPrivateMessageRooms,
     getMessageRoom,
     setMessageData,
-    setSelectedMessageData,
+    setSelectedMessageRoomData,
     setActiveRoomData,
+    setSelectedMessageData,
     sendMessage,
   } = useMessage();
 
@@ -35,12 +37,11 @@ const Messages = () => {
 
   const handleMessageInput = (e: React.FormEvent<HTMLDivElement>) => {
     const inputText = e.target as HTMLElement;
-
     setMessageData(inputText.innerText ? inputText.innerText : "");
   };
 
-  const handleSelectedMessage = (messageUUID: string, type: "back" | "preview") => {
-    setSelectedMessageData(messageUUID, type);
+  const handleSelectedMessageRoom = (messageUUID: string, type: "back" | "preview") => {
+    setSelectedMessageRoomData(messageUUID, type);
 
     const newActiveRoomData = privateMessageRooms.find((room) => room.private_message_room === messageUUID) || {
       image: "",
@@ -69,6 +70,10 @@ const Messages = () => {
     );
   };
 
+  const handleSelectedMessage = (messageUUID: string) => {
+    setSelectedMessageData(messageUUID);
+  };
+
   const mappedMessageRoomPreviews = privateMessageRooms.map((room, index) => {
     return (
       <React.Fragment key={index}>
@@ -82,7 +87,7 @@ const Messages = () => {
           dateSent={new Date().toLocaleDateString()}
           isSelected={selectedMessageRoom === room.private_message_room}
           isSender={room.private_message_from === user?.id}
-          handleSelectedMessage={() => handleSelectedMessage(room.private_message_room, "preview")}
+          handleSelectedMessageRoom={() => handleSelectedMessageRoom(room.private_message_room, "preview")}
         />
         {privateMessageRooms.length - 1 !== index && (
           <div className="w-full h-[0.5px] min-h-[0.5px] bg-secondary-100" />
@@ -143,7 +148,9 @@ const Messages = () => {
               message={message}
               messageRef={messageRef}
               selectedMessageRoom={selectedMessageRoom}
-              handleSelectedMessage={() => handleSelectedMessage(`${selectedMessageRoom}`, "back")}
+              selectedMessage={selectedMessage}
+              handleSelectedMessageRoom={() => handleSelectedMessageRoom(`${selectedMessageRoom}`, "back")}
+              handleSelectedMessage={handleSelectedMessage}
               handleMessageInput={handleMessageInput}
               sendMessage={sendMessage}
             />
