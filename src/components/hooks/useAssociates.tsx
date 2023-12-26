@@ -18,60 +18,14 @@ export interface AssociatesProps {
   is_image: string;
   is_status: string;
   is_role: string;
-  is_task_count: number;
-  of_task_count: number;
   associate_uuid: string;
   associate_of: number;
   associate_is: number;
 }
 
 export default function useAssociates() {
-  const [recentAssociates, setRecentAssociates] = React.useState<Array<AssociatesProps>>([
-    {
-      of_uuid: "",
-      of_name: "",
-      of_surname: "",
-      of_email: "",
-      of_image: "",
-      of_status: "",
-      of_role: "",
-      is_uuid: "",
-      is_name: "",
-      is_surname: "",
-      is_email: "",
-      is_image: "",
-      is_status: "",
-      is_role: "",
-      is_task_count: 0,
-      of_task_count: 0,
-      associate_uuid: "",
-      associate_of: -1,
-      associate_is: -1,
-    },
-  ]);
-  const [allAssociates, setAllAssociates] = React.useState<Array<AssociatesProps>>([
-    {
-      of_uuid: "",
-      of_name: "",
-      of_surname: "",
-      of_email: "",
-      of_image: "",
-      of_status: "",
-      of_role: "",
-      is_uuid: "",
-      is_name: "",
-      is_surname: "",
-      is_email: "",
-      is_image: "",
-      is_status: "",
-      is_role: "",
-      is_task_count: 0,
-      of_task_count: 0,
-      associate_uuid: "",
-      associate_of: -1,
-      associate_is: -1,
-    },
-  ]);
+  const [recentAssociates, setRecentAssociates] = React.useState<Array<AssociatesProps>>([]);
+  const [allAssociates, setAllAssociates] = React.useState<Array<AssociatesProps>>([]);
 
   const { url } = useGlobalContext();
   const { data: session } = useSession();

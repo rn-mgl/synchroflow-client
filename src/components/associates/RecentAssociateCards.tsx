@@ -1,14 +1,9 @@
 import React from "react";
-import { AiFillStar, AiOutlineFileText } from "react-icons/ai";
 import { AssociatesProps } from "../hooks/useAssociates";
 
 interface RecentAssociateCardsProps {
   associate: AssociatesProps;
-  selectedAssociate: string;
-  associateUUID: string;
   targetIdentity: "of" | "is";
-  handleSelectedAssociate: () => void;
-  toggleCanDisconnect: () => void;
 }
 
 const RecentAssociateCards: React.FC<RecentAssociateCardsProps> = (props) => {
@@ -16,7 +11,6 @@ const RecentAssociateCards: React.FC<RecentAssociateCardsProps> = (props) => {
   const name = props.associate[`${props.targetIdentity}_name`];
   const surname = props.associate[`${props.targetIdentity}_surname`];
   const role = props.associate[`${props.targetIdentity}_role`];
-  const tasks = props.associate[`${props.targetIdentity}_task_count`];
 
   return (
     <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-full select-none ">
@@ -32,24 +26,6 @@ const RecentAssociateCards: React.FC<RecentAssociateCardsProps> = (props) => {
               {name} {surname}
             </p>
             <p className="text-xs max-w-[20ch] truncate">{role}</p>
-          </div>
-        </div>
-
-        <div className="flex flex-row justify-between items-center mt-auto">
-          <div className="flex flex-row gap-1 items-center justify-center text-xs">
-            <div>
-              <AiOutlineFileText className="text-sm" />
-            </div>
-            <p>
-              {tasks} {typeof tasks === "number" && tasks > 1 ? "Tasks" : "Task"}
-            </p>
-          </div>
-
-          <div className="flex flex-row gap-1 items-center justify-center relative text-xs">
-            <div>
-              <AiFillStar className="text-warning-500 text-sm" />
-            </div>
-            <p>4.5 (750 Reviews)</p>
           </div>
         </div>
       </div>

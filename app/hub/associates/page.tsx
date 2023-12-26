@@ -13,8 +13,7 @@ import { LuLayoutDashboard } from "react-icons/lu";
 
 const Associates = () => {
   const [searchInput, setSearchInput] = React.useState("");
-  const [selectedAssociate, setSelectedAssociate] = React.useState("");
-  const [canDisconnect, setCanDisconnect] = React.useState(false);
+  const [disconnectFromAssociate, setDisconnectFromAssociate] = React.useState("");
   const [canAddAssociate, setCanAddAssociate] = React.useState(false);
   const { allAssociates, recentAssociates, getAllAssociates, getRecentAssociates } = useAssociates();
 
@@ -27,16 +26,12 @@ const Associates = () => {
     setSearchInput(value);
   };
 
-  const handleSelectedAssociate = (associateUUID: string) => {
-    setSelectedAssociate((prev) => (prev !== associateUUID ? associateUUID : ""));
-  };
-
-  const toggleCanDisconnect = () => {
-    setCanDisconnect((prev) => !prev);
-  };
-
   const toggleCanAddAssociate = () => {
     setCanAddAssociate((prev) => !prev);
+  };
+
+  const handleDisconnectFromAssociate = (associateUUID: string) => {
+    setDisconnectFromAssociate((prev) => (prev === associateUUID ? "" : associateUUID));
   };
 
   const mappedRecentAssociateCards = recentAssociates.map((associate, index) => {
@@ -44,11 +39,7 @@ const Associates = () => {
       <RecentAssociateCards
         key={index}
         associate={associate}
-        selectedAssociate={selectedAssociate}
-        associateUUID={associate.associate_uuid}
         targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
-        handleSelectedAssociate={() => handleSelectedAssociate(associate.associate_uuid)}
-        toggleCanDisconnect={toggleCanDisconnect}
       />
     );
   });
@@ -58,11 +49,8 @@ const Associates = () => {
       <AssociateCards
         key={index}
         associate={associate}
-        selectedAssociate={selectedAssociate}
-        associateUUID={associate.associate_uuid}
         targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
-        handleSelectedAssociate={() => handleSelectedAssociate(associate.associate_uuid)}
-        toggleCanDisconnect={toggleCanDisconnect}
+        handleDisconnectFromAssociate={() => handleDisconnectFromAssociate(associate.associate_uuid)}
       />
     );
   });
@@ -81,12 +69,12 @@ const Associates = () => {
         className="max-w-screen-2xl flex flex-col justify-start 
                 items-center w-full h-full"
       >
-        {canDisconnect ? (
+        {disconnectFromAssociate ? (
           <DeleteConfirmation
             title="Confirm Associate Disconnection"
             message="are you sure you want to disconnect with this associate?"
-            apiRoute={`associates/${selectedAssociate}`}
-            toggleConfirmation={toggleCanDisconnect}
+            apiRoute={`associates/${disconnectFromAssociate}`}
+            toggleConfirmation={() => handleDisconnectFromAssociate(disconnectFromAssociate)}
             refetchData={async () => {
               getAllAssociates();
               getRecentAssociates();
@@ -154,7 +142,7 @@ const Associates = () => {
             Add Associates
           </button>
 
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-44">
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-36">
             <div className="flex flex-row justify-between w-full">
               <p className="font-semibold">Recent Associates</p>
             </div>
@@ -169,7 +157,7 @@ const Associates = () => {
             </div>
           </div>
 
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-72">
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-64">
             <div className="flex flex-row justify-between w-full">
               <p className="font-semibold">Associates</p>
             </div>
