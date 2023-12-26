@@ -21,6 +21,7 @@ export interface RoomMessagesStateProps {
   date_sent: string;
   private_message: string;
   private_message_file: string | null;
+  private_message_file_type: string | null;
   private_message_from: number;
   private_message_uuid: string;
 }

@@ -49,7 +49,9 @@ const MessagePreview: React.FC<MessagePreviewProps> = (props) => {
         <div className="flex flex-row justify-between items-center w-full text-xs">
           <p className="truncate max-w-[10ch] t:max-w-[40ch] l-s:max-w-[10ch] l-l:max-w-[25ch]">
             <span> {props.isSender && "You: "}</span>
-            <span> {props.latestMessage} </span>
+            <span>
+              {props.latestMessage ? props.latestMessage : props.latestFile ? <i>sent an attachement</i> : null}
+            </span>
           </p>
 
           <p className="text-xs">{props.dateSent}</p>

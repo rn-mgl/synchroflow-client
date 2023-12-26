@@ -28,7 +28,7 @@ const Messages = () => {
     setActiveRoomData,
     setSelectedMessageData,
   } = useMessage();
-  const { rawFile, imageData, removeRawFile, selectedImageViewer, uploadFile } = useFile();
+  const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } = useFile();
 
   const { url } = useGlobalContext();
   const { data: session } = useSession();
@@ -119,16 +119,19 @@ const Messages = () => {
           messageToUUID: activeRoom.user_uuid,
           message,
           messageFile,
+          messageFileType: messageFile ? fileData.type : null,
         },
         { headers: { Authorization: user?.token } }
       );
 
       if (data) {
-        if (messageRef.current) {
+        if (message && messageRef.current) {
           messageRef.current.innerText = "\n";
+          setMessageData("");
         }
-        removeRawFile();
-        setMessageData("");
+        if (rawFile.current?.value) {
+          removeRawFile();
+        }
         await getMessageRoom();
       }
     } catch (error) {
@@ -190,8 +193,8 @@ const Messages = () => {
               selectedMessageRoom={selectedMessageRoom}
               selectedMessage={selectedMessage}
               rawFile={rawFile}
-              imageData={imageData}
-              selectedImageViewer={selectedImageViewer}
+              fileData={fileData}
+              selectedFileViewer={selectedFileViewer}
               removeRawFile={removeRawFile}
               handleSelectedMessageRoom={() => handleSelectedMessageRoom(`${selectedMessageRoom}`, "back")}
               handleSelectedMessage={handleSelectedMessage}

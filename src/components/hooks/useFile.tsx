@@ -4,14 +4,14 @@ import { useGlobalContext } from "../../../context";
 import { useSession } from "next-auth/react";
 
 export default function useFile() {
-  const [imageData, setImageFile] = React.useState({ name: "", url: "" });
+  const [fileData, setFileData] = React.useState({ name: "", url: "", type: "" });
   const rawFile = React.useRef<any>();
 
   const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
 
-  const selectedImageViewer = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const selectedFileViewer = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files;
 
     if (!file || file.length < 1) {
@@ -25,13 +25,14 @@ export default function useFile() {
     }
 
     const name = details.name;
+    const type = details.type.split("/")[0];
     const url = URL.createObjectURL(details);
 
-    setImageFile({ name, url });
+    setFileData({ name, url, type });
   };
 
   const removeRawFile = () => {
-    setImageFile({ name: "", url: "" });
+    setFileData({ name: "", url: "", type: "" });
     if (rawFile.current) {
       rawFile.current.value = null;
     }
@@ -58,5 +59,5 @@ export default function useFile() {
     }
   };
 
-  return { rawFile, imageData, removeRawFile, selectedImageViewer, uploadFile };
+  return { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile };
 }

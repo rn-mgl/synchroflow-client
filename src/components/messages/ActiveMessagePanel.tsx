@@ -7,6 +7,8 @@ import { AiOutlineDelete, AiOutlineMore, AiOutlinePaperClip } from "react-icons/
 import { BsArrowLeft, BsFillSendFill } from "react-icons/bs";
 import { MessageRoomsStateProps, RoomMessagesStateProps } from "../hooks/useMessage";
 import { localizeDate, localizeTime } from "../utils/dateUtils";
+import FileViewer from "../global/FileViewer";
+import FilePreview from "../global/FilePreview";
 
 interface ActiveMessagePanelProps {
   activeRoom: MessageRoomsStateProps;
@@ -16,8 +18,8 @@ interface ActiveMessagePanelProps {
   selectedMessageRoom: string;
   selectedMessage: string;
   rawFile: any;
-  imageData: { name: string; url: string };
-  selectedImageViewer: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  fileData: { name: string; url: string; type: string };
+  selectedFileViewer: (e: React.ChangeEvent<HTMLInputElement>) => void;
   removeRawFile: () => void;
   handleSelectedMessageRoom: () => void;
   handleMessageInput: (e: React.FormEvent<HTMLDivElement>) => void;
@@ -39,30 +41,25 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
         className={`w-fit max-w-[80%] rounded-md  t:max-w-[60%] flex  ustify-center
                    group relative flex-col ${isSender ? "ml-auto" : "mr-auto"}`}
       >
-        <div className={`w-fit flex relative ${isSender ? "flex-row-reverse ml-auto" : "flex-row mr-auto"}`}>
+        <div className={`w-full flex relative ${isSender ? "flex-row-reverse ml-auto" : "flex-row mr-auto"}`}>
           <div
-            className={`rounded-md p-1 flex flex-row items-center justify-center w-full ${
+            className={`rounded-md p-2 gap-4 flex flex-col items-center justify-center w-full ${
               isSender ? " bg-primary-500" : " bg-secondary-500"
             } `}
           >
             {message.private_message ? (
-              <p className={`text-white ${isSender ? "text-right" : "text-left"} break-word break-words`}>
+              <p
+                className={`text-white ${isSender ? "text-right ml-auto" : "text-left mr-auto"} break-word break-words`}
+              >
                 {message.private_message}
               </p>
             ) : null}
 
             {message.private_message_file ? (
-              <div className="">
-                <Image
-                  src={message.private_message_file}
-                  alt="message"
-                  width={200}
-                  height={200}
-                  className="rounded-sm"
-                />
-              </div>
+              <FileViewer file={message.private_message_file} type={message.private_message_file_type} />
             ) : null}
           </div>
+
           <button
             className={`hidden group-hover:flex animate-fadeIn absolute top-2/4 -translate-y-2/4 p-2
                     hover:bg-secondary-100 hover:rounded-lg transition-all
@@ -108,18 +105,12 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
                   gap-4 overflow-y-auto cstm-scrollbar whitespace-pre-wrap"
       >
         {props.rawFile.current?.value ? (
-          <div
-            className="flex flex-col w-fit p-2 items-center justify-center bg-primary-100  bg-opacity-50 rounded-lg gap-2
-                      border-2 border-primary-200 ml-auto"
-          >
-            <Image src={props.imageData.url} alt="selected" width={200} height={200} className="rounded-md" />
-            <div className="flex flex-row w-full items-end justify-between">
-              <p className="max-w-[15ch] truncate text-sm font-light">{props.imageData.name}</p>
-              <button type="button" className="animate-fadeIn" onClick={props.removeRawFile}>
-                <AiOutlineDelete className="text-primary-500" />
-              </button>
-            </div>
-          </div>
+          <FilePreview
+            file={props.fileData.url}
+            name={props.fileData.name}
+            type={props.fileData.type}
+            removeRawFile={props.removeRawFile}
+          />
         ) : null}
         {mappedMessages}
       </div>
@@ -146,13 +137,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
 
           <div className="flex flex-row gap-2 items-center justify-center mt-auto t:gap-4">
             <label>
-              <input
-                ref={props.rawFile}
-                onChange={(e) => props.selectedImageViewer(e)}
-                type="file"
-                accept="image/*"
-                className="hidden"
-              />
+              <input ref={props.rawFile} onChange={(e) => props.selectedFileViewer(e)} type="file" className="hidden" />
               <div
                 className="p-2.5 hover:bg-primary-100 transition-all outline-none
                 rounded-lg flex flex-col items-center justify-center t:p-4"

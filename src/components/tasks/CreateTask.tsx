@@ -29,7 +29,7 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
     mainTaskStartDate: undefined,
     mainTaskEndDate: undefined,
   });
-  const { rawFile, imageData, removeRawFile, selectedImageViewer, uploadFile } = useFile();
+  const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } = useFile();
   const { isLoading, handleLoader } = useLoader();
 
   const { url } = useGlobalContext();
@@ -99,7 +99,7 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
 
         <div className="flex flex-col w-full items-center justify-center">
           <div
-            style={{ backgroundImage: `url(${imageData.url})` }}
+            style={{ backgroundImage: `url(${fileData.url})` }}
             className="w-full h-40 rounded-xl flex flex-col items-center justify-center
                       border-2 border-primary-200 bg-center bg-cover"
           >
@@ -116,7 +116,7 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
                 formNoValidate
                 accept="image/*"
                 className="hidden peer"
-                onChange={(e) => selectedImageViewer(e)}
+                onChange={(e) => selectedFileViewer(e)}
               />
               {rawFile.current?.value ? null : (
                 <AiOutlinePlus className="text-primary-500 peer-checked animate-fadeIn" />
