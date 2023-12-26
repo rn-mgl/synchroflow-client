@@ -103,36 +103,6 @@ export default function useMessage() {
     []
   );
 
-  const sendMessage = async () => {
-    if (message === "") {
-      return;
-    }
-
-    try {
-      const { data } = await axios.post(
-        `${url}/private_messages`,
-        {
-          messageRoom: selectedMessageRoom,
-          messageToUUID: activeRoom.user_uuid,
-          message,
-          messageFile: null,
-        },
-        { headers: { Authorization: user?.token } }
-      );
-
-      if (data) {
-        if (messageRef.current) {
-          messageRef.current.innerText = "\n";
-        }
-        setMessage("");
-
-        await getMessageRoom();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return {
     selectedMessageRoom,
     message,
@@ -147,6 +117,5 @@ export default function useMessage() {
     setSelectedMessageRoomData,
     setSelectedMessageData,
     setActiveRoomData,
-    sendMessage,
   };
 }

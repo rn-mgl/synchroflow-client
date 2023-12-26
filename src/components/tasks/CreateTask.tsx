@@ -52,7 +52,11 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
     e.preventDefault();
     handleLoader(true);
     try {
-      const bannerURL = await uploadFile(rawFile.current?.files);
+      let bannerURL = null;
+
+      if (rawFile.current?.value) {
+        bannerURL = await uploadFile(rawFile.current?.files);
+      }
 
       mainTaskData.mainTaskBanner = bannerURL;
 

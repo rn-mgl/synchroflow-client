@@ -26,6 +26,10 @@ button {
   cursor: pointer;
 }
 
+.break-word {
+  word-break: break-word;
+}
+
 .react-calendar {
   width: 100%;
   max-width: 100%;

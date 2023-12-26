@@ -1,9 +1,12 @@
 "use client";
+import { useGlobalContext } from "@/base/context";
 import SearchFilter from "@/components//filter/SearchFilter";
+import useFile from "@/components//hooks/useFile";
 import useMessage from "@/components//hooks/useMessage";
 import ActiveMessagePanel from "@/components//messages/ActiveMessagePanel";
 import MessagePreview from "@/components//messages/MessagePreview";
 import StandByMessagePanel from "@/components//messages/StandByMessagePanel";
+import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -24,9 +27,10 @@ const Messages = () => {
     setSelectedMessageRoomData,
     setActiveRoomData,
     setSelectedMessageData,
-    sendMessage,
   } = useMessage();
+  const { rawFile, imageData, removeRawFile, selectedImageViewer, uploadFile } = useFile();
 
+  const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -96,6 +100,42 @@ const Messages = () => {
     );
   });
 
+  const sendMessage = async () => {
+    if (message === "" && !rawFile.current?.value) {
+      return;
+    }
+
+    let messageFile = null;
+
+    if (rawFile.current?.value) {
+      messageFile = await uploadFile(rawFile.current?.files);
+    }
+
+    try {
+      const { data } = await axios.post(
+        `${url}/private_messages`,
+        {
+          messageRoom: selectedMessageRoom,
+          messageToUUID: activeRoom.user_uuid,
+          message,
+          messageFile,
+        },
+        { headers: { Authorization: user?.token } }
+      );
+
+      if (data) {
+        if (messageRef.current) {
+          messageRef.current.innerText = "\n";
+        }
+        removeRawFile();
+        setMessageData("");
+        await getMessageRoom();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   React.useEffect(() => {
     getPrivateMessageRooms();
   }, [getPrivateMessageRooms]);
@@ -149,6 +189,10 @@ const Messages = () => {
               messageRef={messageRef}
               selectedMessageRoom={selectedMessageRoom}
               selectedMessage={selectedMessage}
+              rawFile={rawFile}
+              imageData={imageData}
+              selectedImageViewer={selectedImageViewer}
+              removeRawFile={removeRawFile}
               handleSelectedMessageRoom={() => handleSelectedMessageRoom(`${selectedMessageRoom}`, "back")}
               handleSelectedMessage={handleSelectedMessage}
               handleMessageInput={handleMessageInput}
