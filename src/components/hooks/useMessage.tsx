@@ -6,8 +6,8 @@ import React from "react";
 export interface MessageRoomsStateProps {
   image: string;
   name: string;
-  room_image: string | null;
-  room_name: string | null;
+  room_image: string;
+  room_name: string;
   surname: string;
   message_room: string;
   message: string;
@@ -43,7 +43,7 @@ export default function useMessage() {
   const [selectedMessage, setSelectedMessage] = React.useState("");
   const [activeRoom, setActiveRoom] = React.useState<MessageRoomsStateProps>({
     image: "",
-    room_image: null,
+    room_image: "",
     room_name: "",
     name: "",
     surname: "",
@@ -69,6 +69,20 @@ export default function useMessage() {
 
   const handleSelectedRoomType = React.useCallback((roomType: "private" | "group") => {
     setRoomType(roomType);
+    setSelectedMessageRoom("");
+    setActiveRoom({
+      image: "",
+      room_image: "",
+      room_name: "",
+      name: "",
+      surname: "",
+      message_room: "",
+      message: "",
+      message_file: "",
+      message_from: -1,
+      user_uuid: "",
+      date_sent: "",
+    });
   }, []);
 
   const toggleCanCreateGroupMessage = React.useCallback(() => {
@@ -112,7 +126,7 @@ export default function useMessage() {
       const resetRoomData = {
         image: "",
         name: "",
-        room_image: null,
+        room_image: "",
         room_name: "",
         surname: "",
         message_room: "",

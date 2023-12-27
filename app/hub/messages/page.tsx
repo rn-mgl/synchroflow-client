@@ -98,7 +98,7 @@ const Messages = () => {
 
     try {
       const { data } = await axios.post(
-        `${url}/private_messages`,
+        `${url}/${roomType}_messages`,
         {
           messageRoom: selectedMessageRoom,
           messageToUUID: activeRoom.user_uuid,
@@ -206,6 +206,7 @@ const Messages = () => {
 
           {selectedMessageRoom ? (
             <ActiveMessagePanel
+              roomName={roomType === "private" ? `${activeRoom.name} ${activeRoom.surname}` : activeRoom.room_name}
               activeRoom={activeRoom}
               roomMessages={roomMessages}
               message={message}

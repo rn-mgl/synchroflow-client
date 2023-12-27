@@ -47,7 +47,13 @@ const GroupMessagePreview: React.FC<GroupMessagePreviewProps> = (props) => {
           <p className="truncate max-w-[10ch] t:max-w-[40ch] l-s:max-w-[10ch] l-l:max-w-[25ch]">
             <span> {props.isSender && "You: "}</span>
             <span>
-              {props.latestMessage ? props.latestMessage : props.latestFile ? <i>sent an attachement</i> : null}
+              {props.latestMessage ? (
+                props.latestMessage
+              ) : props.latestFile ? (
+                <i>sent an attachement</i>
+              ) : (
+                <i>no messages yet</i>
+              )}
             </span>
           </p>
 

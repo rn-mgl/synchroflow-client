@@ -10,6 +10,7 @@ import { MessageRoomsStateProps, RoomMessagesStateProps } from "../hooks/useMess
 import { localizeDate, localizeTime } from "../utils/dateUtils";
 
 interface ActiveMessagePanelProps {
+  roomName: string;
   activeRoom: MessageRoomsStateProps;
   roomMessages: Array<RoomMessagesStateProps>;
   message: string;
@@ -92,9 +93,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
           <BsArrowLeft className="text-primary-500" />
         </button>
 
-        <p className="font-bold max-w-[20ch] truncate t:max-w-none t:truncate">
-          {props.activeRoom.name} {props.activeRoom.surname}
-        </p>
+        <p className="font-bold max-w-[20ch] truncate t:max-w-none t:truncate">{props.roomName}</p>
       </div>
 
       <div
