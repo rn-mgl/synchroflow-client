@@ -1,14 +1,13 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { RefObject } from "react";
-import { AiOutlineDelete, AiOutlineMore, AiOutlinePaperClip } from "react-icons/ai";
+import { AiOutlineMore, AiOutlinePaperClip } from "react-icons/ai";
 import { BsArrowLeft, BsFillSendFill } from "react-icons/bs";
+import FilePreview from "../global/FilePreview";
+import FileViewer from "../global/FileViewer";
 import { MessageRoomsStateProps, RoomMessagesStateProps } from "../hooks/useMessage";
 import { localizeDate, localizeTime } from "../utils/dateUtils";
-import FileViewer from "../global/FileViewer";
-import FilePreview from "../global/FilePreview";
 
 interface ActiveMessagePanelProps {
   activeRoom: MessageRoomsStateProps;
@@ -32,32 +31,30 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
   const user = session?.user;
 
   const mappedMessages = props.roomMessages.map((message, index) => {
-    const isSender = message.private_message_from === user?.id;
+    const isSender = message.message_from === user?.id;
 
     return (
       <div
         key={index}
-        onClick={() => props.handleSelectedMessage(message.private_message_uuid)}
+        onClick={() => props.handleSelectedMessage(message.message_uuid)}
         className={`w-fit max-w-[80%] rounded-md  t:max-w-[60%] flex  ustify-center
                    group relative flex-col ${isSender ? "ml-auto" : "mr-auto"}`}
       >
-        <div className={`w-full flex relative ${isSender ? "flex-row-reverse ml-auto" : "flex-row mr-auto"}`}>
+        <div className={`w-fit flex relative ${isSender ? "flex-row-reverse ml-auto" : "flex-row mr-auto"}`}>
           <div
             className={`rounded-md p-2 gap-4 flex flex-col items-center justify-center w-full ${
               isSender ? " bg-primary-500" : " bg-secondary-500"
             } `}
           >
-            {message.private_message ? (
+            {message.message ? (
               <p
                 className={`text-white ${isSender ? "text-right ml-auto" : "text-left mr-auto"} break-word break-words`}
               >
-                {message.private_message}
+                {message.message}
               </p>
             ) : null}
 
-            {message.private_message_file ? (
-              <FileViewer file={message.private_message_file} type={message.private_message_file_type} />
-            ) : null}
+            {message.message_file ? <FileViewer file={message.message_file} type={message.message_file_type} /> : null}
           </div>
 
           <button
@@ -69,7 +66,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
           </button>
         </div>
 
-        {props.selectedMessage === message.private_message_uuid ? (
+        {props.selectedMessage === message.message_uuid ? (
           <p
             className={`whitespace-nowrap text-xs font-light 
                     ${isSender ? "text-right ml-auto" : "text-left mr-auto"}`}

@@ -6,12 +6,15 @@ import React from "react";
 export interface MessageRoomsStateProps {
   image: string;
   name: string;
+  room_image: string | null;
+  room_name: string | null;
   surname: string;
-  private_message_room: string;
-  private_message: string;
-  private_message_file: string;
-  private_message_from: number;
+  message_room: string;
+  message: string;
+  message_file: string;
+  message_from: number;
   user_uuid: string;
+  date_sent: string;
 }
 
 export interface RoomMessagesStateProps {
@@ -19,52 +22,78 @@ export interface RoomMessagesStateProps {
   name: string;
   surname: string;
   date_sent: string;
-  private_message: string;
-  private_message_file: string | null;
-  private_message_file_type: string | null;
-  private_message_from: number;
-  private_message_uuid: string;
+  message: string;
+  message_file: string | null;
+  message_file_type: string | null;
+  message_from: number;
+  message_uuid: string;
 }
 
 export default function useMessage() {
   const [selectedMessageRoom, setSelectedMessageRoom] = React.useState("");
+  const [roomType, setRoomType] = React.useState<"private" | "group">("private");
+
   const [message, setMessage] = React.useState(""); // used a separate use state for message to have realtime update on div content
   const messageRef = React.useRef<HTMLDivElement>(null); // used a separate use ref to clear div content after sending message
+
+  const [messageRooms, setMessageRooms] = React.useState<Array<MessageRoomsStateProps>>([]);
   const [roomMessages, setRoomMessages] = React.useState<Array<RoomMessagesStateProps>>([]);
-  const [privateMessageRooms, setPrivateMessageRooms] = React.useState<Array<MessageRoomsStateProps>>([]);
+  const [canCreateGroupMessage, setCanCreateGroupMessage] = React.useState(false);
+
   const [selectedMessage, setSelectedMessage] = React.useState("");
   const [activeRoom, setActiveRoom] = React.useState<MessageRoomsStateProps>({
     image: "",
+    room_image: null,
+    room_name: "",
     name: "",
     surname: "",
-    private_message_room: "",
-    private_message: "",
-    private_message_file: "",
-    private_message_from: -1,
+    message_room: "",
+    message: "",
+    message_file: "",
+    message_from: -1,
     user_uuid: "",
+    date_sent: "",
   });
 
   const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
 
-  const getPrivateMessageRooms = React.useCallback(async () => {
+  const handleMessage = React.useCallback((message: string) => {
+    setMessage(message);
+  }, []);
+
+  const handleSelectedMessage = React.useCallback((messageUUID: string) => {
+    setSelectedMessage((prev) => (prev === messageUUID ? "" : messageUUID));
+  }, []);
+
+  const handleSelectedRoomType = React.useCallback((roomType: "private" | "group") => {
+    setRoomType(roomType);
+  }, []);
+
+  const toggleCanCreateGroupMessage = React.useCallback(() => {
+    setCanCreateGroupMessage((prev) => !prev);
+  }, []);
+
+  const getMessageRooms = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/private_message_rooms`, { headers: { Authorization: user?.token } });
+        const { data } = await axios.get(`${url}/${roomType}_message_rooms`, {
+          headers: { Authorization: user?.token },
+        });
         if (data) {
-          setPrivateMessageRooms(data);
+          setMessageRooms(data);
         }
       } catch (error) {
         console.log(error);
       }
     }
-  }, [url, user?.token]);
+  }, [url, user?.token, roomType]);
 
   const getMessageRoom = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/private_message_rooms/${selectedMessageRoom}`, {
+        const { data } = await axios.get(`${url}/${roomType}_message_rooms/${selectedMessageRoom}`, {
           headers: { Authorization: user?.token },
         });
         if (data) {
@@ -74,49 +103,49 @@ export default function useMessage() {
         console.log(error);
       }
     }
-  }, [url, user?.token, selectedMessageRoom]);
+  }, [url, user?.token, selectedMessageRoom, roomType]);
 
-  const setSelectedMessageRoomData = React.useCallback((messageUUID: string, type: "back" | "preview") => {
-    setSelectedMessageRoom((prev) => (prev === messageUUID && type === "back" ? "" : messageUUID));
-  }, []);
+  const handleSelectedMessageRoom = React.useCallback(
+    (messageUUID: string, type: "back" | "preview") => {
+      setSelectedMessageRoom((prev) => (prev === messageUUID && type === "back" ? "" : messageUUID));
 
-  const setMessageData = React.useCallback((message: string) => {
-    setMessage(message);
-  }, []);
+      const resetRoomData = {
+        image: "",
+        name: "",
+        room_image: null,
+        room_name: "",
+        surname: "",
+        message_room: "",
+        message: "",
+        message_file: "",
+        message_from: -1,
+        user_uuid: "",
+        date_sent: "",
+      };
 
-  const setSelectedMessageData = React.useCallback((messageUUID: string) => {
-    setSelectedMessage((prev) => (prev === messageUUID ? "" : messageUUID));
-  }, []);
+      const newActiveRoomData = messageRooms.find((room) => room.message_room === messageUUID) || resetRoomData;
 
-  const setActiveRoomData = React.useCallback(
-    (roomData: {
-      image: string;
-      name: string;
-      surname: string;
-      private_message_room: string;
-      private_message: string;
-      private_message_file: string;
-      private_message_from: number;
-      user_uuid: string;
-    }) => {
-      setActiveRoom(roomData);
+      setActiveRoom(type === "back" ? resetRoomData : newActiveRoomData);
     },
-    []
+    [messageRooms]
   );
 
   return {
     selectedMessageRoom,
     message,
     roomMessages,
-    privateMessageRooms,
+    messageRooms,
     activeRoom,
     messageRef,
     selectedMessage,
-    getPrivateMessageRooms,
+    roomType,
+    canCreateGroupMessage,
+    getMessageRooms,
     getMessageRoom,
-    setMessageData,
-    setSelectedMessageRoomData,
-    setSelectedMessageData,
-    setActiveRoomData,
+    handleMessage,
+    handleSelectedMessageRoom,
+    handleSelectedMessage,
+    handleSelectedRoomType,
+    toggleCanCreateGroupMessage,
   };
 }

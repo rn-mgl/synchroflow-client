@@ -1,10 +1,9 @@
 import React from "react";
 import { BsCheck, BsCheckAll, BsDot } from "react-icons/bs";
 
-interface MessagePreviewProps {
-  image: string;
-  name: string;
-  surname: string;
+interface GroupMessagePreviewProps {
+  roomImage: string | null;
+  roomName: string | null;
   latestMessage: string;
   latestFile: string;
   status: "sent" | "read" | "unread";
@@ -14,7 +13,7 @@ interface MessagePreviewProps {
   handleSelectedMessageRoom: () => void;
 }
 
-const MessagePreview: React.FC<MessagePreviewProps> = (props) => {
+const GroupMessagePreview: React.FC<GroupMessagePreviewProps> = (props) => {
   return (
     <button
       onClick={props.handleSelectedMessageRoom}
@@ -23,15 +22,13 @@ const MessagePreview: React.FC<MessagePreviewProps> = (props) => {
                 ${props.isSelected && "bg-primary-100"}`}
     >
       <div
-        style={{ backgroundImage: `url(${props.image})` }}
+        style={{ backgroundImage: `url(${props.roomImage})` }}
         className={`min-h-[3rem] min-w-[3rem] rounded-full bg-primary-100
                   bg-center bg-contain ${props.isSelected && "bg-white"}`}
       />
       <div className="w-full h-full flex flex-col justify-between items-center">
         <div className="flex flex-row justify-center items-center w-full gap-4">
-          <p className="font-bold text-sm max-w-[12ch] truncate mr-auto  l-l:max-w-[20ch]">
-            {props.name} {props.surname}
-          </p>
+          <p className="font-bold text-sm max-w-[12ch] truncate mr-auto  l-l:max-w-[20ch]">{props.roomName}</p>
 
           <div>
             {props.status === "read" ? (
@@ -61,4 +58,4 @@ const MessagePreview: React.FC<MessagePreviewProps> = (props) => {
   );
 };
 
-export default MessagePreview;
+export default GroupMessagePreview;
