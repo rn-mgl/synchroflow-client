@@ -73,7 +73,7 @@ const Messages = () => {
             status="sent"
             latestMessage={room.message}
             latestFile={room.message_file}
-            dateSent={new Date().toLocaleDateString()}
+            dateSent={localizeDate(room.date_sent, true)}
             isSelected={selectedMessageRoom === room.message_room}
             isSender={room.message_from === user?.id}
             handleSelectedMessageRoom={() => handleSelectedMessageRoom(room.message_room, "preview")}
@@ -196,7 +196,7 @@ const Messages = () => {
                   className="w-full p-2 bg-primary-500 text-white font-bold rounded-md flex 
                           flex-row items-center justify-center gap-2"
                 >
-                  <AiOutlinePlus className="text-lg" /> <p>Create Group</p>
+                  <p>Create Group</p> <AiOutlinePlus className="text-lg" />
                 </button>
               )}
 
@@ -207,6 +207,7 @@ const Messages = () => {
           {selectedMessageRoom ? (
             <ActiveMessagePanel
               roomName={roomType === "private" ? `${activeRoom.name} ${activeRoom.surname}` : activeRoom.room_name}
+              isRoomCreator={user?.id === activeRoom.created_by}
               activeRoom={activeRoom}
               roomMessages={roomMessages}
               message={message}

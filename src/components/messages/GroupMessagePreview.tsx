@@ -2,8 +2,8 @@ import React from "react";
 import { BsCheck, BsCheckAll, BsDot } from "react-icons/bs";
 
 interface GroupMessagePreviewProps {
-  roomImage: string | null;
-  roomName: string | null;
+  roomImage?: string;
+  roomName?: string;
   latestMessage: string;
   latestFile: string;
   status: "sent" | "read" | "unread";

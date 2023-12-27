@@ -6,8 +6,8 @@ import React from "react";
 export interface MessageRoomsStateProps {
   image: string;
   name: string;
-  room_image: string;
-  room_name: string;
+  room_image?: string;
+  room_name?: string;
   surname: string;
   message_room: string;
   message: string;
@@ -15,6 +15,7 @@ export interface MessageRoomsStateProps {
   message_from: number;
   user_uuid: string;
   date_sent: string;
+  created_by?: number;
 }
 
 export interface RoomMessagesStateProps {
@@ -43,8 +44,6 @@ export default function useMessage() {
   const [selectedMessage, setSelectedMessage] = React.useState("");
   const [activeRoom, setActiveRoom] = React.useState<MessageRoomsStateProps>({
     image: "",
-    room_image: "",
-    room_name: "",
     name: "",
     surname: "",
     message_room: "",
@@ -72,8 +71,6 @@ export default function useMessage() {
     setSelectedMessageRoom("");
     setActiveRoom({
       image: "",
-      room_image: "",
-      room_name: "",
       name: "",
       surname: "",
       message_room: "",
@@ -126,8 +123,6 @@ export default function useMessage() {
       const resetRoomData = {
         image: "",
         name: "",
-        room_image: "",
-        room_name: "",
         surname: "",
         message_room: "",
         message: "",

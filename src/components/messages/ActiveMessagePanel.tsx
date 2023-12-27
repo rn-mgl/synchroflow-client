@@ -1,8 +1,16 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { RefObject } from "react";
-import { AiOutlineMore, AiOutlinePaperClip } from "react-icons/ai";
+import React, { RefObject } from "react";
+import {
+  AiOutlineClose,
+  AiOutlineDelete,
+  AiOutlineEdit,
+  AiOutlineEllipsis,
+  AiOutlineMore,
+  AiOutlinePaperClip,
+  AiOutlineUser,
+} from "react-icons/ai";
 import { BsArrowLeft, BsFillSendFill } from "react-icons/bs";
 import FilePreview from "../global/FilePreview";
 import FileViewer from "../global/FileViewer";
@@ -10,7 +18,8 @@ import { MessageRoomsStateProps, RoomMessagesStateProps } from "../hooks/useMess
 import { localizeDate, localizeTime } from "../utils/dateUtils";
 
 interface ActiveMessagePanelProps {
-  roomName: string;
+  roomName?: string;
+  isRoomCreator: boolean;
   activeRoom: MessageRoomsStateProps;
   roomMessages: Array<RoomMessagesStateProps>;
   message: string;
@@ -28,8 +37,13 @@ interface ActiveMessagePanelProps {
 }
 
 const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
+  const [activeToolTip, setActiveToolTip] = React.useState(false);
   const { data: session } = useSession();
   const user = session?.user;
+
+  const handleActiveToolTip = () => {
+    setActiveToolTip((prev) => !prev);
+  };
 
   const mappedMessages = props.roomMessages.map((message, index) => {
     const isSender = message.message_from === user?.id;
@@ -94,6 +108,43 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
         </button>
 
         <p className="font-bold max-w-[20ch] truncate t:max-w-none t:truncate">{props.roomName}</p>
+
+        {props.isRoomCreator ? (
+          <div className="ml-auto flex flex-row gap-4 text-sm">
+            {activeToolTip ? (
+              <>
+                <button
+                  className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
+                >
+                  <AiOutlineEdit />
+                </button>
+                <button
+                  className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
+                >
+                  <AiOutlineUser />
+                </button>
+                <button
+                  className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
+                >
+                  <AiOutlineDelete />
+                </button>
+              </>
+            ) : null}
+
+            {activeToolTip ? (
+              <button onClick={handleActiveToolTip} className="p-2 rounded-lg hover:bg-secondary-100 animate-fadeIn">
+                <AiOutlineClose />
+              </button>
+            ) : (
+              <button onClick={handleActiveToolTip} className="p-2 rounded-lg hover:bg-secondary-100 animate-fadeIn">
+                <AiOutlineEllipsis />
+              </button>
+            )}
+          </div>
+        ) : null}
       </div>
 
       <div
