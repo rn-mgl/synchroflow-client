@@ -6,11 +6,14 @@ import React from "react";
 import { AiFillPicture, AiOutlineClose, AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
 import { MdTitle } from "react-icons/md";
 import useFile from "../hooks/useFile";
+import { MessageRoomsStateProps } from "../hooks/useMessage";
 import TextComp from "../input/TextComp";
 
-interface CreateGroupMessageProps {
-  toggleCanCreateGroupMessage: () => void;
+interface EditGroupMessageProps {
+  toggleCanEditGroupMessage: () => void;
   getMessageRooms: () => Promise<void>;
+  groupMessageData: MessageRoomsStateProps;
+  getMessageRoom: () => Promise<void>;
 }
 
 interface GroupMessageStateProps {
@@ -18,10 +21,10 @@ interface GroupMessageStateProps {
   groupImage: string | null;
 }
 
-const CreateGroupMessage: React.FC<CreateGroupMessageProps> = (props) => {
+const EditGroupMessage: React.FC<EditGroupMessageProps> = (props) => {
   const [groupMessageData, setGroupMessageData] = React.useState<GroupMessageStateProps>({
-    groupMessageName: "",
-    groupImage: "",
+    groupMessageName: props.groupMessageData.room_name,
+    groupImage: props.groupMessageData.room_image,
   });
   const { fileData, rawFile, removeRawFile, selectedFileViewer, uploadFile } = useFile();
 
@@ -40,25 +43,34 @@ const CreateGroupMessage: React.FC<CreateGroupMessageProps> = (props) => {
     });
   };
 
-  const createGroup = async (e: React.FormEvent<HTMLFormElement>) => {
+  const removeUploadedFile = () => {
+    setGroupMessageData((prev) => {
+      return {
+        ...prev,
+        groupImage: null,
+      };
+    });
+  };
+
+  const editGroup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       let groupImage = null;
 
       if (rawFile.current?.value) {
         groupImage = await uploadFile(rawFile.current.files);
+        groupMessageData.groupImage = groupImage;
       }
 
-      groupMessageData.groupImage = groupImage;
-
-      const { data } = await axios.post(
-        `${url}/group_message_rooms`,
+      const { data } = await axios.patch(
+        `${url}/group_message_rooms/${props.groupMessageData.message_room}`,
         { groupMessageData },
         { headers: { Authorization: user?.token } }
       );
       if (data) {
-        props.toggleCanCreateGroupMessage();
+        await props.getMessageRoom();
         await props.getMessageRooms();
+        props.toggleCanEditGroupMessage();
       }
     } catch (error) {
       console.log(error);
@@ -72,12 +84,12 @@ const CreateGroupMessage: React.FC<CreateGroupMessageProps> = (props) => {
         flex flex-col items-center justify-start p-4 t:p-10"
     >
       <form
-        onSubmit={(e) => createGroup(e)}
+        onSubmit={(e) => editGroup(e)}
         className="w-full bg-white h-fit rounded-lg flex flex-col p-4 t:p-10 gap-4 my-auto
                   max-w-screen-t overflow-y-auto cstm-scrollbar items-center justify-start"
       >
         <button
-          onClick={props.toggleCanCreateGroupMessage}
+          onClick={props.toggleCanEditGroupMessage}
           type="button"
           className="ml-auto hover:bg-primary-500 rounded-full 
                     hover:bg-opacity-20 transition-all p-2"
@@ -99,11 +111,13 @@ const CreateGroupMessage: React.FC<CreateGroupMessageProps> = (props) => {
 
         <div className="flex flex-col w-full items-center justify-center">
           <div
-            style={{ backgroundImage: `url(${fileData.url})` }}
+            style={{ backgroundImage: `url(${fileData.url ? fileData.url : groupMessageData.groupImage})` }}
             className="w-full h-40 rounded-xl flex flex-col items-center justify-center
                       border-2 border-primary-200 bg-center bg-cover"
           >
-            {rawFile.current?.value ? null : <AiFillPicture className="text-primary-200 text-4xl" />}
+            {rawFile.current?.value || groupMessageData.groupImage ? null : (
+              <AiFillPicture className="text-primary-200 text-4xl" />
+            )}
           </div>
 
           <div className="flex flex-row w-full items-center justify-between py-2">
@@ -118,13 +132,17 @@ const CreateGroupMessage: React.FC<CreateGroupMessageProps> = (props) => {
                 className="hidden peer"
                 onChange={(e) => selectedFileViewer(e)}
               />
-              {rawFile.current?.value ? null : (
+              {rawFile.current?.value || groupMessageData.groupImage ? null : (
                 <AiOutlinePlus className="text-primary-500 peer-checked animate-fadeIn" />
               )}
             </label>
 
-            {rawFile.current?.value ? (
-              <button type="button" className="animate-fadeIn" onClick={removeRawFile}>
+            {rawFile.current?.value || groupMessageData.groupImage ? (
+              <button
+                type="button"
+                className="animate-fadeIn"
+                onClick={rawFile.current?.value ? removeRawFile : removeUploadedFile}
+              >
                 <AiOutlineDelete className="text-primary-500" />
               </button>
             ) : null}
@@ -136,11 +154,11 @@ const CreateGroupMessage: React.FC<CreateGroupMessageProps> = (props) => {
           className="bg-primary-500 rounded-lg text-white 
                     font-bold p-2 w-full"
         >
-          Create
+          Update
         </button>
       </form>
     </div>
   );
 };
 
-export default CreateGroupMessage;
+export default EditGroupMessage;

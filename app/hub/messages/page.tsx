@@ -5,6 +5,7 @@ import useFile from "@/components//hooks/useFile";
 import useMessage from "@/components//hooks/useMessage";
 import ActiveMessagePanel from "@/components//messages/ActiveMessagePanel";
 import CreateGroupMessage from "@/components//messages/CreateGroupMessage";
+import EditGroupMessage from "@/components//messages/EditGroupMessage";
 import GroupMessagePreview from "@/components//messages/GroupMessagePreview";
 import PrivateMessagePreview from "@/components//messages/PrivateMessagePreview";
 import StandByMessagePanel from "@/components//messages/StandByMessagePanel";
@@ -27,13 +28,16 @@ const Messages = () => {
     roomType,
     canCreateGroupMessage,
     getMessageRooms,
-    getMessageRoom,
+    getMessageRoomMessages,
     handleMessage,
     handleSelectedMessageRoom,
     handleSelectedMessage,
     handleSelectedRoomType,
     toggleCanCreateGroupMessage,
+    getMessageRoom,
   } = useMessage();
+  const [activeToolTip, setActiveToolTip] = React.useState(false);
+  const [canEditGroupMessage, setCanEditGroupMessage] = React.useState(false);
   const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } = useFile();
 
   const { url } = useGlobalContext();
@@ -48,6 +52,14 @@ const Messages = () => {
   const handleMessageInput = (e: React.FormEvent<HTMLDivElement>) => {
     const inputText = e.target as HTMLElement;
     handleMessage(inputText.innerText ? inputText.innerText : "");
+  };
+
+  const toggleActiveToolTip = () => {
+    setActiveToolTip((prev) => !prev);
+  };
+
+  const toggleCanEditGroupMessage = () => {
+    setCanEditGroupMessage((prev) => !prev);
   };
 
   const mappedMessageRoomPreviews = messageRooms.map((room, index) => {
@@ -117,7 +129,7 @@ const Messages = () => {
         if (rawFile.current?.value) {
           removeRawFile();
         }
-        await getMessageRoom();
+        await getMessageRoomMessages();
       }
     } catch (error) {
       console.log(error);
@@ -127,6 +139,10 @@ const Messages = () => {
   React.useEffect(() => {
     getMessageRooms();
   }, [getMessageRooms]);
+
+  React.useEffect(() => {
+    getMessageRoomMessages();
+  }, [getMessageRoomMessages]);
 
   React.useEffect(() => {
     getMessageRoom();
@@ -143,6 +159,16 @@ const Messages = () => {
           getMessageRooms={getMessageRooms}
         />
       ) : null}
+
+      {canEditGroupMessage ? (
+        <EditGroupMessage
+          groupMessageData={activeRoom}
+          getMessageRooms={getMessageRooms}
+          toggleCanEditGroupMessage={toggleCanEditGroupMessage}
+          getMessageRoom={getMessageRoom}
+        />
+      ) : null}
+
       <div
         className="max-w-screen-2xl flex flex-col justify-start
             items-center w-full h-full l-s:overflow-hidden"
@@ -216,12 +242,15 @@ const Messages = () => {
               selectedMessage={selectedMessage}
               rawFile={rawFile}
               fileData={fileData}
+              activeToolTip={activeToolTip}
+              toggleActiveToolTip={toggleActiveToolTip}
               selectedFileViewer={selectedFileViewer}
               removeRawFile={removeRawFile}
               handleSelectedMessageRoom={() => handleSelectedMessageRoom(`${selectedMessageRoom}`, "back")}
               handleSelectedMessage={handleSelectedMessage}
               handleMessageInput={handleMessageInput}
               sendMessage={sendMessage}
+              toggleCanEditGroupMessage={toggleCanEditGroupMessage}
             />
           ) : (
             <StandByMessagePanel />

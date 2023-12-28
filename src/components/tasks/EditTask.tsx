@@ -79,11 +79,9 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
     handleLoader(true);
     try {
       let bannerURL = null;
+
       if (rawFile.current?.files) {
         bannerURL = await uploadFile(rawFile.current?.files);
-      }
-
-      if (bannerURL) {
         mainTaskData.mainTaskBanner = bannerURL;
       }
 

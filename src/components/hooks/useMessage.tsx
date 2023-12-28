@@ -6,8 +6,6 @@ import React from "react";
 export interface MessageRoomsStateProps {
   image: string;
   name: string;
-  room_image?: string;
-  room_name?: string;
   surname: string;
   message_room: string;
   message: string;
@@ -15,7 +13,9 @@ export interface MessageRoomsStateProps {
   message_from: number;
   user_uuid: string;
   date_sent: string;
-  created_by?: number;
+  created_by: number;
+  room_image: string;
+  room_name: string;
 }
 
 export interface RoomMessagesStateProps {
@@ -52,6 +52,9 @@ export default function useMessage() {
     message_from: -1,
     user_uuid: "",
     date_sent: "",
+    created_by: -1,
+    room_image: "",
+    room_name: "",
   });
 
   const { url } = useGlobalContext();
@@ -79,6 +82,9 @@ export default function useMessage() {
       message_from: -1,
       user_uuid: "",
       date_sent: "",
+      created_by: -1,
+      room_image: "",
+      room_name: "",
     });
   }, []);
 
@@ -101,11 +107,12 @@ export default function useMessage() {
     }
   }, [url, user?.token, roomType]);
 
-  const getMessageRoom = React.useCallback(async () => {
+  const getMessageRoomMessages = React.useCallback(async () => {
     if (user?.token) {
       try {
         const { data } = await axios.get(`${url}/${roomType}_message_rooms/${selectedMessageRoom}`, {
           headers: { Authorization: user?.token },
+          params: { type: "messages" },
         });
         if (data) {
           setRoomMessages(data);
@@ -116,28 +123,25 @@ export default function useMessage() {
     }
   }, [url, user?.token, selectedMessageRoom, roomType]);
 
-  const handleSelectedMessageRoom = React.useCallback(
-    (messageUUID: string, type: "back" | "preview") => {
-      setSelectedMessageRoom((prev) => (prev === messageUUID && type === "back" ? "" : messageUUID));
+  const getMessageRoom = React.useCallback(async () => {
+    if (user?.token && selectedMessageRoom) {
+      try {
+        const { data } = await axios.get(`${url}/${roomType}_message_rooms/${selectedMessageRoom}`, {
+          headers: { Authorization: user?.token },
+          params: { type: "main" },
+        });
+        if (data) {
+          setActiveRoom(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [url, user?.token, roomType, selectedMessageRoom]);
 
-      const resetRoomData = {
-        image: "",
-        name: "",
-        surname: "",
-        message_room: "",
-        message: "",
-        message_file: "",
-        message_from: -1,
-        user_uuid: "",
-        date_sent: "",
-      };
-
-      const newActiveRoomData = messageRooms.find((room) => room.message_room === messageUUID) || resetRoomData;
-
-      setActiveRoom(type === "back" ? resetRoomData : newActiveRoomData);
-    },
-    [messageRooms]
-  );
+  const handleSelectedMessageRoom = React.useCallback((messageUUID: string, type: "back" | "preview") => {
+    setSelectedMessageRoom((prev) => (prev === messageUUID && type === "back" ? "" : messageUUID));
+  }, []);
 
   return {
     selectedMessageRoom,
@@ -150,11 +154,12 @@ export default function useMessage() {
     roomType,
     canCreateGroupMessage,
     getMessageRooms,
-    getMessageRoom,
+    getMessageRoomMessages,
     handleMessage,
     handleSelectedMessageRoom,
     handleSelectedMessage,
     handleSelectedRoomType,
     toggleCanCreateGroupMessage,
+    getMessageRoom,
   };
 }

@@ -28,22 +28,20 @@ interface ActiveMessagePanelProps {
   selectedMessage: string;
   rawFile: any;
   fileData: { name: string; url: string; type: string };
+  activeToolTip: boolean;
+  toggleActiveToolTip: () => void;
   selectedFileViewer: (e: React.ChangeEvent<HTMLInputElement>) => void;
   removeRawFile: () => void;
   handleSelectedMessageRoom: () => void;
   handleMessageInput: (e: React.FormEvent<HTMLDivElement>) => void;
   handleSelectedMessage: (messageUUID: string) => void;
   sendMessage: () => void;
+  toggleCanEditGroupMessage: () => void;
 }
 
 const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
-  const [activeToolTip, setActiveToolTip] = React.useState(false);
   const { data: session } = useSession();
   const user = session?.user;
-
-  const handleActiveToolTip = () => {
-    setActiveToolTip((prev) => !prev);
-  };
 
   const mappedMessages = props.roomMessages.map((message, index) => {
     const isSender = message.message_from === user?.id;
@@ -111,9 +109,10 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
 
         {props.isRoomCreator ? (
           <div className="ml-auto flex flex-row gap-4 text-sm">
-            {activeToolTip ? (
+            {props.activeToolTip ? (
               <>
                 <button
+                  onClick={props.toggleCanEditGroupMessage}
                   className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
                             hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
                 >
@@ -134,12 +133,18 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
               </>
             ) : null}
 
-            {activeToolTip ? (
-              <button onClick={handleActiveToolTip} className="p-2 rounded-lg hover:bg-secondary-100 animate-fadeIn">
+            {props.activeToolTip ? (
+              <button
+                onClick={props.toggleActiveToolTip}
+                className="p-2 rounded-lg hover:bg-secondary-100 animate-fadeIn"
+              >
                 <AiOutlineClose />
               </button>
             ) : (
-              <button onClick={handleActiveToolTip} className="p-2 rounded-lg hover:bg-secondary-100 animate-fadeIn">
+              <button
+                onClick={props.toggleActiveToolTip}
+                className="p-2 rounded-lg hover:bg-secondary-100 animate-fadeIn"
+              >
                 <AiOutlineEllipsis />
               </button>
             )}
