@@ -10,7 +10,7 @@ interface DeleteConfirmationProps {
   message: string;
   apiRoute: string;
   toggleConfirmation: () => void;
-  refetchData?: () => Promise<void>;
+  refetchData?: (() => Promise<void>) | (() => void);
   redirectLink?: string;
 }
 
@@ -40,7 +40,7 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = (props) => {
 
   return (
     <div
-      className="w-full h-full fixed top-0 left-0 backdrop-blur-md z-20 animate-fadeIn
+      className="w-full h-full fixed top-0 left-0 backdrop-blur-md z-40 animate-fadeIn
         bg-gradient-to-br from-[#546FFF33] to-[#8E92BC33]
         flex flex-col items-center justify-start p-4 t:p-10"
     >

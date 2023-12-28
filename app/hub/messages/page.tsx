@@ -1,6 +1,7 @@
 "use client";
 import { useGlobalContext } from "@/base/context";
 import SearchFilter from "@/components//filter/SearchFilter";
+import DeleteConfirmation from "@/components//global/DeleteConfirmation";
 import useFile from "@/components//hooks/useFile";
 import useMessage from "@/components//hooks/useMessage";
 import ActiveMessagePanel from "@/components//messages/ActiveMessagePanel";
@@ -38,6 +39,8 @@ const Messages = () => {
   } = useMessage();
   const [activeToolTip, setActiveToolTip] = React.useState(false);
   const [canEditGroupMessage, setCanEditGroupMessage] = React.useState(false);
+  const [canDeleteGroupMessage, setCanDeleteGroupMessage] = React.useState(false);
+
   const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } = useFile();
 
   const { url } = useGlobalContext();
@@ -60,6 +63,10 @@ const Messages = () => {
 
   const toggleCanEditGroupMessage = () => {
     setCanEditGroupMessage((prev) => !prev);
+  };
+
+  const toggleCanDeleteGroupMessage = () => {
+    setCanDeleteGroupMessage((prev) => !prev);
   };
 
   const mappedMessageRoomPreviews = messageRooms.map((room, index) => {
@@ -169,6 +176,19 @@ const Messages = () => {
         />
       ) : null}
 
+      {canDeleteGroupMessage ? (
+        <DeleteConfirmation
+          apiRoute={`group_message_rooms/${selectedMessageRoom}`}
+          message="deleting a group will also delete its members and messages"
+          title="Delete Group Message?"
+          toggleConfirmation={toggleCanDeleteGroupMessage}
+          refetchData={() => {
+            handleSelectedMessageRoom(selectedMessageRoom, "back");
+            getMessageRooms();
+          }}
+        />
+      ) : null}
+
       <div
         className="max-w-screen-2xl flex flex-col justify-start
             items-center w-full h-full l-s:overflow-hidden"
@@ -251,6 +271,7 @@ const Messages = () => {
               handleMessageInput={handleMessageInput}
               sendMessage={sendMessage}
               toggleCanEditGroupMessage={toggleCanEditGroupMessage}
+              toggleCanDeleteGroupMessage={toggleCanDeleteGroupMessage}
             />
           ) : (
             <StandByMessagePanel />

@@ -37,6 +37,7 @@ interface ActiveMessagePanelProps {
   handleSelectedMessage: (messageUUID: string) => void;
   sendMessage: () => void;
   toggleCanEditGroupMessage: () => void;
+  toggleCanDeleteGroupMessage: () => void;
 }
 
 const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
@@ -125,6 +126,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
                   <AiOutlineUser />
                 </button>
                 <button
+                  onClick={props.toggleCanDeleteGroupMessage}
                   className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
                             hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
                 >
