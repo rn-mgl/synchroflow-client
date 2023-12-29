@@ -189,7 +189,12 @@ const Messages = () => {
       ) : null}
 
       {canSeeGroupMembers ? (
-        <GroupMembers selectedMessageRoom={selectedMessageRoom} toggleCanSeeGroupMembers={toggleCanSeeGroupMembers} />
+        <GroupMembers
+          selectedMessageRoom={selectedMessageRoom}
+          isRoomCreator={user?.id === activeRoom.created_by}
+          toggleCanSeeGroupMembers={toggleCanSeeGroupMembers}
+          getMessageRoom={getMessageRoom}
+        />
       ) : null}
 
       {canAddGroupMembers ? (

@@ -65,7 +65,7 @@ const EditGroupMessage: React.FC<EditGroupMessageProps> = (props) => {
       const { data } = await axios.patch(
         `${url}/group_message_rooms/${props.groupMessageData.message_room}`,
         { groupMessageData },
-        { headers: { Authorization: user?.token } }
+        { headers: { Authorization: user?.token }, params: { type: "name" } }
       );
       if (data) {
         await props.getMessageRoom();

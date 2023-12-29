@@ -11,8 +11,10 @@ import { IoPersonRemove } from "react-icons/io5";
 import DeleteConfirmation from "../global/DeleteConfirmation";
 
 interface GroupMembersProps {
-  toggleCanSeeGroupMembers: () => void;
   selectedMessageRoom: string;
+  isRoomCreator: boolean;
+  toggleCanSeeGroupMembers: () => void;
+  getMessageRoom: () => Promise<void>;
 }
 
 interface GroupMembersStateProps {
@@ -22,6 +24,7 @@ interface GroupMembersStateProps {
   date_added: string;
   message_member_uuid: string;
   user_id: string;
+  user_uuid: string;
 }
 
 const GroupMembers: React.FC<GroupMembersProps> = (props) => {
@@ -57,6 +60,25 @@ const GroupMembers: React.FC<GroupMembersProps> = (props) => {
     }
   }, [url, user?.token, props.selectedMessageRoom]);
 
+  const makeGroupOwner = async (ownerUUID: string) => {
+    try {
+      const { data } = await axios.patch(
+        `${url}/group_message_rooms/${props.selectedMessageRoom}`,
+        { ownerUUID },
+        { headers: { Authorization: user?.token }, params: { type: "owner" } }
+      );
+
+      if (data) {
+        props.toggleCanSeeGroupMembers();
+        await props.getMessageRoom();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(1);
+
   const mappedGroupMembers = groupMembers.map((member, index) => {
     return (
       <div key={index} className="flex flex-col items-center justify-center w-full gap-2 ">
@@ -79,41 +101,46 @@ const GroupMembers: React.FC<GroupMembersProps> = (props) => {
             </p>
           </div>
 
-          <div className="ml-auto relative">
-            {member.user_id !== user?.id ? (
-              <button
-                onClick={() => handleSelectedGroupMember(member.message_member_uuid)}
-                className=" p-2 rounded-lg hover:bg-secondary-100 transition-all"
-              >
-                {selectedGroupMember ? <AiOutlineClose /> : <AiOutlineMore />}
-              </button>
-            ) : (
-              <p className="text-xs italic font-light">You</p>
-            )}
+          {props.isRoomCreator ? (
+            <div className="ml-auto relative">
+              {member.user_id !== user?.id ? (
+                <button
+                  onClick={() => handleSelectedGroupMember(member.message_member_uuid)}
+                  className=" p-2 rounded-lg hover:bg-secondary-100 transition-all"
+                >
+                  {selectedGroupMember ? <AiOutlineClose /> : <AiOutlineMore />}
+                </button>
+              ) : (
+                <p className="text-xs italic font-light">You</p>
+              )}
 
-            {selectedGroupMember === member.message_member_uuid ? (
-              <div
-                className="w-40 rounded-md bg-secondary-200 absolute right-0 top-0 p-2 -translate-x-10
+              {selectedGroupMember === member.message_member_uuid ? (
+                <div
+                  className="w-40 rounded-md bg-secondary-200 absolute right-0 top-0 p-2 -translate-x-10
                         text-sm flex flex-col gap-2 animate-fadeIn"
-              >
-                <button
-                  className="flex flex-row w-full items-center justify-between p-1 rounded-sm 
-                        hover:bg-secondary-300 hover:text-white transition-all"
                 >
-                  <MdAssignmentAdd /> <span>Make Owner</span>
-                </button>
-                <div className="w-full min-h-[0.5px] h-[0.5px] bg-secondary-500" />
-                <button
-                  onClick={toggleCanDeleteGroupMember}
-                  className="flex flex-row w-full items-center justify-between p-1 rounded-sm 
+                  <button
+                    onClick={() => makeGroupOwner(member.user_uuid)}
+                    className="flex flex-row w-full items-center justify-between p-1 rounded-sm 
                         hover:bg-secondary-300 hover:text-white transition-all"
-                >
-                  <IoPersonRemove />
-                  <span>Remove</span>
-                </button>
-              </div>
-            ) : null}
-          </div>
+                  >
+                    <MdAssignmentAdd /> <span>Make Owner</span>
+                  </button>
+
+                  <div className="w-full min-h-[0.5px] h-[0.5px] bg-secondary-500" />
+
+                  <button
+                    onClick={toggleCanDeleteGroupMember}
+                    className="flex flex-row w-full items-center justify-between p-1 rounded-sm 
+                        hover:bg-secondary-300 hover:text-white transition-all"
+                  >
+                    <IoPersonRemove />
+                    <span>Remove</span>
+                  </button>
+                </div>
+              ) : null}
+            </div>
+          ) : null}
         </div>
 
         <div className="w-full min-h-[0.5px] h-[0.5px] bg-secondary-500" />

@@ -111,58 +111,61 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
 
         <p className="font-bold max-w-[20ch] truncate t:max-w-none t:truncate">{props.roomName}</p>
 
-        {props.isRoomCreator ? (
-          <div className="ml-auto flex flex-row gap-4 text-sm">
-            {props.activeToolTip ? (
-              <>
-                <button
-                  onClick={props.toggleCanEditGroupMessage}
-                  className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
+        <div className="ml-auto flex flex-row gap-4 text-sm">
+          {props.activeToolTip ? (
+            <React.Fragment>
+              <button
+                onClick={props.toggleCanSeeGroupMembers}
+                className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
                             hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
-                >
-                  <AiOutlineEdit />
-                </button>
-                <button
-                  onClick={props.toggleCanSeeGroupMembers}
-                  className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
-                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
-                >
-                  <AiOutlineTeam />
-                </button>
-                <button
-                  onClick={props.toggleCanAddGroupMembers}
-                  className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
-                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
-                >
-                  <AiOutlineUserAdd />
-                </button>
-                <button
-                  onClick={props.toggleCanDeleteGroupMessage}
-                  className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
-                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
-                >
-                  <AiOutlineDelete />
-                </button>
-              </>
-            ) : null}
+              >
+                <AiOutlineTeam />
+              </button>
 
-            {props.activeToolTip ? (
-              <button
-                onClick={props.toggleActiveToolTip}
-                className="p-2 rounded-lg hover:bg-secondary-100 animate-fadeIn"
-              >
-                <AiOutlineClose />
-              </button>
-            ) : (
-              <button
-                onClick={props.toggleActiveToolTip}
-                className="p-2 rounded-lg hover:bg-secondary-100 animate-fadeIn"
-              >
-                <AiOutlineEllipsis />
-              </button>
-            )}
-          </div>
-        ) : null}
+              {props.isRoomCreator ? (
+                <React.Fragment>
+                  <button
+                    onClick={props.toggleCanEditGroupMessage}
+                    className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
+                  >
+                    <AiOutlineEdit />
+                  </button>
+                  <button
+                    onClick={props.toggleCanAddGroupMembers}
+                    className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
+                  >
+                    <AiOutlineUserAdd />
+                  </button>
+                  <button
+                    onClick={props.toggleCanDeleteGroupMessage}
+                    className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
+                  >
+                    <AiOutlineDelete />
+                  </button>
+                </React.Fragment>
+              ) : null}
+            </React.Fragment>
+          ) : null}
+
+          {props.activeToolTip ? (
+            <button
+              onClick={props.toggleActiveToolTip}
+              className="p-2 rounded-lg hover:bg-secondary-100 animate-fadeIn"
+            >
+              <AiOutlineClose />
+            </button>
+          ) : (
+            <button
+              onClick={props.toggleActiveToolTip}
+              className="p-2 rounded-lg hover:bg-secondary-100 animate-fadeIn"
+            >
+              <AiOutlineEllipsis />
+            </button>
+          )}
+        </div>
       </div>
 
       <div
