@@ -60,15 +60,6 @@ const GroupMembers: React.FC<GroupMembersProps> = (props) => {
   const mappedGroupMembers = groupMembers.map((member, index) => {
     return (
       <div key={index} className="flex flex-col items-center justify-center w-full gap-2 ">
-        {canDeleteGroupMember ? (
-          <DeleteConfirmation
-            apiRoute={`group_message_members/${selectedGroupMember}`}
-            message="do you want to remove this member?"
-            title="Remove Group Member"
-            toggleConfirmation={toggleCanDeleteGroupMember}
-            refetchData={getGroupMembers}
-          />
-        ) : null}
         <div className="p-2 rounded-md w-full flex flex-row items-center justify-start gap-4">
           <div
             style={{ backgroundImage: `url(${member.image})` }}
@@ -137,9 +128,18 @@ const GroupMembers: React.FC<GroupMembersProps> = (props) => {
   return (
     <div
       className="w-full h-full fixed top-0 left-0 backdrop-blur-md z-30 animate-fadeIn
-    bg-gradient-to-br from-[#546FFF33] to-[#8E92BC33]
-    flex flex-col items-center justify-start p-4 t:p-10"
+              bg-gradient-to-br from-[#546FFF33] to-[#8E92BC33]
+              flex flex-col items-center justify-start p-4 t:p-10"
     >
+      {canDeleteGroupMember ? (
+        <DeleteConfirmation
+          apiRoute={`group_message_members/${selectedGroupMember}`}
+          message="do you want to remove this member?"
+          title="Remove Group Member"
+          toggleConfirmation={toggleCanDeleteGroupMember}
+          refetchData={getGroupMembers}
+        />
+      ) : null}
       <div
         className="w-full bg-white h-full rounded-lg flex flex-col p-4 t:p-10 gap-4 my-auto
               max-w-screen-t overflow-y-auto cstm-scrollbar items-center justify-start"
