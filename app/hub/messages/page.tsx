@@ -7,6 +7,7 @@ import useMessage from "@/components//hooks/useMessage";
 import ActiveMessagePanel from "@/components//messages/ActiveMessagePanel";
 import CreateGroupMessage from "@/components//messages/CreateGroupMessage";
 import EditGroupMessage from "@/components//messages/EditGroupMessage";
+import GroupMembers from "@/components//messages/GroupMembers";
 import GroupMessagePreview from "@/components//messages/GroupMessagePreview";
 import PrivateMessagePreview from "@/components//messages/PrivateMessagePreview";
 import StandByMessagePanel from "@/components//messages/StandByMessagePanel";
@@ -40,6 +41,7 @@ const Messages = () => {
   const [activeToolTip, setActiveToolTip] = React.useState(false);
   const [canEditGroupMessage, setCanEditGroupMessage] = React.useState(false);
   const [canDeleteGroupMessage, setCanDeleteGroupMessage] = React.useState(false);
+  const [canSeeGroupMembers, setCanSeeGroupMembers] = React.useState(false);
 
   const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } = useFile();
 
@@ -69,6 +71,10 @@ const Messages = () => {
     setCanDeleteGroupMessage((prev) => !prev);
   };
 
+  const toggleCanSeeGroupMembers = () => {
+    setCanSeeGroupMembers((prev) => !prev);
+  };
+
   const mappedMessageRoomPreviews = messageRooms.map((room, index) => {
     return (
       <React.Fragment key={index}>
@@ -80,7 +86,7 @@ const Messages = () => {
             status="sent"
             latestMessage={room.message}
             latestFile={room.message_file}
-            dateSent={localizeDate(room.date_sent, true)}
+            dateSent={room.date_sent ? localizeDate(room.date_sent, true) : "mm/dd/yyyy"}
             isSelected={selectedMessageRoom === room.message_room}
             isSender={room.message_from === user?.id}
             handleSelectedMessageRoom={() => handleSelectedMessageRoom(room.message_room, "preview")}
@@ -92,7 +98,7 @@ const Messages = () => {
             status="sent"
             latestMessage={room.message}
             latestFile={room.message_file}
-            dateSent={localizeDate(room.date_sent, true)}
+            dateSent={room.date_sent ? localizeDate(room.date_sent, true) : "mm/dd/yyyy"}
             isSelected={selectedMessageRoom === room.message_room}
             isSender={room.message_from === user?.id}
             handleSelectedMessageRoom={() => handleSelectedMessageRoom(room.message_room, "preview")}
@@ -174,6 +180,10 @@ const Messages = () => {
           toggleCanEditGroupMessage={toggleCanEditGroupMessage}
           getMessageRoom={getMessageRoom}
         />
+      ) : null}
+
+      {canSeeGroupMembers ? (
+        <GroupMembers selectedMessageRoom={selectedMessageRoom} toggleCanSeeGroupMembers={toggleCanSeeGroupMembers} />
       ) : null}
 
       {canDeleteGroupMessage ? (
@@ -272,6 +282,7 @@ const Messages = () => {
               sendMessage={sendMessage}
               toggleCanEditGroupMessage={toggleCanEditGroupMessage}
               toggleCanDeleteGroupMessage={toggleCanDeleteGroupMessage}
+              toggleCanSeeGroupMembers={toggleCanSeeGroupMembers}
             />
           ) : (
             <StandByMessagePanel />

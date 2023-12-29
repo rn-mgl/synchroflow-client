@@ -68,6 +68,7 @@ const SingleTask = () => {
   const [canCreateSubTask, setCanCreateSubTask] = React.useState(false);
   const [canDeleteTask, setCanDeleteTask] = React.useState(false);
   const [canEditTask, setCanEditTask] = React.useState(false);
+  const [activeToolTip, setActiveToolTip] = React.useState(false);
 
   const params = useParams();
   const { url } = useGlobalContext();
@@ -89,6 +90,10 @@ const SingleTask = () => {
 
   const toggleCanEditTask = () => {
     setCanEditTask((prev) => !prev);
+  };
+
+  const toggleActiveToolTip = () => {
+    setActiveToolTip((prev) => !prev);
   };
 
   const handleSelectedSubTask = (subTaskUUID: string) => {
@@ -232,6 +237,7 @@ const SingleTask = () => {
 
           <div className="grid grid-cols-1 items-center justify-start w-full h-full gap-8 l-s:grid-cols-3">
             <SingleTaskMainData
+              activeToolTip={activeToolTip}
               isTaskCreator={isTaskCreator}
               mainTaskBanner={taskData.main_task_banner}
               mainTaskDescription={taskData.main_task_description}
@@ -243,6 +249,7 @@ const SingleTask = () => {
               toggleCanInvite={toggleCanInvite}
               toggleCanDeleteTask={toggleCanDeleteTask}
               toggleCanEditTask={toggleCanEditTask}
+              toggleActiveToolTip={toggleActiveToolTip}
             />
 
             <div className="flex flex-col items-center justify-start w-full h-full gap-8 col-span-1 ">

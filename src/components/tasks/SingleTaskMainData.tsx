@@ -1,6 +1,7 @@
 import React from "react";
 import {
   AiOutlineClockCircle,
+  AiOutlineClose,
   AiOutlineDelete,
   AiOutlineEdit,
   AiOutlineEllipsis,
@@ -11,6 +12,7 @@ import { localizeDate } from "../utils/dateUtils";
 
 interface SingleTaskDataProps {
   isTaskCreator: boolean;
+  activeToolTip: boolean;
   mainTaskBanner: string | null;
   mainTaskTitle: string;
   mainTaskSubtitle: string;
@@ -21,6 +23,7 @@ interface SingleTaskDataProps {
   toggleCanInvite: () => void;
   toggleCanDeleteTask: () => void;
   toggleCanEditTask: () => void;
+  toggleActiveToolTip: () => void;
 }
 
 const SingleTaskMainData: React.FC<SingleTaskDataProps> = (props) => {
@@ -39,42 +42,45 @@ const SingleTaskMainData: React.FC<SingleTaskDataProps> = (props) => {
           <p className="text-2xl font-medium text-secondary-500">{props.mainTaskTitle}</p>
 
           {props.isTaskCreator ? (
-            <div className="relative flex self-end group">
+            <div className="relative flex self-end ">
               <button
+                onClick={props.toggleActiveToolTip}
                 className="hover:bg-secondary-100 p-2 
                       rounded-lg transition-all"
               >
-                <AiOutlineEllipsis className="text-lg" />
+                {props.activeToolTip ? <AiOutlineClose /> : <AiOutlineEllipsis className="text-lg" />}
               </button>
 
-              <div
-                className="w-40 absolute hidden group-hover:flex 
+              {props.activeToolTip ? (
+                <div
+                  className="w-40 absolute animate-fadeIn flex
                     flex-col items-start justify-center gap-2
                     -translate-x-[10rem] bg-secondary-200 p-2 rounded-md
                     text-sm transition-all delay-200"
-              >
-                <button
-                  onClick={props.toggleCanEditTask}
-                  className="flex flex-row w-full items-center justify-between 
+                >
+                  <button
+                    onClick={props.toggleCanEditTask}
+                    className="flex flex-row w-full items-center justify-between 
                       hover:bg-secondary-300 hover:text-white p-1 rounded-sm
                       transition-all"
-                >
-                  Edit
-                  <AiOutlineEdit />
-                </button>
+                  >
+                    <AiOutlineEdit />
+                    Edit
+                  </button>
 
-                <div className=" w-full min-h-[1px] h-[1px] bg-secondary-400" />
+                  <div className=" w-full min-h-[1px] h-[1px] bg-secondary-400" />
 
-                <button
-                  onClick={props.toggleCanDeleteTask}
-                  className="flex flex-row w-full items-center justify-between 
+                  <button
+                    onClick={props.toggleCanDeleteTask}
+                    className="flex flex-row w-full items-center justify-between 
                       hover:bg-secondary-300 hover:text-white p-1 rounded-sm
                       transition-all"
-                >
-                  Delete
-                  <AiOutlineDelete />
-                </button>
-              </div>
+                  >
+                    <AiOutlineDelete />
+                    Delete
+                  </button>
+                </div>
+              ) : null}
             </div>
           ) : null}
         </div>

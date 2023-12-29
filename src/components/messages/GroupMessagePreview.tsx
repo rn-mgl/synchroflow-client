@@ -24,7 +24,7 @@ const GroupMessagePreview: React.FC<GroupMessagePreviewProps> = (props) => {
       <div
         style={{ backgroundImage: `url(${props.roomImage})` }}
         className={`min-h-[3rem] min-w-[3rem] rounded-full bg-primary-100
-                  bg-center bg-contain ${props.isSelected && "bg-white"}`}
+                  bg-center bg-contain `}
       />
       <div className="w-full h-full flex flex-col justify-between items-center">
         <div className="flex flex-row justify-center items-center w-full gap-4">
