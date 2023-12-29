@@ -5,6 +5,7 @@ import DeleteConfirmation from "@/components//global/DeleteConfirmation";
 import useFile from "@/components//hooks/useFile";
 import useMessage from "@/components//hooks/useMessage";
 import ActiveMessagePanel from "@/components//messages/ActiveMessagePanel";
+import AddGroupMembers from "@/components//messages/AddGroupMembers";
 import CreateGroupMessage from "@/components//messages/CreateGroupMessage";
 import EditGroupMessage from "@/components//messages/EditGroupMessage";
 import GroupMembers from "@/components//messages/GroupMembers";
@@ -42,6 +43,7 @@ const Messages = () => {
   const [canEditGroupMessage, setCanEditGroupMessage] = React.useState(false);
   const [canDeleteGroupMessage, setCanDeleteGroupMessage] = React.useState(false);
   const [canSeeGroupMembers, setCanSeeGroupMembers] = React.useState(false);
+  const [canAddGroupMembers, setCanAddGroupMembers] = React.useState(false);
 
   const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } = useFile();
 
@@ -73,6 +75,10 @@ const Messages = () => {
 
   const toggleCanSeeGroupMembers = () => {
     setCanSeeGroupMembers((prev) => !prev);
+  };
+
+  const toggleCanAddGroupMembers = () => {
+    setCanAddGroupMembers((prev) => !prev);
   };
 
   const mappedMessageRoomPreviews = messageRooms.map((room, index) => {
@@ -186,6 +192,13 @@ const Messages = () => {
         <GroupMembers selectedMessageRoom={selectedMessageRoom} toggleCanSeeGroupMembers={toggleCanSeeGroupMembers} />
       ) : null}
 
+      {canAddGroupMembers ? (
+        <AddGroupMembers
+          selectedMessageRoom={selectedMessageRoom}
+          toggleCanAddGroupMembers={toggleCanAddGroupMembers}
+        />
+      ) : null}
+
       {canDeleteGroupMessage ? (
         <DeleteConfirmation
           apiRoute={`group_message_rooms/${selectedMessageRoom}`}
@@ -283,6 +296,7 @@ const Messages = () => {
               toggleCanEditGroupMessage={toggleCanEditGroupMessage}
               toggleCanDeleteGroupMessage={toggleCanDeleteGroupMessage}
               toggleCanSeeGroupMembers={toggleCanSeeGroupMembers}
+              toggleCanAddGroupMembers={toggleCanAddGroupMembers}
             />
           ) : (
             <StandByMessagePanel />

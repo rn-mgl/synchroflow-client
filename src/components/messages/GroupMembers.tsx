@@ -46,7 +46,7 @@ const GroupMembers: React.FC<GroupMembersProps> = (props) => {
       try {
         const { data } = await axios.get(`${url}/group_message_members`, {
           headers: { Authorization: user?.token },
-          params: { messageRoom: props.selectedMessageRoom },
+          params: { messageRoom: props.selectedMessageRoom, type: "all members" },
         });
         if (data) {
           setGroupMembers(data);

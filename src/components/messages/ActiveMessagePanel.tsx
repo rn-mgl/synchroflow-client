@@ -9,7 +9,8 @@ import {
   AiOutlineEllipsis,
   AiOutlineMore,
   AiOutlinePaperClip,
-  AiOutlineUser,
+  AiOutlineTeam,
+  AiOutlineUserAdd,
 } from "react-icons/ai";
 import { BsArrowLeft, BsFillSendFill } from "react-icons/bs";
 import FilePreview from "../global/FilePreview";
@@ -39,6 +40,7 @@ interface ActiveMessagePanelProps {
   toggleCanEditGroupMessage: () => void;
   toggleCanDeleteGroupMessage: () => void;
   toggleCanSeeGroupMembers: () => void;
+  toggleCanAddGroupMembers: () => void;
 }
 
 const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
@@ -125,7 +127,14 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
                   className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
                             hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
                 >
-                  <AiOutlineUser />
+                  <AiOutlineTeam />
+                </button>
+                <button
+                  onClick={props.toggleCanAddGroupMembers}
+                  className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
+                >
+                  <AiOutlineUserAdd />
                 </button>
                 <button
                   onClick={props.toggleCanDeleteGroupMessage}
