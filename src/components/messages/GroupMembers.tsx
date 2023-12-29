@@ -77,8 +77,6 @@ const GroupMembers: React.FC<GroupMembersProps> = (props) => {
     }
   };
 
-  console.log(1);
-
   const mappedGroupMembers = groupMembers.map((member, index) => {
     return (
       <div key={index} className="flex flex-col items-center justify-center w-full gap-2 ">
