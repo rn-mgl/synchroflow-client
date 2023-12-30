@@ -285,6 +285,7 @@ const Messages = () => {
               activeRoom={activeRoom}
               roomMessages={roomMessages}
               message={message}
+              roomType={roomType}
               messageRef={messageRef}
               selectedMessageRoom={selectedMessageRoom}
               selectedMessage={selectedMessage}
