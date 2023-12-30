@@ -92,6 +92,7 @@ const Messages = () => {
             status="sent"
             latestMessage={room.message}
             latestFile={room.message_file}
+            messageRoom={room.message_room}
             dateSent={room.date_sent ? localizeDate(room.date_sent, true) : "mm/dd/yyyy"}
             isSelected={selectedMessageRoom === room.message_room}
             isSender={room.message_from === user?.id}
@@ -104,6 +105,7 @@ const Messages = () => {
             status="sent"
             latestMessage={room.message}
             latestFile={room.message_file}
+            messageRoom={room.message_room}
             dateSent={room.date_sent ? localizeDate(room.date_sent, true) : "mm/dd/yyyy"}
             isSelected={selectedMessageRoom === room.message_room}
             isSender={room.message_from === user?.id}

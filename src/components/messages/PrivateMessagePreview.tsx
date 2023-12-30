@@ -1,3 +1,8 @@
+"use client";
+
+import { useGlobalContext } from "@/base/context";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 import React from "react";
 import { BsCheck, BsCheckAll, BsDot } from "react-icons/bs";
 
@@ -11,10 +16,42 @@ interface PrivateMessagePreviewProps {
   dateSent: string;
   isSelected: boolean;
   isSender: boolean;
+  messageRoom: string;
   handleSelectedMessageRoom: () => void;
 }
 
 const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
+  const [latestMessage, setLatestMessage] = React.useState({
+    message: "",
+    message_file: "",
+    date_sent: "",
+    message_from: -1,
+  });
+
+  const { url } = useGlobalContext();
+  const { data: session } = useSession();
+  const user = session?.user;
+
+  const getLatestMessage = React.useCallback(async () => {
+    if (user?.token) {
+      try {
+        const { data } = await axios.get(`${url}/private_messages`, {
+          headers: { Authorization: user?.token },
+          params: { messageRoom: props.messageRoom, type: "latest" },
+        });
+        if (data) {
+          setLatestMessage(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [url, props.messageRoom, user?.token]);
+
+  React.useEffect(() => {
+    getLatestMessage();
+  }, [getLatestMessage]);
+
   return (
     <button
       onClick={props.handleSelectedMessageRoom}

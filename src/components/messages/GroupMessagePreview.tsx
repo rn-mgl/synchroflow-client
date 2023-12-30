@@ -10,6 +10,7 @@ interface GroupMessagePreviewProps {
   dateSent: string;
   isSelected: boolean;
   isSender: boolean;
+  messageRoom: string;
   handleSelectedMessageRoom: () => void;
 }
 
