@@ -5,6 +5,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { BsCheck, BsCheckAll, BsDot } from "react-icons/bs";
+import { localizeDate } from "../utils/dateUtils";
 
 interface PrivateMessagePreviewProps {
   image: string | null;
@@ -33,7 +34,7 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
   const user = session?.user;
 
   const getLatestMessage = React.useCallback(async () => {
-    if (user?.token) {
+    if (user?.token && props.messageRoom) {
       try {
         const { data } = await axios.get(`${url}/private_messages`, {
           headers: { Authorization: user?.token },
@@ -85,13 +86,21 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
 
         <div className="flex flex-row justify-between items-center w-full text-xs">
           <p className="truncate max-w-[10ch] t:max-w-[40ch] l-s:max-w-[10ch] l-l:max-w-[25ch]">
-            <span> {props.isSender && "You: "}</span>
+            <span className="font-medium"> {latestMessage.message_from === user?.id && "You: "}</span>
             <span>
-              {props.latestMessage ? props.latestMessage : props.latestFile ? <i>sent an attachement</i> : null}
+              {latestMessage.message ? (
+                latestMessage.message
+              ) : latestMessage.message_file ? (
+                <i>sent an attachement</i>
+              ) : (
+                <i>no messages yet</i>
+              )}
             </span>
           </p>
 
-          <p className="text-xs">{props.dateSent}</p>
+          <p className="text-xs italic">
+            {latestMessage.date_sent ? localizeDate(latestMessage.date_sent, true) : "mm/dd/yyyy"}
+          </p>
         </div>
       </div>
     </button>
