@@ -15,6 +15,7 @@ const General: React.FC<GeneralSettingsProps> = (props) => {
             name="notification_sound"
             type="range"
             className="text-primary-500 bg-primary-500 w-24"
+            step={10}
             value={props.notificationSound}
             onChange={(e) => props.handleUserGeneralSettings(e)}
           />

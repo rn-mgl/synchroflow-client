@@ -6,6 +6,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
 import notificationSound from "@/public//music/NotificationSound.mp3";
+import useAudio from "@/components//hooks/useAudio";
 
 interface UserSettingsStateProps {
   notification_sound: number;
@@ -25,6 +26,8 @@ const Settings = () => {
     associate_invite: false,
   });
 
+  const { audioRef } = useAudio();
+
   const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
@@ -37,6 +40,11 @@ const Settings = () => {
     const { name, value } = e.target;
 
     setUserSettings((prev) => {
+      if (name === "notification_sound" && audioRef.current) {
+        const newVolume = parseInt(value) / 100;
+        audioRef.current.volume = newVolume;
+        audioRef.current.play();
+      }
       return {
         ...prev,
         [name]: value,
@@ -134,7 +142,7 @@ const Settings = () => {
         </div>
       </div>
 
-      <audio src={notificationSound} autoPlay controls />
+      <audio src={notificationSound} ref={audioRef} />
     </div>
   );
 };
