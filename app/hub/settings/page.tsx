@@ -5,6 +5,7 @@ import Notification from "@/components//settings/Notification";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
+import notificationSound from "@/public//music/NotificationSound.mp3";
 
 interface UserSettingsStateProps {
   notification_sound: number;
@@ -132,6 +133,8 @@ const Settings = () => {
           ) : null}
         </div>
       </div>
+
+      <audio src={notificationSound} autoPlay controls />
     </div>
   );
 };
