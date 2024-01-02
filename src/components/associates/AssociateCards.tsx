@@ -4,7 +4,7 @@ import { AssociatesProps } from "../hooks/useAssociates";
 interface AssociateCardsProps {
   associate: AssociatesProps;
   targetIdentity: "of" | "is";
-  handleDisconnectFromAssociate: () => void;
+  handleDisconnectFromAssociate?: () => void;
 }
 
 const AssociateCards: React.FC<AssociateCardsProps> = (props) => {
@@ -35,12 +35,14 @@ const AssociateCards: React.FC<AssociateCardsProps> = (props) => {
         </div>
         <p className="text-xs my-auto text-justify leading-relaxed indent-10">{status}</p>
       </div>
-      <button
-        onClick={props.handleDisconnectFromAssociate}
-        className="w-full p-2 border-2 border-primary-500 font-bold rounded-md text-primary-500"
-      >
-        Disconnect
-      </button>
+      {props.handleDisconnectFromAssociate ? (
+        <button
+          onClick={props.handleDisconnectFromAssociate}
+          className="w-full p-2 border-2 border-primary-500 font-bold rounded-md text-primary-500"
+        >
+          Disconnect
+        </button>
+      ) : null}
     </div>
   );
 };

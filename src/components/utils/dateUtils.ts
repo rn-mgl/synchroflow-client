@@ -13,6 +13,16 @@ const monthMapping = {
   12: "December",
 };
 
+export const dayOfWeekMapping = {
+  1: "Sunday",
+  2: "Monday",
+  3: "Tuesday",
+  4: "Wednesday",
+  5: "Thursday",
+  6: "Friday",
+  7: "Saturday",
+};
+
 export const localizeDate = (date: string, shorten: boolean) => {
   const newDate = new Date(date).toLocaleDateString();
 

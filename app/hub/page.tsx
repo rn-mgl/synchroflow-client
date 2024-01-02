@@ -2,12 +2,39 @@
 import { useSession } from "next-auth/react";
 import React from "react";
 
-import { Chart, ArcElement } from "chart.js/auto";
-import { Line, Pie } from "react-chartjs-2";
+import { useGlobalContext } from "@/base/context";
+import axios from "axios";
+import { ArcElement, Chart } from "chart.js/auto";
 import Calendar from "react-calendar";
+import { Line, Pie } from "react-chartjs-2";
 import { BsChevronDown, BsChevronLeft, BsChevronRight } from "react-icons/bs";
+import useAssociates from "@/components//hooks/useAssociates";
+import useTasks from "@/components//hooks/useTasks";
+import { dayOfWeekMapping, localizeDate } from "@/components//utils/dateUtils";
+import RecentAssociateCards from "@/components//associates/RecentAssociateCards";
+import AssociateCards from "@/components//associates/AssociateCards";
+
+interface TasksCountStateProps {
+  ongoingTasksCount: number;
+  doneTasksCount: number;
+  lateTasksCount: number;
+}
+
+interface WeekTasksCountStateProps {
+  day: number;
+  taskCount: number;
+}
 
 const Hub = () => {
+  const [tasksCount, setTasksCount] = React.useState<TasksCountStateProps>({
+    ongoingTasksCount: 0,
+    doneTasksCount: 0,
+    lateTasksCount: 0,
+  });
+  const [weekTasksCount, setWeekTasksCount] = React.useState<Array<WeekTasksCountStateProps>>([]);
+  const { recentAssociates, getRecentAssociates } = useAssociates();
+  const { myTasksToday, getMyTasksToday } = useTasks();
+  const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -21,10 +48,9 @@ const Hub = () => {
     datasets: [
       {
         label: "Tasks",
-        data: [10, 2, 3],
+        data: [tasksCount.ongoingTasksCount, tasksCount.doneTasksCount, tasksCount.lateTasksCount],
         backgroundColor: ["#546FFFBD", "#98ABFFBD", "#DCE4FFBD"],
         borderColor: ["#546FFF", "#98ABFF", "#DCE4FF"],
-
         borderWidth: 1,
       },
     ],
@@ -35,13 +61,53 @@ const Hub = () => {
     datasets: [
       {
         label: "Task",
-        data: [1, 3, 2, 7, 4, 1, 0],
+        data: Array.from({ length: 7 }, (_, index) => {
+          const task = weekTasksCount.find((task) => task.day === index + 1);
+          return task ? task.taskCount : null;
+        }),
         fill: false,
         borderColor: "#141522",
         tension: 0.4,
       },
     ],
   };
+
+  const getTasksCount = React.useCallback(async () => {
+    if (user?.token) {
+      try {
+        const { data } = await axios.get(`${url}/dashboard`, { headers: { Authorization: user?.token } });
+        if (data) {
+          const { tasksCount, weekTasksCount } = data;
+          setWeekTasksCount(weekTasksCount);
+          setTasksCount(tasksCount);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [url, user?.token]);
+
+  const mappedRecentAssociateCards = recentAssociates.map((associate, index) => {
+    return (
+      <AssociateCards
+        key={index}
+        associate={associate}
+        targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
+      />
+    );
+  });
+
+  React.useEffect(() => {
+    getTasksCount();
+  }, [getTasksCount]);
+
+  React.useEffect(() => {
+    getRecentAssociates();
+  }, [getRecentAssociates]);
+
+  React.useEffect(() => {
+    getMyTasksToday();
+  }, [getMyTasksToday]);
 
   return (
     <div className="flex flex-col items-center justify-start w-full ">
@@ -58,8 +124,10 @@ const Hub = () => {
                     p-4 text-white gap-2 l-l:row-span-1 l-l:order-1"
           >
             <div className="flex flex-col gap-2 items-center justify-center">
-              <p className="text-xs font-semibold">Ongoing Tasks</p>
-              <p className="text-4xl font-medium">65</p>
+              <p className="text-xs font-semibold">Total Tasks</p>
+              <p className="text-4xl font-medium">
+                {tasksCount.ongoingTasksCount + tasksCount.doneTasksCount + tasksCount.lateTasksCount}
+              </p>
             </div>
 
             <div className="h-48 flex flex-col items-center justify-center">
@@ -92,57 +160,28 @@ const Hub = () => {
           </div>
 
           <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 l-l:order-5 l-l:row-start-2 l-l:col-span-2">
-            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
-              <p>Latest Associates</p>
-              <div className="flex flex-row gap-2 items-center justify-between">
-                <button>
-                  <BsChevronLeft />
-                </button>
-                <button>
-                  <BsChevronRight />
-                </button>
-              </div>
+            <div className="flex flex-row justify-between w-full">
+              <p className="font-semibold">Recent Associates</p>
             </div>
 
-            <div className="grid grid-cols-1 grid-rows-2 gap-2 h-full l-l:grid-cols-2">
+            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
               <div
-                className=" flex flex-col items-center justify-center p-4 
-              bg-white rounded-md row-span-1"
-              ></div>
-
-              <div
-                className="flex flex-col items-center justify-center p-4 
-              bg-white rounded-md row-span-1"
-              ></div>
-
-              <div
-                className="flex-col items-center justify-center p-4 
-              bg-white rounded-md row-span-1 hidden l-l:flex"
-              ></div>
-
-              <div
-                className="flex-col items-center justify-center p-4 
-              bg-white rounded-md row-span-1 hidden l-l:flex"
-              ></div>
+                className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
+                  transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
+              >
+                {mappedRecentAssociateCards}
+              </div>
             </div>
           </div>
 
           <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 l-l:order-6 l-l:col-span-2">
             <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
               <p>Upcoming Tasks</p>
-              <div className="flex flex-row gap-2 items-center justify-between">
-                <button>
-                  <BsChevronLeft />
-                </button>
-                <button>
-                  <BsChevronRight />
-                </button>
-              </div>
             </div>
 
             <div
               className="h-full flex flex-col items-center justify-center p-4 
-              bg-white rounded-md"
+              bg-white rounded-md overflow-x-auto cstm-scrollbar-2"
             ></div>
           </div>
 

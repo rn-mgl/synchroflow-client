@@ -157,7 +157,7 @@ const Associates = () => {
             </div>
           </div>
 
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-64">
+          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-72">
             <div className="flex flex-row justify-between w-full">
               <p className="font-semibold">Associates</p>
             </div>
