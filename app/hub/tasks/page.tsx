@@ -6,12 +6,16 @@ import TaskCards from "@/components//tasks/TaskCards";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
-import { BsFilter } from "react-icons/bs";
+import { BsChevronDown, BsFilter } from "react-icons/bs";
 import { LuLayoutDashboard } from "react-icons/lu";
+import { HiChevronDown } from "react-icons/hi";
+import useSortFilter from "@/components//hooks/useSortFilter";
+import SortFilter from "@/components//filter/SortFilter";
 
 const Tasks = () => {
   const [searchInput, setSearchInput] = React.useState("");
   const [canCreateTask, setCanCreateTask] = React.useState(false);
+  const { activeSortOptions, sortFilter, handleSortFilter, toggleActiveSortOptions } = useSortFilter();
   const {
     myTasksToday,
     collaboratedTasksToday,
@@ -22,8 +26,6 @@ const Tasks = () => {
     getMyTasks,
     getCollaboratedTasks,
   } = useTasks();
-
-  const { data: session } = useSession();
 
   const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -122,10 +124,10 @@ const Tasks = () => {
             />
           ) : null}
 
-          <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit">
+          <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit ">
             <p className="font-semibold text-xl">Explore Task</p>
 
-            <div className="flex flex-row justify-center h-full w-full">
+            <div className="flex flex-row justify-center h-full w-full ">
               <div className="flex flex-row gap-4 h-fit w-full">
                 <div className="max-w-screen-m-m w-full mr-auto h-fit">
                   <SearchFilter
@@ -146,7 +148,7 @@ const Tasks = () => {
                 </button>
 
                 <button
-                  className="hidden p-2 rounded-lg border-[1px] flex-row gap-2
+                  className="hidden p-2 rounded-lg border-[1px] flex-row gap-2 w-40
                         items-center justify-between t:flex font-medium px-6"
                 >
                   <div>
@@ -155,15 +157,13 @@ const Tasks = () => {
                   <p className="text-xs">Category</p>
                 </button>
 
-                <button
-                  className="hidden p-2 rounded-lg border-[1px] flex-row gap-2
-                        items-center justify-between t:flex font-medium px-6"
-                >
-                  <div>
-                    <BsFilter className="text-base text-secondary-300 t:text-lg l-s:text-xl" />
-                  </div>
-                  <p className="text-xs">Sort by: {`Deadline`}</p>
-                </button>
+                <SortFilter
+                  activeSortOptions={activeSortOptions}
+                  sortFilter={sortFilter}
+                  handleSortFilter={handleSortFilter}
+                  toggleActiveSortOptions={toggleActiveSortOptions}
+                  sortKeys={["title", "start", "deadline"]}
+                />
               </div>
             </div>
           </div>

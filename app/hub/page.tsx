@@ -260,8 +260,6 @@ const Hub = () => {
     getMyUpcomingTasks();
   }, [getMyUpcomingTasks]);
 
-  console.log(myUpcomingTasks);
-
   return (
     <div className="flex flex-col items-center justify-start w-full ">
       <div
