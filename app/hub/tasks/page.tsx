@@ -1,21 +1,27 @@
 "use client";
 import SearchFilter from "@/components//filter/SearchFilter";
+import SearchOptions from "@/components//filter/SearchOptions";
+import SortFilter from "@/components//filter/SortFilter";
+import useSearchFilter from "@/components//hooks/useSearchFilter";
+import useSortFilter from "@/components//hooks/useSortFilter";
 import useTasks from "@/components//hooks/useTasks";
 import CreateTask from "@/components//tasks/CreateTask";
 import TaskCards from "@/components//tasks/TaskCards";
-import { useSession } from "next-auth/react";
 import React from "react";
 import { AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
-import { BsChevronDown, BsFilter } from "react-icons/bs";
-import { LuLayoutDashboard } from "react-icons/lu";
-import { HiChevronDown } from "react-icons/hi";
-import useSortFilter from "@/components//hooks/useSortFilter";
-import SortFilter from "@/components//filter/SortFilter";
 
 const Tasks = () => {
-  const [searchInput, setSearchInput] = React.useState("");
   const [canCreateTask, setCanCreateTask] = React.useState(false);
-  const { activeSortOptions, sortFilter, handleSortFilter, toggleActiveSortOptions } = useSortFilter();
+  const { activeSortOptions, sortFilter, handleSortFilter, toggleActiveSortOptions } = useSortFilter("deadline");
+  const {
+    searchFilter,
+    searchCategory,
+    activeSearchOptions,
+    handleSearchFilter,
+    handleSearchCategory,
+    toggleActiveSearchOptions,
+  } = useSearchFilter("title");
+
   const {
     myTasksToday,
     collaboratedTasksToday,
@@ -26,12 +32,6 @@ const Tasks = () => {
     getMyTasks,
     getCollaboratedTasks,
   } = useTasks();
-
-  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-
-    setSearchInput(value);
-  };
 
   const toggleCanCreateTask = () => {
     setCanCreateTask((prev) => !prev);
@@ -133,9 +133,9 @@ const Tasks = () => {
                   <SearchFilter
                     placeholder="Search Task"
                     name="searchInput"
-                    onChange={handleSearchInput}
+                    onChange={handleSearchFilter}
                     required={false}
-                    value={searchInput}
+                    value={searchFilter}
                     Icon={AiOutlineSearch}
                   />
                 </div>
@@ -147,15 +147,13 @@ const Tasks = () => {
                   <AiOutlineTool className="text-base text-secondary-300 t:text-lg l-s:text-xl" />
                 </button>
 
-                <button
-                  className="hidden p-2 rounded-lg border-[1px] flex-row gap-2 w-40
-                        items-center justify-between t:flex font-medium px-6"
-                >
-                  <div>
-                    <LuLayoutDashboard className="text-base text-secondary-300 t:text-lg l-s:text-xl" />
-                  </div>
-                  <p className="text-xs">Category</p>
-                </button>
+                <SearchOptions
+                  activeSearchOptions={activeSearchOptions}
+                  searchCategory={searchCategory}
+                  handleSearchCategory={handleSearchCategory}
+                  toggleActiveSearchOptions={toggleActiveSearchOptions}
+                  searchCategories={["title", "sub title"]}
+                />
 
                 <SortFilter
                   activeSortOptions={activeSortOptions}

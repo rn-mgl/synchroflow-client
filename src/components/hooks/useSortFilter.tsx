@@ -1,7 +1,7 @@
 import React from "react";
 
-export default function useSortFilter() {
-  const [sortFilter, setSortFilter] = React.useState("Deadline");
+export default function useSortFilter(initialSortFilter: string) {
+  const [sortFilter, setSortFilter] = React.useState(initialSortFilter);
   const [activeSortOptions, setActiveSortOptions] = React.useState(false);
 
   const handleSortFilter = React.useCallback((sortKey: string) => {
