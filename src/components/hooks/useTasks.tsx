@@ -10,6 +10,8 @@ interface TasksProps {
   main_task_status: string;
   main_task_end_date: string;
   main_task_uuid: string;
+  main_task_description?: string;
+  sub_task_description?: string;
 }
 
 export default function useTasks() {

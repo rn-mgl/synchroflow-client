@@ -3,16 +3,17 @@ import { useSession } from "next-auth/react";
 import React from "react";
 
 import { useGlobalContext } from "@/base/context";
+import AssociateCards from "@/components//associates/AssociateCards";
+import useAssociates from "@/components//hooks/useAssociates";
+import useTasks from "@/components//hooks/useTasks";
 import axios from "axios";
 import { ArcElement, Chart } from "chart.js/auto";
 import Calendar from "react-calendar";
 import { Line, Pie } from "react-chartjs-2";
-import { BsChevronDown, BsChevronLeft, BsChevronRight } from "react-icons/bs";
-import useAssociates from "@/components//hooks/useAssociates";
-import useTasks from "@/components//hooks/useTasks";
-import { dayOfWeekMapping, localizeDate } from "@/components//utils/dateUtils";
-import RecentAssociateCards from "@/components//associates/RecentAssociateCards";
-import AssociateCards from "@/components//associates/AssociateCards";
+import { BsChevronDown } from "react-icons/bs";
+import questionMark from "@/public//tasks/QuestionMark.svg";
+import Image from "next/image";
+import Link from "next/link";
 
 interface TasksCountStateProps {
   ongoingTasksCount: number;
@@ -97,6 +98,79 @@ const Hub = () => {
     );
   });
 
+  const mappedTasksToday = myTasksToday.map((task, index) => {
+    if ((index + 1) % 2 === 0) return;
+
+    const currTask = myTasksToday[index];
+    const nextTask = myTasksToday[index + 1];
+
+    return (
+      <div key={index} className="flex flex-col w-full h-full gap-4 items-center justify-start min-w-full">
+        {currTask ? (
+          <div
+            className={`flex flex-col gap-4 items-start justify-start p-4 
+              bg-white w-full rounded-lg min-w-full ${nextTask ? "h-full" : "h-3/6"}`}
+          >
+            <div className="flex flex-row w-full">
+              <p className="text-sm font-semibold">Task Today</p>
+            </div>
+
+            <Link
+              href={`/hub/tasks/${currTask.main_task_uuid}`}
+              style={{ backgroundImage: `url(${currTask.main_task_banner})` }}
+              className="bg-primary-100 w-full h-full rounded-lg bg-center bg-cover
+                      hover:shadow-[0rem_0.2rem_0.4rem_#14152233_inset] transition-all
+                      l-l:h-3/6"
+            />
+
+            <div className="w-full flex flex-row justify-between">
+              <p className="font-bold">{currTask.main_task_title}</p>
+              <p className="font-light">{currTask.main_task_subtitle}</p>
+            </div>
+
+            <div className="flex flex-col w-full gap-1">
+              <div className="flex justify-between text-sm">
+                <p className="font-bold text-secondary-400">Progress</p>
+                <p className="text-primary-500 capitalize">{currTask.main_task_status}</p>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        {nextTask ? (
+          <div
+            className="flex flex-col gap-4 items-start justify-start p-4 
+              bg-white w-full rounded-lg h-full min-w-full "
+          >
+            <div className="flex flex-row w-full">
+              <p className="text-sm font-semibold">Task Today</p>
+            </div>
+
+            <Link
+              href={`/hub/tasks/${nextTask.main_task_uuid}`}
+              style={{ backgroundImage: `url(${nextTask.main_task_banner})` }}
+              className="bg-primary-100 w-full h-full rounded-lg bg-center bg-cover
+                      hover:shadow-[0rem_0.2rem_0.4rem_#14152233_inset] transition-all
+                      l-l:h-3/6"
+            />
+
+            <div className="w-full flex flex-row justify-between">
+              <p className="font-bold">{nextTask.main_task_title}</p>
+              <p className="font-light">{nextTask.main_task_subtitle}</p>
+            </div>
+
+            <div className="flex flex-col w-full gap-1">
+              <div className="flex justify-between text-sm">
+                <p className="font-bold text-secondary-400">Progress</p>
+                <p className="text-primary-500 capitalize">{nextTask.main_task_status}</p>
+              </div>
+            </div>
+          </div>
+        ) : null}
+      </div>
+    );
+  });
+
   React.useEffect(() => {
     getTasksCount();
   }, [getTasksCount]);
@@ -113,7 +187,7 @@ const Hub = () => {
     <div className="flex flex-col items-center justify-start w-full ">
       <div
         className="max-w-screen-2xl flex flex-col gap-4 justify-start h-auto 
-        items-center w-full"
+                  items-center w-full"
       >
         <div
           className="grid grid-cols-1 grid-rows-6 t:grid-cols-2 t:grid-rows-2 gap-4  p-4 t:p-10 
@@ -190,16 +264,37 @@ const Hub = () => {
           </div>
 
           <div
-            className="flex flex-col gap-4 items-start justify-start p-4 
-                        bg-white w-full rounded-lg h-full l-l:col-start-3 l-l:row-span-2 l-l:order-4"
+            className="flex flex-row gap-4 items-start justify-start overflow-x-auto
+                      w-full h-full l-l:col-start-3 l-l:row-span-2 l-l:order-4 cstm-scrollbar-2"
           >
-            <div className="flex flex-row w-full">
-              <p className="text-sm font-semibold">Task Today</p>
-            </div>
+            {myTasksToday.length ? (
+              mappedTasksToday
+            ) : (
+              <div
+                className="flex flex-col gap-4 items-start justify-start p-4 
+                        bg-white w-full rounded-lg h-full min-w-full"
+              >
+                <div className="flex flex-row w-full">
+                  <p className="text-sm font-semibold">Task Today</p>
+                </div>
 
-            <div className="bg-neutral-150 rounded-lg w-full h-full l-l:h-3/6" />
+                <div
+                  className="bg-neutral-150 rounded-lg w-full h-full l-l:h-3/6 flex flex-col 
+                            items-center justify-center p-4"
+                >
+                  <Image
+                    src={questionMark}
+                    alt="none"
+                    draggable={false}
+                    width={500}
+                    height={500}
+                    className="w-full h-full animate-float drop-shadow-md"
+                  />
+                </div>
 
-            <p className="font-semibold">Task Title</p>
+                <p className="font-semibold">Task Title</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
