@@ -34,7 +34,7 @@ const Hub = () => {
   });
   const [weekTasksCount, setWeekTasksCount] = React.useState<Array<WeekTasksCountStateProps>>([]);
   const { recentAssociates, getRecentAssociates } = useAssociates();
-  const { myTasksToday, getMyTasksToday } = useTasks();
+  const { myTasksToday, myUpcomingTasks, getMyTasksToday, getMyUpcomingTasks } = useTasks();
   const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
@@ -98,7 +98,7 @@ const Hub = () => {
     );
   });
 
-  const mappedTasksToday = myTasksToday.map((task, index) => {
+  const mappedTasksToday = myTasksToday.map((_, index) => {
     if ((index + 1) % 2 === 0) return;
 
     const currTask = myTasksToday[index];
@@ -110,6 +110,79 @@ const Hub = () => {
           <div
             className={`flex flex-col gap-4 items-start justify-start p-4 
               bg-white w-full rounded-lg min-w-full ${nextTask ? "h-full" : "h-3/6"}`}
+          >
+            <div className="flex flex-row w-full">
+              <p className="text-sm font-semibold">Task Today</p>
+            </div>
+
+            <Link
+              href={`/hub/tasks/${currTask.main_task_uuid}`}
+              style={{ backgroundImage: `url(${currTask.main_task_banner})` }}
+              className="bg-primary-100 w-full h-full rounded-lg bg-center bg-cover
+                      hover:shadow-[0rem_0.2rem_0.4rem_#14152233_inset] transition-all
+                      l-l:h-3/6"
+            />
+
+            <div className="w-full flex flex-row justify-between">
+              <p className="font-bold">{currTask.main_task_title}</p>
+              <p className="font-light">{currTask.main_task_subtitle}</p>
+            </div>
+
+            <div className="flex flex-col w-full gap-1">
+              <div className="flex justify-between text-sm">
+                <p className="font-bold text-secondary-400">Progress</p>
+                <p className="text-primary-500 capitalize">{currTask.main_task_status}</p>
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        {nextTask ? (
+          <div
+            className="flex flex-col gap-4 items-start justify-start p-4 
+              bg-white w-full rounded-lg h-full min-w-full "
+          >
+            <div className="flex flex-row w-full">
+              <p className="text-sm font-semibold">Task Today</p>
+            </div>
+
+            <Link
+              href={`/hub/tasks/${nextTask.main_task_uuid}`}
+              style={{ backgroundImage: `url(${nextTask.main_task_banner})` }}
+              className="bg-primary-100 w-full h-full rounded-lg bg-center bg-cover
+                      hover:shadow-[0rem_0.2rem_0.4rem_#14152233_inset] transition-all
+                      l-l:h-3/6"
+            />
+
+            <div className="w-full flex flex-row justify-between">
+              <p className="font-bold">{nextTask.main_task_title}</p>
+              <p className="font-light">{nextTask.main_task_subtitle}</p>
+            </div>
+
+            <div className="flex flex-col w-full gap-1">
+              <div className="flex justify-between text-sm">
+                <p className="font-bold text-secondary-400">Progress</p>
+                <p className="text-primary-500 capitalize">{nextTask.main_task_status}</p>
+              </div>
+            </div>
+          </div>
+        ) : null}
+      </div>
+    );
+  });
+
+  const mappedUpcomingTasks = myUpcomingTasks.map((_, index) => {
+    if ((index + 1) % 2 === 0) return;
+
+    const currTask = myUpcomingTasks[index];
+    const nextTask = myUpcomingTasks[index + 1];
+
+    return (
+      <div key={index} className="flex flex-row w-full h-full gap-4 items-center justify-start min-w-full">
+        {currTask ? (
+          <div
+            className={`flex flex-col gap-4 items-start justify-start p-4 
+              bg-white h-full rounded-lg ${nextTask ? "w-full" : "w-full l-l:w-3/6"}`}
           >
             <div className="flex flex-row w-full">
               <p className="text-sm font-semibold">Task Today</p>
@@ -183,6 +256,12 @@ const Hub = () => {
     getMyTasksToday();
   }, [getMyTasksToday]);
 
+  React.useEffect(() => {
+    getMyUpcomingTasks();
+  }, [getMyUpcomingTasks]);
+
+  console.log(myUpcomingTasks);
+
   return (
     <div className="flex flex-col items-center justify-start w-full ">
       <div
@@ -241,7 +320,7 @@ const Hub = () => {
             <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
               <div
                 className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
-                  transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
+                  transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar-2"
               >
                 {mappedRecentAssociateCards}
               </div>
@@ -254,9 +333,11 @@ const Hub = () => {
             </div>
 
             <div
-              className="h-full flex flex-col items-center justify-center p-4 
-              bg-white rounded-md overflow-x-auto cstm-scrollbar-2"
-            ></div>
+              className="w-full h-full flex flex-row items-center justify-start gap-4 
+                         overflow-x-auto cstm-scrollbar-2"
+            >
+              {mappedUpcomingTasks}
+            </div>
           </div>
 
           <div className="h-full l-l:order-3">
@@ -264,37 +345,46 @@ const Hub = () => {
           </div>
 
           <div
-            className="flex flex-row gap-4 items-start justify-start overflow-x-auto
+            className="flex flex-col gap-2 items-start justify-start overflow-x-auto
                       w-full h-full l-l:col-start-3 l-l:row-span-2 l-l:order-4 cstm-scrollbar-2"
           >
-            {myTasksToday.length ? (
-              mappedTasksToday
-            ) : (
-              <div
-                className="flex flex-col gap-4 items-start justify-start p-4 
-                        bg-white w-full rounded-lg h-full min-w-full"
-              >
-                <div className="flex flex-row w-full">
-                  <p className="text-sm font-semibold">Task Today</p>
-                </div>
+            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
+              <p>Tasks Today</p>
+            </div>
 
+            <div
+              className="w-full h-full flex flex-row items-center justify-start gap-4 
+                         overflow-x-auto cstm-scrollbar-2"
+            >
+              {myTasksToday.length ? (
+                mappedTasksToday
+              ) : (
                 <div
-                  className="bg-neutral-150 rounded-lg w-full h-full l-l:h-3/6 flex flex-col 
-                            items-center justify-center p-4"
+                  className="flex flex-col gap-4 items-start justify-start p-4 
+                        bg-white w-full rounded-lg h-full min-w-full"
                 >
-                  <Image
-                    src={questionMark}
-                    alt="none"
-                    draggable={false}
-                    width={500}
-                    height={500}
-                    className="w-full h-full animate-float drop-shadow-md"
-                  />
-                </div>
+                  <div className="flex flex-row w-full">
+                    <p className="text-sm font-semibold">Task Today</p>
+                  </div>
 
-                <p className="font-semibold">Task Title</p>
-              </div>
-            )}
+                  <div
+                    className="bg-neutral-150 rounded-lg w-full h-full l-l:h-3/6 flex flex-col 
+                            items-center justify-center p-4"
+                  >
+                    <Image
+                      src={questionMark}
+                      alt="none"
+                      draggable={false}
+                      width={500}
+                      height={500}
+                      className="w-full h-full animate-float drop-shadow-md"
+                    />
+                  </div>
+
+                  <p className="font-semibold">Task Title</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

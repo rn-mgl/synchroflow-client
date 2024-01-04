@@ -16,6 +16,7 @@ interface TasksProps {
 
 export default function useTasks() {
   const [myTasksToday, setMyTasksToday] = React.useState<Array<TasksProps>>([]);
+  const [myUpcomingTasks, setMyUpcomingTasks] = React.useState<Array<TasksProps>>([]);
   const [collaboratedTasksToday, setCollaboratedTasksToday] = React.useState<Array<TasksProps>>([]);
   const [myTasks, setMyTasks] = React.useState<Array<TasksProps>>([]);
   const [collaboratedTasks, setCollaboratedTasks] = React.useState<Array<TasksProps>>([]);
@@ -36,6 +37,25 @@ export default function useTasks() {
         });
         if (data) {
           setMyTasksToday(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [url, user?.token]);
+
+  const getMyUpcomingTasks = React.useCallback(async () => {
+    if (user?.token) {
+      try {
+        const { data } = await axios.get(`${url}/main_tasks`, {
+          headers: { Authorization: user?.token },
+          params: {
+            type: "upcoming",
+            which: "all",
+          },
+        });
+        if (data) {
+          setMyUpcomingTasks(data);
         }
       } catch (error) {
         console.log(error);
@@ -105,9 +125,11 @@ export default function useTasks() {
     myTasksToday,
     myTasks,
     collaboratedTasks,
+    myUpcomingTasks,
     getMyTasks,
     getCollaboratedTasks,
     getCollaboratedTasksToday,
     getMyTasksToday,
+    getMyUpcomingTasks,
   };
 }
