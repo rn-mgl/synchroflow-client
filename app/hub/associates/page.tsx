@@ -3,28 +3,34 @@ import AddAssociate from "@/components//associates/AddAssociate";
 import AssociateCards from "@/components//associates/AssociateCards";
 import RecentAssociateCards from "@/components//associates/RecentAssociateCards";
 import SearchFilter from "@/components//filter/SearchFilter";
+import SearchOptions from "@/components//filter/SearchOptions";
+import SortFilter from "@/components//filter/SortFilter";
 import DeleteConfirmation from "@/components//global/DeleteConfirmation";
 import useAssociates from "@/components//hooks/useAssociates";
+import useFilter from "@/components//hooks/useFilter";
+import useSearchFilter from "@/components//hooks/useSearchFilter";
+import useSortFilter from "@/components//hooks/useSortFilter";
 import { useSession } from "next-auth/react";
 import React from "react";
-import { AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
-import { BsFilter } from "react-icons/bs";
-import { LuLayoutDashboard } from "react-icons/lu";
+import { AiOutlineClose, AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
 
 const Associates = () => {
-  const [searchInput, setSearchInput] = React.useState("");
   const [disconnectFromAssociate, setDisconnectFromAssociate] = React.useState("");
   const [canAddAssociate, setCanAddAssociate] = React.useState(false);
+  const { activeFilterOptions, toggleActiveFilterOptions } = useFilter();
+  const { activeSortOptions, sortFilter, handleSortFilter, toggleActiveSortOptions } = useSortFilter("date added");
+  const {
+    searchFilter,
+    searchCategory,
+    activeSearchOptions,
+    handleSearchFilter,
+    handleSearchCategory,
+    toggleActiveSearchOptions,
+  } = useSearchFilter("name");
   const { allAssociates, recentAssociates, getAllAssociates, getRecentAssociates } = useAssociates();
 
   const { data: session } = useSession();
   const user = session?.user;
-
-  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-
-    setSearchInput(value);
-  };
 
   const toggleCanAddAssociate = () => {
     setCanAddAssociate((prev) => !prev);
@@ -84,48 +90,52 @@ const Associates = () => {
 
         {canAddAssociate ? <AddAssociate toggleCanAddAssociate={toggleCanAddAssociate} /> : null}
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
-          <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit">
-            <p className="font-semibold text-xl">Explore Associates</p>
+          <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit ">
+            <p className="font-semibold text-xl">Explore Task</p>
 
-            <div className="flex flex-row justify-center h-full w-full">
-              <div className="flex flex-row gap-4 h-fit w-full">
-                <div className="max-w-screen-m-m w-full mr-auto h-fit">
-                  <SearchFilter
-                    placeholder="Search Associates"
-                    name="searchInput"
-                    onChange={handleSearchInput}
-                    required={false}
-                    value={searchInput}
-                    Icon={AiOutlineSearch}
-                  />
-                </div>
+            <div className="flex flex-row justify-center h-full w-full ">
+              <div
+                className={`flex flex-row gap-4 h-fit w-full ${activeFilterOptions && "m-s:flex-wrap t:flex-nowrap"}`}
+              >
+                <SearchFilter
+                  placeholder="Search Task"
+                  name="searchInput"
+                  onChange={handleSearchFilter}
+                  required={false}
+                  value={searchFilter}
+                  Icon={AiOutlineSearch}
+                  activeFilterOptions={activeFilterOptions}
+                />
 
                 <button
-                  className="p-2 rounded-lg border-[1px] w-16 flex flex-col items-center justify-center
+                  onClick={toggleActiveFilterOptions}
+                  className="p-2 rounded-lg border-[1px] w-12 min-w-[3rem] flex flex-col items-center justify-center
                         t:hidden"
                 >
-                  <AiOutlineTool className="text-base text-secondary-300 t:text-lg l-s:text-xl" />
+                  {activeFilterOptions ? (
+                    <AiOutlineClose className="text-base text-secondary-300 t:text-lg l-s:text-xl animate-fadeIn" />
+                  ) : (
+                    <AiOutlineTool className="text-base text-secondary-300 t:text-lg l-s:text-xl animate-fadeIn" />
+                  )}
                 </button>
 
-                <button
-                  className="hidden p-2 rounded-lg border-[1px] flex-row gap-2
-                        items-center justify-between t:flex font-medium px-6"
-                >
-                  <div>
-                    <LuLayoutDashboard className="text-base text-secondary-300 t:text-lg l-s:text-xl" />
-                  </div>
-                  <p className="text-xs">Category</p>
-                </button>
+                <SearchOptions
+                  activeSearchOptions={activeSearchOptions}
+                  searchCategory={searchCategory}
+                  activeFilterOptions={activeFilterOptions}
+                  handleSearchCategory={handleSearchCategory}
+                  toggleActiveSearchOptions={toggleActiveSearchOptions}
+                  searchCategories={["name", "surname", "role", "status"]}
+                />
 
-                <button
-                  className="hidden p-2 rounded-lg border-[1px] flex-row gap-2
-                        items-center justify-between t:flex font-medium px-6"
-                >
-                  <div>
-                    <BsFilter className="text-base text-secondary-300 t:text-lg l-s:text-xl" />
-                  </div>
-                  <p className="text-xs">Sort by: {`Deadline`}</p>
-                </button>
+                <SortFilter
+                  activeSortOptions={activeSortOptions}
+                  sortFilter={sortFilter}
+                  activeFilterOptions={activeFilterOptions}
+                  handleSortFilter={handleSortFilter}
+                  toggleActiveSortOptions={toggleActiveSortOptions}
+                  sortKeys={["name", "surname", "date added"]}
+                />
               </div>
             </div>
           </div>

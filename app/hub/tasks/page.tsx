@@ -2,16 +2,18 @@
 import SearchFilter from "@/components//filter/SearchFilter";
 import SearchOptions from "@/components//filter/SearchOptions";
 import SortFilter from "@/components//filter/SortFilter";
+import useFilter from "@/components//hooks/useFilter";
 import useSearchFilter from "@/components//hooks/useSearchFilter";
 import useSortFilter from "@/components//hooks/useSortFilter";
 import useTasks from "@/components//hooks/useTasks";
 import CreateTask from "@/components//tasks/CreateTask";
 import TaskCards from "@/components//tasks/TaskCards";
 import React from "react";
-import { AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
+import { AiOutlineClose, AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
 
 const Tasks = () => {
   const [canCreateTask, setCanCreateTask] = React.useState(false);
+  const { activeFilterOptions, toggleActiveFilterOptions } = useFilter();
   const { activeSortOptions, sortFilter, handleSortFilter, toggleActiveSortOptions } = useSortFilter("deadline");
   const {
     searchFilter,
@@ -128,28 +130,35 @@ const Tasks = () => {
             <p className="font-semibold text-xl">Explore Task</p>
 
             <div className="flex flex-row justify-center h-full w-full ">
-              <div className="flex flex-row gap-4 h-fit w-full">
-                <div className="max-w-screen-m-m w-full mr-auto h-fit">
-                  <SearchFilter
-                    placeholder="Search Task"
-                    name="searchInput"
-                    onChange={handleSearchFilter}
-                    required={false}
-                    value={searchFilter}
-                    Icon={AiOutlineSearch}
-                  />
-                </div>
+              <div
+                className={`flex flex-row gap-4 h-fit w-full ${activeFilterOptions && "m-s:flex-wrap t:flex-nowrap"}`}
+              >
+                <SearchFilter
+                  placeholder="Search Task"
+                  name="searchInput"
+                  onChange={handleSearchFilter}
+                  required={false}
+                  value={searchFilter}
+                  Icon={AiOutlineSearch}
+                  activeFilterOptions={activeFilterOptions}
+                />
 
                 <button
-                  className="p-2 rounded-lg border-[1px] w-16 flex flex-col items-center justify-center
+                  onClick={toggleActiveFilterOptions}
+                  className="p-2 rounded-lg border-[1px] w-12 min-w-[3rem] flex flex-col items-center justify-center
                         t:hidden"
                 >
-                  <AiOutlineTool className="text-base text-secondary-300 t:text-lg l-s:text-xl" />
+                  {activeFilterOptions ? (
+                    <AiOutlineTool className="text-base text-secondary-300 t:text-lg l-s:text-xl animate-fadeIn" />
+                  ) : (
+                    <AiOutlineClose className="text-base text-secondary-300 t:text-lg l-s:text-xl animate-fadeIn" />
+                  )}
                 </button>
 
                 <SearchOptions
                   activeSearchOptions={activeSearchOptions}
                   searchCategory={searchCategory}
+                  activeFilterOptions={activeFilterOptions}
                   handleSearchCategory={handleSearchCategory}
                   toggleActiveSearchOptions={toggleActiveSearchOptions}
                   searchCategories={["title", "sub title"]}
@@ -158,6 +167,7 @@ const Tasks = () => {
                 <SortFilter
                   activeSortOptions={activeSortOptions}
                   sortFilter={sortFilter}
+                  activeFilterOptions={activeFilterOptions}
                   handleSortFilter={handleSortFilter}
                   toggleActiveSortOptions={toggleActiveSortOptions}
                   sortKeys={["title", "start", "deadline"]}

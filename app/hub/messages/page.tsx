@@ -3,7 +3,10 @@ import { useGlobalContext } from "@/base/context";
 import SearchFilter from "@/components//filter/SearchFilter";
 import DeleteConfirmation from "@/components//global/DeleteConfirmation";
 import useFile from "@/components//hooks/useFile";
+import useFilter from "@/components//hooks/useFilter";
 import useMessage from "@/components//hooks/useMessage";
+import useSearchFilter from "@/components//hooks/useSearchFilter";
+import useSortFilter from "@/components//hooks/useSortFilter";
 import ActiveMessagePanel from "@/components//messages/ActiveMessagePanel";
 import AddGroupMembers from "@/components//messages/AddGroupMembers";
 import CreateGroupMessage from "@/components//messages/CreateGroupMessage";
@@ -19,7 +22,13 @@ import React from "react";
 import { AiOutlinePlus, AiOutlineSearch } from "react-icons/ai";
 
 const Messages = () => {
-  const [searchInput, setSearchInput] = React.useState("");
+  const [activeToolTip, setActiveToolTip] = React.useState(false);
+  const [canEditGroupMessage, setCanEditGroupMessage] = React.useState(false);
+  const [canDeleteGroupMessage, setCanDeleteGroupMessage] = React.useState(false);
+  const [canSeeGroupMembers, setCanSeeGroupMembers] = React.useState(false);
+  const [canAddGroupMembers, setCanAddGroupMembers] = React.useState(false);
+  const { activeFilterOptions } = useFilter();
+  const { searchFilter, handleSearchFilter } = useSearchFilter("title");
   const {
     selectedMessageRoom,
     message,
@@ -39,22 +48,12 @@ const Messages = () => {
     toggleCanCreateGroupMessage,
     getMessageRoom,
   } = useMessage();
-  const [activeToolTip, setActiveToolTip] = React.useState(false);
-  const [canEditGroupMessage, setCanEditGroupMessage] = React.useState(false);
-  const [canDeleteGroupMessage, setCanDeleteGroupMessage] = React.useState(false);
-  const [canSeeGroupMembers, setCanSeeGroupMembers] = React.useState(false);
-  const [canAddGroupMembers, setCanAddGroupMembers] = React.useState(false);
 
   const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } = useFile();
 
   const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
-
-  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchInput(value);
-  };
 
   const handleMessageInput = (e: React.FormEvent<HTMLDivElement>) => {
     const inputText = e.target as HTMLElement;
@@ -231,14 +230,17 @@ const Messages = () => {
             <div className="bg-white w-full p-4 pb-0 flex flex-col gap-4 rounded-lg h-fit ">
               <p className="font-semibold text-xl">Messages</p>
 
-              <div className="max-w-screen-m-m w-full mr-auto h-fit">
+              <div
+                className={`flex flex-row gap-4 h-fit w-full ${activeFilterOptions && "m-s:flex-wrap t:flex-nowrap"}`}
+              >
                 <SearchFilter
-                  placeholder="Search Name"
+                  placeholder="Search Task"
                   name="searchInput"
-                  onChange={handleSearchInput}
+                  onChange={handleSearchFilter}
                   required={false}
-                  value={searchInput}
+                  value={searchFilter}
                   Icon={AiOutlineSearch}
+                  activeFilterOptions={activeFilterOptions}
                 />
               </div>
 

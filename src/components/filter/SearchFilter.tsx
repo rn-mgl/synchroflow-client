@@ -6,13 +6,17 @@ interface Props {
   name: string;
   value: string;
   required: boolean;
+  activeFilterOptions: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   Icon: IconType;
 }
 
 const SearchFilter: React.FC<Props> = (props) => {
   return (
-    <div className="w-full relative flex flex-row items-center justify-between">
+    <div
+      className={`w-full relative flex-row items-center justify-between max-w-screen-m-m mr-auto h-fit t:flex
+                ${props.activeFilterOptions ? "hidden" : "flex"}`}
+    >
       <input
         type="text"
         className="p-4 t:px-6 border-[1px] rounded-md  text-xs

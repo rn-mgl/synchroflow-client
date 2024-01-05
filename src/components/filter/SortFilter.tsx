@@ -2,8 +2,9 @@ import React from "react";
 import { BsFilter } from "react-icons/bs";
 
 interface SortFilterProps {
-  activeSortOptions: boolean;
   sortFilter: string;
+  activeSortOptions: boolean;
+  activeFilterOptions: boolean;
   sortKeys: Array<string>;
   toggleActiveSortOptions: () => void;
   handleSortFilter: (sortKey: string) => void;
@@ -27,19 +28,22 @@ const SortFilter: React.FC<SortFilterProps> = (props) => {
   });
 
   return (
-    <div className="flex-col items-center justify-center hidden t:flex gap-4 relative">
+    <div
+      className={`flex-col items-center justify-center t:flex gap-4 relative
+               ${props.activeFilterOptions ? "flex" : "hidden"}`}
+    >
       <div
-        className="w-52 flex flex-col rounded-lg border-[1px] p-2
-              items-center justify-center font-medium px-6"
+        className="min-w-[13rem] flex flex-col rounded-lg border-[1px] p-2
+              items-center justify-center font-medium px-6 w-auto"
       >
         <button
           onClick={props.toggleActiveSortOptions}
-          className="flex flex-row gap-2 items-center justify-between p-2"
+          className="flex flex-row gap-2 items-center justify-between p-2 w-full"
         >
           <div>
             <BsFilter className="text-base text-secondary-300 t:text-lg l-s:text-xl " />
           </div>
-          <p className="text-xs capitalize">Sort by: {props.sortFilter}</p>
+          <p className="text-xs capitalize whitespace-nowrap">Sort by: {props.sortFilter}</p>
         </button>
       </div>
 
