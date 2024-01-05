@@ -28,7 +28,7 @@ const Messages = () => {
   const [canSeeGroupMembers, setCanSeeGroupMembers] = React.useState(false);
   const [canAddGroupMembers, setCanAddGroupMembers] = React.useState(false);
   const { activeFilterOptions } = useFilter();
-  const { searchFilter, handleSearchFilter } = useSearchFilter("title");
+  const { searchFilter, handleSearchFilter } = useSearchFilter("name");
   const {
     selectedMessageRoom,
     message,
@@ -157,8 +157,8 @@ const Messages = () => {
   };
 
   React.useEffect(() => {
-    getMessageRooms();
-  }, [getMessageRooms]);
+    getMessageRooms(searchFilter);
+  }, [getMessageRooms, searchFilter]);
 
   React.useEffect(() => {
     getMessageRoomMessages();
@@ -176,14 +176,14 @@ const Messages = () => {
       {canCreateGroupMessage ? (
         <CreateGroupMessage
           toggleCanCreateGroupMessage={toggleCanCreateGroupMessage}
-          getMessageRooms={getMessageRooms}
+          getMessageRooms={() => getMessageRooms(searchFilter)}
         />
       ) : null}
 
       {canEditGroupMessage ? (
         <EditGroupMessage
           groupMessageData={activeRoom}
-          getMessageRooms={getMessageRooms}
+          getMessageRooms={() => getMessageRooms(searchFilter)}
           toggleCanEditGroupMessage={toggleCanEditGroupMessage}
           getMessageRoom={getMessageRoom}
         />
@@ -213,7 +213,7 @@ const Messages = () => {
           toggleConfirmation={toggleCanDeleteGroupMessage}
           refetchData={() => {
             handleSelectedMessageRoom(selectedMessageRoom, "back");
-            getMessageRooms();
+            getMessageRooms(searchFilter);
           }}
         />
       ) : null}

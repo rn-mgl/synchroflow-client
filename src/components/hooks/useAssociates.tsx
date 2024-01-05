@@ -31,37 +31,43 @@ export default function useAssociates() {
   const { data: session } = useSession();
   const user = session?.user;
 
-  const getAllAssociates = React.useCallback(async () => {
-    if (user?.token) {
-      try {
-        const { data } = await axios.get(`${url}/associates`, {
-          headers: { Authorization: user?.token },
-          params: { type: "all" },
-        });
-        if (data) {
-          setAllAssociates(data);
+  const getAllAssociates = React.useCallback(
+    async (sortFilter: string, searchFilter: string, searchCategory: string) => {
+      if (user?.token) {
+        try {
+          const { data } = await axios.get(`${url}/associates`, {
+            headers: { Authorization: user?.token },
+            params: { type: "all", sortFilter, searchFilter, searchCategory },
+          });
+          if (data) {
+            setAllAssociates(data);
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
       }
-    }
-  }, [url, user?.token]);
+    },
+    [url, user?.token]
+  );
 
-  const getRecentAssociates = React.useCallback(async () => {
-    if (user?.token) {
-      try {
-        const { data } = await axios.get(`${url}/associates`, {
-          headers: { Authorization: user?.token },
-          params: { type: "recent" },
-        });
-        if (data) {
-          setRecentAssociates(data);
+  const getRecentAssociates = React.useCallback(
+    async (sortFilter: string, searchFilter: string, searchCategory: string) => {
+      if (user?.token) {
+        try {
+          const { data } = await axios.get(`${url}/associates`, {
+            headers: { Authorization: user?.token },
+            params: { type: "recent", sortFilter, searchFilter, searchCategory },
+          });
+          if (data) {
+            setRecentAssociates(data);
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
       }
-    }
-  }, [url, user?.token]);
+    },
+    [url, user?.token]
+  );
 
   return {
     allAssociates,

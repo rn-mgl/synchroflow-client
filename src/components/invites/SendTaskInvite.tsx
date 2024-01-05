@@ -4,13 +4,22 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React from "react";
-import { AiFillCheckCircle, AiFillStar, AiOutlineClose, AiOutlineFileText, AiOutlineUser } from "react-icons/ai";
+import {
+  AiFillCheckCircle,
+  AiFillStar,
+  AiOutlineClose,
+  AiOutlineFileText,
+  AiOutlineSearch,
+  AiOutlineUser,
+} from "react-icons/ai";
 import SearchFilter from "../filter/SearchFilter";
 import Loading from "../global/Loading";
 import Message from "../global/Message";
 import useLoader from "../hooks/useLoading";
 import useNotification from "../hooks/useNotification";
 import TextAreaComp from "../input/TextAreaComp";
+import useSearchFilter from "../hooks/useSearchFilter";
+import useFilter from "../hooks/useFilter";
 
 interface SendTaskInviteProps {
   taskUUID: string;
@@ -28,12 +37,12 @@ interface AssociatesStateProps {
 
 const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
   const [inviteMessage, setInviteMessage] = React.useState("");
+  const [associatesToInvite, setAssociatesToInvite] = React.useState<string[]>([]);
   const [associates, setAssociates] = React.useState<Array<AssociatesStateProps>>([
     { name: "", surname: "", user_uuid: "", status: "", role: "", image: "" },
   ]);
-  const [associatesToInvite, setAssociatesToInvite] = React.useState<string[]>([]);
-  const [searchFilter, setSearchFilter] = React.useState({ searchKey: "name", toSearch: "" });
-
+  const { activeFilterOptions } = useFilter();
+  const { searchFilter, handleSearchFilter } = useSearchFilter("name");
   const { isLoading, handleLoader } = useLoader();
   const { message, handleMessages } = useNotification();
 
@@ -52,18 +61,6 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
     setAssociatesToInvite((prev) =>
       prev.includes(associateUUID) ? prev.filter((associate) => associate !== associateUUID) : [...prev, associateUUID]
     );
-  };
-
-  const handleSeachFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const name = e.target.name;
-    const value = e.target.value;
-
-    setSearchFilter((prev) => {
-      return {
-        ...prev,
-        [name]: value,
-      };
-    });
   };
 
   const getAssociates = React.useCallback(async () => {
@@ -193,13 +190,15 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Associates</p>
           <SearchFilter
-            Icon={AiOutlineUser}
-            name="toSearch"
-            placeholder="Search Name..."
-            onChange={handleSeachFilter}
+            placeholder="Search Task"
+            name="searchInput"
+            onChange={handleSearchFilter}
             required={false}
-            value={searchFilter.toSearch}
+            value={searchFilter}
+            Icon={AiOutlineSearch}
+            activeFilterOptions={activeFilterOptions}
           />
+
           <div
             className="w-full flex flex-row justify-start items-center overflow-x-auto 
                     cstm-scrollbar gap-4"

@@ -62,12 +62,12 @@ const Associates = () => {
   });
 
   React.useEffect(() => {
-    getAllAssociates();
-  }, [getAllAssociates]);
+    getAllAssociates(sortFilter, searchFilter, searchCategory);
+  }, [getAllAssociates, sortFilter, searchFilter, searchCategory]);
 
   React.useEffect(() => {
-    getRecentAssociates();
-  }, [getRecentAssociates]);
+    getRecentAssociates(sortFilter, searchFilter, searchCategory);
+  }, [getRecentAssociates, sortFilter, searchFilter, searchCategory]);
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">
@@ -82,8 +82,8 @@ const Associates = () => {
             apiRoute={`associates/${disconnectFromAssociate}`}
             toggleConfirmation={() => handleDisconnectFromAssociate(disconnectFromAssociate)}
             refetchData={async () => {
-              getAllAssociates();
-              getRecentAssociates();
+              getAllAssociates(sortFilter, searchFilter, searchCategory);
+              getRecentAssociates(sortFilter, searchFilter, searchCategory);
             }}
           />
         ) : null}
@@ -91,7 +91,7 @@ const Associates = () => {
         {canAddAssociate ? <AddAssociate toggleCanAddAssociate={toggleCanAddAssociate} /> : null}
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
           <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit ">
-            <p className="font-semibold text-xl">Explore Task</p>
+            <p className="font-semibold text-xl">Explore Associates</p>
 
             <div className="flex flex-row justify-center h-full w-full ">
               <div

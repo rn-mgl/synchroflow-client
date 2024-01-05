@@ -92,20 +92,24 @@ export default function useMessage() {
     setCanCreateGroupMessage((prev) => !prev);
   }, []);
 
-  const getMessageRooms = React.useCallback(async () => {
-    if (user?.token) {
-      try {
-        const { data } = await axios.get(`${url}/${roomType}_message_rooms`, {
-          headers: { Authorization: user?.token },
-        });
-        if (data) {
-          setMessageRooms(data);
+  const getMessageRooms = React.useCallback(
+    async (searchFilter: string) => {
+      if (user?.token) {
+        try {
+          const { data } = await axios.get(`${url}/${roomType}_message_rooms`, {
+            headers: { Authorization: user?.token },
+            params: { searchFilter },
+          });
+          if (data) {
+            setMessageRooms(data);
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
       }
-    }
-  }, [url, user?.token, roomType]);
+    },
+    [url, user?.token, roomType]
+  );
 
   const getMessageRoomMessages = React.useCallback(async () => {
     if (user?.token) {
