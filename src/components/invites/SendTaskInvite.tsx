@@ -68,7 +68,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
       try {
         const { data } = await axios.get(`${url}/main_task_invites`, {
           headers: { Authorization: user?.token },
-          params: { type: "invite associates", mainTaskUUID: params?.task_uuid },
+          params: { type: "invite associates", mainTaskUUID: params?.task_uuid, searchFilter },
         });
 
         if (data) {
@@ -78,7 +78,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, user?.token, params?.task_uuid]);
+  }, [url, user?.token, params?.task_uuid, searchFilter]);
 
   const mappedAssociates = associates.map((associate, index) => {
     return (
@@ -190,7 +190,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Associates</p>
           <SearchFilter
-            placeholder="Search Task"
+            placeholder="Search Name"
             name="searchInput"
             onChange={handleSearchFilter}
             required={false}

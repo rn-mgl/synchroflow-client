@@ -4,17 +4,15 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { AiOutlineClose, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
-import AssociateCardsInvite from "./AssociateCardsInvite";
-import useNotification from "../hooks/useNotification";
-import Message from "../global/Message";
 import SearchFilter from "../filter/SearchFilter";
-import { LuLayoutDashboard } from "react-icons/lu";
-import { BsFilter } from "react-icons/bs";
-import useFilter from "../hooks/useFilter";
-import useSortFilter from "../hooks/useSortFilter";
-import useSearchFilter from "../hooks/useSearchFilter";
 import SearchOptions from "../filter/SearchOptions";
 import SortFilter from "../filter/SortFilter";
+import Message from "../global/Message";
+import useFilter from "../hooks/useFilter";
+import useNotification from "../hooks/useNotification";
+import useSearchFilter from "../hooks/useSearchFilter";
+import useSortFilter from "../hooks/useSortFilter";
+import AssociateCardsInvite from "./AssociateCardsInvite";
 
 interface AddAssociateProps {
   toggleCanAddAssociate: () => void;
@@ -34,7 +32,7 @@ interface AssociateStateProps {
 
 const AddAssociate: React.FC<AddAssociateProps> = (props) => {
   const { activeFilterOptions, toggleActiveFilterOptions } = useFilter();
-  const { activeSortOptions, sortFilter, handleSortFilter, toggleActiveSortOptions } = useSortFilter("date added");
+  const { activeSortOptions, sortFilter, handleSortFilter, toggleActiveSortOptions } = useSortFilter("name");
   const {
     searchFilter,
     searchCategory,
@@ -65,7 +63,10 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
   const getUsers = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/users`, { headers: { Authorization: user?.token } });
+        const { data } = await axios.get(`${url}/users`, {
+          headers: { Authorization: user?.token },
+          params: { sortFilter, searchFilter, searchCategory },
+        });
         if (data) {
           setUsers(data);
         }
@@ -73,7 +74,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, user?.token]);
+  }, [url, user?.token, sortFilter, searchFilter, searchCategory]);
 
   const sendInvite = async (inviteTo: string) => {
     try {
@@ -182,7 +183,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
                 activeFilterOptions={activeFilterOptions}
                 handleSearchCategory={handleSearchCategory}
                 toggleActiveSearchOptions={toggleActiveSearchOptions}
-                searchCategories={["name", "surname", "role", "status"]}
+                searchCategories={["name", "surname", "email", "role", "status"]}
               />
 
               <SortFilter
@@ -191,7 +192,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
                 activeFilterOptions={activeFilterOptions}
                 handleSortFilter={handleSortFilter}
                 toggleActiveSortOptions={toggleActiveSortOptions}
-                sortKeys={["name", "surname", "date added"]}
+                sortKeys={["name", "surname", "email"]}
               />
             </div>
           </div>
