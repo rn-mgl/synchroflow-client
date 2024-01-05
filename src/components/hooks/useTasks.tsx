@@ -25,25 +25,6 @@ export default function useTasks() {
   const { data: session } = useSession();
   const user = session?.user;
 
-  const getMyTasksToday = React.useCallback(async () => {
-    if (user?.token) {
-      try {
-        const { data } = await axios.get(`${url}/main_tasks`, {
-          headers: { Authorization: user?.token },
-          params: {
-            type: "my",
-            which: "today",
-          },
-        });
-        if (data) {
-          setMyTasksToday(data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }, [url, user?.token]);
-
   const getMyUpcomingTasks = React.useCallback(async () => {
     if (user?.token) {
       try {
@@ -63,62 +44,105 @@ export default function useTasks() {
     }
   }, [url, user?.token]);
 
-  const getCollaboratedTasksToday = React.useCallback(async () => {
-    if (user?.token) {
-      try {
-        const { data } = await axios.get(`${url}/main_tasks`, {
-          headers: { Authorization: user?.token },
-          params: {
-            type: "collaborated",
-            which: "today",
-          },
-        });
-        if (data) {
-          setCollaboratedTasksToday(data);
+  const getMyTasksToday = React.useCallback(
+    async (sortFilter: string, searchFilter: string, searchCategory: string) => {
+      if (user?.token) {
+        try {
+          const { data } = await axios.get(`${url}/main_tasks`, {
+            headers: { Authorization: user?.token },
+            params: {
+              type: "my",
+              which: "today",
+              sortFilter,
+              searchFilter,
+              searchCategory,
+            },
+          });
+          if (data) {
+            setMyTasksToday(data);
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
       }
-    }
-  }, [url, user?.token]);
+    },
+    [url, user?.token]
+  );
 
-  const getMyTasks = React.useCallback(async () => {
-    if (user?.token) {
-      try {
-        const { data } = await axios.get(`${url}/main_tasks`, {
-          headers: { Authorization: user?.token },
-          params: {
-            type: "my",
-            which: "all",
-          },
-        });
-        if (data) {
-          setMyTasks(data);
+  const getCollaboratedTasksToday = React.useCallback(
+    async (sortFilter: string, searchFilter: string, searchCategory: string) => {
+      if (user?.token) {
+        try {
+          const { data } = await axios.get(`${url}/main_tasks`, {
+            headers: { Authorization: user?.token },
+            params: {
+              type: "collaborated",
+              which: "today",
+              sortFilter,
+              searchFilter,
+              searchCategory,
+            },
+          });
+          if (data) {
+            setCollaboratedTasksToday(data);
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
       }
-    }
-  }, [url, user?.token]);
+    },
+    [url, user?.token]
+  );
 
-  const getCollaboratedTasks = React.useCallback(async () => {
-    if (user?.token) {
-      try {
-        const { data } = await axios.get(`${url}/main_tasks`, {
-          headers: { Authorization: user?.token },
-          params: {
-            type: "collaborated",
-            which: "all",
-          },
-        });
-        if (data) {
-          setCollaboratedTasks(data);
+  const getMyTasks = React.useCallback(
+    async (sortFilter: string, searchFilter: string, searchCategory: string) => {
+      if (user?.token) {
+        try {
+          const { data } = await axios.get(`${url}/main_tasks`, {
+            headers: { Authorization: user?.token },
+            params: {
+              type: "my",
+              which: "all",
+              sortFilter,
+              searchFilter,
+              searchCategory,
+            },
+          });
+          if (data) {
+            setMyTasks(data);
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
       }
-    }
-  }, [url, user?.token]);
+    },
+    [url, user?.token]
+  );
+
+  const getCollaboratedTasks = React.useCallback(
+    async (sortFilter: string, searchFilter: string, searchCategory: string) => {
+      if (user?.token) {
+        try {
+          const { data } = await axios.get(`${url}/main_tasks`, {
+            headers: { Authorization: user?.token },
+            params: {
+              type: "collaborated",
+              which: "all",
+              sortFilter,
+              searchFilter,
+              searchCategory,
+            },
+          });
+          if (data) {
+            setCollaboratedTasks(data);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    },
+    [url, user?.token]
+  );
 
   return {
     collaboratedTasksToday,

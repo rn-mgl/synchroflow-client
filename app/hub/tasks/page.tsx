@@ -13,17 +13,6 @@ import { AiOutlineClose, AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "r
 
 const Tasks = () => {
   const [canCreateTask, setCanCreateTask] = React.useState(false);
-  const { activeFilterOptions, toggleActiveFilterOptions } = useFilter();
-  const { activeSortOptions, sortFilter, handleSortFilter, toggleActiveSortOptions } = useSortFilter("deadline");
-  const {
-    searchFilter,
-    searchCategory,
-    activeSearchOptions,
-    handleSearchFilter,
-    handleSearchCategory,
-    toggleActiveSearchOptions,
-  } = useSearchFilter("title");
-
   const {
     myTasksToday,
     collaboratedTasksToday,
@@ -34,6 +23,16 @@ const Tasks = () => {
     getMyTasks,
     getCollaboratedTasks,
   } = useTasks();
+  const { activeFilterOptions, toggleActiveFilterOptions } = useFilter();
+  const { activeSortOptions, sortFilter, handleSortFilter, toggleActiveSortOptions } = useSortFilter("deadline");
+  const {
+    searchFilter,
+    searchCategory,
+    activeSearchOptions,
+    handleSearchFilter,
+    handleSearchCategory,
+    toggleActiveSearchOptions,
+  } = useSearchFilter("title");
 
   const toggleCanCreateTask = () => {
     setCanCreateTask((prev) => !prev);
@@ -96,20 +95,20 @@ const Tasks = () => {
   });
 
   React.useEffect(() => {
-    getMyTasks();
-  }, [getMyTasks]);
+    getMyTasks(sortFilter, searchFilter, searchCategory);
+  }, [getMyTasks, sortFilter, searchFilter, searchCategory]);
 
   React.useEffect(() => {
-    getCollaboratedTasks();
-  }, [getCollaboratedTasks]);
+    getCollaboratedTasks(sortFilter, searchFilter, searchCategory);
+  }, [getCollaboratedTasks, sortFilter, searchFilter, searchCategory]);
 
   React.useEffect(() => {
-    getMyTasksToday();
-  }, [getMyTasksToday]);
+    getMyTasksToday(sortFilter, searchFilter, searchCategory);
+  }, [getMyTasksToday, sortFilter, searchFilter, searchCategory]);
 
   React.useEffect(() => {
-    getCollaboratedTasksToday();
-  }, [getCollaboratedTasksToday]);
+    getCollaboratedTasksToday(sortFilter, searchFilter, searchCategory);
+  }, [getCollaboratedTasksToday, sortFilter, searchFilter, searchCategory]);
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">
@@ -121,8 +120,8 @@ const Tasks = () => {
           {canCreateTask ? (
             <CreateTask
               toggleCanCreateTask={toggleCanCreateTask}
-              getMyTasks={getMyTasks}
-              getCollaboratedTasks={getCollaboratedTasks}
+              getMyTasks={() => getMyTasks(sortFilter, searchFilter, searchCategory)}
+              getCollaboratedTasks={() => getCollaboratedTasks(sortFilter, searchFilter, searchCategory)}
             />
           ) : null}
 

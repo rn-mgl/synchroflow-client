@@ -14,6 +14,8 @@ import { BsChevronDown } from "react-icons/bs";
 import questionMark from "@/public//tasks/QuestionMark.svg";
 import Image from "next/image";
 import Link from "next/link";
+import useSortFilter from "@/components//hooks/useSortFilter";
+import useSearchFilter from "@/components//hooks/useSearchFilter";
 
 interface TasksCountStateProps {
   ongoingTasksCount: number;
@@ -35,6 +37,8 @@ const Hub = () => {
   const [weekTasksCount, setWeekTasksCount] = React.useState<Array<WeekTasksCountStateProps>>([]);
   const { recentAssociates, getRecentAssociates } = useAssociates();
   const { myTasksToday, myUpcomingTasks, getMyTasksToday, getMyUpcomingTasks } = useTasks();
+  const { sortFilter } = useSortFilter("deadline");
+  const { searchFilter, searchCategory } = useSearchFilter("title");
   const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
@@ -253,8 +257,8 @@ const Hub = () => {
   }, [getRecentAssociates]);
 
   React.useEffect(() => {
-    getMyTasksToday();
-  }, [getMyTasksToday]);
+    getMyTasksToday(sortFilter, searchFilter, searchCategory);
+  }, [getMyTasksToday, sortFilter, searchFilter, searchCategory]);
 
   React.useEffect(() => {
     getMyUpcomingTasks();
