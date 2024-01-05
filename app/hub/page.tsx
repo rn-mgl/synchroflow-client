@@ -253,8 +253,8 @@ const Hub = () => {
   }, [getTasksCount]);
 
   React.useEffect(() => {
-    getRecentAssociates();
-  }, [getRecentAssociates]);
+    getRecentAssociates(sortFilter, searchFilter, searchCategory);
+  }, [getRecentAssociates, sortFilter, searchFilter, searchCategory]);
 
   React.useEffect(() => {
     getMyTasksToday(sortFilter, searchFilter, searchCategory);
