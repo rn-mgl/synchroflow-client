@@ -1,4 +1,5 @@
 import React from "react";
+import isAlphanumeric from "validator/es/lib/isAlphanumeric";
 
 export default function useSearchFilter(initialSearchCategory: string) {
   const [searchFilter, setSearchFilter] = React.useState("");
@@ -6,7 +7,12 @@ export default function useSearchFilter(initialSearchCategory: string) {
   const [activeSearchOptions, setActiveSearchOptions] = React.useState(false);
 
   const handleSearchFilter = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     const { value } = e.target;
+
+    if (value !== "" && !isAlphanumeric(value)) {
+      return;
+    }
 
     setSearchFilter(value);
   }, []);
