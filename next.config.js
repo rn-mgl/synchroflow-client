@@ -12,8 +12,6 @@ const nextConfig = {
   images: { remotePatterns: [{ hostname: "res.cloudinary.com" }] },
 };
 
-console.log(process.env.NEXTAUTH_SECRET);
-
 const mp3Config = {
   webpack(config, options) {
     const { isServer } = options;
