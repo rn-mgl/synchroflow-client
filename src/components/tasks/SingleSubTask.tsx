@@ -32,6 +32,7 @@ interface SubTaskDataStateProps {
 
 interface SingleSubTaskProps {
   selectedSubTask: string;
+  isTaskCreator: boolean;
   handleSelectedSubTask: (subTaskUUID: string) => void;
   getCreatedSubTasks: () => Promise<void>;
 }
@@ -80,7 +81,6 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
   };
 
   const assignSubTask = async (collaboratorUUID: string) => {
-    console.log(collaboratorUUID);
     try {
       const { data } = await axios.post(
         `${url}/sub_task_collaborators`,
@@ -222,26 +222,28 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
           </button>
         </div>
 
-        <div className="w-full h-fit flex flex-col gap-8 items-center justify-start overflow-y-auto cstm-scrollbar p-4">
-          <div className="flex flex-row w-full justify-between">
-            <button
-              onClick={() => handleActivePage("details")}
-              className={`p-2 text-sm transition-all t:w-28 ${
-                activePage === "details" && "border-b-2 border-primary-500 text-primary-500"
-              }`}
-            >
-              Details
-            </button>
+        <div className="w-full h-full flex flex-col gap-8 items-center justify-start overflow-y-auto cstm-scrollbar p-4">
+          {props.isTaskCreator ? (
+            <div className="flex flex-row w-full justify-between">
+              <button
+                onClick={() => handleActivePage("details")}
+                className={`p-2 text-sm transition-all t:w-28 ${
+                  activePage === "details" && "border-b-2 border-primary-500 text-primary-500"
+                }`}
+              >
+                Details
+              </button>
 
-            <button
-              onClick={() => handleActivePage("associates")}
-              className={`p-2 text-sm transition-all t:w-28 ${
-                activePage === "associates" && "border-b-2 border-primary-500 text-primary-500"
-              }`}
-            >
-              Associates
-            </button>
-          </div>
+              <button
+                onClick={() => handleActivePage("associates")}
+                className={`p-2 text-sm transition-all t:w-28 ${
+                  activePage === "associates" && "border-b-2 border-primary-500 text-primary-500"
+                }`}
+              >
+                Associates
+              </button>
+            </div>
+          ) : null}
 
           {activePage === "details" ? (
             <SubTaskData
@@ -254,6 +256,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
               sub_task_start_date={subTaskData.sub_task_start_date}
               sub_task_end_date={subTaskData.sub_task_end_date}
               sub_task_priority={subTaskData.sub_task_priority}
+              isTaskCreator={props.isTaskCreator}
               toggleCanDeleteSubTask={toggleCanDeleteSubTask}
               toggleCanEditSubTask={toggleCanEditSubTask}
             />

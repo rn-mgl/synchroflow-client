@@ -30,12 +30,7 @@ interface SingleTaskDataStateProps {
   main_task_uuid: string;
 }
 
-interface AssignedSubTasksStateProps {
-  sub_task_title: string;
-  sub_task_subtitle: string;
-}
-
-interface CreatedSubTasksStateProps {
+interface SubTasksStateProps {
   sub_task_title: string;
   sub_task_subtitle: string;
   sub_task_uuid: string;
@@ -61,8 +56,8 @@ const SingleTask = () => {
     main_task_uuid: "",
   });
   const [collaborators, setCollaborators] = React.useState<Array<CollaboratorsStateProps>>([]);
-  const [createdSubTasks, setCreatedSubTasks] = React.useState<Array<CreatedSubTasksStateProps>>([]);
-  const [assignedSubTasks, setAssignedSubTasks] = React.useState<Array<AssignedSubTasksStateProps>>([]);
+  const [createdSubTasks, setCreatedSubTasks] = React.useState<Array<SubTasksStateProps>>([]);
+  const [assignedSubTasks, setAssignedSubTasks] = React.useState<Array<SubTasksStateProps>>([]);
   const [selectedSubTask, setSelectedSubTask] = React.useState("");
   const [canInvite, setCanInvite] = React.useState(false);
   const [canCreateSubTask, setCanCreateSubTask] = React.useState(false);
@@ -150,11 +145,11 @@ const SingleTask = () => {
   }, [url, user?.token, params?.task_uuid]);
 
   const getAssignedSubTasks = React.useCallback(async () => {
-    if (user?.token) {
+    if (!isTaskCreator && user?.token) {
       try {
         const { data } = await axios.get(`${url}/sub_tasks`, {
           headers: { Authorization: user?.token },
-          params: { type: "collaborated" },
+          params: { type: "collaborated", mainTaskUUID: params?.task_uuid },
         });
         if (data) {
           setAssignedSubTasks(data);
@@ -163,7 +158,7 @@ const SingleTask = () => {
         console.log(error);
       }
     }
-  }, [url, user?.token]);
+  }, [url, user?.token, isTaskCreator, params?.task_uuid]);
 
   const mappedCollaborators = collaborators.map((collaborator, index) => {
     return (
@@ -206,6 +201,7 @@ const SingleTask = () => {
 
         {selectedSubTask ? (
           <SingleSubTask
+            isTaskCreator={isTaskCreator}
             selectedSubTask={selectedSubTask}
             handleSelectedSubTask={handleSelectedSubTask}
             getCreatedSubTasks={getCreatedSubTasks}
@@ -277,7 +273,11 @@ const SingleTask = () => {
                     createdSubTasks={createdSubTasks}
                   />
                 ) : (
-                  <AsssignedSubTasks getAssignedSubTasks={getAssignedSubTasks} assignedSubTasks={assignedSubTasks} />
+                  <AsssignedSubTasks
+                    getAssignedSubTasks={getAssignedSubTasks}
+                    handleSelectedSubTask={handleSelectedSubTask}
+                    assignedSubTasks={assignedSubTasks}
+                  />
                 )}
               </div>
 

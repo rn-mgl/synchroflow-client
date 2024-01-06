@@ -1,27 +1,33 @@
 "use client";
 import React from "react";
-import { AiFillCaretRight } from "react-icons/ai";
 import { BsFillDiamondFill } from "react-icons/bs";
 
-interface AssignedSubTasksStateProps {
+interface SubTasksStateProps {
   sub_task_title: string;
   sub_task_subtitle: string;
+  sub_task_uuid: string;
 }
 
 interface AssignedSubTasksProps {
   getAssignedSubTasks: () => Promise<void>;
-  assignedSubTasks: Array<AssignedSubTasksStateProps>;
+  handleSelectedSubTask: (subTaskUUID: string) => void;
+  assignedSubTasks: Array<SubTasksStateProps>;
 }
 
 const AssignedSubTasks: React.FC<AssignedSubTasksProps> = ({ getAssignedSubTasks, ...props }) => {
   const mappedAssignedSubtasks = props.assignedSubTasks.map((subTask, index) => {
     return (
-      <div className="flex flex-row gap-2 items-center justify-start w-full" key={index}>
+      <button
+        onClick={() => props.handleSelectedSubTask(subTask.sub_task_uuid)}
+        className="flex flex-row gap-2 items-center justify-start 
+                w-full p-2 bg-primary-500 text-white rounded-md"
+        key={index}
+      >
         <div>
-          <BsFillDiamondFill className="text-xs text-primary-500" />
+          <BsFillDiamondFill className="text-xs" />
         </div>
         <p>{subTask.sub_task_title}</p>
-      </div>
+      </button>
     );
   });
 
@@ -31,8 +37,6 @@ const AssignedSubTasks: React.FC<AssignedSubTasksProps> = ({ getAssignedSubTasks
 
   return (
     <div className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500">
-      <p>Details</p>
-
       {mappedAssignedSubtasks}
     </div>
   );
