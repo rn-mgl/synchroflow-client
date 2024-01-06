@@ -80,6 +80,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
   };
 
   const assignSubTask = async (collaboratorUUID: string) => {
+    console.log(collaboratorUUID);
     try {
       const { data } = await axios.post(
         `${url}/sub_task_collaborators`,
@@ -87,7 +88,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
         { headers: { Authorization: user?.token } }
       );
       if (data) {
-        await getAllSubTaskCollaborators();
+        await getAllMainTaskCollaborators();
       }
     } catch (error) {
       console.log(error);
@@ -100,14 +101,14 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
         headers: { Authorization: user?.token },
       });
       if (data) {
-        await getAllSubTaskCollaborators();
+        await getAllMainTaskCollaborators();
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const getAllSubTaskCollaborators = React.useCallback(async () => {
+  const getAllMainTaskCollaborators = React.useCallback(async () => {
     if (user?.token) {
       try {
         const { data } = await axios.get(`${url}/sub_task_collaborators`, {
@@ -176,8 +177,8 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
   });
 
   React.useEffect(() => {
-    getAllSubTaskCollaborators();
-  }, [getAllSubTaskCollaborators]);
+    getAllMainTaskCollaborators();
+  }, [getAllMainTaskCollaborators]);
 
   React.useEffect(() => {
     getSubtask();

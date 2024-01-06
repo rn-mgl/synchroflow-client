@@ -10,13 +10,24 @@ interface InvitesStateProps {
   email: string;
 }
 
-interface TaskInvitesStateProps extends InvitesStateProps {
+interface TaskInvitesStateProps {
+  from_image: string;
+  from_name: string;
+  from_surname: string;
+  from_email: string;
+  from_user: string;
+  from_user_uuid: string;
+  invited_image: string;
+  invited_name: string;
+  invited_surname: string;
+  invited_email: string;
+  invited_user: string;
+  invited_user_uuid: string;
   main_task_banner: string;
   main_task_title: string;
   main_task_invite_uuid: string;
   main_task_priority: "critical" | "important" | "none";
   main_task_uuid: string;
-  user_uuid: string;
 }
 
 interface AssociateInvitesStateProps extends InvitesStateProps {
@@ -27,30 +38,44 @@ interface AssociateInvitesStateProps extends InvitesStateProps {
 export default function useInvites() {
   const [sentTaskInvites, setSentTaskInvites] = React.useState<Array<TaskInvitesStateProps>>([
     {
-      image: "",
-      name: "",
-      surname: "",
-      email: "",
+      from_image: "",
+      from_name: "",
+      from_surname: "",
+      from_email: "",
+      from_user: "",
+      from_user_uuid: "",
+      invited_image: "",
+      invited_name: "",
+      invited_surname: "",
+      invited_email: "",
+      invited_user: "",
+      invited_user_uuid: "",
       main_task_invite_uuid: "",
       main_task_title: "",
       main_task_banner: "",
       main_task_priority: "none",
       main_task_uuid: "",
-      user_uuid: "",
     },
   ]);
   const [receivedTaskInvites, setReceivedTaskInvites] = React.useState<Array<TaskInvitesStateProps>>([
     {
-      image: "",
-      name: "",
-      surname: "",
-      email: "",
+      from_image: "",
+      from_name: "",
+      from_surname: "",
+      from_email: "",
+      from_user: "",
+      from_user_uuid: "",
+      invited_image: "",
+      invited_name: "",
+      invited_surname: "",
+      invited_email: "",
+      invited_user: "",
+      invited_user_uuid: "",
       main_task_invite_uuid: "",
       main_task_title: "",
       main_task_banner: "",
       main_task_priority: "none",
       main_task_uuid: "",
-      user_uuid: "",
     },
   ]);
   const [sentAssociateInvites, setSentAssociateInvites] = React.useState<Array<AssociateInvitesStateProps>>([

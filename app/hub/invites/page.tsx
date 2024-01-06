@@ -84,12 +84,16 @@ const Invites = () => {
   };
 
   const mappedSentTaskInvites = sentTaskInvites.map((taskInvite, index) => {
+    const targetIdentity = taskInvite.from_user === user?.id ? "invited" : "from"; // check if im the sender and use the other user's data
+    const name = taskInvite[`${targetIdentity}_name`];
+    const surname = taskInvite[`${targetIdentity}_surname`];
+    const email = taskInvite[`${targetIdentity}_email`];
     return (
       <SentTaskInvitesCard
         key={index}
-        name={taskInvite.name}
-        surname={taskInvite.surname}
-        email={taskInvite.email}
+        name={name}
+        surname={surname}
+        email={email}
         main_task_invite_uuid={taskInvite.main_task_invite_uuid}
         main_task_title={taskInvite.main_task_title}
         main_task_banner={taskInvite.main_task_banner}
@@ -100,19 +104,24 @@ const Invites = () => {
   });
 
   const mappedReceivedTaskInvites = receivedTaskInvites.map((taskInvite, index) => {
+    const targetIdentity = taskInvite.from_user === user?.id ? "invited" : "from"; // check if im the invited and use my data
+    const name = taskInvite[`${targetIdentity}_name`];
+    const surname = taskInvite[`${targetIdentity}_surname`];
+    const email = taskInvite[`${targetIdentity}_email`];
+    const userUUID = taskInvite["invited_user_uuid"];
     return (
       <ReceivedTaskInvitesCard
         key={index}
-        name={taskInvite.name}
-        surname={taskInvite.surname}
-        email={taskInvite.email}
+        name={name}
+        surname={surname}
+        email={email}
         main_task_invite_uuid={taskInvite.main_task_invite_uuid}
         main_task_title={taskInvite.main_task_title}
         main_task_banner={taskInvite.main_task_banner}
         main_task_priority={taskInvite.main_task_priority}
         declineReceivedTaskInvites={() => removeSentTaskInvites(taskInvite.main_task_invite_uuid)}
         acceptReceivedTaskInvites={() =>
-          acceptReceivedTaskInvites(taskInvite.main_task_uuid, taskInvite.user_uuid, taskInvite.main_task_invite_uuid)
+          acceptReceivedTaskInvites(taskInvite.main_task_uuid, userUUID, taskInvite.main_task_invite_uuid)
         }
       />
     );

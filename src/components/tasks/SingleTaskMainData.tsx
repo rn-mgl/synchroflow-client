@@ -94,7 +94,7 @@ const SingleTaskMainData: React.FC<SingleTaskDataProps> = (props) => {
             <div>
               <AiOutlineUser className="text-lg text-secondary-400" />
             </div>
-            {props.collaboratorCount} {props.collaboratorCount > 1 ? "Associates" : "Associate"}
+            {props.collaboratorCount} {props.collaboratorCount > 1 ? "Collaborators" : "Collaborator"}
           </div>
           {props.isTaskCreator ? (
             <>
