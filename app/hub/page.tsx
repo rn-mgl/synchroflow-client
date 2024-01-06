@@ -5,17 +5,16 @@ import React from "react";
 import { useGlobalContext } from "@/base/context";
 import AssociateCards from "@/components//associates/AssociateCards";
 import useAssociates from "@/components//hooks/useAssociates";
+import useSearchFilter from "@/components//hooks/useSearchFilter";
 import useTasks from "@/components//hooks/useTasks";
+import questionMark from "@/public//tasks/QuestionMark.svg";
 import axios from "axios";
 import { ArcElement, Chart } from "chart.js/auto";
+import Image from "next/image";
+import Link from "next/link";
 import Calendar from "react-calendar";
 import { Line, Pie } from "react-chartjs-2";
 import { BsChevronDown } from "react-icons/bs";
-import questionMark from "@/public//tasks/QuestionMark.svg";
-import Image from "next/image";
-import Link from "next/link";
-import useSortFilter from "@/components//hooks/useSortFilter";
-import useSearchFilter from "@/components//hooks/useSearchFilter";
 
 interface TasksCountStateProps {
   ongoingTasksCount: number;
@@ -37,8 +36,7 @@ const Hub = () => {
   const [weekTasksCount, setWeekTasksCount] = React.useState<Array<WeekTasksCountStateProps>>([]);
   const { recentAssociates, getRecentAssociates } = useAssociates();
   const { myTasksToday, myUpcomingTasks, getMyTasksToday, getMyUpcomingTasks } = useTasks();
-  const { sortFilter } = useSortFilter("deadline");
-  const { searchFilter, searchCategory } = useSearchFilter("title");
+  const { searchFilter } = useSearchFilter("title");
   const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
@@ -253,12 +251,12 @@ const Hub = () => {
   }, [getTasksCount]);
 
   React.useEffect(() => {
-    getRecentAssociates(sortFilter, searchFilter, searchCategory);
-  }, [getRecentAssociates, sortFilter, searchFilter, searchCategory]);
+    getRecentAssociates("name", searchFilter, "name");
+  }, [getRecentAssociates, searchFilter]);
 
   React.useEffect(() => {
-    getMyTasksToday(sortFilter, searchFilter, searchCategory);
-  }, [getMyTasksToday, sortFilter, searchFilter, searchCategory]);
+    getMyTasksToday("title", searchFilter, "title");
+  }, [getMyTasksToday, searchFilter]);
 
   React.useEffect(() => {
     getMyUpcomingTasks();
