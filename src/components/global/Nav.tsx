@@ -31,6 +31,9 @@ interface UserData {
 }
 
 const Nav = ({ children }: { children: React.ReactNode }) => {
+  const [notificationIsVisible, setNotificationIsVisible] = React.useState(false);
+  const [navIsVisible, setNavIsVisible] = React.useState(false);
+  const [notifications, setNotifications] = React.useState([]);
   const [userData, setUserData] = React.useState<UserData>({
     email: "",
     image: "",
@@ -40,7 +43,6 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
     user_uuid: "",
   });
 
-  const [isVisible, setIsVisible] = React.useState(false);
   const { message, handleMessages } = useNotification();
   const { url } = useGlobalContext();
   const { data: session } = useSession();
@@ -48,8 +50,8 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 
   const user = session?.user;
 
-  const toggleIsVisible = (using: "button" | "link") => {
-    setIsVisible((prev) => {
+  const toggleNavIsVisible = (using: "button" | "link") => {
+    setNavIsVisible((prev) => {
       if (using === "button") {
         return !prev;
       } else if (using === "link") {
@@ -65,6 +67,10 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
+  const toggleNotificationIsVisible = () => {
+    setNotificationIsVisible((prev) => !prev);
+  };
+
   const logOut = async () => {
     try {
       await signOut({ callbackUrl: "/", redirect: true });
@@ -75,23 +81,40 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
   };
 
   const getUser = React.useCallback(async () => {
-    try {
-      const { data } = await axios.get(`${url}/users/${user?.uuid}`, { headers: { Authorization: user?.token } });
+    if (user?.token) {
+      try {
+        const { data } = await axios.get(`${url}/users/${user?.uuid}`, { headers: { Authorization: user?.token } });
 
-      if (data) {
-        setUserData(data);
+        if (data) {
+          setUserData(data);
+        }
+      } catch (error: any) {
+        console.log(error);
+        handleMessages(true, error?.response?.data, "error");
       }
-    } catch (error: any) {
-      console.log(error);
-      handleMessages(true, error?.response?.data, "error");
     }
   }, [url, user?.token, user?.uuid, handleMessages]);
 
-  React.useEffect(() => {
-    if (user?.token) {
-      getUser();
+  const getNotifications = React.useCallback(async () => {
+    if (notificationIsVisible && user?.token) {
+      try {
+        const { data } = await axios.get(`${url}/notifications`, { headers: { Authorization: user?.token } });
+        if (data) {
+          setNotifications(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }, [user?.token, getUser]);
+  }, [url, user?.token, notificationIsVisible]);
+
+  React.useEffect(() => {
+    getUser();
+  }, [getUser]);
+
+  React.useEffect(() => {
+    getNotifications();
+  }, [getNotifications]);
 
   return (
     <div className="flex flex-row h-full">
@@ -101,20 +124,20 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
         className={`fixed  top-0 left-0 w-full h-full z-20 l-s:z-0 bg-white px-4 py-7 flex 
                     flex-col gap-8 t:w-6/12 l-s:border-r-[1px] l-s:static animate-fadeIn transition-all 
                     duration-75 overflow-y-auto cstm-scrollbar overflow-x-clip ${
-                      isVisible ? "flex l-s:w-72 l-s:min-w-[18rem]" : "hidden l-s:flex l-s:w-[6rem] l-s:min-w-[6rem]"
+                      navIsVisible ? "flex l-s:w-72 l-s:min-w-[18rem]" : "hidden l-s:flex l-s:w-[6rem] l-s:min-w-[6rem]"
                     } `}
       >
         <div className="flex flex-row gap-2 items-center justify-center relative px-2.5">
           <button
-            onClick={() => toggleIsVisible("button")}
-            className={`p-2 border-[1px] rounded-full border-inherit ${isVisible ? "mr-auto" : "l-s:mx-auto"}`}
+            onClick={() => toggleNavIsVisible("button")}
+            className={`p-2 border-[1px] rounded-full border-inherit ${navIsVisible ? "mr-auto" : "l-s:mx-auto"}`}
           >
             <AiOutlineMenu className="text-lg text-secondary-300" />
           </button>
 
           <p
             className={`font-black text-lg text-primary-500 mr-auto absolute left-2/4 -translate-x-2/4
-                        ${isVisible ? "l-s:flex" : "l-s:hidden"}`}
+                        ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}
           >
             SynchroFlow
           </p>
@@ -122,7 +145,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 
         <div className="w-full flex flex-col gap-4">
           <Link
-            onClick={() => toggleIsVisible("link")}
+            onClick={() => toggleNavIsVisible("link")}
             href="/hub"
             className={`flex flex-row items-center justify-center gap-4 
                       w-full p-4 hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
@@ -134,11 +157,11 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             <div>
               <AiOutlineBuild className="text-2xl" />
             </div>
-            <p className={`font-medium mr-auto ${isVisible ? "l-s:flex" : "l-s:hidden"}`}>Dashboard</p>
+            <p className={`font-medium mr-auto ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Dashboard</p>
           </Link>
 
           <Link
-            onClick={() => toggleIsVisible("link")}
+            onClick={() => toggleNavIsVisible("link")}
             href="/hub/tasks"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
                       hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
@@ -150,11 +173,11 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             <div>
               <AiOutlineSchedule className="text-2xl" />
             </div>
-            <p className={`font-medium mr-auto ${isVisible ? "l-s:flex" : "l-s:hidden"}`}>Tasks</p>
+            <p className={`font-medium mr-auto ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Tasks</p>
           </Link>
 
           <Link
-            onClick={() => toggleIsVisible("link")}
+            onClick={() => toggleNavIsVisible("link")}
             href="/hub/associates"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
                       hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
@@ -166,11 +189,11 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             <div>
               <AiOutlineTeam className="text-2xl" />
             </div>
-            <p className={`font-medium mr-auto ${isVisible ? "l-s:flex" : "l-s:hidden"}`}>Associates</p>
+            <p className={`font-medium mr-auto ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Associates</p>
           </Link>
 
           <Link
-            onClick={() => toggleIsVisible("link")}
+            onClick={() => toggleNavIsVisible("link")}
             href="/hub/messages"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
                       hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
@@ -182,11 +205,11 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             <div>
               <AiOutlineSend className="text-2xl" />
             </div>
-            <p className={`font-medium mr-auto ${isVisible ? "l-s:flex" : "l-s:hidden"}`}>Messages</p>
+            <p className={`font-medium mr-auto ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Messages</p>
           </Link>
 
           <Link
-            onClick={() => toggleIsVisible("link")}
+            onClick={() => toggleNavIsVisible("link")}
             href="/hub/invites"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
                       hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
@@ -198,11 +221,11 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             <div>
               <AiOutlineMail className="text-2xl" />
             </div>
-            <p className={`font-medium mr-auto ${isVisible ? "l-s:flex" : "l-s:hidden"}`}>Invites</p>
+            <p className={`font-medium mr-auto ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Invites</p>
           </Link>
 
           <Link
-            onClick={() => toggleIsVisible("link")}
+            onClick={() => toggleNavIsVisible("link")}
             href="/hub/settings"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
                       hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
@@ -214,7 +237,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             <div>
               <AiOutlineSetting className="text-2xl" />
             </div>
-            <p className={`font-medium mr-auto ${isVisible ? "l-s:flex" : "l-s:hidden"}`}>Settings</p>
+            <p className={`font-medium mr-auto ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Settings</p>
           </Link>
         </div>
 
@@ -226,20 +249,20 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
           <div>
             <AiOutlineLogout className="text-2xl rotate-180" />
           </div>
-          <p className={`font-medium mr-auto ${isVisible ? "l-s:flex" : "l-s:hidden"}`}>Log Out</p>
+          <p className={`font-medium mr-auto ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Log Out</p>
         </button>
       </div>
 
       <div
         className={`top-0 right-0 w-6/12 h-full animate-fadeIn
                 t:bg-secondary-900 t:bg-opacity-20 l-s:hidden z-20
-                ${isVisible ? "fixed" : "hidden"}`}
+                ${navIsVisible ? "fixed" : "hidden"}`}
       />
 
       <div className="flex flex-col flex-1 w-full relative z-0">
         <div
           className="w-full p-7 border-b-[1px] border-b-secondary-100  
-                  flex flex-row items-center justify-center gap-4 bg-white l-s:bg-transparent transition-all
+                  flex flex-row items-center justify-center gap-4 bg-white transition-all
                   flex-1"
         >
           <div className="flex-col hidden l-s:flex ">
@@ -250,23 +273,43 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
           </div>
 
           <button
-            onClick={() => toggleIsVisible("button")}
+            onClick={() => toggleNavIsVisible("button")}
             className="p-2 border-[1px] rounded-full border-inherit mr-auto l-s:hidden"
           >
             <AiOutlineMenu className="text-lg text-secondary-300 " />
           </button>
 
-          <button className="p-2 border-[1px] rounded-full border-inherit relative cursor-pointer l-s:ml-auto">
+          <button
+            onClick={toggleNotificationIsVisible}
+            className="p-2 border-[1px] rounded-full border-inherit relative cursor-pointer l-s:ml-auto"
+          >
             <AiOutlineBell className="text-lg text-secondary-300" />
             <div className="w-2 h-2 bg-red-500 absolute rounded-full top-2 right-2" />
           </button>
 
-          <button
+          <Link
+            href={`/hub/profile/${userData?.user_uuid}`}
             style={{ backgroundImage: userData?.image ? `url(${userData?.image})` : undefined }}
-            className="w-9 h-9 min-w-[2.25rem] min-h-[2.25rem] bg-secondary-200 
-                rounded-full bg-center bg-cover"
+            className={`w-9 h-9 min-w-[2.25rem] min-h-[2.25rem] bg-secondary-200 
+                      rounded-full bg-center bg-cover transition-all ${
+                        path?.includes("profile") && "border-4 border-primary-500"
+                      }`}
           />
         </div>
+
+        {notificationIsVisible ? (
+          <div
+            className="w-11/12 h-96 max-h-[24rem] bg-neutral-100 shadow-xl absolute top-24 left-2/4 -translate-x-2/4 z-20 
+                      overflow-y-hidden animate-fadeIn rounded-lg flex flex-col items-center justify-start p-4 gap-2
+                       t:max-w-screen-m-s t:left-auto t:-translate-x-0 t:right-16"
+          >
+            <p className="w-full text-lg text-left font-semibold">Notifications</p>
+
+            <div className="w-full h-[1px] bg-secondary-300" />
+
+            <div className="flex flex-col items-center justify-start w-full h-full gap-4 overflow-y-auto cstm-scrollbar-2"></div>
+          </div>
+        ) : null}
 
         <div
           className="w-full h-screen flex flex-col overflow-y-auto justify-start 

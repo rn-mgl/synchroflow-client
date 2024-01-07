@@ -273,7 +273,7 @@ const Hub = () => {
                     l-s:grid-cols-2 l-s:grid-rows-2 l-l:grid-cols-3 l-l:grid-rows-3"
         >
           <div
-            className="w-full rounded-lg bg-secondary-500 flex flex-col
+            className="w-full rounded-lg bg-secondary-500 flex flex-col h-fit
                     p-4 text-white gap-2 l-l:row-span-1 l-l:order-1"
           >
             <div className="flex flex-col gap-2 items-center justify-center">
@@ -283,13 +283,13 @@ const Hub = () => {
               </p>
             </div>
 
-            <div className="h-48 flex flex-col items-center justify-center">
+            <div className="h-44 flex flex-col items-center justify-center">
               <Pie data={pieData} updateMode="active" />
             </div>
           </div>
 
           <div
-            className="w-full rounded-lg bg-neutral-150 flex flex-col 
+            className="w-full rounded-lg bg-neutral-150 flex flex-col  h-fit
                     p-4 text-secondary-500 gap-2 l-l:order-2"
           >
             <div className="flex flex-row gap-2 items-center justify-between text-xs font-semibold">
@@ -320,9 +320,9 @@ const Hub = () => {
               <p className="font-semibold">Recent Associates</p>
             </div>
 
-            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
+            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-start justify-start">
               <div
-                className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
+                className="absolute w-full h-full flex flex-row gap-4 items-start justify-start 
                   transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar-2"
               >
                 {mappedRecentAssociateCards}
@@ -343,7 +343,7 @@ const Hub = () => {
             </div>
           </div>
 
-          <div className="h-full l-l:order-3">
+          <div className="h-fit l-l:order-3">
             <Calendar allowPartialRange={false} />
           </div>
 
@@ -359,34 +359,7 @@ const Hub = () => {
               className="w-full h-full flex flex-row items-center justify-start gap-4 
                          overflow-x-auto cstm-scrollbar-2"
             >
-              {myTasksToday.length ? (
-                mappedTasksToday
-              ) : (
-                <div
-                  className="flex flex-col gap-4 items-start justify-start p-4 
-                        bg-white w-full rounded-lg h-full min-w-full"
-                >
-                  <div className="flex flex-row w-full">
-                    <p className="text-sm font-semibold">Task Today</p>
-                  </div>
-
-                  <div
-                    className="bg-neutral-150 rounded-lg w-full h-full l-l:h-3/6 flex flex-col 
-                            items-center justify-center p-4"
-                  >
-                    <Image
-                      src={questionMark}
-                      alt="none"
-                      draggable={false}
-                      width={500}
-                      height={500}
-                      className="w-full h-full animate-float drop-shadow-md"
-                    />
-                  </div>
-
-                  <p className="font-semibold">Task Title</p>
-                </div>
-              )}
+              {myTasksToday.length ? mappedTasksToday : null}
             </div>
           </div>
         </div>
