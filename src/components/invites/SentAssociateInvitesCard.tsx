@@ -12,12 +12,21 @@ interface SendAssociateInvitesProps {
 const SentAssociateInvitesCard: React.FC<SendAssociateInvitesProps> = (props) => {
   return (
     <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-full select-none">
-      <div className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md">
+      <div
+        className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md
+                    transition-all"
+      >
         <div
           className="w-full h-72 bg-top bg-contain bg-no-repeat bg-primary-100 rounded-md 
-                overflow-hidden flex flex-col items-center justify-center"
+                overflow-hidden flex flex-col items-center justify-center group"
         >
-          <Image src={props.image} alt="profile" width={120} height={120} />
+          <Image
+            src={props.image}
+            alt="profile"
+            width={120}
+            height={120}
+            className="group-hover:scale-110 transition-all"
+          />
         </div>
 
         <div className="w-full flex flex-row justify-between gap-4">

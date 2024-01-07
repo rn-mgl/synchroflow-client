@@ -6,6 +6,7 @@ import { useGlobalContext } from "@/base/context";
 import { useSession } from "next-auth/react";
 import { TbMoodX } from "react-icons/tb";
 import axios from "axios";
+import Image from "next/image";
 
 interface TaskCardProps {
   title: string;
@@ -73,14 +74,26 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
   }, [getCollaborators]);
 
   return (
-    <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-full select-none">
+    <Link
+      href={`/hub/tasks/${props.taskUUID}`}
+      className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-full select-none"
+    >
       <div className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md">
-        <Link
-          href={`/hub/tasks/${props.taskUUID}`}
-          style={{ backgroundImage: `url(${props.banner})` }}
-          className="bg-primary-100 w-full h-full rounded-2xl bg-center bg-cover
-                      hover:shadow-[0rem_0.2rem_0.4rem_#14152233_inset] transition-all"
-        />
+        <div
+          className="bg-primary-100 w-full h-36 rounded-md bg-center bg-cover
+                      hover:shadow-[0rem_0.2rem_0.4rem_#14152233_inset] bg-gradient-to-br 
+                      from-primary-100 to-primary-400 overflow-hidden group"
+        >
+          {props.banner && (
+            <Image
+              src={props.banner}
+              alt="banner"
+              className="w-full h-full group-hover:scale-110 transition-all"
+              width={500}
+              height={500}
+            />
+          )}
+        </div>
 
         <div className="w-full flex flex-row justify-between">
           <p className="font-bold">{props.title}</p>
@@ -113,7 +126,7 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 
