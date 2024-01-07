@@ -77,7 +77,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
 
           <button
             className={`hidden group-hover:flex animate-fadeIn absolute top-2/4 -translate-y-2/4 p-2
-                    hover:bg-secondary-100 hover:rounded-lg transition-all
+                    hover:bg-secondary-100 hover:rounded-full transition-all
                     ${isSender ? "left-0 -translate-x-8" : "right-0 translate-x-8"}`}
           >
             <AiOutlineMore className="text-secondary-500" />
@@ -118,7 +118,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
                 <button
                   onClick={props.toggleCanSeeGroupMembers}
                   className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
-                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-full"
                 >
                   <AiOutlineTeam />
                 </button>
@@ -128,21 +128,21 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
                     <button
                       onClick={props.toggleCanEditGroupMessage}
                       className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
-                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-full"
                     >
                       <AiOutlineEdit />
                     </button>
                     <button
                       onClick={props.toggleCanAddGroupMembers}
                       className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
-                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-full"
                     >
                       <AiOutlineUserAdd />
                     </button>
                     <button
                       onClick={props.toggleCanDeleteGroupMessage}
                       className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
-                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-md"
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-full"
                     >
                       <AiOutlineDelete />
                     </button>
@@ -154,14 +154,14 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
             {props.activeToolTip ? (
               <button
                 onClick={props.toggleActiveToolTip}
-                className="p-2 rounded-lg hover:bg-secondary-100 animate-fadeIn"
+                className="p-2 rounded-full hover:bg-secondary-100 animate-fadeIn"
               >
                 <AiOutlineClose />
               </button>
             ) : (
               <button
                 onClick={props.toggleActiveToolTip}
-                className="p-2 rounded-lg hover:bg-secondary-100 animate-fadeIn"
+                className="p-2 rounded-full hover:bg-secondary-100 animate-fadeIn"
               >
                 <AiOutlineEllipsis />
               </button>

@@ -50,8 +50,7 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
     .slice(0, collaborators.length < 5 ? collaborators.length : 5)
     .map((collaborator, index) => {
       return (
-        <Link
-          href={`/hub/associates/${collaborator.user_uuid}`}
+        <div
           style={{ right: `${index}rem`, backgroundImage: `url(${collaborator.image})` }}
           key={index}
           className="w-6 h-6 rounded-full bg-secondary-300 
@@ -65,7 +64,7 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
               {collaborator.name} {collaborator.surname}
             </p>
           </div>
-        </Link>
+        </div>
       );
     });
 

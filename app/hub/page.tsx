@@ -269,7 +269,7 @@ const Hub = () => {
                   items-center w-full"
       >
         <div
-          className="grid grid-cols-1 grid-rows-6 t:grid-cols-2 t:grid-rows-2 gap-4  p-4 t:p-10 
+          className="grid grid-cols-1 grid-rows-6 t:grid-cols-2 t:grid-rows-2 gap-4 p-4 t:p-10 
                     l-s:grid-cols-2 l-s:grid-rows-2 l-l:grid-cols-3 l-l:grid-rows-3"
         >
           <div
@@ -312,7 +312,10 @@ const Hub = () => {
             </div>
           </div>
 
-          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 l-l:order-5 l-l:row-start-2 l-l:col-span-2">
+          <div
+            className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 l-l:order-5 
+                      l-l:row-start-2 l-l:col-span-2"
+          >
             <div className="flex flex-row justify-between w-full">
               <p className="font-semibold">Recent Associates</p>
             </div>

@@ -46,23 +46,23 @@ const SingleTaskMainData: React.FC<SingleTaskDataProps> = (props) => {
               <button
                 onClick={props.toggleActiveToolTip}
                 className="hover:bg-secondary-100 p-2 
-                      rounded-lg transition-all"
+                      rounded-full transition-all"
               >
                 {props.activeToolTip ? <AiOutlineClose /> : <AiOutlineEllipsis className="text-lg" />}
               </button>
 
               {props.activeToolTip ? (
                 <div
-                  className="w-40 absolute animate-fadeIn flex
+                  className="w-52 absolute animate-fadeIn flex
                     flex-col items-start justify-center gap-2
-                    -translate-x-[10rem] bg-secondary-200 p-2 rounded-md
-                    text-sm transition-all delay-200"
+                    -translate-x-full bg-secondary-300 p-2 rounded-lg
+                    transition-all delay-200 font-medium shadow-lg text-white"
                 >
                   <button
                     onClick={props.toggleCanEditTask}
-                    className="flex flex-row w-full items-center justify-between 
-                      hover:bg-secondary-300 hover:text-white p-1 rounded-sm
-                      transition-all"
+                    className="flex flex-row w-full items-center gap-2
+                    hover:bg-secondary-400 p-2 rounded-md
+                    transition-all"
                   >
                     <AiOutlineEdit />
                     Edit
@@ -72,8 +72,8 @@ const SingleTaskMainData: React.FC<SingleTaskDataProps> = (props) => {
 
                   <button
                     onClick={props.toggleCanDeleteTask}
-                    className="flex flex-row w-full items-center justify-between 
-                      hover:bg-secondary-300 hover:text-white p-1 rounded-sm
+                    className="flex flex-row w-full items-center gap-2
+                      hover:bg-secondary-400 p-2 rounded-md
                       transition-all"
                   >
                     <AiOutlineDelete />
