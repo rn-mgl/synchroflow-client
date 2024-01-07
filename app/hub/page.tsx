@@ -7,19 +7,20 @@ import AssociateCards from "@/components//associates/AssociateCards";
 import useAssociates from "@/components//hooks/useAssociates";
 import useSearchFilter from "@/components//hooks/useSearchFilter";
 import useTasks from "@/components//hooks/useTasks";
-import questionMark from "@/public//tasks/QuestionMark.svg";
 import axios from "axios";
 import { ArcElement, Chart } from "chart.js/auto";
-import Image from "next/image";
 import Link from "next/link";
 import Calendar from "react-calendar";
 import { Line, Pie } from "react-chartjs-2";
 import { BsChevronDown } from "react-icons/bs";
 
 interface TasksCountStateProps {
-  ongoingTasksCount: number;
-  doneTasksCount: number;
-  lateTasksCount: number;
+  ongoingMainTasksCount: number;
+  doneMainTasksCount: number;
+  lateMainTasksCount: number;
+  ongoingSubTasksCount: number;
+  doneSubTasksCount: number;
+  lateSubTasksCount: number;
 }
 
 interface WeekTasksCountStateProps {
@@ -29,9 +30,12 @@ interface WeekTasksCountStateProps {
 
 const Hub = () => {
   const [tasksCount, setTasksCount] = React.useState<TasksCountStateProps>({
-    ongoingTasksCount: 0,
-    doneTasksCount: 0,
-    lateTasksCount: 0,
+    ongoingMainTasksCount: 0,
+    doneMainTasksCount: 0,
+    lateMainTasksCount: 0,
+    ongoingSubTasksCount: 0,
+    doneSubTasksCount: 0,
+    lateSubTasksCount: 0,
   });
   const [weekTasksCount, setWeekTasksCount] = React.useState<Array<WeekTasksCountStateProps>>([]);
   const { recentAssociates, getRecentAssociates } = useAssociates();
@@ -43,17 +47,21 @@ const Hub = () => {
 
   Chart.register(ArcElement);
   Chart.defaults.font.family = "Poppins, sans-serif";
-  Chart.defaults.font.weight = "400";
-  Chart.defaults.font.size = 10;
+  Chart.defaults.font.weight = "600";
+  Chart.defaults.font.size = 12;
 
   const pieData = {
     labels: ["Ongoing", "Done", "Late"],
     datasets: [
       {
         label: "Tasks",
-        data: [tasksCount.ongoingTasksCount, tasksCount.doneTasksCount, tasksCount.lateTasksCount],
-        backgroundColor: ["#546FFFBD", "#98ABFFBD", "#DCE4FFBD"],
-        borderColor: ["#546FFF", "#98ABFF", "#DCE4FF"],
+        data: [
+          tasksCount.ongoingMainTasksCount + tasksCount.ongoingSubTasksCount,
+          tasksCount.doneMainTasksCount + tasksCount.doneSubTasksCount,
+          tasksCount.lateMainTasksCount + tasksCount.lateSubTasksCount,
+        ],
+        backgroundColor: ["#546FFFBD", "#9F84FDBD", "#BAC8FFBD"],
+        borderColor: ["#546FFF", "#9F84FD", "#BAC8FF"],
         borderWidth: 1,
       },
     ],
@@ -276,14 +284,19 @@ const Hub = () => {
             className="w-full rounded-lg bg-secondary-500 flex flex-col h-fit
                     p-4 text-white gap-2 l-l:row-span-1 l-l:order-1"
           >
-            <div className="flex flex-col gap-2 items-center justify-center">
-              <p className="text-xs font-semibold">Total Tasks</p>
+            <div className="flex flex-row gap-2 items-center justify-center">
               <p className="text-4xl font-medium">
-                {tasksCount.ongoingTasksCount + tasksCount.doneTasksCount + tasksCount.lateTasksCount}
+                {tasksCount.ongoingMainTasksCount +
+                  tasksCount.doneMainTasksCount +
+                  tasksCount.lateMainTasksCount +
+                  tasksCount.ongoingSubTasksCount +
+                  tasksCount.doneSubTasksCount +
+                  tasksCount.lateSubTasksCount}
               </p>
+              <p className="text-xs font-semibold">Total Tasks</p>
             </div>
 
-            <div className="h-44 flex flex-col items-center justify-center">
+            <div className="h-[12.5rem] flex flex-row items-center justify-center">
               <Pie data={pieData} updateMode="active" />
             </div>
           </div>
