@@ -20,6 +20,9 @@ import {
   AiOutlineSetting,
   AiOutlineTeam,
 } from "react-icons/ai";
+import { MdGroupAdd } from "react-icons/md";
+import { IoNotifications } from "react-icons/io5";
+import { localizeDate, localizeTime } from "../utils/dateUtils";
 
 interface UserData {
   email: string;
@@ -30,10 +33,19 @@ interface UserData {
   user_uuid: string;
 }
 
+interface NotificationsStateProps {
+  from_image: string;
+  name: string;
+  purpose: string;
+  surname: string;
+  title: string;
+  notif_date: string;
+}
+
 const Nav = ({ children }: { children: React.ReactNode }) => {
   const [notificationIsVisible, setNotificationIsVisible] = React.useState(false);
   const [navIsVisible, setNavIsVisible] = React.useState(false);
-  const [notifications, setNotifications] = React.useState([]);
+  const [notifications, setNotifications] = React.useState<Array<NotificationsStateProps>>([]);
   const [userData, setUserData] = React.useState<UserData>({
     email: "",
     image: "",
@@ -107,6 +119,50 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
       }
     }
   }, [url, user?.token, notificationIsVisible]);
+
+  const mappedNotifications = notifications.map((notification, index) => {
+    const action = notification.purpose === "group member" ? "added you as a" : "sent you a";
+    return (
+      <div key={index} className="w-full p-2 rounded-md bg-neutral-50 flex flex-col items-center justify-center gap-2">
+        <div className="flex flex-row w-full items-center justify-between gap-4">
+          <div
+            style={{ backgroundImage: `url(${notification.from_image})` }}
+            className="w-10 h-10 min-w-[2.5rem] min-h-[2.5rem] bg-center bg-cover rounded-full bg-primary-100"
+          />
+
+          <p className="text-sm">
+            <span className="font-semibold">
+              {notification.name} {notification.surname}{" "}
+            </span>{" "}
+            {action} <span className="capitalize font-semibold">{notification.purpose}</span>{" "}
+          </p>
+        </div>
+
+        <div className="flex flex-row w-full items-center justify-start gap-4">
+          <div
+            className="w-10 h-10 min-w-[2.5rem] min-h-[2.5rem] bg-center bg-cover rounded-full 
+                    bg-gradient-to-br from-primary-100 to-primary-400 flex flex-col items-center
+                    justify-center"
+          >
+            {notification.purpose.includes("invite") ? (
+              <AiOutlineMail className="text-secondary-500" />
+            ) : notification.purpose === "group member" ? (
+              <MdGroupAdd className="text-secondary-500" />
+            ) : notification.purpose === "private message" ? (
+              <AiOutlineSend className="text-secondary-500" />
+            ) : (
+              <IoNotifications className="text-secondary-500" />
+            )}
+          </div>
+          <p className="text-sm truncate max-w-[25ch] ">{notification.title}</p>
+        </div>
+
+        <p className="text-xs ml-auto">
+          {localizeDate(notification.notif_date, false)} | {localizeTime(notification.notif_date)}
+        </p>
+      </div>
+    );
+  });
 
   React.useEffect(() => {
     getUser();
@@ -299,15 +355,17 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 
         {notificationIsVisible ? (
           <div
-            className="w-11/12 h-96 max-h-[24rem] bg-neutral-100 shadow-xl absolute top-24 left-2/4 -translate-x-2/4 z-20 
+            className="w-11/12 h-96 max-h-[24rem] bg-neutral-100 shadow-xl absolute top-24 left-2/4 -translate-x-2/4 z-50 
                       overflow-y-hidden animate-fadeIn rounded-lg flex flex-col items-center justify-start p-4 gap-2
-                       t:max-w-screen-m-s t:left-auto t:-translate-x-0 t:right-16"
+                       t:max-w-screen-m-l t:left-auto t:-translate-x-0 t:right-16"
           >
             <p className="w-full text-lg text-left font-semibold">Notifications</p>
 
             <div className="w-full h-[1px] bg-secondary-300" />
 
-            <div className="flex flex-col items-center justify-start w-full h-full gap-4 overflow-y-auto cstm-scrollbar-2"></div>
+            <div className="flex flex-col items-center justify-start w-full h-full gap-2 overflow-y-auto cstm-scrollbar-2">
+              {mappedNotifications}
+            </div>
           </div>
         ) : null}
 
