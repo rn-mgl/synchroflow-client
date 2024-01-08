@@ -31,11 +31,7 @@ const Profile = () => {
     email: "",
     date_joined: "",
   });
-  const [password, setPassword] = React.useState({
-    currentPassword: "",
-    newPassword: "",
-    retypedNewPassword: "",
-  });
+
   const [canEditUserData, setCanEditUserData] = React.useState(false);
   const [canChangePassword, setCanChangePassword] = React.useState(false);
 
@@ -51,17 +47,6 @@ const Profile = () => {
 
   const toggleCanChangePassword = () => {
     setCanChangePassword((prev) => !prev);
-  };
-
-  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setPassword((prev) => {
-      return {
-        ...prev,
-        [name]: value,
-      };
-    });
   };
 
   const getUserData = React.useCallback(async () => {
