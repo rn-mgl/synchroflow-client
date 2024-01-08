@@ -2,46 +2,22 @@
 import { useSession } from "next-auth/react";
 import React from "react";
 
-import { useGlobalContext } from "@/base/context";
 import AssociateCards from "@/components//associates/AssociateCards";
 import useAssociates from "@/components//hooks/useAssociates";
+import useDashboard from "@/components//hooks/useDashboard";
 import useSearchFilter from "@/components//hooks/useSearchFilter";
 import useTasks from "@/components//hooks/useTasks";
-import axios from "axios";
 import { ArcElement, Chart } from "chart.js/auto";
 import Link from "next/link";
 import Calendar from "react-calendar";
 import { Line, Pie } from "react-chartjs-2";
 import { BsChevronDown } from "react-icons/bs";
 
-interface TasksCountStateProps {
-  ongoingMainTasksCount: number;
-  doneMainTasksCount: number;
-  lateMainTasksCount: number;
-  ongoingSubTasksCount: number;
-  doneSubTasksCount: number;
-  lateSubTasksCount: number;
-}
-
-interface WeekTasksCountStateProps {
-  day: number;
-  taskCount: number;
-}
-
 const Hub = () => {
-  const [tasksCount, setTasksCount] = React.useState<TasksCountStateProps>({
-    ongoingMainTasksCount: 0,
-    doneMainTasksCount: 0,
-    lateMainTasksCount: 0,
-    ongoingSubTasksCount: 0,
-    doneSubTasksCount: 0,
-    lateSubTasksCount: 0,
-  });
-  const [weekTasksCount, setWeekTasksCount] = React.useState<Array<WeekTasksCountStateProps>>([]);
+  const { tasksCount, weekTasksCount, getTasksCount } = useDashboard();
   const { recentAssociates, getRecentAssociates } = useAssociates();
   const { myTasksToday, myUpcomingTasks, getMyTasksToday, getMyUpcomingTasks } = useTasks();
   const { searchFilter } = useSearchFilter("title");
-  const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -82,21 +58,6 @@ const Hub = () => {
       },
     ],
   };
-
-  const getTasksCount = React.useCallback(async () => {
-    if (user?.token) {
-      try {
-        const { data } = await axios.get(`${url}/dashboard`, { headers: { Authorization: user?.token } });
-        if (data) {
-          const { tasksCount, weekTasksCount } = data;
-          setWeekTasksCount(weekTasksCount);
-          setTasksCount(tasksCount);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }, [url, user?.token]);
 
   const mappedRecentAssociateCards = recentAssociates.map((associate, index) => {
     return (

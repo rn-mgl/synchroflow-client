@@ -1,4 +1,5 @@
 import React from "react";
+import { isSpecialCharacter } from "../utils/specialCharsUtils";
 
 export default function useSearchFilter(initialSearchCategory: string) {
   const [searchFilter, setSearchFilter] = React.useState("");
@@ -8,9 +9,8 @@ export default function useSearchFilter(initialSearchCategory: string) {
   const handleSearchFilter = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const { value } = e.target;
-    const specialCharsRegex = /[!@#$%^&*`~()_+\-=\[\]{};':"\\|,.<>\/?]/;
 
-    if (specialCharsRegex.test(value)) {
+    if (isSpecialCharacter(value)) {
       return;
     }
 

@@ -80,7 +80,7 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
     try {
       let bannerURL = null;
 
-      if (rawFile.current?.files) {
+      if (rawFile.current?.value) {
         bannerURL = await uploadFile(rawFile.current?.files);
         mainTaskData.mainTaskBanner = bannerURL;
       }
