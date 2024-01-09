@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 
 import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineUser } from "react-icons/ai";
+import { BsArrowRight } from "react-icons/bs";
 
 const Login = () => {
   const [loginCredentials, setLoginCredentials] = React.useState({ candidateEmail: "", candidatePassword: "" });
@@ -143,9 +144,19 @@ const Login = () => {
             Submit
           </button>
 
-          <Link href="/register" className="text-xs text-primary-500 hover:underline transition-all underline-offset-2">
-            don&apos;t have an account yet?
-          </Link>
+          <div className="flex flex-col items-center justify-center gap-2 t:flex-row t:justify-between w-full">
+            <Link href="/forgot" className="text-xs text-primary-500 hover:underline transition-all underline-offset-2">
+              forgot password?
+            </Link>
+
+            <Link
+              href="/register"
+              className="text-xs text-primary-500 hover:underline transition-all 
+                    underline-offset-2 flex flex-row items-center justify-center gap-2"
+            >
+              don&apos;t have an account yet? <BsArrowRight />
+            </Link>
+          </div>
         </form>
 
         <div className="w-full flex-col items-center justify-center hidden l-s:flex max-w-lg">

@@ -5,6 +5,7 @@ import Image from "next/image";
 
 const SENDING_PURPOSE = {
   verify: "We are currently sending a verification link to the account you registered.",
+  reset: "We are currently sending a password reset link to the email you entered.",
 };
 
 const Sending = () => {
