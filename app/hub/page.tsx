@@ -23,7 +23,7 @@ const Hub = () => {
 
   Chart.register(ArcElement);
   Chart.defaults.font.family = "Poppins, sans-serif";
-  Chart.defaults.font.weight = "600";
+  Chart.defaults.font.weight = "bold";
   Chart.defaults.font.size = 12;
 
   const pieData = {
