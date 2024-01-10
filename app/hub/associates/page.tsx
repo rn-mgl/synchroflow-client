@@ -1,4 +1,5 @@
 "use client";
+import { useGlobalContext } from "@/base/context";
 import AddAssociate from "@/components//associates/AddAssociate";
 import AssociateCards from "@/components//associates/AssociateCards";
 import RecentAssociateCards from "@/components//associates/RecentAssociateCards";
@@ -29,8 +30,20 @@ const Associates = () => {
   } = useSearchFilter("name");
   const { allAssociates, recentAssociates, getAllAssociates, getRecentAssociates } = useAssociates();
 
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+
+  // need to optimize
+  const socketDisconnectAssociate = () => {
+    const associate = allAssociates.find((associate) => associate.associate_uuid === disconnectFromAssociate);
+    socket.emit("disconnect_associate", {
+      room: associate?.of_uuid,
+    });
+    socket.emit("disconnect_associate", {
+      room: associate?.is_uuid,
+    });
+  };
 
   const toggleCanAddAssociate = () => {
     setCanAddAssociate((prev) => !prev);
@@ -69,6 +82,13 @@ const Associates = () => {
     getRecentAssociates(sortFilter, searchFilter, searchCategory);
   }, [getRecentAssociates, sortFilter, searchFilter, searchCategory]);
 
+  React.useEffect(() => {
+    socket.on("update_associates", () => {
+      getAllAssociates(sortFilter, searchFilter, searchCategory);
+      getRecentAssociates(sortFilter, searchFilter, searchCategory);
+    });
+  }, [socket, sortFilter, searchFilter, searchCategory, getAllAssociates, getRecentAssociates]);
+
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">
       <div
@@ -84,6 +104,7 @@ const Associates = () => {
             refetchData={async () => {
               getAllAssociates(sortFilter, searchFilter, searchCategory);
               getRecentAssociates(sortFilter, searchFilter, searchCategory);
+              socketDisconnectAssociate();
             }}
           />
         ) : null}

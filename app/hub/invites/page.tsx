@@ -22,7 +22,7 @@ const Invites = () => {
     getReceivedAssociateInvites,
   } = useInvites();
 
-  const { url } = useGlobalContext();
+  const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -56,27 +56,38 @@ const Invites = () => {
     }
   };
 
-  const removeSentAssociateInvites = async (inviteUUID: string) => {
-    try {
-      const { data } = await axios.delete(`${url}/associate_invites/${inviteUUID}`, {
-        headers: { Authorization: user?.token },
-        params: { type: "sent" },
-      });
+  const removeSentAssociateInvites = React.useCallback(
+    async (inviteUUID: string, invitedUserUUID: string) => {
+      if (user?.token) {
+        try {
+          const { data } = await axios.delete(`${url}/associate_invites/${inviteUUID}`, {
+            headers: { Authorization: user?.token },
+            params: { type: "sent" },
+          });
 
-      if (data) {
-        getSentAssociateInvites();
-        getReceivedAssociateInvites();
+          if (data) {
+            getSentAssociateInvites();
+            getReceivedAssociateInvites();
+            socket.emit("remove_associate_invite", { inviteUUID, room: invitedUserUUID });
+          }
+        } catch (error) {
+          console.log(error);
+        }
       }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    },
+    [user?.token, url, socket, getSentAssociateInvites, getReceivedAssociateInvites]
+  );
 
-  const acceptReceivedAssociateInvites = async (userUUID: string, inviteUUID: string) => {
+  const acceptReceivedAssociateInvites = async (invitedFromUUID: string, inviteUUID: string) => {
     try {
-      const { data } = await axios.post(`${url}/associates`, { userUUID }, { headers: { Authorization: user?.token } });
+      const { data } = await axios.post(
+        `${url}/associates`,
+        { userUUID: invitedFromUUID },
+        { headers: { Authorization: user?.token } }
+      );
       if (data) {
-        await removeSentAssociateInvites(inviteUUID);
+        await removeSentAssociateInvites(inviteUUID, invitedFromUUID);
+        socket.emit("accept_associate_invite", { room: invitedFromUUID });
       }
     } catch (error) {
       console.log(error);
@@ -135,7 +146,9 @@ const Invites = () => {
         name={associateInvite.name}
         surname={associateInvite.surname}
         email={associateInvite.email}
-        removeSentAssociateInvites={() => removeSentAssociateInvites(associateInvite.associate_invite_uuid)}
+        removeSentAssociateInvites={() =>
+          removeSentAssociateInvites(associateInvite.associate_invite_uuid, associateInvite.user_uuid)
+        }
       />
     );
   });
@@ -148,7 +161,9 @@ const Invites = () => {
         name={associateInvite.name}
         surname={associateInvite.surname}
         email={associateInvite.email}
-        declineReceivedAssociateInvites={() => removeSentAssociateInvites(associateInvite.associate_invite_uuid)}
+        declineReceivedAssociateInvites={() =>
+          removeSentAssociateInvites(associateInvite.associate_invite_uuid, associateInvite.user_uuid)
+        }
         acceptReceivedAssociateInvites={() =>
           acceptReceivedAssociateInvites(associateInvite.user_uuid, associateInvite.associate_invite_uuid)
         }
@@ -171,6 +186,12 @@ const Invites = () => {
   React.useEffect(() => {
     getReceivedAssociateInvites();
   }, [getReceivedAssociateInvites]);
+
+  React.useEffect(() => {
+    socket.on("remove_associate_invite", (args: { inviteUUID: string; room: string }) => {
+      removeSentAssociateInvites(args.inviteUUID, args.room);
+    });
+  }, [socket, removeSentAssociateInvites]);
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">

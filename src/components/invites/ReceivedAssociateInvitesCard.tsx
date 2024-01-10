@@ -18,17 +18,10 @@ const ReceivedAssociateInvitesCard: React.FC<ReceivedAssociateInvitesProps> = (p
                     transition-all"
       >
         <div
-          className="w-full h-72 bg-top bg-contain bg-no-repeat bg-primary-100 rounded-md 
+          style={{ backgroundImage: `url(${props.image})` }}
+          className="w-full h-72 bg-top bg-cover bg-no-repeat bg-primary-100 rounded-md 
                 overflow-hidden flex flex-col items-center justify-center group"
-        >
-          <Image
-            src={props.image}
-            alt="profile"
-            width={120}
-            height={120}
-            className="group-hover:scale-110 transition-all"
-          />
-        </div>
+        />
 
         <div className="w-full flex flex-row justify-between gap-4">
           <p className="font-bold truncate">
