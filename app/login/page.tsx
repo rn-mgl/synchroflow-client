@@ -1,5 +1,6 @@
 "use client";
 
+import { useGlobalContext } from "@/base/context";
 import Loading from "@/components//global/Loading";
 import Message from "@/components//global/Message";
 import useDisable from "@/components//hooks/useDisable";
@@ -28,6 +29,7 @@ const Login = () => {
   const { isLoading, handleLoader } = useLoader();
   const { disable, handleDisable } = useDisable();
 
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const router = useRouter();
   const user = session?.user;
@@ -78,9 +80,11 @@ const Login = () => {
       handleLoader(false);
       handleDisable(false);
 
+      socket.connect();
+      socket.emit("connect to uuid", { uuid: user?.uuid });
       router.push("/hub");
     }
-  }, [user?.token, router, firstLogin, handleDisable, handleLoader]);
+  }, [user?.token, router, firstLogin, socket, user?.uuid, handleDisable, handleLoader]);
 
   return (
     <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full min-h-screen h-screen bg-white">

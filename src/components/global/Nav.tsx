@@ -56,7 +56,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
   });
 
   const { message, handleMessages } = useNotification();
-  const { url } = useGlobalContext();
+  const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const path = usePathname();
 

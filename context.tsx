@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { socket } from "./socket";
-import { Socket } from "socket.io-client";
+
+import { io, Socket } from "socket.io-client";
 
 interface AppContextData {
   url: string;
@@ -15,7 +15,7 @@ const prod = "https://synchroflow-server.onrender.com";
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const url = prod;
-  socket.connect();
+  const socket = io(url, { autoConnect: false });
 
   return <AppContext.Provider value={{ url, socket }}>{children}</AppContext.Provider>;
 };
