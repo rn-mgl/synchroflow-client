@@ -15,7 +15,7 @@ const prod = "https://synchroflow-server.onrender.com";
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   const url = prod;
-  const socket = io(url, { autoConnect: false });
+  const socket = io(url);
 
   return <AppContext.Provider value={{ url, socket }}>{children}</AppContext.Provider>;
 };

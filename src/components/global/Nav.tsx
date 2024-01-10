@@ -172,6 +172,14 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
     getNotifications();
   }, [getNotifications]);
 
+  React.useEffect(() => {
+    if (user?.uuid) {
+      socket.on("room_rejoin", () => {
+        socket.emit("rejoin_user_uuid", { room: user?.uuid });
+      });
+    }
+  }, [socket, user?.uuid]);
+
   return (
     <div className="flex flex-row h-full">
       {message.active ? <Message message={message} handleMessages={handleMessages} /> : null}

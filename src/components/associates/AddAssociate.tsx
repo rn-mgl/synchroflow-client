@@ -56,9 +56,13 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
   ]);
   const { message, handleMessages } = useNotification();
 
-  const { url } = useGlobalContext();
+  const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+
+  const socketAssociateInvite = (room: string) => {
+    socket.emit("associate_invite", { room });
+  };
 
   const getUsers = React.useCallback(async () => {
     if (user?.token) {
@@ -86,13 +90,15 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
       if (data) {
         await getUsers();
         handleMessages(true, "Invite sent successfully", "info");
+        socketAssociateInvite(inviteTo);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const cancelRequest = async (inviteUUID: string) => {
+  // add invitedUser params for socket
+  const cancelRequest = async (inviteUUID: string, invitedUser: string) => {
     try {
       const { data } = await axios.delete(
         `${url}/associate_invites/${inviteUUID}`,
@@ -102,6 +108,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
       if (data) {
         await getUsers();
         handleMessages(true, "Invite removed successfully", "info");
+        socketAssociateInvite(invitedUser);
       }
     } catch (error) {
       console.log(error);
@@ -121,7 +128,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
         user_uuid={user.user_uuid}
         associate_invite_uuid={user.associate_invite_uuid}
         sendInvite={() => sendInvite(user.user_uuid)}
-        cancelRequest={() => cancelRequest(user.associate_invite_uuid)}
+        cancelRequest={() => cancelRequest(user.associate_invite_uuid, user.user_uuid)}
       />
     );
   });
@@ -129,6 +136,12 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
   React.useEffect(() => {
     getUsers();
   }, [getUsers]);
+
+  React.useEffect(() => {
+    socket.on("update_associate_invite", () => {
+      getUsers();
+    });
+  }, [socket, getUsers]);
 
   return (
     <div

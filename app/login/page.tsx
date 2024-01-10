@@ -80,8 +80,7 @@ const Login = () => {
       handleLoader(false);
       handleDisable(false);
 
-      socket.connect();
-      socket.emit("connect to uuid", { uuid: user?.uuid });
+      socket.emit("connect_to_uuid", { uuid: user?.uuid });
       router.push("/hub");
     }
   }, [user?.token, router, firstLogin, socket, user?.uuid, handleDisable, handleLoader]);
