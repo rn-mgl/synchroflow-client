@@ -29,7 +29,7 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
     message_from: -1,
   });
 
-  const { url } = useGlobalContext();
+  const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -52,6 +52,12 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
   React.useEffect(() => {
     getLatestMessage();
   }, [getLatestMessage]);
+
+  React.useEffect(() => {
+    socket.on("get_messages", async () => {
+      await getLatestMessage();
+    });
+  }, [socket, getLatestMessage]);
 
   return (
     <button

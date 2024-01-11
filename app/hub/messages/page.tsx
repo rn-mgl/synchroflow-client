@@ -6,7 +6,6 @@ import useFile from "@/components//hooks/useFile";
 import useFilter from "@/components//hooks/useFilter";
 import useMessage from "@/components//hooks/useMessage";
 import useSearchFilter from "@/components//hooks/useSearchFilter";
-import useSortFilter from "@/components//hooks/useSortFilter";
 import ActiveMessagePanel from "@/components//messages/ActiveMessagePanel";
 import AddGroupMembers from "@/components//messages/AddGroupMembers";
 import CreateGroupMessage from "@/components//messages/CreateGroupMessage";
@@ -31,7 +30,6 @@ const Messages = () => {
   const { searchFilter, handleSearchFilter } = useSearchFilter("name");
   const {
     selectedMessageRoom,
-    message,
     roomMessages,
     messageRooms,
     activeRoom,
@@ -41,7 +39,6 @@ const Messages = () => {
     canCreateGroupMessage,
     getMessageRooms,
     getMessageRoomMessages,
-    handleMessage,
     handleSelectedMessageRoom,
     handleSelectedMessage,
     handleSelectedRoomType,
@@ -51,14 +48,9 @@ const Messages = () => {
 
   const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } = useFile();
 
-  const { url } = useGlobalContext();
+  const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
-
-  const handleMessageInput = (e: React.FormEvent<HTMLDivElement>) => {
-    const inputText = e.target as HTMLElement;
-    handleMessage(inputText.innerText ? inputText.innerText : "");
-  };
 
   const toggleActiveToolTip = () => {
     setActiveToolTip((prev) => !prev);
@@ -118,7 +110,7 @@ const Messages = () => {
   });
 
   const sendMessage = async () => {
-    if (message === "" && !rawFile.current?.value) {
+    if (!messageRef.current?.innerText && !rawFile.current?.value) {
       return;
     }
 
@@ -134,7 +126,7 @@ const Messages = () => {
         {
           messageRoom: selectedMessageRoom,
           messageToUUID: activeRoom.user_uuid,
-          message,
+          message: messageRef.current?.innerText,
           messageFile,
           messageFileType: messageFile ? fileData.type : null,
         },
@@ -142,14 +134,16 @@ const Messages = () => {
       );
 
       if (data) {
-        if (message && messageRef.current) {
-          messageRef.current.innerText = "\n";
-          handleMessage("");
+        if (messageRef.current) {
+          messageRef.current.innerText = "";
         }
         if (rawFile.current?.value) {
           removeRawFile();
         }
         await getMessageRoomMessages();
+        socket.emit("send_message", {
+          rooms: roomType === "private" ? [user?.uuid, activeRoom.user_uuid] : [activeRoom.message_room],
+        });
       }
     } catch (error) {
       console.log(error);
@@ -167,6 +161,12 @@ const Messages = () => {
   React.useEffect(() => {
     getMessageRoom();
   }, [getMessageRoom]);
+
+  React.useEffect(() => {
+    socket.on("get_messages", async () => {
+      await getMessageRoomMessages();
+    });
+  }, [socket, searchFilter, getMessageRoomMessages]);
 
   return (
     <div
@@ -288,7 +288,6 @@ const Messages = () => {
               isRoomCreator={user?.id === activeRoom.created_by}
               activeRoom={activeRoom}
               roomMessages={roomMessages}
-              message={message}
               roomType={roomType}
               messageRef={messageRef}
               selectedMessageRoom={selectedMessageRoom}
@@ -301,7 +300,6 @@ const Messages = () => {
               removeRawFile={removeRawFile}
               handleSelectedMessageRoom={() => handleSelectedMessageRoom(`${selectedMessageRoom}`, "back")}
               handleSelectedMessage={handleSelectedMessage}
-              handleMessageInput={handleMessageInput}
               sendMessage={sendMessage}
               toggleCanEditGroupMessage={toggleCanEditGroupMessage}
               toggleCanDeleteGroupMessage={toggleCanDeleteGroupMessage}

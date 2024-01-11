@@ -185,3 +185,10 @@ input[type="range"]::-moz-range-thumb {
 .cstm-scrollbar-2::-webkit-scrollbar-track {
   border-radius: 100vh;
 }
+
+[contenteditable="true"]:empty:before {
+  content: attr(placeholder);
+  pointer-events: none;
+  display: block; /* For Firefox */
+  opacity: 0.5;
+}

@@ -34,7 +34,6 @@ export default function useMessage() {
   const [selectedMessageRoom, setSelectedMessageRoom] = React.useState("");
   const [roomType, setRoomType] = React.useState<"private" | "group">("private");
 
-  const [message, setMessage] = React.useState(""); // used a separate use state for message to have realtime update on div content
   const messageRef = React.useRef<HTMLDivElement>(null); // used a separate use ref to clear div content after sending message
 
   const [messageRooms, setMessageRooms] = React.useState<Array<MessageRoomsStateProps>>([]);
@@ -60,10 +59,6 @@ export default function useMessage() {
   const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
-
-  const handleMessage = React.useCallback((message: string) => {
-    setMessage(message);
-  }, []);
 
   const handleSelectedMessage = React.useCallback((messageUUID: string) => {
     setSelectedMessage((prev) => (prev === messageUUID ? "" : messageUUID));
@@ -149,7 +144,6 @@ export default function useMessage() {
 
   return {
     selectedMessageRoom,
-    message,
     roomMessages,
     messageRooms,
     activeRoom,
@@ -159,7 +153,6 @@ export default function useMessage() {
     canCreateGroupMessage,
     getMessageRooms,
     getMessageRoomMessages,
-    handleMessage,
     handleSelectedMessageRoom,
     handleSelectedMessage,
     handleSelectedRoomType,

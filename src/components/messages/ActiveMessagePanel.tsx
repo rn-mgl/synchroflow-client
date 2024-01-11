@@ -23,7 +23,6 @@ interface ActiveMessagePanelProps {
   isRoomCreator: boolean;
   activeRoom: MessageRoomsStateProps;
   roomMessages: Array<RoomMessagesStateProps>;
-  message: string;
   messageRef: RefObject<HTMLDivElement>;
   selectedMessageRoom: string;
   selectedMessage: string;
@@ -35,7 +34,6 @@ interface ActiveMessagePanelProps {
   selectedFileViewer: (e: React.ChangeEvent<HTMLInputElement>) => void;
   removeRawFile: () => void;
   handleSelectedMessageRoom: () => void;
-  handleMessageInput: (e: React.FormEvent<HTMLDivElement>) => void;
   handleSelectedMessage: (messageUUID: string) => void;
   sendMessage: () => void;
   toggleCanEditGroupMessage: () => void;
@@ -192,17 +190,12 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
         <div className="flex flex-row w-full gap-4">
           <div className="flex flex-row items-center justify-center rounded-md w-full gap-4 bg-neutral-100 p-2">
             <div
-              onInput={(e) => props.handleMessageInput(e)}
+              placeholder="Aa"
               contentEditable={true}
               ref={props.messageRef}
               className="border-none outline-none cstm-scrollbar h-auto w-full max-h-[12rem] overflow-y-auto 
                         relative whitespace-pre-wrap break-words"
-            >
-              <p>
-                <br />
-              </p>
-              {props.message === "" ? <div className="absolute top-0 opacity-50">Aa</div> : null}
-            </div>
+            ></div>
           </div>
 
           <div className="flex flex-row gap-2 items-center justify-center mt-auto t:gap-4">

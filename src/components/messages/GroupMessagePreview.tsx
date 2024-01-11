@@ -26,7 +26,7 @@ const GroupMessagePreview: React.FC<GroupMessagePreviewProps> = (props) => {
     date_sent: "",
     message_from: -1,
   });
-  const { url } = useGlobalContext();
+  const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -49,6 +49,12 @@ const GroupMessagePreview: React.FC<GroupMessagePreviewProps> = (props) => {
   React.useEffect(() => {
     getLatestMessage();
   }, [getLatestMessage]);
+
+  React.useEffect(() => {
+    socket.on("get_messages", async () => {
+      await getLatestMessage();
+    });
+  }, [socket, getLatestMessage]);
 
   return (
     <button
@@ -83,9 +89,9 @@ const GroupMessagePreview: React.FC<GroupMessagePreviewProps> = (props) => {
           <p className="truncate max-w-[10ch] t:max-w-[40ch] l-s:max-w-[10ch] l-l:max-w-[25ch]">
             <span> {props.isSender && "You: "}</span>
             <span>
-              {props.latestMessage ? (
-                props.latestMessage
-              ) : props.latestFile ? (
+              {latestMessage.message ? (
+                latestMessage.message
+              ) : latestMessage.message_file ? (
                 <i>sent an attachement</i>
               ) : (
                 <i>no messages yet</i>
