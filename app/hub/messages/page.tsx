@@ -75,38 +75,42 @@ const Messages = () => {
     setCanAddGroupMembers((prev) => !prev);
   };
 
-  const mappedMessageRoomPreviews = messageRooms.map((room, index) => {
+  const mappedPrivateMessageRoomPreviews = messageRooms.map((room, index) => {
     return (
       <React.Fragment key={index}>
-        {roomType === "private" ? (
-          <PrivateMessagePreview
-            image={room.image}
-            name={room.name}
-            surname={room.surname}
-            status="sent"
-            latestMessage={room.message}
-            latestFile={room.message_file}
-            messageRoom={room.message_room}
-            dateSent={room.date_sent ? localizeDate(room.date_sent, true) : "mm/dd/yyyy"}
-            isSelected={selectedMessageRoom === room.message_room}
-            isSender={room.message_from === user?.id}
-            handleSelectedMessageRoom={() => handleSelectedMessageRoom(room.message_room, "preview")}
-          />
-        ) : (
-          <GroupMessagePreview
-            roomImage={room.room_image}
-            roomName={room.room_name}
-            status="sent"
-            latestMessage={room.message}
-            latestFile={room.message_file}
-            messageRoom={room.message_room}
-            dateSent={room.date_sent ? localizeDate(room.date_sent, true) : "mm/dd/yyyy"}
-            isSelected={selectedMessageRoom === room.message_room}
-            isSender={room.message_from === user?.id}
-            handleSelectedMessageRoom={() => handleSelectedMessageRoom(room.message_room, "preview")}
-          />
-        )}
+        <PrivateMessagePreview
+          image={room.image}
+          name={room.name}
+          surname={room.surname}
+          status="sent"
+          latestMessage={room.message}
+          latestFile={room.message_file}
+          messageRoom={room.message_room}
+          dateSent={room.date_sent ? localizeDate(room.date_sent, true) : "mm/dd/yyyy"}
+          isSelected={selectedMessageRoom === room.message_room}
+          isSender={room.message_from === user?.id}
+          handleSelectedMessageRoom={() => handleSelectedMessageRoom(room.message_room, "preview")}
+        />
+        <div className="w-full h-[0.5px] min-h-[0.5px] bg-secondary-100" />
+      </React.Fragment>
+    );
+  });
 
+  const mappedGroupMessageRoomPreviews = messageRooms.map((room, index) => {
+    return (
+      <React.Fragment key={index}>
+        <GroupMessagePreview
+          roomImage={room.room_image}
+          roomName={room.room_name}
+          status="sent"
+          latestMessage={room.message}
+          latestFile={room.message_file}
+          messageRoom={room.message_room}
+          dateSent={room.date_sent ? localizeDate(room.date_sent, true) : "mm/dd/yyyy"}
+          isSelected={selectedMessageRoom === room.message_room}
+          isSender={room.message_from === user?.id}
+          handleSelectedMessageRoom={() => handleSelectedMessageRoom(room.message_room, "preview")}
+        />
         <div className="w-full h-[0.5px] min-h-[0.5px] bg-secondary-100" />
       </React.Fragment>
     );
@@ -162,6 +166,12 @@ const Messages = () => {
   React.useEffect(() => {
     getMessageRoom();
   }, [getMessageRoom]);
+
+  React.useEffect(() => {
+    socket.on("get_group_rooms", async () => {
+      await getMessageRooms(searchFilter);
+    });
+  }, [socket, searchFilter, getMessageRooms]);
 
   React.useEffect(() => {
     socket.on("get_messages", async (args: { room: string }) => {
@@ -282,7 +292,7 @@ const Messages = () => {
                 </button>
               )}
 
-              {mappedMessageRoomPreviews}
+              {roomType === "private" ? mappedPrivateMessageRoomPreviews : mappedGroupMessageRoomPreviews}
             </div>
           </div>
 

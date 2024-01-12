@@ -25,7 +25,7 @@ interface AddGroupMembersStateProps {
 const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
   const [groupMembers, setGroupMembers] = React.useState<Array<AddGroupMembersStateProps>>([]);
 
-  const { url } = useGlobalContext();
+  const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -54,6 +54,7 @@ const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
       );
       if (data) {
         await getPossibleGroupMembers();
+        socket.emit("add_group_member", { room: memberUUID });
       }
     } catch (error) {
       console.log(error);

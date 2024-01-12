@@ -27,12 +27,12 @@ interface GroupMembersStateProps {
   user_uuid: string;
 }
 
-const GroupMembers: React.FC<GroupMembersProps> = (props) => {
+const GroupMembers: React.FC<GroupMembersProps> = ({ toggleCanSeeGroupMembers, ...props }) => {
   const [groupMembers, setGroupMembers] = React.useState<Array<GroupMembersStateProps>>([]);
   const [selectedGroupMember, setSelectedGroupMember] = React.useState("");
   const [canDeleteGroupMember, setCanDeleteGroupMember] = React.useState(false);
 
-  const { url } = useGlobalContext();
+  const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -42,6 +42,12 @@ const GroupMembers: React.FC<GroupMembersProps> = (props) => {
 
   const toggleCanDeleteGroupMember = () => {
     setCanDeleteGroupMember((prev) => !prev);
+  };
+
+  const socketRemoveGroupMember = () => {
+    const memberUUID = groupMembers.find((groupMember) => groupMember.message_member_uuid === selectedGroupMember);
+
+    socket.emit("remove_group_member", { room: memberUUID?.user_uuid });
   };
 
   const getGroupMembers = React.useCallback(async () => {
@@ -69,7 +75,7 @@ const GroupMembers: React.FC<GroupMembersProps> = (props) => {
       );
 
       if (data) {
-        props.toggleCanSeeGroupMembers();
+        toggleCanSeeGroupMembers();
         await props.getMessageRoom();
       }
     } catch (error) {
@@ -150,6 +156,15 @@ const GroupMembers: React.FC<GroupMembersProps> = (props) => {
     getGroupMembers();
   }, [getGroupMembers]);
 
+  React.useEffect(() => {
+    socket.on("get_group_members", (args) => {
+      getGroupMembers();
+      if (args.room === user?.uuid) {
+        toggleCanSeeGroupMembers();
+      }
+    });
+  }, [socket, user?.uuid, toggleCanSeeGroupMembers, getGroupMembers]);
+
   return (
     <div
       className="w-full h-full fixed top-0 left-0 backdrop-blur-md z-30 animate-fadeIn
@@ -162,7 +177,10 @@ const GroupMembers: React.FC<GroupMembersProps> = (props) => {
           message="do you want to remove this member?"
           title="Remove Group Member"
           toggleConfirmation={toggleCanDeleteGroupMember}
-          refetchData={getGroupMembers}
+          refetchData={() => {
+            getGroupMembers();
+            socketRemoveGroupMember();
+          }}
         />
       ) : null}
       <div
@@ -170,7 +188,7 @@ const GroupMembers: React.FC<GroupMembersProps> = (props) => {
               max-w-screen-t overflow-y-auto cstm-scrollbar items-center justify-start"
       >
         <button
-          onClick={props.toggleCanSeeGroupMembers}
+          onClick={toggleCanSeeGroupMembers}
           type="button"
           className="ml-auto hover:bg-primary-500 rounded-full
             hover:bg-opacity-20 transition-all p-2"
