@@ -155,6 +155,23 @@ const Messages = () => {
     }
   };
 
+  const deleteGroupRoom = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.delete(`${url}/group_message_rooms/${selectedMessageRoom}`, {
+        headers: { Authorization: user?.token },
+      });
+      if (data.deletedRoom) {
+        handleSelectedMessageRoom("", "back");
+        getMessageRooms(searchFilter);
+        toggleCanDeleteGroupMessage();
+        socket.emit("delete_group_room", { rooms: data.rooms });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   React.useEffect(() => {
     getMessageRooms(searchFilter);
   }, [getMessageRooms, searchFilter]);
@@ -168,10 +185,11 @@ const Messages = () => {
   }, [getMessageRoom]);
 
   React.useEffect(() => {
-    socket.on("get_group_rooms", async () => {
+    socket.on("reflect_add_group_member", async () => {
       await getMessageRooms(searchFilter);
+      handleSelectedMessageRoom("", "back");
     });
-  }, [socket, searchFilter, getMessageRooms]);
+  }, [socket, searchFilter, getMessageRooms, handleSelectedMessageRoom]);
 
   React.useEffect(() => {
     socket.on("reflect_update_group_room", async () => {
@@ -182,6 +200,13 @@ const Messages = () => {
 
   React.useEffect(() => {
     socket.on("reflect_remove_group_member", async () => {
+      await getMessageRooms(searchFilter);
+      handleSelectedMessageRoom("", "back");
+    });
+  }, [socket, searchFilter, selectedMessageRoom, getMessageRooms, handleSelectedMessageRoom]);
+
+  React.useEffect(() => {
+    socket.on("reflect_delete_group_room", async () => {
       await getMessageRooms(searchFilter);
       handleSelectedMessageRoom("", "back");
     });
@@ -239,6 +264,7 @@ const Messages = () => {
           message="deleting a group will also delete its members and messages"
           title="Delete Group Message?"
           toggleConfirmation={toggleCanDeleteGroupMessage}
+          customDelete={deleteGroupRoom}
           refetchData={() => {
             handleSelectedMessageRoom(selectedMessageRoom, "back");
             getMessageRooms(searchFilter);

@@ -9,6 +9,7 @@ interface DeleteConfirmationProps {
   title: string;
   message: string;
   apiRoute: string;
+  customDelete?: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
   toggleConfirmation: () => void;
   refetchData?: (() => Promise<void>) | (() => void);
   redirectLink?: string;
@@ -45,7 +46,9 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = (props) => {
         flex flex-col items-center justify-start p-4 t:p-10"
     >
       <form
-        onSubmit={(e) => deleteData(e)}
+        onSubmit={(e) => {
+          props.customDelete ? props.customDelete(e) : deleteData(e);
+        }}
         className="w-full bg-white h-fit rounded-lg flex flex-col gap-4 
                   max-w-screen-m-l overflow-y-auto cstm-scrollbar items-center justify-start
                   my-auto text-center"
