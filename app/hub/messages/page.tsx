@@ -174,6 +174,13 @@ const Messages = () => {
   }, [socket, searchFilter, getMessageRooms]);
 
   React.useEffect(() => {
+    socket.on("reflect_update_group_room", async () => {
+      await getMessageRooms(searchFilter);
+      await getMessageRoom();
+    });
+  }, [socket, searchFilter, getMessageRooms, getMessageRoom]);
+
+  React.useEffect(() => {
     socket.on("reflect_remove_group_member", async () => {
       await getMessageRooms(searchFilter);
       handleSelectedMessageRoom("", "back");

@@ -28,7 +28,7 @@ const EditGroupMessage: React.FC<EditGroupMessageProps> = (props) => {
   });
   const { fileData, rawFile, removeRawFile, selectedFileViewer, uploadFile } = useFile();
 
-  const { url } = useGlobalContext();
+  const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -67,10 +67,14 @@ const EditGroupMessage: React.FC<EditGroupMessageProps> = (props) => {
         { groupMessageData },
         { headers: { Authorization: user?.token }, params: { type: "name" } }
       );
-      if (data) {
+
+      console.log(data);
+
+      if (data.updatedRoom) {
         await props.getMessageRoom();
         await props.getMessageRooms();
         props.toggleCanEditGroupMessage();
+        socket.emit("update_group_room", { rooms: data.rooms });
       }
     } catch (error) {
       console.log(error);
