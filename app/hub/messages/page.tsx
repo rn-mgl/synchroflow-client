@@ -2,6 +2,7 @@
 import { useGlobalContext } from "@/base/context";
 import SearchFilter from "@/components//filter/SearchFilter";
 import DeleteConfirmation from "@/components//global/DeleteConfirmation";
+import useAudio from "@/components//hooks/useAudio";
 import useFile from "@/components//hooks/useFile";
 import useFilter from "@/components//hooks/useFilter";
 import useMessage from "@/components//hooks/useMessage";
@@ -19,6 +20,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { AiOutlinePlus, AiOutlineSearch } from "react-icons/ai";
+import notifSound from "@/public//music/NotificationSound.mp3";
 
 const Messages = () => {
   const [activeToolTip, setActiveToolTip] = React.useState(false);
@@ -26,6 +28,7 @@ const Messages = () => {
   const [canDeleteGroupMessage, setCanDeleteGroupMessage] = React.useState(false);
   const [canSeeGroupMembers, setCanSeeGroupMembers] = React.useState(false);
   const [canAddGroupMembers, setCanAddGroupMembers] = React.useState(false);
+  const { audioRef } = useAudio();
   const { activeFilterOptions } = useFilter();
   const { searchFilter, handleSearchFilter } = useSearchFilter("name");
   const {
@@ -163,10 +166,16 @@ const Messages = () => {
   }, [getMessageRoom]);
 
   React.useEffect(() => {
-    socket.on("get_messages", async () => {
+    socket.on("get_messages", async (args: { room: string }) => {
       await getMessageRoomMessages();
+
+      if (args.room !== user?.uuid) {
+        audioRef.current?.play();
+      }
     });
-  }, [socket, searchFilter, getMessageRoomMessages]);
+  }, [socket, searchFilter, audioRef, user?.uuid, getMessageRoomMessages]);
+
+  console.log(1);
 
   return (
     <div
@@ -309,6 +318,8 @@ const Messages = () => {
           ) : (
             <StandByMessagePanel />
           )}
+
+          <audio ref={audioRef} src={notifSound} />
         </div>
       </div>
     </div>
