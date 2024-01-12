@@ -16,11 +16,11 @@ import GroupMessagePreview from "@/components//messages/GroupMessagePreview";
 import PrivateMessagePreview from "@/components//messages/PrivateMessagePreview";
 import StandByMessagePanel from "@/components//messages/StandByMessagePanel";
 import { localizeDate } from "@/components//utils/dateUtils";
+import notifSound from "@/public//music/NotificationSound.mp3";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { AiOutlinePlus, AiOutlineSearch } from "react-icons/ai";
-import notifSound from "@/public//music/NotificationSound.mp3";
 
 const Messages = () => {
   const [activeToolTip, setActiveToolTip] = React.useState(false);
@@ -136,7 +136,7 @@ const Messages = () => {
         { headers: { Authorization: user?.token } }
       );
 
-      if (data) {
+      if (data.message) {
         if (messageRef.current) {
           messageRef.current.innerText = "";
         }
@@ -144,9 +144,7 @@ const Messages = () => {
           removeRawFile();
         }
         await getMessageRoomMessages();
-        socket.emit("send_message", {
-          rooms: roomType === "private" ? [user?.uuid, activeRoom.user_uuid] : [activeRoom.message_room],
-        });
+        socket.emit("send_message", { rooms: data.rooms });
       }
     } catch (error) {
       console.log(error);
@@ -168,14 +166,11 @@ const Messages = () => {
   React.useEffect(() => {
     socket.on("get_messages", async (args: { room: string }) => {
       await getMessageRoomMessages();
-
       if (args.room !== user?.uuid) {
         audioRef.current?.play();
       }
     });
   }, [socket, searchFilter, audioRef, user?.uuid, getMessageRoomMessages]);
-
-  console.log(1);
 
   return (
     <div
