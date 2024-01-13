@@ -61,7 +61,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
   const user = session?.user;
 
   const socketAssociateInvite = (room: string) => {
-    socket.emit("associate_invite", { room });
+    socket.emit("send_associate_invite", { room });
   };
 
   const getUsers = React.useCallback(async () => {
@@ -138,7 +138,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
   }, [getUsers]);
 
   React.useEffect(() => {
-    socket.on("update_associate_invite", () => {
+    socket.on("reflect_send_associate_invite", () => {
       getUsers();
     });
   }, [socket, getUsers]);
