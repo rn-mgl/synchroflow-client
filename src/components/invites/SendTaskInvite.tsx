@@ -46,7 +46,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
   const { isLoading, handleLoader } = useLoader();
   const { message, handleMessages } = useNotification();
 
-  const { url } = useGlobalContext();
+  const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
   const params = useParams();
@@ -153,6 +153,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
         handleMessages(true, "Invite sent successfully", "info");
         handleLoader(false);
         props.toggleCanInvite();
+        socket.emit("send_main_task_invite", { rooms: associatesToInvite });
       }
     } catch (error) {
       handleLoader(false);

@@ -1,4 +1,5 @@
 "use client";
+import { useGlobalContext } from "@/base/context";
 import SearchFilter from "@/components//filter/SearchFilter";
 import SearchOptions from "@/components//filter/SearchOptions";
 import SortFilter from "@/components//filter/SortFilter";

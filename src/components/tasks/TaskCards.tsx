@@ -27,7 +27,7 @@ interface CollaboratorsProps {
 const TaskCards: React.FC<TaskCardProps> = (props) => {
   const [collaborators, setCollaborators] = React.useState<Array<CollaboratorsProps>>([]);
 
-  const { url } = useGlobalContext();
+  const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -72,6 +72,12 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
   React.useEffect(() => {
     getCollaborators();
   }, [getCollaborators]);
+
+  React.useEffect(() => {
+    socket.on("refetch_tasks", async () => {
+      await getCollaborators();
+    });
+  }, [socket, getCollaborators]);
 
   return (
     <Link

@@ -83,7 +83,7 @@ const Associates = () => {
   }, [getRecentAssociates, sortFilter, searchFilter, searchCategory]);
 
   React.useEffect(() => {
-    socket.on("update_associates", () => {
+    socket.on("refetch_associates", () => {
       getAllAssociates(sortFilter, searchFilter, searchCategory);
       getRecentAssociates(sortFilter, searchFilter, searchCategory);
     });
