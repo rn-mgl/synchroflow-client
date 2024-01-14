@@ -49,7 +49,7 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
   const { isLoading, handleLoader } = useLoader();
 
   const params = useParams();
-  const { url } = useGlobalContext();
+  const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -90,9 +90,10 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
         { mainTaskData },
         { headers: { Authorization: user?.token } }
       );
-      if (data) {
+      if (data.updateTask) {
         props.toggleCanEditTask();
         await props.getSingleTask();
+        socket.emit("update_task", { rooms: data.rooms });
       }
     } catch (error) {
       handleLoader(false);

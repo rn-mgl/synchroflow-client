@@ -58,7 +58,12 @@ const Invites = () => {
           );
           if (data) {
             await removeSentTaskInvites(inviteUUID, invitedUserUUID, inviteFromUUID);
-            socket.emit("accept_task_invite", { inviteUUID, invitedRoom: invitedUserUUID, fromRoom: inviteFromUUID });
+            socket.emit("accept_task_invite", {
+              inviteUUID,
+              invitedRoom: invitedUserUUID,
+              fromRoom: inviteFromUUID,
+              mainTaskUUID,
+            });
           }
         } catch (error) {
           console.log(error);
@@ -93,8 +98,6 @@ const Invites = () => {
     },
     [user?.token, url, socket, getSentAssociateInvites, getReceivedAssociateInvites]
   );
-
-  console.log("main");
 
   const acceptReceivedAssociateInvites = React.useCallback(
     async (inviteUUID: string, invitedUserUUID: string, inviteFromUUID: string) => {

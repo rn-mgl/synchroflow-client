@@ -12,6 +12,7 @@ import SelectComp from "../input/SelectComp";
 import TextAreaComp from "../input/TextAreaComp";
 import TextComp from "../input/TextComp";
 import { dateTimeForInput } from "../utils/dateUtils";
+import { useParams } from "next/navigation";
 
 interface SubTaskDataStateProps {
   date_created: string;
@@ -29,6 +30,7 @@ interface EditSubTaskProps {
   subTaskData: SubTaskDataStateProps;
   toggleCanEditSubTask: () => void;
   getSubTask: () => Promise<void>;
+  getCreatedSubTasks: () => Promise<void>;
 }
 
 const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
@@ -43,9 +45,10 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
   });
   const { isLoading, handleLoader } = useLoader();
 
-  const { url } = useGlobalContext();
+  const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+  const params = useParams();
 
   const handleTaskData = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const name = e.target.name;
@@ -66,11 +69,13 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
       const { data } = await axios.patch(
         `${url}/sub_tasks/${props.subTaskData.sub_task_uuid}`,
         { subTaskData },
-        { headers: { Authorization: user?.token } }
+        { headers: { Authorization: user?.token }, params: { mainTaskUUID: params?.task_uuid } }
       );
-      if (data) {
+      if (data.updateSubTask) {
         await props.getSubTask();
+        await props.getCreatedSubTasks();
         props.toggleCanEditSubTask();
+        socket.emit("update_subtask", { rooms: data.rooms });
       }
     } catch (error) {
       handleLoader(false);

@@ -63,7 +63,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
   const [canEditSubTask, setCanEditSubTask] = React.useState(false);
   const [canDeleteSubTask, setCanDeleteSubTask] = React.useState(false);
 
-  const { url } = useGlobalContext();
+  const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
   const params = useParams();
@@ -89,19 +89,21 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
       );
       if (data) {
         await getAllMainTaskCollaborators();
+        socket.emit("assign_sub_task", { room: collaboratorUUID });
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const revokeAssignedSubTask = async (collaboratorUUID: string) => {
+  const revokeAssignedSubTask = async (collaboratorUUID: string, collaboratorUserUUID: string) => {
     try {
       const { data } = await axios.delete(`${url}/sub_task_collaborators/${collaboratorUUID}`, {
         headers: { Authorization: user?.token },
       });
       if (data) {
         await getAllMainTaskCollaborators();
+        socket.emit("revoke_sub_task", { room: collaboratorUserUUID });
       }
     } catch (error) {
       console.log(error);
@@ -140,6 +142,26 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
     }
   }, [props.selectedSubTask, url, user?.token]);
 
+  const deleteSubtask = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.delete(`${url}/sub_tasks/${subTaskData.sub_task_uuid}`, {
+        headers: { Authorization: user?.token },
+        params: { mainTaskUUID: params?.task_uuid },
+      });
+
+      if (data.deleteSubTask) {
+        props.handleSelectedSubTask(props.selectedSubTask);
+        await props.getCreatedSubTasks();
+        toggleCanDeleteSubTask();
+
+        socket.emit("delete_subtask", { rooms: data.rooms });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const mappedCollaborators = collaborators.map((collaborator, index) => {
     return (
       <div key={index} className="flex flex-col gap-2 items-center justify-start w-full">
@@ -155,7 +177,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
 
             {collaborator.is_sub_task_collaborator ? (
               <button
-                onClick={() => revokeAssignedSubTask(collaborator.sub_task_collaborator_uuid)}
+                onClick={() => revokeAssignedSubTask(collaborator.sub_task_collaborator_uuid, collaborator.user_uuid)}
                 className="flex flex-row gap-2 text-error-500 items-center hover:underline 
                     hover:underline-offset-2 transition-all"
               >
@@ -184,6 +206,18 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
     getSubtask();
   }, [getSubtask]);
 
+  React.useEffect(() => {
+    socket.on("refetch_assigned_subtask", async () => {
+      await getAllMainTaskCollaborators();
+    });
+  }, [socket, getAllMainTaskCollaborators]);
+
+  React.useEffect(() => {
+    socket.on("reflect_update_subtask", async () => {
+      await getSubtask();
+    });
+  }, [socket, getSubtask]);
+
   return (
     <div
       className="w-full h-full fixed top-0 left-0 backdrop-blur-md z-20 animate-fadeIn
@@ -193,18 +227,21 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
       {canDeleteSubTask ? (
         <DeleteConfirmation
           apiRoute={`sub_tasks/${subTaskData.sub_task_uuid}`}
-          toggleConfirmation={() => {
-            toggleCanDeleteSubTask();
-            props.handleSelectedSubTask(props.selectedSubTask);
-          }}
+          toggleConfirmation={toggleCanDeleteSubTask}
           refetchData={props.getCreatedSubTasks}
+          customDelete={deleteSubtask}
           title="Delete Task"
           message="are you sure you want to delete this task?"
         />
       ) : null}
 
       {canEditSubTask ? (
-        <EditSubTask subTaskData={subTaskData} getSubTask={getSubtask} toggleCanEditSubTask={toggleCanEditSubTask} />
+        <EditSubTask
+          subTaskData={subTaskData}
+          getSubTask={getSubtask}
+          toggleCanEditSubTask={toggleCanEditSubTask}
+          getCreatedSubTasks={props.getCreatedSubTasks}
+        />
       ) : null}
 
       <div

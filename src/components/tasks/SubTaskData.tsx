@@ -19,7 +19,7 @@ interface SubTaskDataProps {
 
 const SubTaskData: React.FC<SubTaskDataProps> = (props) => {
   return (
-    <div className="flex flex-col gap-4 w-full items-center justify-start animate-fadeIn h-full">
+    <div className="flex flex-col gap-4 w-full items-center justify-start animate-fadeIn h-auto">
       <div className="w-full gap-2 flex flex-col border-b-2 border-primary-500 p-2">
         <p className="text-xs font-light">Title</p>
         <p className="capitalize">{props.sub_task_title}</p>
@@ -30,7 +30,7 @@ const SubTaskData: React.FC<SubTaskDataProps> = (props) => {
         <p className="capitalize">{props.sub_task_subtitle}</p>
       </div>
 
-      <div className="w-full gap-2 flex flex-col max-h-80 overflow-y-auto cstm-scrollbar-2 border-b-2 border-primary-500 p-2">
+      <div className="w-full gap-2 flex flex-col min-h-[10rem] max-h-80 overflow-y-auto cstm-scrollbar-2 border-b-2 border-primary-500 p-2">
         <p className="text-xs font-light">Description</p>
         <p className="capitalize whitespace-pre-wrap break-words">{props.sub_task_description} </p>
       </div>

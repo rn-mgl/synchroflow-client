@@ -66,7 +66,7 @@ const SingleTask = () => {
   const [activeToolTip, setActiveToolTip] = React.useState(false);
 
   const params = useParams();
-  const { url } = useGlobalContext();
+  const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
   const isTaskCreator = user?.id === taskData.main_task_by;
@@ -129,7 +129,7 @@ const SingleTask = () => {
   }, [url, user?.token, params?.task_uuid]);
 
   const getCreatedSubTasks = React.useCallback(async () => {
-    if (user?.token) {
+    if (isTaskCreator && user?.token) {
       try {
         const { data } = await axios.get(`${url}/sub_tasks`, {
           headers: { Authorization: user?.token },
@@ -142,7 +142,7 @@ const SingleTask = () => {
         console.log(error);
       }
     }
-  }, [url, user?.token, params?.task_uuid]);
+  }, [url, user?.token, params?.task_uuid, isTaskCreator]);
 
   const getAssignedSubTasks = React.useCallback(async () => {
     if (!isTaskCreator && user?.token) {
@@ -186,6 +186,41 @@ const SingleTask = () => {
   React.useEffect(() => {
     getSingleTaskCollborators();
   }, [getSingleTaskCollborators]);
+
+  React.useEffect(() => {
+    socket.on("refetch_tasks_collaborators", async (args: { mainTaskUUID: string }) => {
+      if (params?.task_uuid === args.mainTaskUUID) {
+        await getSingleTaskCollborators();
+      }
+    });
+  }, [socket, params?.task_uuid, getSingleTaskCollborators]);
+
+  React.useEffect(() => {
+    socket.on("reflect_update_task", async () => {
+      await getSingleTask();
+    });
+  }, [socket, getSingleTask]);
+
+  React.useEffect(() => {
+    socket.on("refetch_assigned_subtask", async () => {
+      await getAssignedSubTasks();
+    });
+  }, [socket, getAssignedSubTasks]);
+
+  React.useEffect(() => {
+    socket.on("reflect_update_subtask", async () => {
+      await getAssignedSubTasks();
+    });
+  }, [socket, getAssignedSubTasks]);
+
+  React.useEffect(() => {
+    socket.on("reflect_delete_subtask", async () => {
+      await getAssignedSubTasks();
+      handleSelectedSubTask("");
+    });
+  }, [socket, getAssignedSubTasks]);
+
+  console.log(1);
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">

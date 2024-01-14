@@ -30,7 +30,7 @@ const CreateSubTask: React.FC<CreateSubTaskProps> = (props) => {
   const { isLoading, handleLoader } = useLoader();
   const params = useParams();
 
-  const { url } = useGlobalContext();
+  const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
 
