@@ -4,7 +4,7 @@ const local = "http://localhost:3000";
 const prod = "https://synchroflow.vercel.app";
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   env: {
     NEXTAUTH_URL: prod,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,

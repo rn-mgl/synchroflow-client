@@ -40,6 +40,7 @@ interface ActiveMessagePanelProps {
   toggleCanDeleteGroupMessage: () => void;
   toggleCanSeeGroupMembers: () => void;
   toggleCanAddGroupMembers: () => void;
+  handleMessagePanelKeys: (e: React.KeyboardEvent<HTMLDivElement>) => void;
 }
 
 const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
@@ -191,6 +192,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
           <div className="flex flex-row items-center justify-center rounded-md w-full gap-4 bg-neutral-100 p-2">
             <div
               placeholder="Aa"
+              onKeyDown={(e) => props.handleMessagePanelKeys(e)}
               contentEditable={true}
               ref={props.messageRef}
               className="border-none outline-none cstm-scrollbar h-auto w-full max-h-[12rem] overflow-y-auto 

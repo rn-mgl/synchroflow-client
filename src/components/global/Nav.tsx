@@ -20,8 +20,8 @@ import {
   AiOutlineSetting,
   AiOutlineTeam,
 } from "react-icons/ai";
-import { MdGroupAdd } from "react-icons/md";
 import { IoNotifications } from "react-icons/io5";
+import { MdGroupAdd } from "react-icons/md";
 import { localizeDate, localizeTime } from "../utils/dateUtils";
 
 interface UserData {
@@ -59,7 +59,6 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
   const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const path = usePathname();
-
   const user = session?.user;
 
   const toggleNavIsVisible = (using: "button" | "link") => {

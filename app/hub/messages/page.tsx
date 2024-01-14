@@ -7,6 +7,7 @@ import useFile from "@/components//hooks/useFile";
 import useFilter from "@/components//hooks/useFilter";
 import useMessage from "@/components//hooks/useMessage";
 import useSearchFilter from "@/components//hooks/useSearchFilter";
+import useSettings from "@/components//hooks/useSettings";
 import ActiveMessagePanel from "@/components//messages/ActiveMessagePanel";
 import AddGroupMembers from "@/components//messages/AddGroupMembers";
 import CreateGroupMessage from "@/components//messages/CreateGroupMessage";
@@ -50,6 +51,7 @@ const Messages = () => {
   } = useMessage();
 
   const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } = useFile();
+  const { settings } = useSettings();
 
   const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
@@ -73,6 +75,13 @@ const Messages = () => {
 
   const toggleCanAddGroupMembers = () => {
     setCanAddGroupMembers((prev) => !prev);
+  };
+
+  const handleMessagePanelKeys = async (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      await sendMessage();
+    }
   };
 
   const mappedPrivateMessageRoomPreviews = messageRooms.map((room, index) => {
@@ -148,6 +157,7 @@ const Messages = () => {
           removeRawFile();
         }
         await getMessageRoomMessages();
+        await getMessageRooms(searchFilter);
         socket.emit("send_message", { rooms: data.rooms });
       }
     } catch (error) {
@@ -215,11 +225,22 @@ const Messages = () => {
   React.useEffect(() => {
     socket.on("get_messages", async (args: { room: string }) => {
       await getMessageRoomMessages();
-      if (args.room !== user?.uuid) {
+      handleSelectedMessageRoom(selectedMessageRoom, "preview");
+      if (settings.message_notification && user?.uuid && args.room !== user?.uuid) {
         audioRef.current?.play();
       }
     });
-  }, [socket, searchFilter, audioRef, user?.uuid, getMessageRoomMessages]);
+  }, [
+    socket,
+    searchFilter,
+    audioRef,
+    user?.uuid,
+    settings.message_notification,
+    settings.notification_sound,
+    selectedMessageRoom,
+    getMessageRoomMessages,
+    handleSelectedMessageRoom,
+  ]);
 
   return (
     <div
@@ -359,6 +380,7 @@ const Messages = () => {
               toggleCanDeleteGroupMessage={toggleCanDeleteGroupMessage}
               toggleCanSeeGroupMembers={toggleCanSeeGroupMembers}
               toggleCanAddGroupMembers={toggleCanAddGroupMembers}
+              handleMessagePanelKeys={handleMessagePanelKeys}
             />
           ) : (
             <StandByMessagePanel />
