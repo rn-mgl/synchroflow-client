@@ -35,6 +35,8 @@ const Tasks = () => {
     toggleActiveSearchOptions,
   } = useSearchFilter("title");
 
+  const { socket } = useGlobalContext();
+
   const toggleCanCreateTask = () => {
     setCanCreateTask((prev) => !prev);
   };
@@ -110,6 +112,42 @@ const Tasks = () => {
   React.useEffect(() => {
     getCollaboratedTasksToday(sortFilter, searchFilter, searchCategory);
   }, [getCollaboratedTasksToday, sortFilter, searchFilter, searchCategory]);
+
+  React.useEffect(() => {
+    socket.on("reflect_delete_task", async () => {
+      await getMyTasks(sortFilter, searchFilter, searchCategory);
+      await getCollaboratedTasks(sortFilter, searchFilter, searchCategory);
+      await getMyTasksToday(sortFilter, searchFilter, searchCategory);
+      await getCollaboratedTasksToday(sortFilter, searchFilter, searchCategory);
+    });
+  }, [
+    socket,
+    sortFilter,
+    searchFilter,
+    searchCategory,
+    getMyTasks,
+    getCollaboratedTasks,
+    getMyTasksToday,
+    getCollaboratedTasksToday,
+  ]);
+
+  React.useEffect(() => {
+    socket.on("reflect_update_task", async () => {
+      await getMyTasks(sortFilter, searchFilter, searchCategory);
+      await getCollaboratedTasks(sortFilter, searchFilter, searchCategory);
+      await getMyTasksToday(sortFilter, searchFilter, searchCategory);
+      await getCollaboratedTasksToday(sortFilter, searchFilter, searchCategory);
+    });
+  }, [
+    socket,
+    sortFilter,
+    searchFilter,
+    searchCategory,
+    getMyTasks,
+    getCollaboratedTasks,
+    getMyTasksToday,
+    getCollaboratedTasksToday,
+  ]);
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">

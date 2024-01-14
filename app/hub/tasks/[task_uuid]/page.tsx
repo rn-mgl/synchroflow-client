@@ -2,20 +2,19 @@
 import { useGlobalContext } from "@/base/context";
 import DeleteConfirmation from "@/components//global/DeleteConfirmation";
 import SendTaskInvite from "@/components//invites/SendTaskInvite";
-import AssignSubTask from "@/components//tasks/SingleSubTask";
 import AsssignedSubTasks from "@/components//tasks/AsssignedSubTasks";
 import CreateSubTask from "@/components//tasks/CreateSubTask";
 import CreatedSubTasks from "@/components//tasks/CreatedSubTasks";
 import EditTask from "@/components//tasks/EditTask";
+import SingleSubTask from "@/components//tasks/SingleSubTask";
 import SingleTaskMainData from "@/components//tasks/SingleTaskMainData";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { BsArrowLeft } from "react-icons/bs";
-import SingleSubTask from "@/components//tasks/SingleSubTask";
 
 interface SingleTaskDataStateProps {
   main_task_banner: string | null;
@@ -70,6 +69,7 @@ const SingleTask = () => {
   const { data: session } = useSession();
   const user = session?.user;
   const isTaskCreator = user?.id === taskData.main_task_by;
+  const router = useRouter();
 
   const toggleCanInvite = () => {
     setCanInvite((prev) => !prev);
@@ -160,6 +160,23 @@ const SingleTask = () => {
     }
   }, [url, user?.token, isTaskCreator, params?.task_uuid]);
 
+  const deleteTask = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.delete(`${url}/main_tasks/${params?.task_uuid}`, {
+        headers: { Authorization: user?.token },
+      });
+
+      if (data.deleteTask) {
+        toggleCanDeleteTask();
+        router.push("/hub/tasks");
+        socket.emit("delete_task", { mainTaskUUID: params?.task_uuid, rooms: data.rooms });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const mappedCollaborators = collaborators.map((collaborator, index) => {
     return (
       <div key={index} className="flex flex-col gap-2 items-center justify-start w-full">
@@ -220,7 +237,13 @@ const SingleTask = () => {
     });
   }, [socket, getAssignedSubTasks]);
 
-  console.log(1);
+  React.useEffect(() => {
+    socket.on("reflect_delete_task", async (args: { mainTaskUUID: string }) => {
+      if (args.mainTaskUUID === params?.task_uuid) {
+        router.push("/hub/tasks");
+      }
+    });
+  }, [socket, params?.task_uuid, router]);
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">
@@ -247,6 +270,7 @@ const SingleTask = () => {
           <DeleteConfirmation
             apiRoute={`main_tasks/${params?.task_uuid}`}
             toggleConfirmation={toggleCanDeleteTask}
+            customDelete={deleteTask}
             redirectLink="/hub/tasks"
             title="Delete Task"
             message="are you sure you want to delete this task?"
