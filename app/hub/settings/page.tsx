@@ -7,24 +7,12 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import notificationSound from "@/public//music/NotificationSound.mp3";
 import useAudio from "@/components//hooks/useAudio";
-
-interface UserSettingsStateProps {
-  notification_sound: number;
-  message_notification: boolean;
-  task_update: boolean;
-  task_deadline: boolean;
-  associate_invite: boolean;
-}
+import useSettings from "@/components//hooks/useSettings";
 
 const Settings = () => {
   const [activeNav, setActiveNav] = React.useState<"general" | "notification">("general");
-  const [userSettings, setUserSettings] = React.useState<UserSettingsStateProps>({
-    notification_sound: 50,
-    message_notification: false,
-    task_update: false,
-    task_deadline: false,
-    associate_invite: false,
-  });
+
+  const { settings, getUserSettings, handleUserGeneralSettings, handleUserNotificationSettings } = useSettings();
 
   const { audioRef } = useAudio();
 
@@ -36,51 +24,11 @@ const Settings = () => {
     setActiveNav(type);
   };
 
-  const handleUserGeneralSettings = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setUserSettings((prev) => {
-      if (name === "notification_sound" && audioRef.current) {
-        const newVolume = parseInt(value) / 100;
-        audioRef.current.volume = newVolume;
-        audioRef.current.play();
-      }
-      return {
-        ...prev,
-        [name]: value,
-      };
-    });
-  };
-
-  const handleUserNotificationSettings = (
-    name: "message_notification" | "task_update" | "task_deadline" | "associate_invite"
-  ) => {
-    setUserSettings((prev) => {
-      return {
-        ...prev,
-        [name]: !prev[name],
-      };
-    });
-  };
-
-  const getUserSettings = React.useCallback(async () => {
-    if (user?.token) {
-      try {
-        const { data } = await axios.get(`${url}/user_settings`, { headers: { Authorization: user?.token } });
-        if (data) {
-          setUserSettings(data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }, [url, user?.token]);
-
   const updateUserSettings = async () => {
     try {
       const { data } = await axios.patch(
         `${url}/user_settings`,
-        { userSettings },
+        { settings },
         { headers: { Authorization: user?.token } }
       );
       if (data) {
@@ -125,16 +73,17 @@ const Settings = () => {
 
           {activeNav === "general" ? (
             <General
-              notificationSound={userSettings.notification_sound}
+              notificationSound={settings.notification_sound}
               handleUserGeneralSettings={handleUserGeneralSettings}
               updateUserSettings={updateUserSettings}
+              audioRef={audioRef}
             />
           ) : activeNav === "notification" ? (
             <Notification
-              messageNotification={userSettings.message_notification}
-              taskUpdate={userSettings.task_update}
-              taskDeadline={userSettings.task_deadline}
-              associateInvite={userSettings.associate_invite}
+              messageNotification={settings.message_notification}
+              taskUpdate={settings.task_update}
+              taskDeadline={settings.task_deadline}
+              associateInvite={settings.associate_invite}
               handleUserNotificationSettings={handleUserNotificationSettings}
               updateUserSettings={updateUserSettings}
             />

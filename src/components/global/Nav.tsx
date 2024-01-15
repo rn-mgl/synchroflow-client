@@ -54,6 +54,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
     getNotifications,
   } = useNotification();
   const { message, handleMessages } = usePopUpMessage();
+
   const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const path = usePathname();
@@ -324,7 +325,8 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
           </button>
 
           <button
-            onClick={() => {
+            onClick={async () => {
+              await getNotifications();
               toggleNotificationIsVisible();
               toggleCheckedNotifications(true);
             }}

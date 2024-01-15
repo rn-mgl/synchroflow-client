@@ -24,6 +24,37 @@ export default function useSettings() {
   const { data: session } = useSession();
   const user = session?.user;
 
+  const handleUserGeneralSettings = React.useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>, audioRef: React.RefObject<HTMLAudioElement>) => {
+      const { name, value } = e.target;
+
+      setSettings((prev) => {
+        if (name === "notification_sound" && audioRef.current) {
+          const newVolume = parseInt(value) / 100;
+          audioRef.current.volume = newVolume;
+          audioRef.current.play();
+        }
+        return {
+          ...prev,
+          [name]: value,
+        };
+      });
+    },
+    []
+  );
+
+  const handleUserNotificationSettings = React.useCallback(
+    (name: "message_notification" | "task_update" | "task_deadline" | "associate_invite") => {
+      setSettings((prev) => {
+        return {
+          ...prev,
+          [name]: !prev[name],
+        };
+      });
+    },
+    []
+  );
+
   const getUserSettings = React.useCallback(async () => {
     if (user?.token) {
       try {
@@ -37,9 +68,5 @@ export default function useSettings() {
     }
   }, [url, user?.token]);
 
-  React.useEffect(() => {
-    getUserSettings();
-  }, [getUserSettings]);
-
-  return { settings };
+  return { settings, getUserSettings, handleUserGeneralSettings, handleUserNotificationSettings };
 }

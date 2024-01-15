@@ -1,9 +1,7 @@
-import React from "react";
-import usePopUpMessage from "./usePopUpMessage";
 import { useGlobalContext } from "@/base/context";
-import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation";
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import React from "react";
 
 interface NotificationsStateProps {
   from_image: string;

@@ -2,7 +2,11 @@ import React from "react";
 
 interface GeneralSettingsProps {
   notificationSound: number;
-  handleUserGeneralSettings: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  audioRef: React.RefObject<HTMLAudioElement>;
+  handleUserGeneralSettings: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    audioRef: React.RefObject<HTMLAudioElement>
+  ) => void;
   updateUserSettings: () => Promise<void>;
 }
 
@@ -17,7 +21,7 @@ const General: React.FC<GeneralSettingsProps> = (props) => {
             className="text-primary-500 bg-primary-500 w-24"
             step={10}
             value={props.notificationSound}
-            onChange={(e) => props.handleUserGeneralSettings(e)}
+            onChange={(e) => props.handleUserGeneralSettings(e, props.audioRef)}
           />
 
           <p>Notification Sound</p>
