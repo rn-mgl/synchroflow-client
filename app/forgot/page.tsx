@@ -5,7 +5,7 @@ import Loading from "@/components//global/Loading";
 import Message from "@/components//global/Message";
 import useDisable from "@/components//hooks/useDisable";
 import useLoader from "@/components//hooks/useLoading";
-import useNotification from "@/components//hooks/useNotification";
+import usePopUpMessage from "@/components//hooks/usePopUpMessage";
 import TextComp from "@/components//input/TextComp";
 
 import forgot from "@/public//auth/ForgotPassword.svg";
@@ -24,7 +24,7 @@ const Forgot = () => {
     candidateSurname: "",
   });
 
-  const { message, handleMessages } = useNotification();
+  const { message, handleMessages } = usePopUpMessage();
   const { isLoading, handleLoader } = useLoader();
   const { disable, handleDisable } = useDisable();
 

@@ -6,7 +6,7 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useGlobalContext } from "../../../context";
-import useNotification from "../hooks/useNotification";
+import usePopUpMessage from "../hooks/usePopUpMessage";
 import Message from "./Message";
 
 import {
@@ -23,6 +23,7 @@ import {
 import { IoNotifications } from "react-icons/io5";
 import { MdGroupAdd } from "react-icons/md";
 import { localizeDate, localizeTime } from "../utils/dateUtils";
+import useNotification from "../hooks/useNotification";
 
 interface UserData {
   email: string;
@@ -33,19 +34,8 @@ interface UserData {
   user_uuid: string;
 }
 
-interface NotificationsStateProps {
-  from_image: string;
-  name: string;
-  purpose: string;
-  surname: string;
-  title: string;
-  notif_date: string;
-}
-
 const Nav = ({ children }: { children: React.ReactNode }) => {
-  const [notificationIsVisible, setNotificationIsVisible] = React.useState(false);
   const [navIsVisible, setNavIsVisible] = React.useState(false);
-  const [notifications, setNotifications] = React.useState<Array<NotificationsStateProps>>([]);
   const [userData, setUserData] = React.useState<UserData>({
     email: "",
     image: "",
@@ -55,7 +45,15 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
     user_uuid: "",
   });
 
-  const { message, handleMessages } = useNotification();
+  const {
+    notificationIsVisible,
+    notifications,
+    checkedNotifications,
+    toggleNotificationIsVisible,
+    toggleCheckedNotifications,
+    getNotifications,
+  } = useNotification();
+  const { message, handleMessages } = usePopUpMessage();
   const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const path = usePathname();
@@ -76,10 +74,6 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 
       return !prev;
     });
-  };
-
-  const toggleNotificationIsVisible = () => {
-    setNotificationIsVisible((prev) => !prev);
   };
 
   const logOut = async () => {
@@ -105,19 +99,6 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
       }
     }
   }, [url, user?.token, user?.uuid, handleMessages]);
-
-  const getNotifications = React.useCallback(async () => {
-    if (notificationIsVisible && user?.token) {
-      try {
-        const { data } = await axios.get(`${url}/notifications`, { headers: { Authorization: user?.token } });
-        if (data) {
-          setNotifications(data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }, [url, user?.token, notificationIsVisible]);
 
   const mappedNotifications = notifications.map((notification, index) => {
     const action = notification.purpose === "group member" ? "added you as a" : "sent you a";
@@ -257,7 +238,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 
           <Link
             onClick={() => toggleNavIsVisible("link")}
-            href="/hub/messages"
+            href="/hub/messages/private/me"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
                       hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
                         path?.includes("messages")
@@ -343,11 +324,14 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
           </button>
 
           <button
-            onClick={toggleNotificationIsVisible}
+            onClick={() => {
+              toggleNotificationIsVisible();
+              toggleCheckedNotifications(true);
+            }}
             className="p-2 border-[1px] rounded-full border-inherit relative cursor-pointer l-s:ml-auto"
           >
             <AiOutlineBell className="text-lg text-secondary-300" />
-            <div className="w-2 h-2 bg-red-500 absolute rounded-full top-2 right-2" />
+            {!checkedNotifications ? <div className="w-2 h-2 bg-red-500 absolute rounded-full top-2 right-2" /> : null}
           </button>
 
           <Link

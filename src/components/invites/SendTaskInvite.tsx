@@ -16,7 +16,7 @@ import SearchFilter from "../filter/SearchFilter";
 import Loading from "../global/Loading";
 import Message from "../global/Message";
 import useLoader from "../hooks/useLoading";
-import useNotification from "../hooks/useNotification";
+import usePopUpMessage from "../hooks/usePopUpMessage";
 import TextAreaComp from "../input/TextAreaComp";
 import useSearchFilter from "../hooks/useSearchFilter";
 import useFilter from "../hooks/useFilter";
@@ -44,7 +44,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
   const { activeFilterOptions } = useFilter();
   const { searchFilter, handleSearchFilter } = useSearchFilter("name");
   const { isLoading, handleLoader } = useLoader();
-  const { message, handleMessages } = useNotification();
+  const { message, handleMessages } = usePopUpMessage();
 
   const { url, socket } = useGlobalContext();
   const { data: session } = useSession();

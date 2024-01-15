@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import { BsCheck, BsCheckAll, BsDot } from "react-icons/bs";
 import { localizeDate } from "../utils/dateUtils";
+import Link from "next/link";
 
 interface PrivateMessagePreviewProps {
   image: string | null;
@@ -18,7 +19,6 @@ interface PrivateMessagePreviewProps {
   isSelected: boolean;
   isSender: boolean;
   messageRoom: string;
-  handleSelectedMessageRoom: () => void;
 }
 
 const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
@@ -60,16 +60,17 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
   }, [socket, getLatestMessage]);
 
   return (
-    <button
-      onClick={props.handleSelectedMessageRoom}
+    <Link
+      href={`/hub/messages/private/${props.messageRoom}`}
+      shallow={true}
       className={`w-full p-2 rounded-lg hover:bg-neutral-50 
                 flex flex-row items-center gap-2 transition-all
                 ${props.isSelected && "bg-primary-100"}`}
     >
       <div
         style={{ backgroundImage: `url(${props.image})` }}
-        className={`min-h-[3rem] min-w-[3rem] rounded-full bg-primary-100
-                  bg-center bg-contain ${props.isSelected && "bg-white"}`}
+        className={`min-h-[3rem] min-w-[3rem] rounded-full
+                  bg-center bg-contain ${props.isSelected ? "bg-white" : "bg-primary-100"}`}
       />
       <div className="w-full h-full flex flex-col justify-between items-center">
         <div className="flex flex-row justify-center items-center w-full gap-4">
@@ -109,7 +110,7 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
           </p>
         </div>
       </div>
-    </button>
+    </Link>
   );
 };
 

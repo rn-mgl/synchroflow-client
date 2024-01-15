@@ -9,7 +9,7 @@ import SearchOptions from "../filter/SearchOptions";
 import SortFilter from "../filter/SortFilter";
 import Message from "../global/Message";
 import useFilter from "../hooks/useFilter";
-import useNotification from "../hooks/useNotification";
+import usePopUpMessage from "../hooks/usePopUpMessage";
 import useSearchFilter from "../hooks/useSearchFilter";
 import useSortFilter from "../hooks/useSortFilter";
 import AssociateCardsInvite from "./AssociateCardsInvite";
@@ -54,7 +54,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
       is_invited: false,
     },
   ]);
-  const { message, handleMessages } = useNotification();
+  const { message, handleMessages } = usePopUpMessage();
 
   const { url, socket } = useGlobalContext();
   const { data: session } = useSession();

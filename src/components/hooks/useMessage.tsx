@@ -1,6 +1,7 @@
 import { useGlobalContext } from "@/base/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
 import React from "react";
 
 export interface MessageRoomsStateProps {
@@ -31,9 +32,6 @@ export interface RoomMessagesStateProps {
 }
 
 export default function useMessage() {
-  const [selectedMessageRoom, setSelectedMessageRoom] = React.useState("");
-  const [roomType, setRoomType] = React.useState<"private" | "group">("private");
-
   const messageRef = React.useRef<HTMLDivElement>(null); // used a separate use ref to clear div content after sending message
 
   const [messageRooms, setMessageRooms] = React.useState<Array<MessageRoomsStateProps>>([]);
@@ -59,28 +57,10 @@ export default function useMessage() {
   const { url } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+  const params = useParams();
 
   const handleSelectedMessage = React.useCallback((messageUUID: string) => {
     setSelectedMessage((prev) => (prev === messageUUID ? "" : messageUUID));
-  }, []);
-
-  const handleSelectedRoomType = React.useCallback((roomType: "private" | "group") => {
-    setRoomType(roomType);
-    setSelectedMessageRoom("");
-    setActiveRoom({
-      image: "",
-      name: "",
-      surname: "",
-      message_room: "",
-      message: "",
-      message_file: "",
-      message_from: -1,
-      user_uuid: "",
-      date_sent: "",
-      created_by: -1,
-      room_image: "",
-      room_name: "",
-    });
   }, []);
 
   const toggleCanCreateGroupMessage = React.useCallback(() => {
@@ -88,7 +68,7 @@ export default function useMessage() {
   }, []);
 
   const getMessageRooms = React.useCallback(
-    async (searchFilter: string) => {
+    async (searchFilter: string, roomType: "private" | "group") => {
       if (user?.token) {
         try {
           const { data } = await axios.get(`${url}/${roomType}_message_rooms`, {
@@ -103,59 +83,57 @@ export default function useMessage() {
         }
       }
     },
-    [url, user?.token, roomType]
+    [url, user?.token]
   );
 
-  const getMessageRoomMessages = React.useCallback(async () => {
-    if (user?.token) {
-      try {
-        const { data } = await axios.get(`${url}/${roomType}_message_rooms/${selectedMessageRoom}`, {
-          headers: { Authorization: user?.token },
-          params: { type: "messages" },
-        });
-        if (data) {
-          setRoomMessages(data);
+  const getMessageRoomMessages = React.useCallback(
+    async (roomType: "private" | "group") => {
+      if (user?.token) {
+        try {
+          const { data } = await axios.get(`${url}/${roomType}_message_rooms/${params?.room_uuid}`, {
+            headers: { Authorization: user?.token },
+            params: { type: "messages" },
+          });
+          if (data) {
+            setRoomMessages(data);
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
       }
-    }
-  }, [url, user?.token, selectedMessageRoom, roomType]);
+    },
+    [url, user?.token, params?.room_uuid]
+  );
 
-  const getMessageRoom = React.useCallback(async () => {
-    if (user?.token && selectedMessageRoom) {
-      try {
-        const { data } = await axios.get(`${url}/${roomType}_message_rooms/${selectedMessageRoom}`, {
-          headers: { Authorization: user?.token },
-          params: { type: "main" },
-        });
-        if (data) {
-          setActiveRoom(data);
+  const getMessageRoom = React.useCallback(
+    async (roomType: "private" | "group") => {
+      if (user?.token && params?.room_uuid) {
+        try {
+          const { data } = await axios.get(`${url}/${roomType}_message_rooms/${params?.room_uuid}`, {
+            headers: { Authorization: user?.token },
+            params: { type: "main" },
+          });
+          if (data) {
+            setActiveRoom(data);
+          }
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
       }
-    }
-  }, [url, user?.token, roomType, selectedMessageRoom]);
-
-  const handleSelectedMessageRoom = React.useCallback((messageUUID: string, type: "back" | "preview") => {
-    setSelectedMessageRoom((prev) => (prev === messageUUID && type === "back" ? "" : messageUUID));
-  }, []);
+    },
+    [url, user?.token, params?.room_uuid]
+  );
 
   return {
-    selectedMessageRoom,
     roomMessages,
     messageRooms,
     activeRoom,
     messageRef,
     selectedMessage,
-    roomType,
     canCreateGroupMessage,
     getMessageRooms,
     getMessageRoomMessages,
-    handleSelectedMessageRoom,
     handleSelectedMessage,
-    handleSelectedRoomType,
     toggleCanCreateGroupMessage,
     getMessageRoom,
   };

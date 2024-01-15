@@ -3,6 +3,7 @@
 import { useGlobalContext } from "@/base/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import React from "react";
 import { BsCheck, BsCheckAll, BsDot } from "react-icons/bs";
 
@@ -16,7 +17,6 @@ interface GroupMessagePreviewProps {
   isSelected: boolean;
   isSender: boolean;
   messageRoom: string;
-  handleSelectedMessageRoom: () => void;
 }
 
 const GroupMessagePreview: React.FC<GroupMessagePreviewProps> = (props) => {
@@ -57,16 +57,17 @@ const GroupMessagePreview: React.FC<GroupMessagePreviewProps> = (props) => {
   }, [socket, getLatestMessage]);
 
   return (
-    <button
-      onClick={props.handleSelectedMessageRoom}
+    <Link
+      href={`/hub/messages/group/${props.messageRoom}`}
+      shallow={true}
       className={`w-full p-2 rounded-lg hover:bg-neutral-50 
                 flex flex-row items-center gap-2 transition-all
                 ${props.isSelected && "bg-primary-100"}`}
     >
       <div
         style={{ backgroundImage: `url(${props.roomImage})` }}
-        className={`min-h-[3rem] min-w-[3rem] rounded-full bg-primary-100
-                  bg-center bg-contain `}
+        className={`min-h-[3rem] min-w-[3rem] rounded-full 
+                  bg-center bg-contain ${props.isSelected ? "bg-white" : "bg-primary-100"}`}
       />
       <div className="w-full h-full flex flex-col justify-between items-center">
         <div className="flex flex-row justify-center items-center w-full gap-4">
@@ -102,7 +103,7 @@ const GroupMessagePreview: React.FC<GroupMessagePreviewProps> = (props) => {
           <p className="text-xs">{props.dateSent}</p>
         </div>
       </div>
-    </button>
+    </Link>
   );
 };
 

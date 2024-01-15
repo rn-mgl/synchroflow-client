@@ -17,6 +17,7 @@ import FilePreview from "../global/FilePreview";
 import FileViewer from "../global/FileViewer";
 import { MessageRoomsStateProps, RoomMessagesStateProps } from "../hooks/useMessage";
 import { localizeDate, localizeTime } from "../utils/dateUtils";
+import Link from "next/link";
 
 interface ActiveMessagePanelProps {
   roomName?: string;
@@ -24,7 +25,6 @@ interface ActiveMessagePanelProps {
   activeRoom: MessageRoomsStateProps;
   roomMessages: Array<RoomMessagesStateProps>;
   messageRef: RefObject<HTMLDivElement>;
-  selectedMessageRoom: string;
   selectedMessage: string;
   rawFile: any;
   fileData: { name: string; url: string; type: string };
@@ -33,14 +33,13 @@ interface ActiveMessagePanelProps {
   toggleActiveToolTip: () => void;
   selectedFileViewer: (e: React.ChangeEvent<HTMLInputElement>) => void;
   removeRawFile: () => void;
-  handleSelectedMessageRoom: () => void;
   handleSelectedMessage: (messageUUID: string) => void;
   sendMessage: () => void;
-  toggleCanEditGroupMessage: () => void;
-  toggleCanDeleteGroupMessage: () => void;
-  toggleCanSeeGroupMembers: () => void;
-  toggleCanAddGroupMembers: () => void;
   handleMessagePanelKeys: (e: React.KeyboardEvent<HTMLDivElement>) => void;
+  toggleCanEditGroupMessage?: () => void;
+  toggleCanDeleteGroupMessage?: () => void;
+  toggleCanSeeGroupMembers?: () => void;
+  toggleCanAddGroupMembers?: () => void;
 }
 
 const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
@@ -105,9 +104,9 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
         className="flex flex-row w-full items-center justify-start p-4 border-b-[1px] 
                 border-b-primary-100 gap-4"
       >
-        <button onClick={props.handleSelectedMessageRoom}>
+        <Link href="/hub/messages/me" shallow={true}>
           <BsArrowLeft className="text-primary-500" />
-        </button>
+        </Link>
 
         <p className="font-bold max-w-[20ch] truncate t:max-w-none t:truncate">{props.roomName}</p>
         {props.roomType === "group" ? (

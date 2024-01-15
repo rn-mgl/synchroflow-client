@@ -3,12 +3,12 @@
 import { useGlobalContext } from "@/base/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
 import React from "react";
 import { AiOutlineClose, AiOutlineUserAdd } from "react-icons/ai";
 
 interface AddGroupMembersProps {
   toggleCanAddGroupMembers: () => void;
-  selectedMessageRoom: string;
 }
 
 interface AddGroupMembersStateProps {
@@ -28,13 +28,14 @@ const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
   const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+  const params = useParams();
 
   const getPossibleGroupMembers = React.useCallback(async () => {
     if (user?.token) {
       try {
         const { data } = await axios.get(`${url}/group_message_members`, {
           headers: { Authorization: user?.token },
-          params: { messageRoom: props.selectedMessageRoom, type: "possible members" },
+          params: { messageRoom: params?.room_uuid, type: "possible members" },
         });
         if (data) {
           setGroupMembers(data);
@@ -43,13 +44,13 @@ const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, user?.token, props.selectedMessageRoom]);
+  }, [url, user?.token, params?.room_uuid]);
 
   const addToGroup = async (memberUUID: string) => {
     try {
       const { data } = await axios.post(
         `${url}/group_message_members`,
-        { memberUUID, groupRoomUUID: props.selectedMessageRoom },
+        { memberUUID, groupRoomUUID: params?.room_uuid },
         { headers: { Authorization: user?.token } }
       );
       if (data) {

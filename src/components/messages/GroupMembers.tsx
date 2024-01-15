@@ -9,9 +9,9 @@ import { localizeDate } from "../utils/dateUtils";
 import { MdAssignmentAdd } from "react-icons/md";
 import { IoPersonRemove } from "react-icons/io5";
 import DeleteConfirmation from "../global/DeleteConfirmation";
+import { useParams } from "next/navigation";
 
 interface GroupMembersProps {
-  selectedMessageRoom: string;
   isRoomCreator: boolean;
   toggleCanSeeGroupMembers: () => void;
   getMessageRoom: () => Promise<void>;
@@ -35,6 +35,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({ toggleCanSeeGroupMembers, .
   const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+  const params = useParams();
 
   const handleSelectedGroupMember = (groupMemberUUID: string) => {
     setSelectedGroupMember((prev) => (prev === groupMemberUUID ? "" : groupMemberUUID));
@@ -55,7 +56,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({ toggleCanSeeGroupMembers, .
       try {
         const { data } = await axios.get(`${url}/group_message_members`, {
           headers: { Authorization: user?.token },
-          params: { messageRoom: props.selectedMessageRoom, type: "all members" },
+          params: { messageRoom: params?.room_uuid, type: "all members" },
         });
         if (data) {
           setGroupMembers(data);
@@ -64,12 +65,12 @@ const GroupMembers: React.FC<GroupMembersProps> = ({ toggleCanSeeGroupMembers, .
         console.log(error);
       }
     }
-  }, [url, user?.token, props.selectedMessageRoom]);
+  }, [url, user?.token, params?.room_uuid]);
 
   const makeGroupOwner = async (ownerUUID: string) => {
     try {
       const { data } = await axios.patch(
-        `${url}/group_message_rooms/${props.selectedMessageRoom}`,
+        `${url}/group_message_rooms/${params?.room_uuid}`,
         { ownerUUID },
         { headers: { Authorization: user?.token }, params: { type: "owner" } }
       );

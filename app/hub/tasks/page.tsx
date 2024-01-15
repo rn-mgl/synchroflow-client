@@ -4,6 +4,7 @@ import SearchFilter from "@/components//filter/SearchFilter";
 import SearchOptions from "@/components//filter/SearchOptions";
 import SortFilter from "@/components//filter/SortFilter";
 import useFilter from "@/components//hooks/useFilter";
+import useNotification from "@/components//hooks/useNotification";
 import useSearchFilter from "@/components//hooks/useSearchFilter";
 import useSortFilter from "@/components//hooks/useSortFilter";
 import useTasks from "@/components//hooks/useTasks";
@@ -34,6 +35,7 @@ const Tasks = () => {
     handleSearchCategory,
     toggleActiveSearchOptions,
   } = useSearchFilter("title");
+  const { getNotifications } = useNotification();
 
   const { socket } = useGlobalContext();
 

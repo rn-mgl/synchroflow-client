@@ -2,6 +2,7 @@
 
 import { useGlobalContext } from "@/base/context";
 import useInvites from "@/components//hooks/useInvites";
+import useNotification from "@/components//hooks/useNotification";
 import ReceivedAssociateInvitesCard from "@/components//invites/ReceivedAssociateInvitesCard";
 import ReceivedTaskInvitesCard from "@/components//invites/ReceivedTaskInvitesCard";
 import SentAssociateInvitesCard from "@/components//invites/SentAssociateInvitesCard";
@@ -21,6 +22,7 @@ const Invites = () => {
     getSentAssociateInvites,
     getReceivedAssociateInvites,
   } = useInvites();
+  const { getNotifications } = useNotification();
 
   const { url, socket } = useGlobalContext();
   const { data: session } = useSession();
@@ -264,8 +266,9 @@ const Invites = () => {
   React.useEffect(() => {
     socket.on("reflect_send_associate_invite", async () => {
       await getReceivedAssociateInvites();
+      await getNotifications();
     });
-  }, [socket, getReceivedAssociateInvites]);
+  }, [socket, getReceivedAssociateInvites, getNotifications]);
 
   React.useEffect(() => {
     socket.on(
