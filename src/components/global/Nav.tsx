@@ -193,7 +193,9 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             onClick={() => toggleNavIsVisible("link")}
             href="/hub"
             className={`flex flex-row items-center justify-center gap-4 
-                      w-full p-4 hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
+                      w-full p-4 hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all 
+                      active:bg-gradient-to-br active:from-primary-100 active:to-primary-500
+                      ${
                         path === "/hub"
                           ? "opacity-100 bg-gradient-to-br from-primary-500 to-primary-900 text-white"
                           : "opacity-50"
@@ -209,7 +211,9 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             onClick={() => toggleNavIsVisible("link")}
             href="/hub/tasks"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
-                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
+                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all 
+                      active:bg-gradient-to-br active:from-primary-100 active:to-primary-500
+                      ${
                         path?.includes("tasks")
                           ? "opacity-100 bg-gradient-to-br from-primary-500 to-primary-900 text-white"
                           : "opacity-50"
@@ -225,7 +229,9 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             onClick={() => toggleNavIsVisible("link")}
             href="/hub/associates"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
-                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
+                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all 
+                      active:bg-gradient-to-br active:from-primary-100 active:to-primary-500
+                      ${
                         path?.includes("associates")
                           ? "opacity-100 bg-gradient-to-br from-primary-500 to-primary-900 text-white"
                           : "opacity-50"
@@ -241,7 +247,9 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             onClick={() => toggleNavIsVisible("link")}
             href="/hub/messages/private/me"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
-                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
+                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all 
+                      active:bg-gradient-to-br active:from-primary-100 active:to-primary-500
+                      ${
                         path?.includes("messages")
                           ? "opacity-100 bg-gradient-to-br from-primary-500 to-primary-900 text-white"
                           : "opacity-50"
@@ -257,7 +265,9 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             onClick={() => toggleNavIsVisible("link")}
             href="/hub/invites"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
-                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
+                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all 
+                      active:bg-gradient-to-br active:from-primary-100 active:to-primary-500
+                      ${
                         path?.includes("invites")
                           ? "opacity-100 bg-gradient-to-br from-primary-500 to-primary-900 text-white"
                           : "opacity-50"
@@ -273,7 +283,9 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             onClick={() => toggleNavIsVisible("link")}
             href="/hub/settings"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
-                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all ${
+                      hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all 
+                      active:bg-gradient-to-br active:from-primary-100 active:to-primary-500
+                      ${
                         path?.includes("settings")
                           ? "opacity-100 bg-gradient-to-br from-primary-500 to-primary-900 text-white"
                           : "opacity-50"
