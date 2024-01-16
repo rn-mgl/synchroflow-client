@@ -10,6 +10,7 @@ import useSearchFilter from "@/components//hooks/useSearchFilter";
 import useSettings from "@/components//hooks/useSettings";
 import ActiveMessagePanel from "@/components//messages/ActiveMessagePanel";
 import PrivateMessagePreview from "@/components//messages/PrivateMessagePreview";
+import StandByMessagePanel from "@/components//messages/StandByMessagePanel";
 import { localizeDate } from "@/components//utils/dateUtils";
 import notifSound from "@/public//music/NotificationSound.mp3";
 import axios from "axios";
@@ -202,24 +203,28 @@ const PrivateMessages = () => {
             </div>
           </div>
 
-          <ActiveMessagePanel
-            roomName={`${activeRoom.name} ${activeRoom.surname}`}
-            isRoomCreator={user?.id === activeRoom.created_by}
-            activeRoom={activeRoom}
-            roomMessages={roomMessages}
-            roomType="private"
-            messageRef={messageRef}
-            selectedMessage={selectedMessage}
-            rawFile={rawFile}
-            fileData={fileData}
-            activeToolTip={activeToolTip}
-            toggleActiveToolTip={toggleActiveToolTip}
-            selectedFileViewer={selectedFileViewer}
-            removeRawFile={removeRawFile}
-            handleSelectedMessage={handleSelectedMessage}
-            sendMessage={sendMessage}
-            handleMessagePanelKeys={handleMessagePanelKeys}
-          />
+          {!activeRoom.message_room ? (
+            <StandByMessagePanel />
+          ) : (
+            <ActiveMessagePanel
+              roomName={`${activeRoom.name} ${activeRoom.surname}`}
+              isRoomCreator={user?.id === activeRoom.created_by}
+              activeRoom={activeRoom}
+              roomMessages={roomMessages}
+              roomType="private"
+              messageRef={messageRef}
+              selectedMessage={selectedMessage}
+              rawFile={rawFile}
+              fileData={fileData}
+              activeToolTip={activeToolTip}
+              toggleActiveToolTip={toggleActiveToolTip}
+              selectedFileViewer={selectedFileViewer}
+              removeRawFile={removeRawFile}
+              handleSelectedMessage={handleSelectedMessage}
+              sendMessage={sendMessage}
+              handleMessagePanelKeys={handleMessagePanelKeys}
+            />
+          )}
 
           <audio ref={audioRef} src={notifSound} />
         </div>

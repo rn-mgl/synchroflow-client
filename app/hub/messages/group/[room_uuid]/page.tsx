@@ -16,6 +16,7 @@ import EditGroupMessage from "@/components//messages/EditGroupMessage";
 import GroupMembers from "@/components//messages/GroupMembers";
 import GroupMessagePreview from "@/components//messages/GroupMessagePreview";
 import PrivateMessagePreview from "@/components//messages/PrivateMessagePreview";
+import StandByMessagePanel from "@/components//messages/StandByMessagePanel";
 import { localizeDate } from "@/components//utils/dateUtils";
 import notifSound from "@/public//music/NotificationSound.mp3";
 import axios from "axios";
@@ -317,28 +318,32 @@ const GroupMessages = () => {
             </div>
           </div>
 
-          <ActiveMessagePanel
-            roomName={activeRoom.room_name}
-            isRoomCreator={user?.id === activeRoom.created_by}
-            activeRoom={activeRoom}
-            roomMessages={roomMessages}
-            roomType="group"
-            messageRef={messageRef}
-            selectedMessage={selectedMessage}
-            rawFile={rawFile}
-            fileData={fileData}
-            activeToolTip={activeToolTip}
-            toggleActiveToolTip={toggleActiveToolTip}
-            selectedFileViewer={selectedFileViewer}
-            removeRawFile={removeRawFile}
-            handleSelectedMessage={handleSelectedMessage}
-            sendMessage={sendMessage}
-            toggleCanEditGroupMessage={toggleCanEditGroupMessage}
-            toggleCanDeleteGroupMessage={toggleCanDeleteGroupMessage}
-            toggleCanSeeGroupMembers={toggleCanSeeGroupMembers}
-            toggleCanAddGroupMembers={toggleCanAddGroupMembers}
-            handleMessagePanelKeys={handleMessagePanelKeys}
-          />
+          {!activeRoom.message_room ? (
+            <StandByMessagePanel />
+          ) : (
+            <ActiveMessagePanel
+              roomName={activeRoom.room_name}
+              isRoomCreator={user?.id === activeRoom.created_by}
+              activeRoom={activeRoom}
+              roomMessages={roomMessages}
+              roomType="group"
+              messageRef={messageRef}
+              selectedMessage={selectedMessage}
+              rawFile={rawFile}
+              fileData={fileData}
+              activeToolTip={activeToolTip}
+              toggleActiveToolTip={toggleActiveToolTip}
+              selectedFileViewer={selectedFileViewer}
+              removeRawFile={removeRawFile}
+              handleSelectedMessage={handleSelectedMessage}
+              sendMessage={sendMessage}
+              toggleCanEditGroupMessage={toggleCanEditGroupMessage}
+              toggleCanDeleteGroupMessage={toggleCanDeleteGroupMessage}
+              toggleCanSeeGroupMembers={toggleCanSeeGroupMembers}
+              toggleCanAddGroupMembers={toggleCanAddGroupMembers}
+              handleMessagePanelKeys={handleMessagePanelKeys}
+            />
+          )}
 
           <audio ref={audioRef} src={notifSound} />
         </div>
