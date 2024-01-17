@@ -192,7 +192,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
           <Link
             onClick={() => toggleNavIsVisible("link")}
             href="/hub"
-            className={`flex flex-row items-center justify-center gap-4 
+            className={`flex flex-row items-center justify-center gap-4
                       w-full p-4 hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all 
                       active:bg-gradient-to-br active:from-primary-100 active:to-primary-500
                       ${
@@ -210,7 +210,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
           <Link
             onClick={() => toggleNavIsVisible("link")}
             href="/hub/tasks"
-            className={`flex flex-row items-center justify-center gap-4 w-full p-4 
+            className={`flex flex-row items-center justify-center gap-4 w-full p-4
                       hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all 
                       active:bg-gradient-to-br active:from-primary-100 active:to-primary-500
                       ${
@@ -222,7 +222,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             <div>
               <AiOutlineSchedule className="text-2xl" />
             </div>
-            <p className={`font-medium mr-auto ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Tasks</p>
+            <p className={`font-medium mr-auto w-full ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Tasks</p>
           </Link>
 
           <Link
@@ -264,19 +264,19 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
           <Link
             onClick={() => toggleNavIsVisible("link")}
             href="/hub/invites"
-            className={`flex flex-row items-center justify-center gap-4 w-full p-4 
+            className={`flex flex-row items-center justify-center gap-4 w-full p-4
                       hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all 
                       active:bg-gradient-to-br active:from-primary-100 active:to-primary-500
                       ${
                         path?.includes("invites")
                           ? "opacity-100 bg-gradient-to-br from-primary-500 to-primary-900 text-white"
                           : "opacity-50"
-                      } mt-auto`}
+                      }`}
           >
-            <div>
+            <span>
               <AiOutlineMail className="text-2xl" />
-            </div>
-            <p className={`font-medium mr-auto ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Invites</p>
+            </span>
+            <span className={`font-medium mr-auto ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Invites</span>
           </Link>
 
           <Link

@@ -189,9 +189,9 @@ const Tasks = () => {
                         t:hidden"
                 >
                   {activeFilterOptions ? (
-                    <AiOutlineTool className="text-base text-secondary-300 t:text-lg l-s:text-xl animate-fadeIn" />
-                  ) : (
                     <AiOutlineClose className="text-base text-secondary-300 t:text-lg l-s:text-xl animate-fadeIn" />
+                  ) : (
+                    <AiOutlineTool className="text-base text-secondary-300 t:text-lg l-s:text-xl animate-fadeIn" />
                   )}
                 </button>
 
