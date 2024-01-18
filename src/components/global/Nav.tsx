@@ -102,7 +102,12 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
   }, [url, user?.token, user?.uuid, handleMessages]);
 
   const mappedNotifications = notifications.map((notification, index) => {
-    const action = notification.purpose === "group member" ? "added you as a" : "sent you a";
+    const action = notification.purpose.includes("group member")
+      ? "added you as a"
+      : notification.purpose.includes("message") || notification.purpose.includes("invite")
+      ? "sent a"
+      : "notification on";
+
     return (
       <div key={index} className="w-full p-2 rounded-md bg-neutral-50 flex flex-col items-center justify-center gap-2">
         <div className="flex flex-row w-full items-center justify-between gap-4">
@@ -111,7 +116,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             className="w-10 h-10 min-w-[2.5rem] min-h-[2.5rem] bg-center bg-cover rounded-full bg-primary-100"
           />
 
-          <p className="text-sm">
+          <p className="text-sm w-full">
             <span className="font-semibold">
               {notification.name} {notification.surname}{" "}
             </span>{" "}

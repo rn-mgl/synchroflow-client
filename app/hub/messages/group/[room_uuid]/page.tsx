@@ -203,7 +203,7 @@ const GroupMessages = () => {
       await getMessageRoomMessages("group");
       await getNotifications();
       toggleCheckedNotifications(false);
-      if (settings.message_notification && user?.uuid && args.room !== user?.uuid) {
+      if (settings.message_notification && args.room !== user?.uuid) {
         audioRef.current?.play();
       }
     });
