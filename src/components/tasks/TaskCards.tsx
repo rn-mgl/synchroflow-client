@@ -88,24 +88,15 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
     >
       <div className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md">
         <div
+          style={{ backgroundImage: `url(${props.banner})` }}
           className="bg-primary-100 w-full h-36 rounded-md bg-center bg-cover
                       hover:shadow-[0rem_0.2rem_0.4rem_#14152233_inset] bg-gradient-to-br 
                       from-primary-100 to-primary-400 overflow-hidden group"
-        >
-          {props.banner && (
-            <Image
-              src={props.banner}
-              alt="banner"
-              className="w-full h-full group-hover:scale-110 transition-all"
-              width={500}
-              height={500}
-            />
-          )}
-        </div>
+        />
 
         <div className="w-full flex flex-row justify-between">
-          <p className="font-bold">{props.title}</p>
-          <p className="font-light">{props.subTitle}</p>
+          <p className="font-bold text-left max-w-[12ch] truncate">{props.title}</p>
+          <p className="font-light text-right max-w-[12ch] truncate">{props.subTitle}</p>
         </div>
 
         <div className="flex flex-col w-full gap-1">

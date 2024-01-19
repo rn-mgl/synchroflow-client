@@ -4,22 +4,15 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React from "react";
-import {
-  AiFillCheckCircle,
-  AiFillStar,
-  AiOutlineClose,
-  AiOutlineFileText,
-  AiOutlineSearch,
-  AiOutlineUser,
-} from "react-icons/ai";
+import { AiFillCheckCircle, AiFillStar, AiOutlineClose, AiOutlineFileText, AiOutlineSearch } from "react-icons/ai";
 import SearchFilter from "../filter/SearchFilter";
 import Loading from "../global/Loading";
 import Message from "../global/Message";
+import useFilter from "../hooks/useFilter";
 import useLoader from "../hooks/useLoading";
 import usePopUpMessage from "../hooks/usePopUpMessage";
-import TextAreaComp from "../input/TextAreaComp";
 import useSearchFilter from "../hooks/useSearchFilter";
-import useFilter from "../hooks/useFilter";
+import TextAreaComp from "../input/TextAreaComp";
 
 interface SendTaskInviteProps {
   taskUUID: string;

@@ -21,20 +21,11 @@ const SentTaskInvitesCard: React.FC<SendTaskInvitesProps> = (props) => {
                     transition-all"
       >
         <div
+          style={{ backgroundImage: `url(${props.main_task_banner})` }}
           className="w-full h-72 bg-center bg-cover bg-no-repeat rounded-md 
                     overflow-hidden flex flex-col items-center justify-center group
                     bg-gradient-to-br from-primary-100 to-primary-400"
-        >
-          {props.main_task_banner && (
-            <Image
-              src={props.main_task_banner}
-              alt="banner"
-              width={500}
-              height={500}
-              className="w-full h-full group-hover:scale-110 transition-all"
-            />
-          )}
-        </div>
+        />
 
         <div className="w-full flex flex-row justify-between">
           <p className="font-bold truncate">{props.main_task_title}</p>

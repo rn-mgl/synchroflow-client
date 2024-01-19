@@ -8,7 +8,7 @@ interface InvitesStateProps {
   from_name: string;
   from_surname: string;
   from_email: string;
-  from_user_id: string;
+  from_user: string;
   from_user_uuid: string;
   invited_user_id: string;
   invited_image: string;

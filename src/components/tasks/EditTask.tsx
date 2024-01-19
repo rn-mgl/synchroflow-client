@@ -19,7 +19,7 @@ interface SingleTaskDataStateProps {
   main_task_banner: string | null;
   main_task_by: number;
   main_task_description: string;
-  main_main_task_priority: string;
+  main_task_priority: string;
   main_task_start_date: string;
   main_task_end_date: string;
   main_task_status: string;
@@ -41,7 +41,7 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
     mainTaskSubtitle: props.taskData.main_task_subtitle,
     mainTaskDescription: props.taskData.main_task_description,
     mainTaskStatus: props.taskData.main_task_status,
-    mainTaskPriority: props.taskData.main_main_task_priority,
+    mainTaskPriority: props.taskData.main_task_priority,
     mainTaskStartDate: props.taskData.main_task_start_date,
     mainTaskEndDate: props.taskData.main_task_end_date,
   });
@@ -201,7 +201,7 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Priority</p>
           <SelectComp
-            name="maintTaskPriority"
+            name="mainTaskPriority"
             value={mainTaskData.mainTaskPriority}
             onChange={handleTaskData}
             labelValuePair={[

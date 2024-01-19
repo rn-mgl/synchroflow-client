@@ -20,7 +20,7 @@ interface SingleTaskDataStateProps {
   main_task_banner: string | null;
   main_task_by: number;
   main_task_description: string;
-  main_main_task_priority: string;
+  main_task_priority: string;
   main_task_start_date: string;
   main_task_end_date: string;
   main_task_status: string;
@@ -46,7 +46,7 @@ const SingleTask = () => {
     main_task_banner: "",
     main_task_by: -1,
     main_task_description: "",
-    main_main_task_priority: "",
+    main_task_priority: "",
     main_task_start_date: "",
     main_task_end_date: "",
     main_task_status: "",

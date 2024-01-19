@@ -20,7 +20,7 @@
     "eslint": "^8.47.0",
     "eslint-config-next": "^13.4.19",
     "file-loader": "^6.2.0",
-    "next": "^14.0.4",
+    "next": "^14.1.0",
     "next-auth": "^4.24.5",
     "postcss": "^8.4.33",
     "react": "^18.2.0",

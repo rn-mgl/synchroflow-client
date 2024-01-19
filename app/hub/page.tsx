@@ -82,16 +82,12 @@ const Hub = () => {
             className={`flex flex-col gap-4 items-start justify-start p-4 
               bg-white w-full rounded-lg min-w-full ${nextTask ? "h-full" : "h-3/6"}`}
           >
-            <div className="flex flex-row w-full">
-              <p className="text-sm font-semibold">Task Today</p>
-            </div>
-
             <Link
               href={`/hub/tasks/${currTask.main_task_uuid}`}
               style={{ backgroundImage: `url(${currTask.main_task_banner})` }}
               className="bg-primary-100 w-full h-full rounded-lg bg-center bg-cover
                       hover:shadow-[0rem_0.2rem_0.4rem_#14152233_inset] transition-all
-                      l-l:h-3/6"
+                      l-l:h-4/6"
             />
 
             <div className="w-full flex flex-row justify-between">
@@ -153,18 +149,14 @@ const Hub = () => {
         {currTask ? (
           <div
             className={`flex flex-col gap-4 items-start justify-start p-4 
-              bg-white h-full rounded-lg ${nextTask ? "w-full" : "w-full l-l:w-3/6"}`}
+              bg-white h-full rounded-lg ${nextTask ? "w-full " : "w-full l-l:w-3/6"}`}
           >
-            <div className="flex flex-row w-full">
-              <p className="text-sm font-semibold">Task Today</p>
-            </div>
-
             <Link
               href={`/hub/tasks/${currTask.main_task_uuid}`}
               style={{ backgroundImage: `url(${currTask.main_task_banner})` }}
               className="bg-primary-100 w-full h-full rounded-lg bg-center bg-cover
                       hover:shadow-[0rem_0.2rem_0.4rem_#14152233_inset] transition-all
-                      l-l:h-3/6"
+                      l-l:h-4/6"
             />
 
             <div className="w-full flex flex-row justify-between">
@@ -184,18 +176,14 @@ const Hub = () => {
         {nextTask ? (
           <div
             className="flex flex-col gap-4 items-start justify-start p-4 
-              bg-white w-full rounded-lg h-full min-w-full "
+              bg-white w-full rounded-lg h-full"
           >
-            <div className="flex flex-row w-full">
-              <p className="text-sm font-semibold">Task Today</p>
-            </div>
-
             <Link
               href={`/hub/tasks/${nextTask.main_task_uuid}`}
               style={{ backgroundImage: `url(${nextTask.main_task_banner})` }}
               className="bg-primary-100 w-full h-full rounded-lg bg-center bg-cover
                       hover:shadow-[0rem_0.2rem_0.4rem_#14152233_inset] transition-all
-                      l-l:h-3/6"
+                      l-l:h-4/6"
             />
 
             <div className="w-full flex flex-row justify-between">
