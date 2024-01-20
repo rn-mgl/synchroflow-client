@@ -24,6 +24,7 @@ interface SingleTaskDataProps {
   toggleCanDeleteTask: () => void;
   toggleCanEditTask: () => void;
   toggleActiveToolTip: () => void;
+  toggleCanLeaveTask: () => void;
 }
 
 const SingleTaskMainData: React.FC<SingleTaskDataProps> = (props) => {
@@ -41,48 +42,60 @@ const SingleTaskMainData: React.FC<SingleTaskDataProps> = (props) => {
         <div className="flex flex-row w-full justify-between items-center">
           <p className="text-2xl font-medium text-secondary-500">{props.mainTaskTitle}</p>
 
-          {props.isTaskCreator ? (
-            <div className="relative flex self-end ">
-              <button
-                onClick={props.toggleActiveToolTip}
-                className="hover:bg-secondary-100 p-2 
+          <div className="relative flex self-end ">
+            <button
+              onClick={props.toggleActiveToolTip}
+              className="hover:bg-secondary-100 p-2 
                       rounded-full transition-all"
-              >
-                {props.activeToolTip ? <AiOutlineClose /> : <AiOutlineEllipsis className="text-lg" />}
-              </button>
+            >
+              {props.activeToolTip ? <AiOutlineClose /> : <AiOutlineEllipsis className="text-lg" />}
+            </button>
 
-              {props.activeToolTip ? (
-                <div
-                  className="w-52 absolute animate-fadeIn flex
+            {props.activeToolTip ? (
+              <div
+                className="w-52 absolute animate-fadeIn flex
                     flex-col items-start justify-center gap-2
                     -translate-x-full bg-secondary-300 p-2 rounded-lg
                     transition-all delay-200 font-medium shadow-lg text-white"
-                >
-                  <button
-                    onClick={props.toggleCanEditTask}
-                    className="flex flex-row w-full items-center gap-2
+              >
+                {props.isTaskCreator ? (
+                  <>
+                    <button
+                      onClick={props.toggleCanEditTask}
+                      className="flex flex-row w-full items-center gap-2
                     hover:bg-secondary-400 p-2 rounded-md
                     transition-all"
-                  >
-                    <AiOutlineEdit />
-                    Edit
-                  </button>
-
-                  <div className=" w-full min-h-[1px] h-[1px] bg-secondary-400" />
-
-                  <button
-                    onClick={props.toggleCanDeleteTask}
-                    className="flex flex-row w-full items-center gap-2
+                    >
+                      <AiOutlineEdit />
+                      Edit
+                    </button>
+                    <div className=" w-full min-h-[1px] h-[1px] bg-secondary-400" />
+                    <button
+                      onClick={props.toggleCanDeleteTask}
+                      className="flex flex-row w-full items-center gap-2
                       hover:bg-secondary-400 p-2 rounded-md
                       transition-all"
-                  >
-                    <AiOutlineDelete />
-                    Delete
-                  </button>
-                </div>
-              ) : null}
-            </div>
-          ) : null}
+                    >
+                      <AiOutlineDelete />
+                      Delete
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={props.toggleCanLeaveTask}
+                      className="flex flex-row w-full items-center gap-2
+                    hover:bg-secondary-400 p-2 rounded-md
+                    transition-all"
+                    >
+                      <AiOutlineEdit />
+                      Leave
+                    </button>
+                  </>
+                )}
+              </div>
+            ) : null}
+          </div>
         </div>
 
         <div className="flex flex-row gap-2 text-secondary-400 text-sm">

@@ -79,14 +79,7 @@ const SubTaskData: React.FC<SubTaskDataProps> = (props) => {
               Delete
             </button>
           </>
-        ) : (
-          <button
-            className="bg-primary-500 border-2 border-primary-500 rounded-lg text-white 
-                      font-bold p-2 w-full"
-          >
-            Submit
-          </button>
-        )}
+        ) : null}
       </div>
     </div>
   );

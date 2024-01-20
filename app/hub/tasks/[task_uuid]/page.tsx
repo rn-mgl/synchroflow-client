@@ -63,6 +63,7 @@ const SingleTask = () => {
   const [canDeleteTask, setCanDeleteTask] = React.useState(false);
   const [canEditTask, setCanEditTask] = React.useState(false);
   const [activeToolTip, setActiveToolTip] = React.useState(false);
+  const [canLeaveTask, setCanLeaveTask] = React.useState(false);
 
   const params = useParams();
   const { url, socket } = useGlobalContext();
@@ -89,6 +90,10 @@ const SingleTask = () => {
 
   const toggleActiveToolTip = () => {
     setActiveToolTip((prev) => !prev);
+  };
+
+  const toggleCanLeaveTask = () => {
+    setCanLeaveTask((prev) => !prev);
   };
 
   const handleSelectedSubTask = (subTaskUUID: string) => {
@@ -171,6 +176,26 @@ const SingleTask = () => {
         toggleCanDeleteTask();
         router.push("/hub/tasks");
         socket.emit("delete_task", { mainTaskUUID: params?.task_uuid, rooms: data.rooms });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const leaveTask = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.delete(`${url}/main_task_collaborators/${params?.task_uuid}`, {
+        headers: { Authorization: user?.token },
+        params: { type: "leave", mainTaskUUID: params?.task_uuid },
+      });
+
+      console.log(data);
+
+      if (data.deleteCollaborator) {
+        toggleCanLeaveTask();
+        router.push("/hub/tasks");
+        socket.emit("leave_task", { mainTaskUUID: params?.task_uuid, rooms: data.rooms });
       }
     } catch (error) {
       console.log(error);
@@ -277,6 +302,17 @@ const SingleTask = () => {
           />
         ) : null}
 
+        {canLeaveTask ? (
+          <DeleteConfirmation
+            apiRoute={`main_task_collaborators/${params?.task_uuid}`}
+            toggleConfirmation={toggleCanLeaveTask}
+            customDelete={leaveTask}
+            redirectLink="/hub/tasks"
+            title="Leave Task"
+            message="are you sure you want to leave this task?"
+          />
+        ) : null}
+
         {canEditTask ? (
           <EditTask taskData={taskData} toggleCanEditTask={toggleCanEditTask} getSingleTask={getSingleTask} />
         ) : null}
@@ -305,6 +341,7 @@ const SingleTask = () => {
               toggleCanDeleteTask={toggleCanDeleteTask}
               toggleCanEditTask={toggleCanEditTask}
               toggleActiveToolTip={toggleActiveToolTip}
+              toggleCanLeaveTask={toggleCanLeaveTask}
             />
 
             <div className="flex flex-col items-center justify-start w-full h-full gap-8 col-span-1 ">
