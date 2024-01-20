@@ -134,6 +134,22 @@ const Tasks = () => {
   ]);
 
   React.useEffect(() => {
+    socket.on("reflect_remove_collaborator", async () => {
+      await getCollaboratedTasks(sortFilter, searchFilter, searchCategory);
+      await getMyTasksToday(sortFilter, searchFilter, searchCategory);
+      await getCollaboratedTasksToday(sortFilter, searchFilter, searchCategory);
+    });
+  }, [
+    socket,
+    sortFilter,
+    searchFilter,
+    searchCategory,
+    getCollaboratedTasks,
+    getMyTasksToday,
+    getCollaboratedTasksToday,
+  ]);
+
+  React.useEffect(() => {
     socket.on("reflect_update_task", async () => {
       await getMyTasks(sortFilter, searchFilter, searchCategory);
       await getCollaboratedTasks(sortFilter, searchFilter, searchCategory);

@@ -13,7 +13,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
-import { AiOutlinePlus } from "react-icons/ai";
+import { AiFillDelete, AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
 import { BsArrowLeft } from "react-icons/bs";
 
 interface SingleTaskDataStateProps {
@@ -39,6 +39,8 @@ interface CollaboratorsStateProps {
   name: string;
   surname: string;
   image: string;
+  main_task_collaborator_uuid: string;
+  user_uuid: string;
 }
 
 const SingleTask = () => {
@@ -64,6 +66,7 @@ const SingleTask = () => {
   const [canEditTask, setCanEditTask] = React.useState(false);
   const [activeToolTip, setActiveToolTip] = React.useState(false);
   const [canLeaveTask, setCanLeaveTask] = React.useState(false);
+  const [collaboratorToRemove, setCollaboratorToRemove] = React.useState("");
 
   const params = useParams();
   const { url, socket } = useGlobalContext();
@@ -94,6 +97,10 @@ const SingleTask = () => {
 
   const toggleCanLeaveTask = () => {
     setCanLeaveTask((prev) => !prev);
+  };
+
+  const handleCollaboratorToRemove = (collaboratorUUID: string) => {
+    setCollaboratorToRemove((prev) => (prev === collaboratorUUID ? "" : collaboratorUUID));
   };
 
   const handleSelectedSubTask = (subTaskUUID: string) => {
@@ -190,12 +197,28 @@ const SingleTask = () => {
         params: { type: "leave", mainTaskUUID: params?.task_uuid },
       });
 
-      console.log(data);
-
       if (data.deleteCollaborator) {
         toggleCanLeaveTask();
         router.push("/hub/tasks");
         socket.emit("leave_task", { mainTaskUUID: params?.task_uuid, rooms: data.rooms });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const removeCollaborator = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.delete(`${url}/main_task_collaborators/${collaboratorToRemove}`, {
+        headers: { Authorization: user?.token },
+        params: { type: "delete", mainTaskUUID: params?.task_uuid },
+      });
+
+      if (data.deleteCollaborator) {
+        handleCollaboratorToRemove("");
+        await getSingleTaskCollborators();
+        socket.emit("remove_collaborator", { mainTaskUUID: params?.task_uuid, rooms: data.rooms });
       }
     } catch (error) {
       console.log(error);
@@ -211,9 +234,18 @@ const SingleTask = () => {
             className="w-8 h-8 min-w-[2rem] min-h-[2rem] bg-primary-200 rounded-full bg-center bg-cover"
           />
           <div className="flex flex-row w-full items-center justify-between">
-            <p>
+            <p className="max-w-[20ch] truncate">
               {collaborator.name} {collaborator.surname}
             </p>
+
+            {isTaskCreator && (
+              <button
+                onClick={() => setCollaboratorToRemove(collaborator.main_task_collaborator_uuid)}
+                className="p-2 rounded-full hover:bg-secondary-100 transition-all"
+              >
+                <AiFillDelete className="text-error-500" />
+              </button>
+            )}
           </div>
         </div>
         {index !== collaborators.length - 1 ? <div className="w-full h-[1px] bg-secondary-200" /> : null}
@@ -270,6 +302,14 @@ const SingleTask = () => {
     });
   }, [socket, params?.task_uuid, router]);
 
+  React.useEffect(() => {
+    socket.on("reflect_remove_collaborator", async (args: { mainTaskUUID: string }) => {
+      if (args.mainTaskUUID === params?.task_uuid) {
+        router.push("/hub/tasks");
+      }
+    });
+  }, [socket, params?.task_uuid, router]);
+
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">
       <div
@@ -307,6 +347,17 @@ const SingleTask = () => {
             apiRoute={`main_task_collaborators/${params?.task_uuid}`}
             toggleConfirmation={toggleCanLeaveTask}
             customDelete={leaveTask}
+            redirectLink="/hub/tasks"
+            title="Leave Task"
+            message="are you sure you want to leave this task?"
+          />
+        ) : null}
+
+        {collaboratorToRemove ? (
+          <DeleteConfirmation
+            apiRoute={`main_task_collaborators/${params?.task_uuid}`}
+            toggleConfirmation={() => handleCollaboratorToRemove(collaboratorToRemove)}
+            customDelete={removeCollaborator}
             redirectLink="/hub/tasks"
             title="Leave Task"
             message="are you sure you want to leave this task?"
