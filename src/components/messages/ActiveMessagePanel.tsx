@@ -29,9 +29,9 @@ interface ActiveMessagePanelProps {
   selectedMessage: string;
   rawFile: any;
   fileData: { name: string; url: string; type: string };
-  activeToolTip: boolean;
+  activePanelToolTip: boolean;
   roomType: "private" | "group";
-  toggleActiveToolTip: () => void;
+  toggleActivePanelToolTip: () => void;
   selectedFileViewer: (e: React.ChangeEvent<HTMLInputElement>) => void;
   removeRawFile: () => void;
   handleSelectedMessage: (messageUUID: string) => void;
@@ -57,7 +57,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
       <div
         key={index}
         onClick={() => props.handleSelectedMessage(message.message_uuid)}
-        className={`w-fit max-w-[80%] rounded-md  t:max-w-[60%] flex  ustify-center
+        className={`w-fit max-w-[80%] rounded-md t:max-w-[60%] flex  ustify-center
                    group relative flex-col ${isSender ? "ml-auto" : "mr-auto"}`}
       >
         <div className={`w-fit flex relative ${isSender ? "flex-row-reverse ml-auto" : "flex-row mr-auto"}`}>
@@ -76,14 +76,6 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
 
             {message.message_file ? <FileViewer file={message.message_file} type={message.message_file_type} /> : null}
           </div>
-
-          <button
-            className={`hidden group-hover:flex animate-fadeIn absolute top-2/4 -translate-y-2/4 p-2
-                    hover:bg-secondary-100 hover:rounded-full transition-all
-                    ${isSender ? "left-0 -translate-x-8" : "right-0 translate-x-8"}`}
-          >
-            <AiOutlineMore className="text-secondary-500" />
-          </button>
         </div>
 
         {props.selectedMessage === message.message_uuid ? (
@@ -115,7 +107,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
         <p className="font-bold max-w-[20ch] truncate t:max-w-none t:truncate">{props.roomName}</p>
         {props.roomType === "group" ? (
           <div className="ml-auto flex flex-row gap-4 text-sm">
-            {props.activeToolTip ? (
+            {props.activePanelToolTip ? (
               <React.Fragment>
                 <button
                   onClick={props.toggleCanSeeGroupMembers}
@@ -153,16 +145,16 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
               </React.Fragment>
             ) : null}
 
-            {props.activeToolTip ? (
+            {props.activePanelToolTip ? (
               <button
-                onClick={props.toggleActiveToolTip}
+                onClick={props.toggleActivePanelToolTip}
                 className="p-2 rounded-full hover:bg-secondary-100 animate-fadeIn"
               >
                 <AiOutlineClose />
               </button>
             ) : (
               <button
-                onClick={props.toggleActiveToolTip}
+                onClick={props.toggleActivePanelToolTip}
                 className="p-2 rounded-full hover:bg-secondary-100 animate-fadeIn"
               >
                 <AiOutlineEllipsis />

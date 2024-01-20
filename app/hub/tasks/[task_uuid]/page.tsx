@@ -13,7 +13,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
-import { AiFillDelete, AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
 import { BsArrowLeft } from "react-icons/bs";
 
 interface SingleTaskDataStateProps {
@@ -241,9 +241,10 @@ const SingleTask = () => {
             {isTaskCreator && (
               <button
                 onClick={() => setCollaboratorToRemove(collaborator.main_task_collaborator_uuid)}
-                className="p-2 rounded-full hover:bg-secondary-100 transition-all"
+                className="p-2 rounded-full hover:bg-primary-500  
+                        text-primary-500 hover:text-white transition-all"
               >
-                <AiFillDelete className="text-error-500" />
+                <AiOutlineDelete />
               </button>
             )}
           </div>

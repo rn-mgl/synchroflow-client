@@ -18,10 +18,10 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
-import { AiOutlinePlus, AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const PrivateMessages = () => {
-  const [activeToolTip, setActiveToolTip] = React.useState(false);
+  const [activePanelToolTip, setActivePanelToolTip] = React.useState(false);
   const { audioRef } = useAudio();
   const { activeFilterOptions } = useFilter();
   const { searchFilter, handleSearchFilter } = useSearchFilter("name");
@@ -34,7 +34,6 @@ const PrivateMessages = () => {
     getMessageRooms,
     getMessageRoomMessages,
     handleSelectedMessage,
-    toggleCanCreateGroupMessage,
     getMessageRoom,
   } = useMessage();
   const { getNotifications, toggleCheckedNotifications } = useNotification();
@@ -47,8 +46,8 @@ const PrivateMessages = () => {
   const user = session?.user;
   const params = useParams();
 
-  const toggleActiveToolTip = () => {
-    setActiveToolTip((prev) => !prev);
+  const toggleActivePanelToolTip = () => {
+    setActivePanelToolTip((prev) => !prev);
   };
 
   const handleMessagePanelKeys = async (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -216,8 +215,8 @@ const PrivateMessages = () => {
               selectedMessage={selectedMessage}
               rawFile={rawFile}
               fileData={fileData}
-              activeToolTip={activeToolTip}
-              toggleActiveToolTip={toggleActiveToolTip}
+              activePanelToolTip={activePanelToolTip}
+              toggleActivePanelToolTip={toggleActivePanelToolTip}
               selectedFileViewer={selectedFileViewer}
               removeRawFile={removeRawFile}
               handleSelectedMessage={handleSelectedMessage}

@@ -15,7 +15,6 @@ import CreateGroupMessage from "@/components//messages/CreateGroupMessage";
 import EditGroupMessage from "@/components//messages/EditGroupMessage";
 import GroupMembers from "@/components//messages/GroupMembers";
 import GroupMessagePreview from "@/components//messages/GroupMessagePreview";
-import PrivateMessagePreview from "@/components//messages/PrivateMessagePreview";
 import StandByMessagePanel from "@/components//messages/StandByMessagePanel";
 import { localizeDate } from "@/components//utils/dateUtils";
 import notifSound from "@/public//music/NotificationSound.mp3";
@@ -27,7 +26,7 @@ import React from "react";
 import { AiOutlinePlus, AiOutlineSearch } from "react-icons/ai";
 
 const GroupMessages = () => {
-  const [activeToolTip, setActiveToolTip] = React.useState(false);
+  const [activePanelToolTip, setActivePanelToolTip] = React.useState(false);
   const [canEditGroupMessage, setCanEditGroupMessage] = React.useState(false);
   const [canDeleteGroupMessage, setCanDeleteGroupMessage] = React.useState(false);
   const [canSeeGroupMembers, setCanSeeGroupMembers] = React.useState(false);
@@ -58,8 +57,8 @@ const GroupMessages = () => {
   const user = session?.user;
   const params = useParams();
 
-  const toggleActiveToolTip = () => {
-    setActiveToolTip((prev) => !prev);
+  const toggleActivePanelToolTip = () => {
+    setActivePanelToolTip((prev) => !prev);
   };
 
   const toggleCanEditGroupMessage = () => {
@@ -331,8 +330,8 @@ const GroupMessages = () => {
               selectedMessage={selectedMessage}
               rawFile={rawFile}
               fileData={fileData}
-              activeToolTip={activeToolTip}
-              toggleActiveToolTip={toggleActiveToolTip}
+              activePanelToolTip={activePanelToolTip}
+              toggleActivePanelToolTip={toggleActivePanelToolTip}
               selectedFileViewer={selectedFileViewer}
               removeRawFile={removeRawFile}
               handleSelectedMessage={handleSelectedMessage}
