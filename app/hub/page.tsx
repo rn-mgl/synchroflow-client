@@ -255,13 +255,7 @@ const Hub = () => {
                     p-4 text-secondary-500 gap-2 l-l:order-2"
           >
             <div className="flex flex-row gap-2 items-center justify-between text-xs font-semibold">
-              <p>To do</p>
-              <div className="flex flex-row justify-between items-center gap-2 font-medium">
-                <p>This Week</p>
-                <button>
-                  <BsChevronDown />
-                </button>
-              </div>
+              <p>This week&apos;s tasks</p>
             </div>
 
             <div
