@@ -1,5 +1,4 @@
 "use client";
-import { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { Poppins } from "next/font/google";
 import { AppProvider } from "../context";
@@ -12,12 +11,18 @@ const poppins = Poppins({
   variable: "--poppins",
 });
 
-export default function RootLayout({ children, params }: { children: React.ReactNode; params: Session }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <AppProvider>
       <html lang="en">
-        <SessionProvider session={params}>
-          <body className={`${poppins.variable} font-body cstm-scrollbar`}>{children}</body>
+        <SessionProvider>
+          <body className={`${poppins.variable} font-body cstm-scrollbar`}>
+            {children}
+          </body>
         </SessionProvider>
       </html>
     </AppProvider>
