@@ -10,14 +10,18 @@ interface AppContextData {
 
 const AppContext = React.createContext<AppContextData | null>(null);
 
-const local = "http://192.168.1.121:9000";
+const local = "http://192.168.1.30:9000";
 const prod = "https://synchroflow-server.onrender.com";
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
-  const url = prod;
+  const url = local;
   const socket = io(url);
 
-  return <AppContext.Provider value={{ url, socket }}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider value={{ url, socket }}>
+      {children}
+    </AppContext.Provider>
+  );
 };
 
 export const useGlobalContext = () => {

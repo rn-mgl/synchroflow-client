@@ -11,18 +11,25 @@ import PasswordComp from "@/components//input/PasswordComp";
 import TextComp from "@/components//input/TextComp";
 
 import login from "@/public//auth/Login.svg";
+import axios from "axios";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineUser } from "react-icons/ai";
+import {
+  AiOutlineEye,
+  AiOutlineEyeInvisible,
+  AiOutlineUser,
+} from "react-icons/ai";
 import { BsArrowRight } from "react-icons/bs";
 
 const Login = () => {
-  const [loginCredentials, setLoginCredentials] = React.useState({ candidateEmail: "", candidatePassword: "" });
-  const [firstLogin, setFirstLogin] = React.useState(false);
+  const [loginCredentials, setLoginCredentials] = React.useState({
+    candidateEmail: "",
+    candidatePassword: "",
+  });
 
   const { message, handleMessages } = usePopUpMessage();
   const { visiblePassword, toggleVisiblePassword } = useVisiblePassword();
@@ -33,6 +40,7 @@ const Login = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const user = session?.user;
+  const { url } = useGlobalContext();
 
   const handleLoginCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
@@ -50,44 +58,36 @@ const Login = () => {
     e.preventDefault();
     handleLoader(true);
     handleDisable(true);
-    setFirstLogin(true);
-
-    signOut({ redirect: false });
 
     try {
-      const data = await signIn("credentials", {
-        candidateEmail: loginCredentials.candidateEmail,
-        candidatePassword: loginCredentials.candidatePassword,
-        redirect: false,
+      const { data } = await axios.post(`${url}/auth/login`, {
+        loginCredentials,
       });
-      if (!data?.ok) {
-        handleMessages(true, "The email and password does not match.", "error");
-        handleLoader(false);
-        handleDisable(false);
-        setFirstLogin(false);
+
+      if (data) {
+        const creds = await signIn("credentials", {
+          ...data,
+          redirect: false,
+        });
+
+        if (creds?.ok) {
+          socket.emit("connect_to_uuid", { uuid: data?.uuid });
+          router.push("/hub");
+        }
       }
     } catch (error: any) {
       console.log(error);
       handleLoader(false);
       handleDisable(false);
-      setFirstLogin(false);
       handleMessages(true, error?.response?.data, "error");
     }
   };
 
-  React.useEffect(() => {
-    if (firstLogin && user?.token) {
-      handleLoader(false);
-      handleDisable(false);
-
-      socket.emit("connect_to_uuid", { uuid: user?.uuid });
-      router.push("/hub");
-    }
-  }, [user?.token, router, firstLogin, socket, user?.uuid, handleDisable, handleLoader]);
-
   return (
     <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full min-h-screen h-screen bg-white">
-      {message.active ? <Message message={message} handleMessages={handleMessages} /> : null}
+      {message.active ? (
+        <Message message={message} handleMessages={handleMessages} />
+      ) : null}
       {isLoading ? <Loading /> : null}
 
       <div
@@ -106,9 +106,13 @@ const Login = () => {
                       max-w-lg t:p-10"
         >
           <div className="text-left w-full">
-            <p className="text-sm text-secondary-500">Welcome back to SynchroFlow,</p>
+            <p className="text-sm text-secondary-500">
+              Welcome back to SynchroFlow,
+            </p>
 
-            <p className="font-black text-2xl text-primary-500 l-s:text-3xl">Log In</p>
+            <p className="font-black text-2xl text-primary-500 l-s:text-3xl">
+              Log In
+            </p>
           </div>
 
           <div className="w-full flex flex-col gap-2">
@@ -148,7 +152,10 @@ const Login = () => {
           </button>
 
           <div className="flex flex-col items-center justify-center gap-2 t:flex-row t:justify-between w-full">
-            <Link href="/forgot" className="text-xs text-primary-500 hover:underline transition-all underline-offset-2">
+            <Link
+              href="/forgot"
+              className="text-xs text-primary-500 hover:underline transition-all underline-offset-2"
+            >
               forgot password?
             </Link>
 

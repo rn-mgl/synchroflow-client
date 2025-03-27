@@ -1,11 +1,5 @@
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import axios from "axios";
-
-const local = "http://192.168.1.121:9000";
-const prod = "https://synchroflow-server.onrender.com";
-
-const url = prod;
 
 export const authOptions: AuthOptions = {
   providers: [
@@ -13,18 +7,11 @@ export const authOptions: AuthOptions = {
       name: "Credentials",
       id: "credentials",
 
-      credentials: {
-        candidateEmail: { label: "Email", type: "email" },
-        candidatePassword: { label: "Password", type: "password" },
-      },
+      credentials: {},
 
       async authorize(credentials, req): Promise<any> {
-        const { data } = await axios.post(`${url}/auth/login`, {
-          loginCredentials: credentials,
-        });
-
-        if (data) {
-          const user = data;
+        if (credentials) {
+          const user = credentials;
           return user;
         } else {
           return null;
