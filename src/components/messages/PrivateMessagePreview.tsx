@@ -29,9 +29,10 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
     message_from: -1,
   });
 
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const getLatestMessage = React.useCallback(async () => {
     if (user?.token && props.messageRoom) {
@@ -70,7 +71,9 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
       <div
         style={{ backgroundImage: `url(${props.image})` }}
         className={`min-h-[3rem] min-w-[3rem] rounded-full
-                  bg-center bg-contain ${props.isSelected ? "bg-white" : "bg-primary-100"}`}
+                  bg-center bg-contain ${
+                    props.isSelected ? "bg-white" : "bg-primary-100"
+                  }`}
       />
       <div className="w-full h-full flex flex-col justify-between items-center">
         <div className="flex flex-row justify-center items-center w-full gap-4">
@@ -93,7 +96,10 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
 
         <div className="flex flex-row justify-between items-center w-full text-xs">
           <p className="truncate max-w-[10ch] t:max-w-[40ch] l-s:max-w-[10ch] l-l:max-w-[25ch]">
-            <span className="font-medium"> {latestMessage.message_from === user?.id && "You: "}</span>
+            <span className="font-medium">
+              {" "}
+              {latestMessage.message_from === user?.id && "You: "}
+            </span>
             <span>
               {latestMessage.message ? (
                 latestMessage.message
@@ -106,7 +112,9 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
           </p>
 
           <p className="text-xs italic">
-            {latestMessage.date_sent ? localizeDate(latestMessage.date_sent, true) : "mm/dd/yyyy"}
+            {latestMessage.date_sent
+              ? localizeDate(latestMessage.date_sent, true)
+              : "mm/dd/yyyy"}
           </p>
         </div>
       </div>

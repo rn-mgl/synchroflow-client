@@ -38,19 +38,23 @@ const PrivateMessages = () => {
   } = useMessage();
   const { getNotifications, toggleCheckedNotifications } = useNotification();
 
-  const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } = useFile();
+  const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } =
+    useFile();
   const { settings } = useSettings();
 
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
   const params = useParams();
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const toggleActivePanelToolTip = () => {
     setActivePanelToolTip((prev) => !prev);
   };
 
-  const handleMessagePanelKeys = async (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleMessagePanelKeys = async (
+    e: React.KeyboardEvent<HTMLDivElement>
+  ) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       await sendMessage();
@@ -68,7 +72,9 @@ const PrivateMessages = () => {
           latestMessage={room.message}
           latestFile={room.message_file}
           messageRoom={room.message_room}
-          dateSent={room.date_sent ? localizeDate(room.date_sent, true) : "mm/dd/yyyy"}
+          dateSent={
+            room.date_sent ? localizeDate(room.date_sent, true) : "mm/dd/yyyy"
+          }
           isSender={room.message_from === user?.id}
           isSelected={params?.room_uuid === room.message_room}
         />
@@ -168,7 +174,9 @@ const PrivateMessages = () => {
               <p className="font-semibold text-xl">Messages</p>
 
               <div
-                className={`flex flex-row gap-4 h-fit w-full ${activeFilterOptions && "m-s:flex-wrap t:flex-nowrap"}`}
+                className={`flex flex-row gap-4 h-fit w-full ${
+                  activeFilterOptions && "m-s:flex-wrap t:flex-nowrap"
+                }`}
               >
                 <SearchFilter
                   placeholder="Search Task"
@@ -188,7 +196,10 @@ const PrivateMessages = () => {
                 >
                   Private
                 </Link>
-                <Link href="/hub/messages/group/me" className="p-2 w-20 transition-all">
+                <Link
+                  href="/hub/messages/group/me"
+                  className="p-2 w-20 transition-all"
+                >
                   Group
                 </Link>
               </div>

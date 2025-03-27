@@ -4,7 +4,13 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React from "react";
-import { AiFillCheckCircle, AiFillStar, AiOutlineClose, AiOutlineFileText, AiOutlineSearch } from "react-icons/ai";
+import {
+  AiFillCheckCircle,
+  AiFillStar,
+  AiOutlineClose,
+  AiOutlineFileText,
+  AiOutlineSearch,
+} from "react-icons/ai";
 import SearchFilter from "../filter/SearchFilter";
 import Loading from "../global/Loading";
 import Message from "../global/Message";
@@ -30,8 +36,12 @@ interface AssociatesStateProps {
 
 const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
   const [inviteMessage, setInviteMessage] = React.useState("");
-  const [associatesToInvite, setAssociatesToInvite] = React.useState<string[]>([]);
-  const [associates, setAssociates] = React.useState<Array<AssociatesStateProps>>([
+  const [associatesToInvite, setAssociatesToInvite] = React.useState<string[]>(
+    []
+  );
+  const [associates, setAssociates] = React.useState<
+    Array<AssociatesStateProps>
+  >([
     { name: "", surname: "", user_uuid: "", status: "", role: "", image: "" },
   ]);
   const { activeFilterOptions } = useFilter();
@@ -39,7 +49,8 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
   const { isLoading, handleLoader } = useLoader();
   const { message, handleMessages } = usePopUpMessage();
 
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
   const params = useParams();
@@ -52,7 +63,9 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
 
   const handleAssociateToInvite = (associateUUID: string) => {
     setAssociatesToInvite((prev) =>
-      prev.includes(associateUUID) ? prev.filter((associate) => associate !== associateUUID) : [...prev, associateUUID]
+      prev.includes(associateUUID)
+        ? prev.filter((associate) => associate !== associateUUID)
+        : [...prev, associateUUID]
     );
   };
 
@@ -61,7 +74,11 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
       try {
         const { data } = await axios.get(`${url}/main_task_invites`, {
           headers: { Authorization: user?.token },
-          params: { type: "invite associates", mainTaskUUID: params?.task_uuid, searchFilter },
+          params: {
+            type: "invite associates",
+            mainTaskUUID: params?.task_uuid,
+            searchFilter,
+          },
         });
 
         if (data) {
@@ -101,7 +118,9 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
             </div>
           </div>
 
-          <p className="text-xs my-auto text-justify leading-relaxed indent-10">{associate.status}</p>
+          <p className="text-xs my-auto text-justify leading-relaxed indent-10">
+            {associate.status}
+          </p>
 
           <div className="flex flex-row justify-between items-center mt-4">
             <div className="flex flex-row gap-1 items-center justify-center text-xs">
@@ -129,7 +148,11 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
 
     if (associatesToInvite.length < 1) {
       handleLoader(false);
-      handleMessages(true, "Please select an associate before sending an invite.", "error");
+      handleMessages(
+        true,
+        "Please select an associate before sending an invite.",
+        "error"
+      );
       return;
     }
 
@@ -164,7 +187,9 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
             bg-gradient-to-br from-[#546FFF33] to-[#8E92BC33]
             flex flex-col items-center justify-start p-4 t:p-10"
     >
-      {message.active ? <Message message={message} handleMessages={handleMessages} /> : null}
+      {message.active ? (
+        <Message message={message} handleMessages={handleMessages} />
+      ) : null}
       {isLoading ? <Loading /> : null}
 
       <form

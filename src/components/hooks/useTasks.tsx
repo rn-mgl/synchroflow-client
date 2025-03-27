@@ -16,12 +16,18 @@ interface TasksProps {
 
 export default function useTasks() {
   const [myTasksToday, setMyTasksToday] = React.useState<Array<TasksProps>>([]);
-  const [myUpcomingTasks, setMyUpcomingTasks] = React.useState<Array<TasksProps>>([]);
-  const [collaboratedTasksToday, setCollaboratedTasksToday] = React.useState<Array<TasksProps>>([]);
+  const [myUpcomingTasks, setMyUpcomingTasks] = React.useState<
+    Array<TasksProps>
+  >([]);
+  const [collaboratedTasksToday, setCollaboratedTasksToday] = React.useState<
+    Array<TasksProps>
+  >([]);
   const [myTasks, setMyTasks] = React.useState<Array<TasksProps>>([]);
-  const [collaboratedTasks, setCollaboratedTasks] = React.useState<Array<TasksProps>>([]);
+  const [collaboratedTasks, setCollaboratedTasks] = React.useState<
+    Array<TasksProps>
+  >([]);
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -45,7 +51,11 @@ export default function useTasks() {
   }, [url, user?.token]);
 
   const getMyTasksToday = React.useCallback(
-    async (sortFilter: string, searchFilter: string, searchCategory: string) => {
+    async (
+      sortFilter: string,
+      searchFilter: string,
+      searchCategory: string
+    ) => {
       if (user?.token) {
         try {
           const { data } = await axios.get(`${url}/main_tasks`, {
@@ -70,7 +80,11 @@ export default function useTasks() {
   );
 
   const getCollaboratedTasksToday = React.useCallback(
-    async (sortFilter: string, searchFilter: string, searchCategory: string) => {
+    async (
+      sortFilter: string,
+      searchFilter: string,
+      searchCategory: string
+    ) => {
       if (user?.token) {
         try {
           const { data } = await axios.get(`${url}/main_tasks`, {
@@ -95,7 +109,11 @@ export default function useTasks() {
   );
 
   const getMyTasks = React.useCallback(
-    async (sortFilter: string, searchFilter: string, searchCategory: string) => {
+    async (
+      sortFilter: string,
+      searchFilter: string,
+      searchCategory: string
+    ) => {
       if (user?.token) {
         try {
           const { data } = await axios.get(`${url}/main_tasks`, {
@@ -120,7 +138,11 @@ export default function useTasks() {
   );
 
   const getCollaboratedTasks = React.useCallback(
-    async (sortFilter: string, searchFilter: string, searchCategory: string) => {
+    async (
+      sortFilter: string,
+      searchFilter: string,
+      searchCategory: string
+    ) => {
       if (user?.token) {
         try {
           const { data } = await axios.get(`${url}/main_tasks`, {

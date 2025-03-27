@@ -38,7 +38,9 @@ interface SingleSubTaskProps {
 }
 
 const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
-  const [activePage, setActivePage] = React.useState<"details" | "associates">("details");
+  const [activePage, setActivePage] = React.useState<"details" | "associates">(
+    "details"
+  );
   const [subTaskData, setSubTaskData] = React.useState<SubTaskDataStateProps>({
     date_created: "",
     sub_task_uuid: "",
@@ -50,7 +52,9 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
     sub_task_end_date: "",
     sub_task_priority: "",
   });
-  const [collaborators, setCollaborators] = React.useState<Array<CollaboratorsStateProps>>([
+  const [collaborators, setCollaborators] = React.useState<
+    Array<CollaboratorsStateProps>
+  >([
     {
       name: "",
       surname: "",
@@ -63,10 +67,11 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
   const [canEditSubTask, setCanEditSubTask] = React.useState(false);
   const [canDeleteSubTask, setCanDeleteSubTask] = React.useState(false);
 
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
   const params = useParams();
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const handleActivePage = (page: "details" | "associates") => {
     setActivePage(page);
@@ -96,11 +101,17 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
     }
   };
 
-  const revokeAssignedSubTask = async (collaboratorUUID: string, collaboratorUserUUID: string) => {
+  const revokeAssignedSubTask = async (
+    collaboratorUUID: string,
+    collaboratorUserUUID: string
+  ) => {
     try {
-      const { data } = await axios.delete(`${url}/sub_task_collaborators/${collaboratorUUID}`, {
-        headers: { Authorization: user?.token },
-      });
+      const { data } = await axios.delete(
+        `${url}/sub_task_collaborators/${collaboratorUUID}`,
+        {
+          headers: { Authorization: user?.token },
+        }
+      );
       if (data) {
         await getAllMainTaskCollaborators();
         socket.emit("revoke_sub_task", { room: collaboratorUserUUID });
@@ -115,7 +126,10 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
       try {
         const { data } = await axios.get(`${url}/sub_task_collaborators`, {
           headers: { Authorization: user?.token },
-          params: { subTaskUUID: props.selectedSubTask, mainTaskUUID: params?.task_uuid },
+          params: {
+            subTaskUUID: props.selectedSubTask,
+            mainTaskUUID: params?.task_uuid,
+          },
         });
 
         if (data) {
@@ -130,9 +144,12 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
   const getSubtask = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/sub_tasks/${props.selectedSubTask}`, {
-          headers: { Authorization: user?.token },
-        });
+        const { data } = await axios.get(
+          `${url}/sub_tasks/${props.selectedSubTask}`,
+          {
+            headers: { Authorization: user?.token },
+          }
+        );
         if (data) {
           setSubTaskData(data);
         }
@@ -145,10 +162,13 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
   const deleteSubtask = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const { data } = await axios.delete(`${url}/sub_tasks/${subTaskData.sub_task_uuid}`, {
-        headers: { Authorization: user?.token },
-        params: { mainTaskUUID: params?.task_uuid },
-      });
+      const { data } = await axios.delete(
+        `${url}/sub_tasks/${subTaskData.sub_task_uuid}`,
+        {
+          headers: { Authorization: user?.token },
+          params: { mainTaskUUID: params?.task_uuid },
+        }
+      );
 
       if (data.deleteSubTask) {
         props.handleSelectedSubTask(props.selectedSubTask);
@@ -164,7 +184,10 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
 
   const mappedCollaborators = collaborators.map((collaborator, index) => {
     return (
-      <div key={index} className="flex flex-col gap-2 items-center justify-start w-full">
+      <div
+        key={index}
+        className="flex flex-col gap-2 items-center justify-start w-full"
+      >
         <div className="flex flex-row gap-2 items-center justify-start w-full">
           <div
             style={{ backgroundImage: `url(${collaborator.image})` }}
@@ -177,7 +200,12 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
 
             {collaborator.is_sub_task_collaborator ? (
               <button
-                onClick={() => revokeAssignedSubTask(collaborator.sub_task_collaborator_uuid, collaborator.user_uuid)}
+                onClick={() =>
+                  revokeAssignedSubTask(
+                    collaborator.sub_task_collaborator_uuid,
+                    collaborator.user_uuid
+                  )
+                }
                 className="flex flex-row gap-2 text-error-500 items-center hover:underline 
                     hover:underline-offset-2 transition-all"
               >
@@ -265,7 +293,8 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
               <button
                 onClick={() => handleActivePage("details")}
                 className={`p-2 text-sm transition-all t:w-28 ${
-                  activePage === "details" && "border-b-2 border-primary-500 text-primary-500"
+                  activePage === "details" &&
+                  "border-b-2 border-primary-500 text-primary-500"
                 }`}
               >
                 Details
@@ -274,7 +303,8 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
               <button
                 onClick={() => handleActivePage("associates")}
                 className={`p-2 text-sm transition-all t:w-28 ${
-                  activePage === "associates" && "border-b-2 border-primary-500 text-primary-500"
+                  activePage === "associates" &&
+                  "border-b-2 border-primary-500 text-primary-500"
                 }`}
               >
                 Associates
@@ -298,7 +328,9 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
               toggleCanEditSubTask={toggleCanEditSubTask}
             />
           ) : (
-            <div className="flex flex-col w-full gap-4 animate-fadeIn">{mappedCollaborators}</div>
+            <div className="flex flex-col w-full gap-4 animate-fadeIn">
+              {mappedCollaborators}
+            </div>
           )}
         </div>
       </div>

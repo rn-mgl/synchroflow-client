@@ -2,7 +2,12 @@
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
-import { AiFillPicture, AiOutlineClose, AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
+import {
+  AiFillPicture,
+  AiOutlineClose,
+  AiOutlineDelete,
+  AiOutlinePlus,
+} from "react-icons/ai";
 import { MdSubtitles, MdTitle } from "react-icons/md";
 import { useGlobalContext } from "../../../context";
 import Loading from "../global/Loading";
@@ -29,14 +34,19 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
     mainTaskStartDate: undefined,
     mainTaskEndDate: undefined,
   });
-  const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } = useFile();
+  const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } =
+    useFile();
   const { isLoading, handleLoader } = useLoader();
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
 
-  const handleTaskData = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleTaskData = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const name = e.target.name;
     const value = e.target.value;
 
@@ -103,7 +113,9 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
             className="w-full h-40 rounded-xl flex flex-col items-center justify-center
                       border-2 border-primary-200 bg-center bg-cover"
           >
-            {rawFile.current?.value ? null : <AiFillPicture className="text-primary-200 text-4xl" />}
+            {rawFile.current?.value ? null : (
+              <AiFillPicture className="text-primary-200 text-4xl" />
+            )}
           </div>
 
           <div className="flex flex-row w-full items-center justify-between py-2">
@@ -124,7 +136,11 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
             </label>
 
             {rawFile.current?.value ? (
-              <button type="button" className="animate-fadeIn" onClick={removeRawFile}>
+              <button
+                type="button"
+                className="animate-fadeIn"
+                onClick={removeRawFile}
+              >
                 <AiOutlineDelete className="text-primary-500" />
               </button>
             ) : null}

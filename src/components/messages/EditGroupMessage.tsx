@@ -3,7 +3,12 @@ import { useGlobalContext } from "@/base/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
-import { AiFillPicture, AiOutlineClose, AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
+import {
+  AiFillPicture,
+  AiOutlineClose,
+  AiOutlineDelete,
+  AiOutlinePlus,
+} from "react-icons/ai";
 import { MdTitle } from "react-icons/md";
 import useFile from "../hooks/useFile";
 import { MessageRoomsStateProps } from "../hooks/useMessage";
@@ -22,15 +27,18 @@ interface GroupMessageStateProps {
 }
 
 const EditGroupMessage: React.FC<EditGroupMessageProps> = (props) => {
-  const [groupMessageData, setGroupMessageData] = React.useState<GroupMessageStateProps>({
-    groupMessageName: props.groupMessageData.room_name,
-    groupImage: props.groupMessageData.room_image,
-  });
-  const { fileData, rawFile, removeRawFile, selectedFileViewer, uploadFile } = useFile();
+  const [groupMessageData, setGroupMessageData] =
+    React.useState<GroupMessageStateProps>({
+      groupMessageName: props.groupMessageData.room_name,
+      groupImage: props.groupMessageData.room_image,
+    });
+  const { fileData, rawFile, removeRawFile, selectedFileViewer, uploadFile } =
+    useFile();
 
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const handleGroupMessageData = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
@@ -115,7 +123,11 @@ const EditGroupMessage: React.FC<EditGroupMessageProps> = (props) => {
 
         <div className="flex flex-col w-full items-center justify-center">
           <div
-            style={{ backgroundImage: `url(${fileData.url ? fileData.url : groupMessageData.groupImage})` }}
+            style={{
+              backgroundImage: `url(${
+                fileData.url ? fileData.url : groupMessageData.groupImage
+              })`,
+            }}
             className="w-full h-40 rounded-xl flex flex-col items-center justify-center
                       border-2 border-primary-200 bg-center bg-cover"
           >
@@ -145,7 +157,9 @@ const EditGroupMessage: React.FC<EditGroupMessageProps> = (props) => {
               <button
                 type="button"
                 className="animate-fadeIn"
-                onClick={rawFile.current?.value ? removeRawFile : removeUploadedFile}
+                onClick={
+                  rawFile.current?.value ? removeRawFile : removeUploadedFile
+                }
               >
                 <AiOutlineDelete className="text-primary-500" />
               </button>

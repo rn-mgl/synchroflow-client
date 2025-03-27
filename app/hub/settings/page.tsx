@@ -10,13 +10,20 @@ import useAudio from "@/components//hooks/useAudio";
 import useSettings from "@/components//hooks/useSettings";
 
 const Settings = () => {
-  const [activeNav, setActiveNav] = React.useState<"general" | "notification">("general");
+  const [activeNav, setActiveNav] = React.useState<"general" | "notification">(
+    "general"
+  );
 
-  const { settings, getUserSettings, handleUserGeneralSettings, handleUserNotificationSettings } = useSettings();
+  const {
+    settings,
+    getUserSettings,
+    handleUserGeneralSettings,
+    handleUserNotificationSettings,
+  } = useSettings();
 
   const { audioRef } = useAudio();
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -57,14 +64,20 @@ const Settings = () => {
               <button
                 onClick={() => handleActiveNav("general")}
                 className={`p-4 hover:bg-neutral-100 transition-all
-                      ${activeNav === "general" && "border-b-2 border-primary-500"}`}
+                      ${
+                        activeNav === "general" &&
+                        "border-b-2 border-primary-500"
+                      }`}
               >
                 General
               </button>
               <button
                 onClick={() => handleActiveNav("notification")}
                 className={`p-4 hover:bg-neutral-100 transition-all
-                        ${activeNav === "notification" && "border-b-2 border-primary-500"}`}
+                        ${
+                          activeNav === "notification" &&
+                          "border-b-2 border-primary-500"
+                        }`}
               >
                 Notification
               </button>

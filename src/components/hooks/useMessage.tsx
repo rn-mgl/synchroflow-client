@@ -34,9 +34,14 @@ export interface RoomMessagesStateProps {
 export default function useMessage() {
   const messageRef = React.useRef<HTMLDivElement>(null); // used a separate use ref to clear div content after sending message
 
-  const [messageRooms, setMessageRooms] = React.useState<Array<MessageRoomsStateProps>>([]);
-  const [roomMessages, setRoomMessages] = React.useState<Array<RoomMessagesStateProps>>([]);
-  const [canCreateGroupMessage, setCanCreateGroupMessage] = React.useState(false);
+  const [messageRooms, setMessageRooms] = React.useState<
+    Array<MessageRoomsStateProps>
+  >([]);
+  const [roomMessages, setRoomMessages] = React.useState<
+    Array<RoomMessagesStateProps>
+  >([]);
+  const [canCreateGroupMessage, setCanCreateGroupMessage] =
+    React.useState(false);
 
   const [selectedMessage, setSelectedMessage] = React.useState("");
   const [activeRoom, setActiveRoom] = React.useState<MessageRoomsStateProps>({
@@ -54,7 +59,7 @@ export default function useMessage() {
     room_name: "",
   });
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
   const params = useParams();
@@ -90,10 +95,13 @@ export default function useMessage() {
     async (roomType: "private" | "group") => {
       if (user?.token) {
         try {
-          const { data } = await axios.get(`${url}/${roomType}_message_rooms/${params?.room_uuid}`, {
-            headers: { Authorization: user?.token },
-            params: { type: "messages" },
-          });
+          const { data } = await axios.get(
+            `${url}/${roomType}_message_rooms/${params?.room_uuid}`,
+            {
+              headers: { Authorization: user?.token },
+              params: { type: "messages" },
+            }
+          );
           if (data) {
             setRoomMessages(data);
           }
@@ -109,10 +117,13 @@ export default function useMessage() {
     async (roomType: "private" | "group") => {
       if (user?.token && params?.room_uuid) {
         try {
-          const { data } = await axios.get(`${url}/${roomType}_message_rooms/${params?.room_uuid}`, {
-            headers: { Authorization: user?.token },
-            params: { type: "main" },
-          });
+          const { data } = await axios.get(
+            `${url}/${roomType}_message_rooms/${params?.room_uuid}`,
+            {
+              headers: { Authorization: user?.token },
+              params: { type: "main" },
+            }
+          );
           if (data) {
             setActiveRoom(data);
           }

@@ -16,7 +16,7 @@ interface DeleteConfirmationProps {
 }
 
 const DeleteConfirmation: React.FC<DeleteConfirmationProps> = (props) => {
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
   const router = useRouter();
@@ -24,7 +24,9 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = (props) => {
   const deleteData = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const { data } = await axios.delete(`${url}/${props.apiRoute}`, { headers: { Authorization: user?.token } });
+      const { data } = await axios.delete(`${url}/${props.apiRoute}`, {
+        headers: { Authorization: user?.token },
+      });
       if (data) {
         if (props.refetchData) {
           await props.refetchData();
@@ -65,7 +67,9 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = (props) => {
         </div>
 
         <div className="flex flex-col gap-4 p-4 items-center justify-center">
-          <p className="font-semibold text-primary-500 text-sm">{props.title}</p>
+          <p className="font-semibold text-primary-500 text-sm">
+            {props.title}
+          </p>
           <p className="text-xs">{props.message}</p>
 
           <div className="w-full flex flex-row gap-4">

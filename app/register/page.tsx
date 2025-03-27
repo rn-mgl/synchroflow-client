@@ -18,7 +18,12 @@ import PasswordComp from "@/components//input/PasswordComp";
 import { useRouter } from "next/navigation";
 import { useGlobalContext } from "../../context";
 
-import { AiOutlineEye, AiOutlineEyeInvisible, AiOutlineUser, AiOutlineMail } from "react-icons/ai";
+import {
+  AiOutlineEye,
+  AiOutlineEyeInvisible,
+  AiOutlineUser,
+  AiOutlineMail,
+} from "react-icons/ai";
 import { useVisiblePassword } from "@/components//hooks/useVisiblePassword";
 
 const Register = () => {
@@ -34,10 +39,12 @@ const Register = () => {
   const { disable, handleDisable } = useDisable();
   const { visiblePassword, toggleVisiblePassword } = useVisiblePassword();
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const router = useRouter();
 
-  const handleRegisterCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRegisterCredentials = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const name = e.target.name;
     const value = e.target.value;
 
@@ -49,7 +56,9 @@ const Register = () => {
     });
   };
 
-  const submitRegistration = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+  const submitRegistration = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     e.preventDefault();
 
     handleLoader(true);
@@ -63,14 +72,20 @@ const Register = () => {
     }
 
     if (registerCredentials.password.length < 8) {
-      handleMessages(true, "Password length must not be less than 8 characters.", "warning");
+      handleMessages(
+        true,
+        "Password length must not be less than 8 characters.",
+        "warning"
+      );
       handleLoader(false);
       handleDisable(false);
       return;
     }
 
     try {
-      const { data } = await axios.post(`${url}/auth/register`, { registerCredentials });
+      const { data } = await axios.post(`${url}/auth/register`, {
+        registerCredentials,
+      });
 
       if (data) {
         router.push("/sending?purpose=verify");
@@ -86,7 +101,9 @@ const Register = () => {
   return (
     <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full min-h-screen h-screen bg-white">
       {isLoading ? <Loading /> : null}
-      {message.active && <Message message={message} handleMessages={handleMessages} />}
+      {message.active && (
+        <Message message={message} handleMessages={handleMessages} />
+      )}
 
       <div
         className="absolute right-0 bottom-0 bg-primary-500 w-full h-2/6
@@ -103,8 +120,12 @@ const Register = () => {
                       max-w-lg t:p-10"
         >
           <div className="text-left w-full">
-            <p className="text-sm text-secondary-500">Welcome to SynchroFlow,</p>
-            <p className="font-black text-2xl text-primary-500 l-s:text-3xl">Register</p>
+            <p className="text-sm text-secondary-500">
+              Welcome to SynchroFlow,
+            </p>
+            <p className="font-black text-2xl text-primary-500 l-s:text-3xl">
+              Register
+            </p>
           </div>
 
           <div className="w-full flex flex-col gap-2">
@@ -165,7 +186,10 @@ const Register = () => {
             Submit
           </button>
 
-          <Link href="/login" className="text-xs text-secondary-500 hover:underline transition-all underline-offset-2">
+          <Link
+            href="/login"
+            className="text-xs text-secondary-500 hover:underline transition-all underline-offset-2"
+          >
             already have an account?
           </Link>
         </form>

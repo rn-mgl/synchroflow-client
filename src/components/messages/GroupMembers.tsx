@@ -27,18 +27,26 @@ interface GroupMembersStateProps {
   user_uuid: string;
 }
 
-const GroupMembers: React.FC<GroupMembersProps> = ({ toggleCanSeeGroupMembers, ...props }) => {
-  const [groupMembers, setGroupMembers] = React.useState<Array<GroupMembersStateProps>>([]);
+const GroupMembers: React.FC<GroupMembersProps> = ({
+  toggleCanSeeGroupMembers,
+  ...props
+}) => {
+  const [groupMembers, setGroupMembers] = React.useState<
+    Array<GroupMembersStateProps>
+  >([]);
   const [selectedGroupMember, setSelectedGroupMember] = React.useState("");
   const [canDeleteGroupMember, setCanDeleteGroupMember] = React.useState(false);
 
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
   const params = useParams();
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const handleSelectedGroupMember = (groupMemberUUID: string) => {
-    setSelectedGroupMember((prev) => (prev === groupMemberUUID ? "" : groupMemberUUID));
+    setSelectedGroupMember((prev) =>
+      prev === groupMemberUUID ? "" : groupMemberUUID
+    );
   };
 
   const toggleCanDeleteGroupMember = () => {
@@ -46,7 +54,9 @@ const GroupMembers: React.FC<GroupMembersProps> = ({ toggleCanSeeGroupMembers, .
   };
 
   const socketRemoveGroupMember = () => {
-    const memberUUID = groupMembers.find((groupMember) => groupMember.message_member_uuid === selectedGroupMember);
+    const memberUUID = groupMembers.find(
+      (groupMember) => groupMember.message_member_uuid === selectedGroupMember
+    );
 
     socket.emit("remove_group_member", { room: memberUUID?.user_uuid });
   };
@@ -86,7 +96,10 @@ const GroupMembers: React.FC<GroupMembersProps> = ({ toggleCanSeeGroupMembers, .
 
   const mappedGroupMembers = groupMembers.map((member, index) => {
     return (
-      <div key={index} className="flex flex-col items-center justify-center w-full gap-2 ">
+      <div
+        key={index}
+        className="flex flex-col items-center justify-center w-full gap-2 "
+      >
         <div className="p-2 rounded-md w-full flex flex-row items-center justify-start gap-4">
           <div
             style={{ backgroundImage: `url(${member.image})` }}
@@ -110,7 +123,9 @@ const GroupMembers: React.FC<GroupMembersProps> = ({ toggleCanSeeGroupMembers, .
             <div className="ml-auto relative">
               {member.user_id !== user?.id ? (
                 <button
-                  onClick={() => handleSelectedGroupMember(member.message_member_uuid)}
+                  onClick={() =>
+                    handleSelectedGroupMember(member.message_member_uuid)
+                  }
                   className=" p-2 rounded-lg hover:bg-secondary-100 transition-all"
                 >
                   {selectedGroupMember ? <AiOutlineClose /> : <AiOutlineMore />}

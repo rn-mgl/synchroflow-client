@@ -30,11 +30,16 @@ const CreateSubTask: React.FC<CreateSubTaskProps> = (props) => {
   const { isLoading, handleLoader } = useLoader();
   const params = useParams();
 
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
-  const handleTaskData = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleTaskData = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const name = e.target.name;
     const value = e.target.value;
 

@@ -31,12 +31,19 @@ interface AssociateInvitesStateProps extends InvitesStateProps {
 }
 
 export default function useInvites() {
-  const [sentTaskInvites, setSentTaskInvites] = React.useState<Array<TaskInvitesStateProps>>([]);
-  const [receivedTaskInvites, setReceivedTaskInvites] = React.useState<Array<TaskInvitesStateProps>>([]);
-  const [sentAssociateInvites, setSentAssociateInvites] = React.useState<Array<AssociateInvitesStateProps>>([]);
-  const [receivedAssociateInvites, setReceivedAssociateInvites] = React.useState<Array<AssociateInvitesStateProps>>([]);
+  const [sentTaskInvites, setSentTaskInvites] = React.useState<
+    Array<TaskInvitesStateProps>
+  >([]);
+  const [receivedTaskInvites, setReceivedTaskInvites] = React.useState<
+    Array<TaskInvitesStateProps>
+  >([]);
+  const [sentAssociateInvites, setSentAssociateInvites] = React.useState<
+    Array<AssociateInvitesStateProps>
+  >([]);
+  const [receivedAssociateInvites, setReceivedAssociateInvites] =
+    React.useState<Array<AssociateInvitesStateProps>>([]);
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
 

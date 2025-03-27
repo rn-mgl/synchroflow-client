@@ -23,12 +23,15 @@ interface AddGroupMembersStateProps {
 }
 
 const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
-  const [groupMembers, setGroupMembers] = React.useState<Array<AddGroupMembersStateProps>>([]);
+  const [groupMembers, setGroupMembers] = React.useState<
+    Array<AddGroupMembersStateProps>
+  >([]);
 
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
   const params = useParams();
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const getPossibleGroupMembers = React.useCallback(async () => {
     if (user?.token) {
@@ -64,7 +67,10 @@ const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
 
   const mappedAvailableMembers = groupMembers.map((member, index) => {
     return (
-      <div key={index} className="flex flex-col items-center justify-center w-full gap-2 ">
+      <div
+        key={index}
+        className="flex flex-col items-center justify-center w-full gap-2 "
+      >
         <div className="p-2 rounded-md w-full flex flex-row items-center justify-start gap-4">
           <div
             style={{ backgroundImage: `url(${member.image})` }}
@@ -76,7 +82,9 @@ const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
               {member.name} {member.surname}
             </p>
 
-            <p className="w-full text-xs flex flex-row gap-1 items-center">{member.email}</p>
+            <p className="w-full text-xs flex flex-row gap-1 items-center">
+              {member.email}
+            </p>
           </div>
 
           <button

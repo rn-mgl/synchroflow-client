@@ -3,7 +3,12 @@ import { useGlobalContext } from "@/base/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
-import { AiFillPicture, AiOutlineClose, AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
+import {
+  AiFillPicture,
+  AiOutlineClose,
+  AiOutlineDelete,
+  AiOutlinePlus,
+} from "react-icons/ai";
 import { MdTitle } from "react-icons/md";
 import useFile from "../hooks/useFile";
 import TextComp from "../input/TextComp";
@@ -19,13 +24,15 @@ interface GroupMessageStateProps {
 }
 
 const CreateGroupMessage: React.FC<CreateGroupMessageProps> = (props) => {
-  const [groupMessageData, setGroupMessageData] = React.useState<GroupMessageStateProps>({
-    groupMessageName: "",
-    groupImage: "",
-  });
-  const { fileData, rawFile, removeRawFile, selectedFileViewer, uploadFile } = useFile();
+  const [groupMessageData, setGroupMessageData] =
+    React.useState<GroupMessageStateProps>({
+      groupMessageName: "",
+      groupImage: "",
+    });
+  const { fileData, rawFile, removeRawFile, selectedFileViewer, uploadFile } =
+    useFile();
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -103,7 +110,9 @@ const CreateGroupMessage: React.FC<CreateGroupMessageProps> = (props) => {
             className="w-full h-40 rounded-xl flex flex-col items-center justify-center
                       border-2 border-primary-200 bg-center bg-cover"
           >
-            {rawFile.current?.value ? null : <AiFillPicture className="text-primary-200 text-4xl" />}
+            {rawFile.current?.value ? null : (
+              <AiFillPicture className="text-primary-200 text-4xl" />
+            )}
           </div>
 
           <div className="flex flex-row w-full items-center justify-between py-2">
@@ -124,7 +133,11 @@ const CreateGroupMessage: React.FC<CreateGroupMessageProps> = (props) => {
             </label>
 
             {rawFile.current?.value ? (
-              <button type="button" className="animate-fadeIn" onClick={removeRawFile}>
+              <button
+                type="button"
+                className="animate-fadeIn"
+                onClick={removeRawFile}
+              >
                 <AiOutlineDelete className="text-primary-500" />
               </button>
             ) : null}

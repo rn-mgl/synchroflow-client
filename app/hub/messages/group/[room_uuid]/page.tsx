@@ -28,7 +28,8 @@ import { AiOutlinePlus, AiOutlineSearch } from "react-icons/ai";
 const GroupMessages = () => {
   const [activePanelToolTip, setActivePanelToolTip] = React.useState(false);
   const [canEditGroupMessage, setCanEditGroupMessage] = React.useState(false);
-  const [canDeleteGroupMessage, setCanDeleteGroupMessage] = React.useState(false);
+  const [canDeleteGroupMessage, setCanDeleteGroupMessage] =
+    React.useState(false);
   const [canSeeGroupMembers, setCanSeeGroupMembers] = React.useState(false);
   const [canAddGroupMembers, setCanAddGroupMembers] = React.useState(false);
   const { audioRef } = useAudio();
@@ -49,13 +50,15 @@ const GroupMessages = () => {
   } = useMessage();
   const { getNotifications, toggleCheckedNotifications } = useNotification();
 
-  const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } = useFile();
+  const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } =
+    useFile();
   const { settings } = useSettings();
 
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
   const params = useParams();
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const toggleActivePanelToolTip = () => {
     setActivePanelToolTip((prev) => !prev);
@@ -77,7 +80,9 @@ const GroupMessages = () => {
     setCanAddGroupMembers((prev) => !prev);
   };
 
-  const handleMessagePanelKeys = async (e: React.KeyboardEvent<HTMLDivElement>) => {
+  const handleMessagePanelKeys = async (
+    e: React.KeyboardEvent<HTMLDivElement>
+  ) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       await sendMessage();
@@ -94,7 +99,9 @@ const GroupMessages = () => {
           latestMessage={room.message}
           latestFile={room.message_file}
           messageRoom={room.message_room}
-          dateSent={room.date_sent ? localizeDate(room.date_sent, true) : "mm/dd/yyyy"}
+          dateSent={
+            room.date_sent ? localizeDate(room.date_sent, true) : "mm/dd/yyyy"
+          }
           isSelected={params?.room_uuid === room.message_room}
           isSender={room.message_from === user?.id}
         />
@@ -146,9 +153,12 @@ const GroupMessages = () => {
   const deleteGroupRoom = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const { data } = await axios.delete(`${url}/group_message_rooms/${params?.room_uuid}`, {
-        headers: { Authorization: user?.token },
-      });
+      const { data } = await axios.delete(
+        `${url}/group_message_rooms/${params?.room_uuid}`,
+        {
+          headers: { Authorization: user?.token },
+        }
+      );
       if (data.deletedRoom) {
         getMessageRooms(searchFilter, "group");
         toggleCanDeleteGroupMessage();
@@ -247,7 +257,9 @@ const GroupMessages = () => {
         />
       ) : null}
 
-      {canAddGroupMembers ? <AddGroupMembers toggleCanAddGroupMembers={toggleCanAddGroupMembers} /> : null}
+      {canAddGroupMembers ? (
+        <AddGroupMembers toggleCanAddGroupMembers={toggleCanAddGroupMembers} />
+      ) : null}
 
       {canDeleteGroupMessage ? (
         <DeleteConfirmation
@@ -275,7 +287,9 @@ const GroupMessages = () => {
               <p className="font-semibold text-xl">Messages</p>
 
               <div
-                className={`flex flex-row gap-4 h-fit w-full ${activeFilterOptions && "m-s:flex-wrap t:flex-nowrap"}`}
+                className={`flex flex-row gap-4 h-fit w-full ${
+                  activeFilterOptions && "m-s:flex-wrap t:flex-nowrap"
+                }`}
               >
                 <SearchFilter
                   placeholder="Search Task"
@@ -289,7 +303,10 @@ const GroupMessages = () => {
               </div>
 
               <div className="w-full flex flex-row items-center justify-between">
-                <Link href={`/hub/messages/private/me`} className="p-2 w-20 transition-all">
+                <Link
+                  href={`/hub/messages/private/me`}
+                  className="p-2 w-20 transition-all"
+                >
                   Private
                 </Link>
                 <Link

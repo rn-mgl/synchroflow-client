@@ -20,12 +20,15 @@ export default function useSettings() {
     task_update: true,
   });
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
 
   const handleUserGeneralSettings = React.useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>, audioRef: React.RefObject<HTMLAudioElement>) => {
+    (
+      e: React.ChangeEvent<HTMLInputElement>,
+      audioRef: React.RefObject<HTMLAudioElement>
+    ) => {
       const { name, value } = e.target;
 
       setSettings((prev) => {
@@ -44,7 +47,13 @@ export default function useSettings() {
   );
 
   const handleUserNotificationSettings = React.useCallback(
-    (name: "message_notification" | "task_update" | "task_deadline" | "associate_invite") => {
+    (
+      name:
+        | "message_notification"
+        | "task_update"
+        | "task_deadline"
+        | "associate_invite"
+    ) => {
       setSettings((prev) => {
         return {
           ...prev,
@@ -58,7 +67,9 @@ export default function useSettings() {
   const getUserSettings = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/user_settings`, { headers: { Authorization: user?.token } });
+        const { data } = await axios.get(`${url}/user_settings`, {
+          headers: { Authorization: user?.token },
+        });
         if (data) {
           setSettings(data);
         }
@@ -68,5 +79,10 @@ export default function useSettings() {
     }
   }, [url, user?.token]);
 
-  return { settings, getUserSettings, handleUserGeneralSettings, handleUserNotificationSettings };
+  return {
+    settings,
+    getUserSettings,
+    handleUserGeneralSettings,
+    handleUserNotificationSettings,
+  };
 }

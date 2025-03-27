@@ -2,7 +2,12 @@
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
-import { AiFillPicture, AiOutlineClose, AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
+import {
+  AiFillPicture,
+  AiOutlineClose,
+  AiOutlineDelete,
+  AiOutlinePlus,
+} from "react-icons/ai";
 import { MdSubtitles, MdTitle } from "react-icons/md";
 import { useGlobalContext } from "../../../context";
 import Loading from "../global/Loading";
@@ -45,15 +50,21 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
     mainTaskStartDate: props.taskData.main_task_start_date,
     mainTaskEndDate: props.taskData.main_task_end_date,
   });
-  const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } = useFile();
+  const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } =
+    useFile();
   const { isLoading, handleLoader } = useLoader();
 
   const params = useParams();
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
-  const handleTaskData = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleTaskData = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const name = e.target.name;
     const value = e.target.value;
 
@@ -124,7 +135,11 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
 
         <div className="flex flex-col w-full items-center justify-center">
           <div
-            style={{ backgroundImage: `url(${fileData.url ? fileData.url : mainTaskData.mainTaskBanner})` }}
+            style={{
+              backgroundImage: `url(${
+                fileData.url ? fileData.url : mainTaskData.mainTaskBanner
+              })`,
+            }}
             className="w-full h-40 rounded-xl flex flex-col items-center justify-center
                       border-2 border-primary-200 bg-center bg-cover"
           >
@@ -154,7 +169,9 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
               <button
                 type="button"
                 className="animate-fadeIn"
-                onClick={rawFile.current?.value ? removeRawFile : removeUploadedFile}
+                onClick={
+                  rawFile.current?.value ? removeRawFile : removeUploadedFile
+                }
               >
                 <AiOutlineDelete className="text-primary-500" />
               </button>

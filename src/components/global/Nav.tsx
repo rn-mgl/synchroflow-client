@@ -55,10 +55,11 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
   } = useNotification();
   const { message, handleMessages } = usePopUpMessage();
 
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const path = usePathname();
   const user = session?.user;
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const toggleNavIsVisible = (using: "button" | "link") => {
     setNavIsVisible((prev) => {
@@ -89,7 +90,9 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
   const getUser = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/users/${user?.uuid}`, { headers: { Authorization: user?.token } });
+        const { data } = await axios.get(`${url}/users/${user?.uuid}`, {
+          headers: { Authorization: user?.token },
+        });
 
         if (data) {
           setUserData(data);
@@ -104,12 +107,16 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
   const mappedNotifications = notifications.map((notification, index) => {
     const action = notification.purpose.includes("group member")
       ? "added you as a"
-      : notification.purpose.includes("message") || notification.purpose.includes("invite")
+      : notification.purpose.includes("message") ||
+        notification.purpose.includes("invite")
       ? "sent a"
       : "notification on";
 
     return (
-      <div key={index} className="w-full p-2 rounded-md bg-neutral-50 flex flex-col items-center justify-center gap-2">
+      <div
+        key={index}
+        className="w-full p-2 rounded-md bg-neutral-50 flex flex-col items-center justify-center gap-2"
+      >
         <div className="flex flex-row w-full items-center justify-between gap-4">
           <div
             style={{ backgroundImage: `url(${notification.from_image})` }}
@@ -120,7 +127,10 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             <span className="font-semibold">
               {notification.name} {notification.surname}{" "}
             </span>{" "}
-            {action} <span className="capitalize font-semibold">{notification.purpose}</span>{" "}
+            {action}{" "}
+            <span className="capitalize font-semibold">
+              {notification.purpose}
+            </span>{" "}
           </p>
         </div>
 
@@ -144,7 +154,8 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
         </div>
 
         <p className="text-xs ml-auto">
-          {localizeDate(notification.notif_date, false)} | {localizeTime(notification.notif_date)}
+          {localizeDate(notification.notif_date, false)} |{" "}
+          {localizeTime(notification.notif_date)}
         </p>
       </div>
     );
@@ -168,19 +179,25 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="flex flex-row h-full">
-      {message.active ? <Message message={message} handleMessages={handleMessages} /> : null}
+      {message.active ? (
+        <Message message={message} handleMessages={handleMessages} />
+      ) : null}
 
       <div
         className={`fixed  top-0 left-0 w-full h-full z-20 l-s:z-0 bg-white px-4 py-7 flex 
                     flex-col gap-8 t:w-6/12 l-s:border-r-[1px] l-s:static animate-fadeIn transition-all 
                     duration-75 overflow-y-auto cstm-scrollbar overflow-x-clip ${
-                      navIsVisible ? "flex l-s:w-72 l-s:min-w-[18rem]" : "hidden l-s:flex l-s:w-[6rem] l-s:min-w-[6rem]"
+                      navIsVisible
+                        ? "flex l-s:w-72 l-s:min-w-[18rem]"
+                        : "hidden l-s:flex l-s:w-[6rem] l-s:min-w-[6rem]"
                     } `}
       >
         <div className="flex flex-row gap-2 items-center justify-center relative px-2.5">
           <button
             onClick={() => toggleNavIsVisible("button")}
-            className={`p-2 border-[1px] rounded-full border-inherit ${navIsVisible ? "mr-auto" : "l-s:mx-auto"}`}
+            className={`p-2 border-[1px] rounded-full border-inherit ${
+              navIsVisible ? "mr-auto" : "l-s:mx-auto"
+            }`}
           >
             <AiOutlineMenu className="text-lg text-secondary-300" />
           </button>
@@ -209,7 +226,13 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             <div>
               <AiOutlineBuild className="text-2xl" />
             </div>
-            <p className={`font-medium mr-auto ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Dashboard</p>
+            <p
+              className={`font-medium mr-auto ${
+                navIsVisible ? "l-s:flex" : "l-s:hidden"
+              }`}
+            >
+              Dashboard
+            </p>
           </Link>
 
           <Link
@@ -227,7 +250,13 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             <div>
               <AiOutlineSchedule className="text-2xl" />
             </div>
-            <p className={`font-medium mr-auto w-full ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Tasks</p>
+            <p
+              className={`font-medium mr-auto w-full ${
+                navIsVisible ? "l-s:flex" : "l-s:hidden"
+              }`}
+            >
+              Tasks
+            </p>
           </Link>
 
           <Link
@@ -245,7 +274,13 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             <div>
               <AiOutlineTeam className="text-2xl" />
             </div>
-            <p className={`font-medium mr-auto ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Associates</p>
+            <p
+              className={`font-medium mr-auto ${
+                navIsVisible ? "l-s:flex" : "l-s:hidden"
+              }`}
+            >
+              Associates
+            </p>
           </Link>
 
           <Link
@@ -263,7 +298,13 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             <div>
               <AiOutlineSend className="text-2xl" />
             </div>
-            <p className={`font-medium mr-auto ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Messages</p>
+            <p
+              className={`font-medium mr-auto ${
+                navIsVisible ? "l-s:flex" : "l-s:hidden"
+              }`}
+            >
+              Messages
+            </p>
           </Link>
 
           <Link
@@ -281,7 +322,13 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             <span>
               <AiOutlineMail className="text-2xl" />
             </span>
-            <span className={`font-medium mr-auto ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Invites</span>
+            <span
+              className={`font-medium mr-auto ${
+                navIsVisible ? "l-s:flex" : "l-s:hidden"
+              }`}
+            >
+              Invites
+            </span>
           </Link>
 
           <Link
@@ -299,7 +346,13 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             <div>
               <AiOutlineSetting className="text-2xl" />
             </div>
-            <p className={`font-medium mr-auto ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Settings</p>
+            <p
+              className={`font-medium mr-auto ${
+                navIsVisible ? "l-s:flex" : "l-s:hidden"
+              }`}
+            >
+              Settings
+            </p>
           </Link>
         </div>
 
@@ -311,7 +364,13 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
           <div>
             <AiOutlineLogout className="text-2xl rotate-180" />
           </div>
-          <p className={`font-medium mr-auto ${navIsVisible ? "l-s:flex" : "l-s:hidden"}`}>Log Out</p>
+          <p
+            className={`font-medium mr-auto ${
+              navIsVisible ? "l-s:flex" : "l-s:hidden"
+            }`}
+          >
+            Log Out
+          </p>
         </button>
       </div>
 
@@ -350,15 +409,22 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
             className="p-2 border-[1px] rounded-full border-inherit relative cursor-pointer l-s:ml-auto"
           >
             <AiOutlineBell className="text-lg text-secondary-300" />
-            {!checkedNotifications ? <div className="w-2 h-2 bg-red-500 absolute rounded-full top-2 right-2" /> : null}
+            {!checkedNotifications ? (
+              <div className="w-2 h-2 bg-red-500 absolute rounded-full top-2 right-2" />
+            ) : null}
           </button>
 
           <Link
             href={`/hub/profile/${userData?.user_uuid}`}
-            style={{ backgroundImage: userData?.image ? `url(${userData?.image})` : undefined }}
+            style={{
+              backgroundImage: userData?.image
+                ? `url(${userData?.image})`
+                : undefined,
+            }}
             className={`w-9 h-9 min-w-[2.25rem] min-h-[2.25rem] bg-secondary-200 
                       rounded-full bg-center bg-cover transition-all ${
-                        path?.includes("profile") && "border-4 border-primary-500"
+                        path?.includes("profile") &&
+                        "border-4 border-primary-500"
                       }`}
           />
         </div>
@@ -369,7 +435,9 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
                       overflow-y-hidden animate-fadeIn rounded-lg flex flex-col items-center justify-start p-4 gap-2
                        t:max-w-screen-m-l t:left-auto t:-translate-x-0 t:right-16"
           >
-            <p className="w-full text-lg text-left font-semibold">Notifications</p>
+            <p className="w-full text-lg text-left font-semibold">
+              Notifications
+            </p>
 
             <div className="w-full h-[1px] bg-secondary-300" />
 

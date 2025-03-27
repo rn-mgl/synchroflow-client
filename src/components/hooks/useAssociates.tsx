@@ -24,15 +24,23 @@ export interface AssociatesProps {
 }
 
 export default function useAssociates() {
-  const [recentAssociates, setRecentAssociates] = React.useState<Array<AssociatesProps>>([]);
-  const [allAssociates, setAllAssociates] = React.useState<Array<AssociatesProps>>([]);
+  const [recentAssociates, setRecentAssociates] = React.useState<
+    Array<AssociatesProps>
+  >([]);
+  const [allAssociates, setAllAssociates] = React.useState<
+    Array<AssociatesProps>
+  >([]);
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
 
   const getAllAssociates = React.useCallback(
-    async (sortFilter: string, searchFilter: string, searchCategory: string) => {
+    async (
+      sortFilter: string,
+      searchFilter: string,
+      searchCategory: string
+    ) => {
       if (user?.token) {
         try {
           const { data } = await axios.get(`${url}/associates`, {
@@ -51,12 +59,21 @@ export default function useAssociates() {
   );
 
   const getRecentAssociates = React.useCallback(
-    async (sortFilter: string, searchFilter: string, searchCategory: string) => {
+    async (
+      sortFilter: string,
+      searchFilter: string,
+      searchCategory: string
+    ) => {
       if (user?.token) {
         try {
           const { data } = await axios.get(`${url}/associates`, {
             headers: { Authorization: user?.token },
-            params: { type: "recent", sortFilter, searchFilter, searchCategory },
+            params: {
+              type: "recent",
+              sortFilter,
+              searchFilter,
+              searchCategory,
+            },
           });
           if (data) {
             setRecentAssociates(data);

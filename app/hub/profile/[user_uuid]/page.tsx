@@ -36,7 +36,7 @@ const Profile = () => {
   const [canChangePassword, setCanChangePassword] = React.useState(false);
 
   const { tasksCount, getTasksCount } = useDashboard();
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
   const params = useParams();
@@ -80,11 +80,18 @@ const Profile = () => {
                 items-center w-full h-full"
       >
         {canEditUserData ? (
-          <EditUserData userData={userData} getUserData={getUserData} toggleCanEditUserData={toggleCanEditUserData} />
+          <EditUserData
+            userData={userData}
+            getUserData={getUserData}
+            toggleCanEditUserData={toggleCanEditUserData}
+          />
         ) : null}
 
         {canChangePassword ? (
-          <ChangePassword getUserData={getUserData} toggleCanChangePassword={toggleCanChangePassword} />
+          <ChangePassword
+            getUserData={getUserData}
+            toggleCanChangePassword={toggleCanChangePassword}
+          />
         ) : null}
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
           <div className="flex flex-col w-full items-center justify-start gap-4 h-full l-s:flex-row">
@@ -117,7 +124,8 @@ const Profile = () => {
               <div className="w-full flex flex-row items-center justify-around">
                 <p className="flex flex-col items-center justify-center text-white">
                   <span className="text-lg font-extrabold t:text-2xl">
-                    {tasksCount.ongoingMainTasksCount + tasksCount.ongoingSubTasksCount}
+                    {tasksCount.ongoingMainTasksCount +
+                      tasksCount.ongoingSubTasksCount}
                   </span>
                   <span className="text-xs ">Ongoing Tasks</span>
                 </p>
@@ -126,7 +134,8 @@ const Profile = () => {
 
                 <p className="flex flex-col items-center justify-center text-white">
                   <span className="text-lg font-extrabold t:text-2xl">
-                    {tasksCount.doneMainTasksCount + tasksCount.doneSubTasksCount}
+                    {tasksCount.doneMainTasksCount +
+                      tasksCount.doneSubTasksCount}
                   </span>
                   <span className="text-xs ">Done Tasks</span>
                 </p>
@@ -135,13 +144,17 @@ const Profile = () => {
 
                 <p className="flex flex-col items-center justify-center text-white">
                   <span className="text-lg font-extrabold t:text-2xl">
-                    {tasksCount.lateMainTasksCount + tasksCount.lateSubTasksCount}
+                    {tasksCount.lateMainTasksCount +
+                      tasksCount.lateSubTasksCount}
                   </span>
                   <span className="text-xs ">Late Tasks</span>
                 </p>
               </div>
 
-              <button onClick={toggleCanChangePassword} className="text-xs text-white hover:underline">
+              <button
+                onClick={toggleCanChangePassword}
+                className="text-xs text-white hover:underline"
+              >
                 change password
               </button>
             </div>
@@ -153,7 +166,9 @@ const Profile = () => {
               <div className="mr-auto h-full">
                 <BiSolidQuoteAltLeft className="text-primary-500 text-2xl" />
               </div>
-              <p className="text-sm max-w-xl whitespace-pre text-center">{userData?.status}</p>
+              <p className="text-sm max-w-xl whitespace-pre text-center">
+                {userData?.status}
+              </p>
               <div className="ml-auto h-full">
                 <BiSolidQuoteAltRight className="text-primary-500 text-2xl" />
               </div>

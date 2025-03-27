@@ -13,11 +13,14 @@ interface NotificationsStateProps {
 }
 
 export default function useNotification() {
-  const [notificationIsVisible, setNotificationIsVisible] = React.useState(false);
-  const [notifications, setNotifications] = React.useState<Array<NotificationsStateProps>>([]);
+  const [notificationIsVisible, setNotificationIsVisible] =
+    React.useState(false);
+  const [notifications, setNotifications] = React.useState<
+    Array<NotificationsStateProps>
+  >([]);
   const [checkedNotifications, setCheckedNotifications] = React.useState(false);
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -32,7 +35,9 @@ export default function useNotification() {
   const getNotifications = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/notifications`, { headers: { Authorization: user?.token } });
+        const { data } = await axios.get(`${url}/notifications`, {
+          headers: { Authorization: user?.token },
+        });
         if (data) {
           setNotifications(data);
         }

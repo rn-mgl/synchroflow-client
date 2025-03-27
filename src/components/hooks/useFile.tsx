@@ -4,10 +4,14 @@ import { useGlobalContext } from "../../../context";
 import { useSession } from "next-auth/react";
 
 export default function useFile() {
-  const [fileData, setFileData] = React.useState({ name: "", url: "", type: "" });
+  const [fileData, setFileData] = React.useState({
+    name: "",
+    url: "",
+    type: "",
+  });
   const rawFile = React.useRef<any>();
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
 
@@ -47,7 +51,9 @@ export default function useFile() {
       const formData = new FormData();
       formData.append("file", details);
 
-      const { data } = await axios.post(`${url}/files`, formData, { headers: { Authorization: user?.token } });
+      const { data } = await axios.post(`${url}/files`, formData, {
+        headers: { Authorization: user?.token },
+      });
 
       if (data) {
         return data;

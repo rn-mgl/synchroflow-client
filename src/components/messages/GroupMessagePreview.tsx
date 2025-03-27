@@ -26,9 +26,10 @@ const GroupMessagePreview: React.FC<GroupMessagePreviewProps> = (props) => {
     date_sent: "",
     message_from: -1,
   });
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const getLatestMessage = React.useCallback(async () => {
     if (user?.token && props.messageRoom) {
@@ -67,11 +68,15 @@ const GroupMessagePreview: React.FC<GroupMessagePreviewProps> = (props) => {
       <div
         style={{ backgroundImage: `url(${props.roomImage})` }}
         className={`min-h-[3rem] min-w-[3rem] rounded-full 
-                  bg-center bg-contain ${props.isSelected ? "bg-white" : "bg-primary-100"}`}
+                  bg-center bg-contain ${
+                    props.isSelected ? "bg-white" : "bg-primary-100"
+                  }`}
       />
       <div className="w-full h-full flex flex-col justify-between items-center">
         <div className="flex flex-row justify-center items-center w-full gap-4">
-          <p className="font-bold text-sm max-w-[12ch] truncate mr-auto  l-l:max-w-[20ch]">{props.roomName}</p>
+          <p className="font-bold text-sm max-w-[12ch] truncate mr-auto  l-l:max-w-[20ch]">
+            {props.roomName}
+          </p>
 
           <div>
             {props.status === "read" ? (

@@ -25,11 +25,14 @@ interface CollaboratorsProps {
 }
 
 const TaskCards: React.FC<TaskCardProps> = (props) => {
-  const [collaborators, setCollaborators] = React.useState<Array<CollaboratorsProps>>([]);
+  const [collaborators, setCollaborators] = React.useState<
+    Array<CollaboratorsProps>
+  >([]);
 
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const getCollaborators = React.useCallback(async () => {
     if (user?.token) {
@@ -52,7 +55,10 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
     .map((collaborator, index) => {
       return (
         <div
-          style={{ right: `${index}rem`, backgroundImage: `url(${collaborator.image})` }}
+          style={{
+            right: `${index}rem`,
+            backgroundImage: `url(${collaborator.image})`,
+          }}
           key={index}
           className="w-6 h-6 rounded-full bg-secondary-300 
           border-2 border-white absolute bg-cover bg-center group"
@@ -74,11 +80,14 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
   }, [getCollaborators]);
 
   React.useEffect(() => {
-    socket.on("refetch_tasks_collaborators", async (args: { mainTaskUUID: string }) => {
-      if (props.taskUUID === args.mainTaskUUID) {
-        await getCollaborators();
+    socket.on(
+      "refetch_tasks_collaborators",
+      async (args: { mainTaskUUID: string }) => {
+        if (props.taskUUID === args.mainTaskUUID) {
+          await getCollaborators();
+        }
       }
-    });
+    );
   }, [socket, props.taskUUID, getCollaborators]);
 
   return (
@@ -95,8 +104,12 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
         />
 
         <div className="w-full flex flex-row justify-between">
-          <p className="font-bold text-left max-w-[12ch] truncate">{props.title}</p>
-          <p className="font-light text-right max-w-[12ch] truncate">{props.subTitle}</p>
+          <p className="font-bold text-left max-w-[12ch] truncate">
+            {props.title}
+          </p>
+          <p className="font-light text-right max-w-[12ch] truncate">
+            {props.subTitle}
+          </p>
         </div>
 
         <div className="flex flex-col w-full gap-1">

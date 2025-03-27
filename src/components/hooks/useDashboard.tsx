@@ -26,16 +26,20 @@ export default function useDashboard() {
     doneSubTasksCount: 0,
     lateSubTasksCount: 0,
   });
-  const [weekTasksCount, setWeekTasksCount] = React.useState<Array<WeekTasksCountStateProps>>([]);
+  const [weekTasksCount, setWeekTasksCount] = React.useState<
+    Array<WeekTasksCountStateProps>
+  >([]);
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
 
   const getTasksCount = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/dashboard`, { headers: { Authorization: user?.token } });
+        const { data } = await axios.get(`${url}/dashboard`, {
+          headers: { Authorization: user?.token },
+        });
         if (data) {
           const { tasksCount, weekTasksCount } = data;
           setWeekTasksCount(weekTasksCount);

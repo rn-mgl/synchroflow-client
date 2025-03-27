@@ -20,7 +20,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
     retypedNewPassword: { text: "", isVisible: false },
   });
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
   const params = useParams();
@@ -60,7 +60,10 @@ const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
       const { data } = await axios.patch(
         `${url}/users/${params?.user_uuid}`,
         { password },
-        { headers: { Authorization: user?.token }, params: { type: "password" } }
+        {
+          headers: { Authorization: user?.token },
+          params: { type: "password" },
+        }
       );
 
       if (data) {
@@ -100,7 +103,11 @@ const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
             required={true}
             value={password.currentPassword.text}
             onChange={handlePassword}
-            Icon={password.currentPassword.isVisible ? AiOutlineUnlock : AiOutlineLock}
+            Icon={
+              password.currentPassword.isVisible
+                ? AiOutlineUnlock
+                : AiOutlineLock
+            }
             type={password.currentPassword.isVisible ? "text" : "password"}
             viewPassword={() => toggleCanViewPassword("currentPassword")}
           />
@@ -114,7 +121,9 @@ const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
             required={true}
             value={password.newPassword.text}
             onChange={handlePassword}
-            Icon={password.newPassword.isVisible ? AiOutlineUnlock : AiOutlineLock}
+            Icon={
+              password.newPassword.isVisible ? AiOutlineUnlock : AiOutlineLock
+            }
             type={password.newPassword.isVisible ? "text" : "password"}
             viewPassword={() => toggleCanViewPassword("newPassword")}
           />
@@ -128,7 +137,11 @@ const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
             required={true}
             value={password.retypedNewPassword.text}
             onChange={handlePassword}
-            Icon={password.retypedNewPassword.isVisible ? AiOutlineUnlock : AiOutlineLock}
+            Icon={
+              password.retypedNewPassword.isVisible
+                ? AiOutlineUnlock
+                : AiOutlineLock
+            }
             type={password.retypedNewPassword.isVisible ? "text" : "password"}
             viewPassword={() => toggleCanViewPassword("retypedNewPassword")}
           />

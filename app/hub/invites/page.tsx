@@ -24,22 +24,34 @@ const Invites = () => {
   } = useInvites();
   const { getNotifications } = useNotification();
 
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const removeSentTaskInvites = React.useCallback(
-    async (inviteUUID: string, invitedUserUUID: string, inviteFromUUID: string) => {
+    async (
+      inviteUUID: string,
+      invitedUserUUID: string,
+      inviteFromUUID: string
+    ) => {
       if (user?.token) {
         try {
-          const { data } = await axios.delete(`${url}/main_task_invites/${inviteUUID}`, {
-            headers: { Authorization: user?.token },
-          });
+          const { data } = await axios.delete(
+            `${url}/main_task_invites/${inviteUUID}`,
+            {
+              headers: { Authorization: user?.token },
+            }
+          );
 
           if (data) {
             await getSentTaskInvites();
             await getReceivedTaskInvites();
-            socket.emit("remove_task_invite", { inviteUUID, invitedRoom: invitedUserUUID, fromRoom: inviteFromUUID });
+            socket.emit("remove_task_invite", {
+              inviteUUID,
+              invitedRoom: invitedUserUUID,
+              fromRoom: inviteFromUUID,
+            });
           }
         } catch (error) {
           console.log(error);
@@ -50,7 +62,12 @@ const Invites = () => {
   );
 
   const acceptReceivedTaskInvites = React.useCallback(
-    async (mainTaskUUID: string, invitedUserUUID: string, inviteUUID: string, inviteFromUUID: string) => {
+    async (
+      mainTaskUUID: string,
+      invitedUserUUID: string,
+      inviteUUID: string,
+      inviteFromUUID: string
+    ) => {
       if (user?.token) {
         try {
           const { data } = await axios.post(
@@ -59,7 +76,11 @@ const Invites = () => {
             { headers: { Authorization: user?.token } }
           );
           if (data) {
-            await removeSentTaskInvites(inviteUUID, invitedUserUUID, inviteFromUUID);
+            await removeSentTaskInvites(
+              inviteUUID,
+              invitedUserUUID,
+              inviteFromUUID
+            );
             socket.emit("accept_task_invite", {
               inviteUUID,
               invitedRoom: invitedUserUUID,
@@ -76,13 +97,20 @@ const Invites = () => {
   );
 
   const removeSentAssociateInvites = React.useCallback(
-    async (inviteUUID: string, invitedUserUUID: string, inviteFromUUID: string) => {
+    async (
+      inviteUUID: string,
+      invitedUserUUID: string,
+      inviteFromUUID: string
+    ) => {
       if (user?.token) {
         try {
-          const { data } = await axios.delete(`${url}/associate_invites/${inviteUUID}`, {
-            headers: { Authorization: user?.token },
-            params: { type: "sent" },
-          });
+          const { data } = await axios.delete(
+            `${url}/associate_invites/${inviteUUID}`,
+            {
+              headers: { Authorization: user?.token },
+              params: { type: "sent" },
+            }
+          );
 
           if (data) {
             await getSentAssociateInvites();
@@ -98,11 +126,21 @@ const Invites = () => {
         }
       }
     },
-    [user?.token, url, socket, getSentAssociateInvites, getReceivedAssociateInvites]
+    [
+      user?.token,
+      url,
+      socket,
+      getSentAssociateInvites,
+      getReceivedAssociateInvites,
+    ]
   );
 
   const acceptReceivedAssociateInvites = React.useCallback(
-    async (inviteUUID: string, invitedUserUUID: string, inviteFromUUID: string) => {
+    async (
+      inviteUUID: string,
+      invitedUserUUID: string,
+      inviteFromUUID: string
+    ) => {
       if (user?.token) {
         try {
           const { data } = await axios.post(
@@ -111,7 +149,11 @@ const Invites = () => {
             { headers: { Authorization: user?.token } }
           );
           if (data) {
-            await removeSentAssociateInvites(inviteUUID, invitedUserUUID, inviteFromUUID);
+            await removeSentAssociateInvites(
+              inviteUUID,
+              invitedUserUUID,
+              inviteFromUUID
+            );
             socket.emit("accept_associate_invite", {
               inviteUUID,
               invitedRoom: invitedUserUUID,
@@ -127,7 +169,8 @@ const Invites = () => {
   );
 
   const mappedSentTaskInvites = sentTaskInvites.map((taskInvite, index) => {
-    const targetIdentity = taskInvite.from_user === user?.id ? "invited" : "from"; // check if im the sender and use the other user's data
+    const targetIdentity =
+      taskInvite.from_user === user?.id ? "invited" : "from"; // check if im the sender and use the other user's data
     const name = taskInvite[`${targetIdentity}_name`];
     const surname = taskInvite[`${targetIdentity}_surname`];
     const email = taskInvite[`${targetIdentity}_email`];
@@ -154,94 +197,103 @@ const Invites = () => {
     );
   });
 
-  const mappedReceivedTaskInvites = receivedTaskInvites.map((taskInvite, index) => {
-    const targetIdentity = taskInvite.from_user === user?.id ? "invited" : "from"; // check if im the invited and use my data
-    const name = taskInvite[`${targetIdentity}_name`];
-    const surname = taskInvite[`${targetIdentity}_surname`];
-    const email = taskInvite[`${targetIdentity}_email`];
-    return (
-      <ReceivedTaskInvitesCard
-        key={index}
-        name={name}
-        surname={surname}
-        email={email}
-        main_task_invite_uuid={taskInvite.main_task_invite_uuid}
-        main_task_title={taskInvite.main_task_title}
-        main_task_banner={taskInvite.main_task_banner}
-        main_task_priority={taskInvite.main_task_priority}
-        declineReceivedTaskInvites={() =>
-          removeSentTaskInvites(
-            taskInvite.main_task_invite_uuid,
-            taskInvite.invited_user_uuid,
-            taskInvite.from_user_uuid
-          )
-        }
-        acceptReceivedTaskInvites={() =>
-          acceptReceivedTaskInvites(
-            taskInvite.main_task_uuid,
-            taskInvite.invited_user_uuid,
-            taskInvite.main_task_invite_uuid,
-            taskInvite.from_user_uuid
-          )
-        }
-      />
-    );
-  });
+  const mappedReceivedTaskInvites = receivedTaskInvites.map(
+    (taskInvite, index) => {
+      const targetIdentity =
+        taskInvite.from_user === user?.id ? "invited" : "from"; // check if im the invited and use my data
+      const name = taskInvite[`${targetIdentity}_name`];
+      const surname = taskInvite[`${targetIdentity}_surname`];
+      const email = taskInvite[`${targetIdentity}_email`];
+      return (
+        <ReceivedTaskInvitesCard
+          key={index}
+          name={name}
+          surname={surname}
+          email={email}
+          main_task_invite_uuid={taskInvite.main_task_invite_uuid}
+          main_task_title={taskInvite.main_task_title}
+          main_task_banner={taskInvite.main_task_banner}
+          main_task_priority={taskInvite.main_task_priority}
+          declineReceivedTaskInvites={() =>
+            removeSentTaskInvites(
+              taskInvite.main_task_invite_uuid,
+              taskInvite.invited_user_uuid,
+              taskInvite.from_user_uuid
+            )
+          }
+          acceptReceivedTaskInvites={() =>
+            acceptReceivedTaskInvites(
+              taskInvite.main_task_uuid,
+              taskInvite.invited_user_uuid,
+              taskInvite.main_task_invite_uuid,
+              taskInvite.from_user_uuid
+            )
+          }
+        />
+      );
+    }
+  );
 
-  const mappedSentAssociateInvites = sentAssociateInvites.map((associateInvite, index) => {
-    const targetIdentity = associateInvite.from_user === user?.id ? "invited" : "from"; // check if im the invited and use my data
-    const image = associateInvite[`${targetIdentity}_image`];
-    const name = associateInvite[`${targetIdentity}_name`];
-    const surname = associateInvite[`${targetIdentity}_surname`];
-    const email = associateInvite[`${targetIdentity}_email`];
-    return (
-      <SentAssociateInvitesCard
-        key={index}
-        image={image}
-        name={name}
-        surname={surname}
-        email={email}
-        removeSentAssociateInvites={() =>
-          removeSentAssociateInvites(
-            associateInvite.associate_invite_uuid,
-            associateInvite.invited_user_uuid,
-            associateInvite.from_user_uuid
-          )
-        }
-      />
-    );
-  });
+  const mappedSentAssociateInvites = sentAssociateInvites.map(
+    (associateInvite, index) => {
+      const targetIdentity =
+        associateInvite.from_user === user?.id ? "invited" : "from"; // check if im the invited and use my data
+      const image = associateInvite[`${targetIdentity}_image`];
+      const name = associateInvite[`${targetIdentity}_name`];
+      const surname = associateInvite[`${targetIdentity}_surname`];
+      const email = associateInvite[`${targetIdentity}_email`];
+      return (
+        <SentAssociateInvitesCard
+          key={index}
+          image={image}
+          name={name}
+          surname={surname}
+          email={email}
+          removeSentAssociateInvites={() =>
+            removeSentAssociateInvites(
+              associateInvite.associate_invite_uuid,
+              associateInvite.invited_user_uuid,
+              associateInvite.from_user_uuid
+            )
+          }
+        />
+      );
+    }
+  );
 
-  const mappedReceivedAssociateInvites = receivedAssociateInvites.map((associateInvite, index) => {
-    const targetIdentity = associateInvite.from_user === user?.id ? "invited" : "from"; // check if im the invited and use my data
-    const image = associateInvite[`${targetIdentity}_image`];
-    const name = associateInvite[`${targetIdentity}_name`];
-    const surname = associateInvite[`${targetIdentity}_surname`];
-    const email = associateInvite[`${targetIdentity}_email`];
-    return (
-      <ReceivedAssociateInvitesCard
-        key={index}
-        image={image}
-        name={name}
-        surname={surname}
-        email={email}
-        declineReceivedAssociateInvites={() =>
-          removeSentAssociateInvites(
-            associateInvite.associate_invite_uuid,
-            associateInvite.invited_user_uuid,
-            associateInvite.from_user_uuid
-          )
-        }
-        acceptReceivedAssociateInvites={() =>
-          acceptReceivedAssociateInvites(
-            associateInvite.associate_invite_uuid,
-            associateInvite.invited_user_uuid,
-            associateInvite.from_user_uuid
-          )
-        }
-      />
-    );
-  });
+  const mappedReceivedAssociateInvites = receivedAssociateInvites.map(
+    (associateInvite, index) => {
+      const targetIdentity =
+        associateInvite.from_user === user?.id ? "invited" : "from"; // check if im the invited and use my data
+      const image = associateInvite[`${targetIdentity}_image`];
+      const name = associateInvite[`${targetIdentity}_name`];
+      const surname = associateInvite[`${targetIdentity}_surname`];
+      const email = associateInvite[`${targetIdentity}_email`];
+      return (
+        <ReceivedAssociateInvitesCard
+          key={index}
+          image={image}
+          name={name}
+          surname={surname}
+          email={email}
+          declineReceivedAssociateInvites={() =>
+            removeSentAssociateInvites(
+              associateInvite.associate_invite_uuid,
+              associateInvite.invited_user_uuid,
+              associateInvite.from_user_uuid
+            )
+          }
+          acceptReceivedAssociateInvites={() =>
+            acceptReceivedAssociateInvites(
+              associateInvite.associate_invite_uuid,
+              associateInvite.invited_user_uuid,
+              associateInvite.from_user_uuid
+            )
+          }
+        />
+      );
+    }
+  );
 
   React.useEffect(() => {
     getSentTaskInvites();
@@ -275,8 +327,16 @@ const Invites = () => {
   React.useEffect(() => {
     socket.on(
       "reflect_remove_associate_invite",
-      async (args: { inviteUUID: string; invitedRoom: string; fromRoom: string }) => {
-        await removeSentAssociateInvites(args.inviteUUID, args.invitedRoom, args.fromRoom);
+      async (args: {
+        inviteUUID: string;
+        invitedRoom: string;
+        fromRoom: string;
+      }) => {
+        await removeSentAssociateInvites(
+          args.inviteUUID,
+          args.invitedRoom,
+          args.fromRoom
+        );
       }
     );
   }, [socket, removeSentAssociateInvites]);
@@ -284,8 +344,16 @@ const Invites = () => {
   React.useEffect(() => {
     socket.on(
       "reflect_remove_task_invite",
-      async (args: { inviteUUID: string; invitedRoom: string; fromRoom: string }) => {
-        await removeSentTaskInvites(args.inviteUUID, args.invitedRoom, args.fromRoom);
+      async (args: {
+        inviteUUID: string;
+        invitedRoom: string;
+        fromRoom: string;
+      }) => {
+        await removeSentTaskInvites(
+          args.inviteUUID,
+          args.invitedRoom,
+          args.fromRoom
+        );
       }
     );
   }, [socket, removeSentTaskInvites]);
@@ -329,7 +397,9 @@ const Invites = () => {
               <div
                 className={`absolute w-full h-full flex flex-row gap-4 items-center 
                   transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar ${
-                    receivedTaskInvites.length ? "justify-start" : "justify-center"
+                    receivedTaskInvites.length
+                      ? "justify-start"
+                      : "justify-center"
                   }`}
               >
                 {receivedTaskInvites.length ? (
@@ -352,7 +422,9 @@ const Invites = () => {
               <div
                 className={`absolute w-full h-full flex flex-row gap-4 items-center 
                   transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar ${
-                    sentAssociateInvites.length ? "justify-start" : "justify-center"
+                    sentAssociateInvites.length
+                      ? "justify-start"
+                      : "justify-center"
                   }`}
               >
                 {sentAssociateInvites.length ? (
@@ -375,7 +447,9 @@ const Invites = () => {
               <div
                 className={`absolute w-full h-full flex flex-row gap-4 items-center 
                   transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar ${
-                    receivedAssociateInvites.length ? "justify-start" : "justify-center"
+                    receivedAssociateInvites.length
+                      ? "justify-start"
+                      : "justify-center"
                   }`}
               >
                 {receivedAssociateInvites.length ? (

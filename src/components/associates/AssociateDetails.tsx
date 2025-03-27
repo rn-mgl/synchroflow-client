@@ -34,16 +34,19 @@ const AssociateDetails: React.FC<AssociateProps> = (props) => {
     rating: "",
   });
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
 
   const getAssociate = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/associates/${props.associateUUID}`, {
-          headers: { Authorization: user?.token },
-        });
+        const { data } = await axios.get(
+          `${url}/associates/${props.associateUUID}`,
+          {
+            headers: { Authorization: user?.token },
+          }
+        );
         if (data) {
           setAssociateData(data);
         }

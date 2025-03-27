@@ -26,7 +26,7 @@ const Reset = () => {
   const { isLoading, handleLoader } = useLoader();
   const { disable, handleDisable } = useDisable();
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const params = useParams();
   const router = useRouter();
 
@@ -62,9 +62,12 @@ const Reset = () => {
     if (newPassword.text !== retypedNewPassword.text) return;
 
     try {
-      const { data } = await axios.patch(`${url}/password/new/${params?.token}`, {
-        newPassword,
-      });
+      const { data } = await axios.patch(
+        `${url}/password/new/${params?.token}`,
+        {
+          newPassword,
+        }
+      );
 
       if (data) {
         router.push("/login");
@@ -81,7 +84,9 @@ const Reset = () => {
 
   return (
     <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full min-h-screen h-screen bg-white">
-      {message.active ? <Message message={message} handleMessages={handleMessages} /> : null}
+      {message.active ? (
+        <Message message={message} handleMessages={handleMessages} />
+      ) : null}
       {isLoading ? <Loading /> : null}
 
       <div
@@ -100,9 +105,13 @@ const Reset = () => {
                       max-w-lg t:p-10"
         >
           <div className="text-left w-full">
-            <p className="text-sm text-secondary-500">Welcome to SynchroFlow,</p>
+            <p className="text-sm text-secondary-500">
+              Welcome to SynchroFlow,
+            </p>
 
-            <p className="font-black text-2xl text-primary-500 l-s:text-3xl">Forgot Password</p>
+            <p className="font-black text-2xl text-primary-500 l-s:text-3xl">
+              Forgot Password
+            </p>
           </div>
 
           <div className="w-full flex flex-col gap-2">
@@ -112,7 +121,9 @@ const Reset = () => {
               name="newPassword"
               placeholder="Enter your new password"
               value={password.newPassword.text}
-              Icon={password.newPassword.isVisible ? AiOutlineUnlock : AiOutlineLock}
+              Icon={
+                password.newPassword.isVisible ? AiOutlineUnlock : AiOutlineLock
+              }
               onChange={handlePassword}
               required={true}
               type={password.newPassword.isVisible ? "text" : "password"}
@@ -127,7 +138,11 @@ const Reset = () => {
               name="retypedNewPassword"
               placeholder="Retype new password"
               value={password.retypedNewPassword.text}
-              Icon={password.retypedNewPassword.isVisible ? AiOutlineUnlock : AiOutlineLock}
+              Icon={
+                password.retypedNewPassword.isVisible
+                  ? AiOutlineUnlock
+                  : AiOutlineLock
+              }
               onChange={handlePassword}
               required={true}
               type={password.retypedNewPassword.isVisible ? "text" : "password"}

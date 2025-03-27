@@ -56,9 +56,15 @@ const SingleTask = () => {
     main_task_title: "",
     main_task_uuid: "",
   });
-  const [collaborators, setCollaborators] = React.useState<Array<CollaboratorsStateProps>>([]);
-  const [createdSubTasks, setCreatedSubTasks] = React.useState<Array<SubTasksStateProps>>([]);
-  const [assignedSubTasks, setAssignedSubTasks] = React.useState<Array<SubTasksStateProps>>([]);
+  const [collaborators, setCollaborators] = React.useState<
+    Array<CollaboratorsStateProps>
+  >([]);
+  const [createdSubTasks, setCreatedSubTasks] = React.useState<
+    Array<SubTasksStateProps>
+  >([]);
+  const [assignedSubTasks, setAssignedSubTasks] = React.useState<
+    Array<SubTasksStateProps>
+  >([]);
   const [selectedSubTask, setSelectedSubTask] = React.useState("");
   const [canInvite, setCanInvite] = React.useState(false);
   const [canCreateSubTask, setCanCreateSubTask] = React.useState(false);
@@ -69,11 +75,12 @@ const SingleTask = () => {
   const [collaboratorToRemove, setCollaboratorToRemove] = React.useState("");
 
   const params = useParams();
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
   const isTaskCreator = user?.id === taskData.main_task_by;
   const router = useRouter();
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const toggleCanInvite = () => {
     setCanInvite((prev) => !prev);
@@ -100,7 +107,9 @@ const SingleTask = () => {
   };
 
   const handleCollaboratorToRemove = (collaboratorUUID: string) => {
-    setCollaboratorToRemove((prev) => (prev === collaboratorUUID ? "" : collaboratorUUID));
+    setCollaboratorToRemove((prev) =>
+      prev === collaboratorUUID ? "" : collaboratorUUID
+    );
   };
 
   const handleSelectedSubTask = (subTaskUUID: string) => {
@@ -110,9 +119,12 @@ const SingleTask = () => {
   const getSingleTask = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/main_tasks/${params?.task_uuid}`, {
-          headers: { Authorization: user?.token },
-        });
+        const { data } = await axios.get(
+          `${url}/main_tasks/${params?.task_uuid}`,
+          {
+            headers: { Authorization: user?.token },
+          }
+        );
 
         if (data) {
           setTaskData(data);
@@ -175,14 +187,20 @@ const SingleTask = () => {
   const deleteTask = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const { data } = await axios.delete(`${url}/main_tasks/${params?.task_uuid}`, {
-        headers: { Authorization: user?.token },
-      });
+      const { data } = await axios.delete(
+        `${url}/main_tasks/${params?.task_uuid}`,
+        {
+          headers: { Authorization: user?.token },
+        }
+      );
 
       if (data.deleteTask) {
         toggleCanDeleteTask();
         router.push("/hub/tasks");
-        socket.emit("delete_task", { mainTaskUUID: params?.task_uuid, rooms: data.rooms });
+        socket.emit("delete_task", {
+          mainTaskUUID: params?.task_uuid,
+          rooms: data.rooms,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -192,15 +210,21 @@ const SingleTask = () => {
   const leaveTask = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const { data } = await axios.delete(`${url}/main_task_collaborators/${params?.task_uuid}`, {
-        headers: { Authorization: user?.token },
-        params: { type: "leave", mainTaskUUID: params?.task_uuid },
-      });
+      const { data } = await axios.delete(
+        `${url}/main_task_collaborators/${params?.task_uuid}`,
+        {
+          headers: { Authorization: user?.token },
+          params: { type: "leave", mainTaskUUID: params?.task_uuid },
+        }
+      );
 
       if (data.deleteCollaborator) {
         toggleCanLeaveTask();
         router.push("/hub/tasks");
-        socket.emit("leave_task", { mainTaskUUID: params?.task_uuid, rooms: data.rooms });
+        socket.emit("leave_task", {
+          mainTaskUUID: params?.task_uuid,
+          rooms: data.rooms,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -210,15 +234,21 @@ const SingleTask = () => {
   const removeCollaborator = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const { data } = await axios.delete(`${url}/main_task_collaborators/${collaboratorToRemove}`, {
-        headers: { Authorization: user?.token },
-        params: { type: "delete", mainTaskUUID: params?.task_uuid },
-      });
+      const { data } = await axios.delete(
+        `${url}/main_task_collaborators/${collaboratorToRemove}`,
+        {
+          headers: { Authorization: user?.token },
+          params: { type: "delete", mainTaskUUID: params?.task_uuid },
+        }
+      );
 
       if (data.deleteCollaborator) {
         handleCollaboratorToRemove("");
         await getSingleTaskCollborators();
-        socket.emit("remove_collaborator", { mainTaskUUID: params?.task_uuid, rooms: data.rooms });
+        socket.emit("remove_collaborator", {
+          mainTaskUUID: params?.task_uuid,
+          rooms: data.rooms,
+        });
       }
     } catch (error) {
       console.log(error);
@@ -227,7 +257,10 @@ const SingleTask = () => {
 
   const mappedCollaborators = collaborators.map((collaborator, index) => {
     return (
-      <div key={index} className="flex flex-col gap-2 items-center justify-start w-full">
+      <div
+        key={index}
+        className="flex flex-col gap-2 items-center justify-start w-full"
+      >
         <div className="flex flex-row gap-2 items-center justify-start w-full">
           <div
             style={{ backgroundImage: `url(${collaborator.image})` }}
@@ -240,7 +273,11 @@ const SingleTask = () => {
 
             {isTaskCreator && (
               <button
-                onClick={() => setCollaboratorToRemove(collaborator.main_task_collaborator_uuid)}
+                onClick={() =>
+                  setCollaboratorToRemove(
+                    collaborator.main_task_collaborator_uuid
+                  )
+                }
                 className="p-2 rounded-full hover:bg-primary-500  
                         text-primary-500 hover:text-white transition-all"
               >
@@ -249,7 +286,9 @@ const SingleTask = () => {
             )}
           </div>
         </div>
-        {index !== collaborators.length - 1 ? <div className="w-full h-[1px] bg-secondary-200" /> : null}
+        {index !== collaborators.length - 1 ? (
+          <div className="w-full h-[1px] bg-secondary-200" />
+        ) : null}
       </div>
     );
   });
@@ -263,11 +302,14 @@ const SingleTask = () => {
   }, [getSingleTaskCollborators]);
 
   React.useEffect(() => {
-    socket.on("refetch_tasks_collaborators", async (args: { mainTaskUUID: string }) => {
-      if (params?.task_uuid === args.mainTaskUUID) {
-        await getSingleTaskCollborators();
+    socket.on(
+      "refetch_tasks_collaborators",
+      async (args: { mainTaskUUID: string }) => {
+        if (params?.task_uuid === args.mainTaskUUID) {
+          await getSingleTaskCollborators();
+        }
       }
-    });
+    );
   }, [socket, params?.task_uuid, getSingleTaskCollborators]);
 
   React.useEffect(() => {
@@ -304,11 +346,14 @@ const SingleTask = () => {
   }, [socket, params?.task_uuid, router]);
 
   React.useEffect(() => {
-    socket.on("reflect_remove_collaborator", async (args: { mainTaskUUID: string }) => {
-      if (args.mainTaskUUID === params?.task_uuid) {
-        router.push("/hub/tasks");
+    socket.on(
+      "reflect_remove_collaborator",
+      async (args: { mainTaskUUID: string }) => {
+        if (args.mainTaskUUID === params?.task_uuid) {
+          router.push("/hub/tasks");
+        }
       }
-    });
+    );
   }, [socket, params?.task_uuid, router]);
 
   return (
@@ -317,10 +362,18 @@ const SingleTask = () => {
         className="max-w-screen-2xl flex flex-col justify-start 
             items-center w-full h-full"
       >
-        {canInvite ? <SendTaskInvite taskUUID={taskData.main_task_uuid} toggleCanInvite={toggleCanInvite} /> : null}
+        {canInvite ? (
+          <SendTaskInvite
+            taskUUID={taskData.main_task_uuid}
+            toggleCanInvite={toggleCanInvite}
+          />
+        ) : null}
 
         {canCreateSubTask ? (
-          <CreateSubTask toggleCanCreateSubTask={toggleCanCreateSubTask} getCreatedSubTasks={getCreatedSubTasks} />
+          <CreateSubTask
+            toggleCanCreateSubTask={toggleCanCreateSubTask}
+            getCreatedSubTasks={getCreatedSubTasks}
+          />
         ) : null}
 
         {selectedSubTask ? (
@@ -357,7 +410,9 @@ const SingleTask = () => {
         {collaboratorToRemove ? (
           <DeleteConfirmation
             apiRoute={`main_task_collaborators/${params?.task_uuid}`}
-            toggleConfirmation={() => handleCollaboratorToRemove(collaboratorToRemove)}
+            toggleConfirmation={() =>
+              handleCollaboratorToRemove(collaboratorToRemove)
+            }
             customDelete={removeCollaborator}
             redirectLink="/hub/tasks"
             title="Leave Task"
@@ -366,7 +421,11 @@ const SingleTask = () => {
         ) : null}
 
         {canEditTask ? (
-          <EditTask taskData={taskData} toggleCanEditTask={toggleCanEditTask} getSingleTask={getSingleTask} />
+          <EditTask
+            taskData={taskData}
+            toggleCanEditTask={toggleCanEditTask}
+            getSingleTask={getSingleTask}
+          />
         ) : null}
 
         <div className="flex flex-col p-4 items-center justify-start w-full h-auto t:p-10  gap-4">
@@ -430,9 +489,13 @@ const SingleTask = () => {
               </div>
 
               <div className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500">
-                <p className="font-medium text-2xl">{collaborators.length > 1 ? "Collaborators" : "Collaborator"}</p>
+                <p className="font-medium text-2xl">
+                  {collaborators.length > 1 ? "Collaborators" : "Collaborator"}
+                </p>
 
-                <div className="flex flex-col gap-2 w-full">{mappedCollaborators}</div>
+                <div className="flex flex-col gap-2 w-full">
+                  {mappedCollaborators}
+                </div>
               </div>
             </div>
           </div>

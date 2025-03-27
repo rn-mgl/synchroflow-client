@@ -44,14 +44,17 @@ const EditUserData: React.FC<EditTaskProps> = (props) => {
     email: props.userData.email,
     date_joined: props.userData.date_joined,
   });
-  const { fileData, rawFile, removeRawFile, selectedFileViewer, uploadFile } = useFile();
+  const { fileData, rawFile, removeRawFile, selectedFileViewer, uploadFile } =
+    useFile();
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
   const params = useParams();
 
-  const handleUserData = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleUserData = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
 
     if (isSpecialCharacter(value)) return;
@@ -87,7 +90,10 @@ const EditUserData: React.FC<EditTaskProps> = (props) => {
       const { data } = await axios.patch(
         `${url}/users/${params?.user_uuid}`,
         { userData },
-        { headers: { Authorization: user?.token }, params: { type: "identifier" } }
+        {
+          headers: { Authorization: user?.token },
+          params: { type: "identifier" },
+        }
       );
 
       if (data) {
@@ -121,11 +127,17 @@ const EditUserData: React.FC<EditTaskProps> = (props) => {
 
         <div className="flex flex-col w-64 items-center justify-center mx-auto">
           <div
-            style={{ backgroundImage: `url(${fileData.url ? fileData.url : userData.image})` }}
+            style={{
+              backgroundImage: `url(${
+                fileData.url ? fileData.url : userData.image
+              })`,
+            }}
             className="w-64 h-64 rounded-full flex flex-col items-center justify-center
                       border-2 border-primary-200 bg-center bg-cover "
           >
-            {rawFile.current?.value || userData.image ? null : <AiFillPicture className="text-primary-200 text-4xl" />}
+            {rawFile.current?.value || userData.image ? null : (
+              <AiFillPicture className="text-primary-200 text-4xl" />
+            )}
           </div>
 
           <div className="flex flex-row w-full items-center justify-between py-2">
@@ -149,7 +161,9 @@ const EditUserData: React.FC<EditTaskProps> = (props) => {
               <button
                 type="button"
                 className="animate-fadeIn"
-                onClick={rawFile.current?.value ? removeRawFile : removeUploadedFile}
+                onClick={
+                  rawFile.current?.value ? removeRawFile : removeUploadedFile
+                }
               >
                 <AiOutlineDelete className="text-primary-500" />
               </button>

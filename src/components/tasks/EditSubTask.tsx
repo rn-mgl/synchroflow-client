@@ -45,12 +45,17 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
   });
   const { isLoading, handleLoader } = useLoader();
 
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
   const params = useParams();
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
-  const handleTaskData = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleTaskData = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const name = e.target.name;
     const value = e.target.value;
 
@@ -69,7 +74,10 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
       const { data } = await axios.patch(
         `${url}/sub_tasks/${props.subTaskData.sub_task_uuid}`,
         { subTaskData },
-        { headers: { Authorization: user?.token }, params: { mainTaskUUID: params?.task_uuid } }
+        {
+          headers: { Authorization: user?.token },
+          params: { mainTaskUUID: params?.task_uuid },
+        }
       );
       if (data.updateSubTask) {
         await props.getSubTask();

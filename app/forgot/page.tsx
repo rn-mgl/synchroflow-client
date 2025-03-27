@@ -28,7 +28,7 @@ const Forgot = () => {
   const { isLoading, handleLoader } = useLoader();
   const { disable, handleDisable } = useDisable();
 
-  const { url } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const router = useRouter();
 
@@ -52,7 +52,11 @@ const Forgot = () => {
     const { candidateEmail, candidateName, candidateSurname } = userCredentials;
 
     try {
-      const { data } = await axios.post(`${url}/password/forgot`, { candidateEmail, candidateName, candidateSurname });
+      const { data } = await axios.post(`${url}/password/forgot`, {
+        candidateEmail,
+        candidateName,
+        candidateSurname,
+      });
 
       if (data) {
         router.push("/sending?purpose=reset");
@@ -67,7 +71,9 @@ const Forgot = () => {
 
   return (
     <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full min-h-screen h-screen bg-white">
-      {message.active ? <Message message={message} handleMessages={handleMessages} /> : null}
+      {message.active ? (
+        <Message message={message} handleMessages={handleMessages} />
+      ) : null}
       {isLoading ? <Loading /> : null}
 
       <div
@@ -86,9 +92,13 @@ const Forgot = () => {
                       max-w-lg t:p-10"
         >
           <div className="text-left w-full">
-            <p className="text-sm text-secondary-500">Welcome to SynchroFlow,</p>
+            <p className="text-sm text-secondary-500">
+              Welcome to SynchroFlow,
+            </p>
 
-            <p className="font-black text-2xl text-primary-500 l-s:text-3xl">Forgot Password</p>
+            <p className="font-black text-2xl text-primary-500 l-s:text-3xl">
+              Forgot Password
+            </p>
           </div>
 
           <div className="w-full flex flex-col gap-2">

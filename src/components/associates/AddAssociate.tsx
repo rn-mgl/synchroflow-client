@@ -32,7 +32,12 @@ interface AssociateStateProps {
 
 const AddAssociate: React.FC<AddAssociateProps> = (props) => {
   const { activeFilterOptions, toggleActiveFilterOptions } = useFilter();
-  const { activeSortOptions, sortFilter, handleSortFilter, toggleActiveSortOptions } = useSortFilter("name");
+  const {
+    activeSortOptions,
+    sortFilter,
+    handleSortFilter,
+    toggleActiveSortOptions,
+  } = useSortFilter("name");
   const {
     searchFilter,
     searchCategory,
@@ -56,9 +61,10 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
   ]);
   const { message, handleMessages } = usePopUpMessage();
 
-  const { url, socket } = useGlobalContext();
+  const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const socketAssociateInvite = (room: string) => {
     socket.emit("send_associate_invite", { room });
@@ -128,7 +134,9 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
         user_uuid={user.user_uuid}
         associate_invite_uuid={user.associate_invite_uuid}
         sendInvite={() => sendInvite(user.user_uuid)}
-        cancelRequest={() => cancelRequest(user.associate_invite_uuid, user.user_uuid)}
+        cancelRequest={() =>
+          cancelRequest(user.associate_invite_uuid, user.user_uuid)
+        }
       />
     );
   });
@@ -149,7 +157,9 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
                 bg-gradient-to-br from-[#546FFF33] to-[#8E92BC33]
                 flex flex-col items-center justify-start p-4 t:p-10"
     >
-      {message.active ? <Message message={message} handleMessages={handleMessages} /> : null}
+      {message.active ? (
+        <Message message={message} handleMessages={handleMessages} />
+      ) : null}
       <div
         className="w-full bg-white h-full rounded-lg flex flex-col p-4 t:p-10 gap-4
           max-w-screen-t items-center justify-start"
@@ -167,7 +177,11 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
           <p className="font-semibold text-xl">Explore Potential Associates</p>
 
           <div className="flex flex-row justify-center h-full w-full ">
-            <div className={`flex flex-row gap-4 h-fit w-full ${activeFilterOptions && "m-s:flex-wrap t:flex-nowrap"}`}>
+            <div
+              className={`flex flex-row gap-4 h-fit w-full ${
+                activeFilterOptions && "m-s:flex-wrap t:flex-nowrap"
+              }`}
+            >
               <SearchFilter
                 placeholder="Search Task"
                 name="searchInput"
@@ -196,7 +210,13 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
                 activeFilterOptions={activeFilterOptions}
                 handleSearchCategory={handleSearchCategory}
                 toggleActiveSearchOptions={toggleActiveSearchOptions}
-                searchCategories={["name", "surname", "email", "role", "status"]}
+                searchCategories={[
+                  "name",
+                  "surname",
+                  "email",
+                  "role",
+                  "status",
+                ]}
               />
 
               <SortFilter
