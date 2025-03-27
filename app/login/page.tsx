@@ -70,6 +70,8 @@ const Login = () => {
           redirect: false,
         });
 
+        console.log(creds);
+
         if (creds?.ok) {
           socket.emit("connect_to_uuid", { uuid: data?.uuid });
           router.push("/hub");
