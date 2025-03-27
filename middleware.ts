@@ -4,7 +4,12 @@ import { NextResponse } from "next/server";
 export default withAuth(
   function middleware(req) {
     if (req.nextUrl.pathname.includes("/hub") && !req.nextauth.token?.user) {
-      return NextResponse.rewrite(new URL("/login/?message=Please log in first before proceeding.", req.url));
+      return NextResponse.rewrite(
+        new URL(
+          "/login/?message=Please log in first before proceeding.",
+          req.url
+        )
+      );
     }
   },
   {
