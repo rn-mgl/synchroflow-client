@@ -11,12 +11,12 @@ import { ArcElement, Chart } from "chart.js/auto";
 import Link from "next/link";
 import Calendar from "react-calendar";
 import { Line, Pie } from "react-chartjs-2";
-import { BsChevronDown } from "react-icons/bs";
 
 const Hub = () => {
   const { tasksCount, weekTasksCount, getTasksCount } = useDashboard();
   const { recentAssociates, getRecentAssociates } = useAssociates();
-  const { myTasksToday, myUpcomingTasks, getMyTasksToday, getMyUpcomingTasks } = useTasks();
+  const { myTasksToday, myUpcomingTasks, getMyTasksToday, getMyUpcomingTasks } =
+    useTasks();
   const { searchFilter } = useSearchFilter("title");
   const { data: session } = useSession();
   const user = session?.user;
@@ -59,15 +59,17 @@ const Hub = () => {
     ],
   };
 
-  const mappedRecentAssociateCards = recentAssociates.map((associate, index) => {
-    return (
-      <AssociateCards
-        key={index}
-        associate={associate}
-        targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
-      />
-    );
-  });
+  const mappedRecentAssociateCards = recentAssociates.map(
+    (associate, index) => {
+      return (
+        <AssociateCards
+          key={index}
+          associate={associate}
+          targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
+        />
+      );
+    }
+  );
 
   const mappedTasksToday = myTasksToday.map((_, index) => {
     if ((index + 1) % 2 === 0) return;
@@ -76,11 +78,16 @@ const Hub = () => {
     const nextTask = myTasksToday[index + 1];
 
     return (
-      <div key={index} className="flex flex-col w-full h-full gap-4 items-center justify-start min-w-full">
+      <div
+        key={index}
+        className="flex flex-col w-full h-full gap-4 items-center justify-start min-w-full"
+      >
         {currTask ? (
           <div
             className={`flex flex-col gap-4 items-start justify-start p-4 
-              bg-white w-full rounded-lg min-w-full ${nextTask ? "h-full" : "h-3/6"}`}
+              bg-white w-full rounded-lg min-w-full ${
+                nextTask ? "h-full" : "h-3/6"
+              }`}
           >
             <Link
               href={`/hub/tasks/${currTask.main_task_uuid}`}
@@ -98,7 +105,9 @@ const Hub = () => {
             <div className="flex flex-col w-full gap-1">
               <div className="flex justify-between text-sm">
                 <p className="font-bold text-secondary-400">Progress</p>
-                <p className="text-primary-500 capitalize">{currTask.main_task_status}</p>
+                <p className="text-primary-500 capitalize">
+                  {currTask.main_task_status}
+                </p>
               </div>
             </div>
           </div>
@@ -129,7 +138,9 @@ const Hub = () => {
             <div className="flex flex-col w-full gap-1">
               <div className="flex justify-between text-sm">
                 <p className="font-bold text-secondary-400">Progress</p>
-                <p className="text-primary-500 capitalize">{nextTask.main_task_status}</p>
+                <p className="text-primary-500 capitalize">
+                  {nextTask.main_task_status}
+                </p>
               </div>
             </div>
           </div>
@@ -145,11 +156,16 @@ const Hub = () => {
     const nextTask = myUpcomingTasks[index + 1];
 
     return (
-      <div key={index} className="flex flex-row w-full h-full gap-4 items-center justify-start min-w-full">
+      <div
+        key={index}
+        className="flex flex-row w-full h-full gap-4 items-center justify-start min-w-full"
+      >
         {currTask ? (
           <div
             className={`flex flex-col gap-4 items-start justify-start p-4 
-              bg-white h-full rounded-lg ${nextTask ? "w-full " : "w-full l-l:w-3/6"}`}
+              bg-white h-full rounded-lg ${
+                nextTask ? "w-full " : "w-full l-l:w-3/6"
+              }`}
           >
             <Link
               href={`/hub/tasks/${currTask.main_task_uuid}`}
@@ -167,7 +183,9 @@ const Hub = () => {
             <div className="flex flex-col w-full gap-1">
               <div className="flex justify-between text-sm">
                 <p className="font-bold text-secondary-400">Progress</p>
-                <p className="text-primary-500 capitalize">{currTask.main_task_status}</p>
+                <p className="text-primary-500 capitalize">
+                  {currTask.main_task_status}
+                </p>
               </div>
             </div>
           </div>
@@ -194,7 +212,9 @@ const Hub = () => {
             <div className="flex flex-col w-full gap-1">
               <div className="flex justify-between text-sm">
                 <p className="font-bold text-secondary-400">Progress</p>
-                <p className="text-primary-500 capitalize">{nextTask.main_task_status}</p>
+                <p className="text-primary-500 capitalize">
+                  {nextTask.main_task_status}
+                </p>
               </div>
             </div>
           </div>
@@ -263,7 +283,11 @@ const Hub = () => {
                     bg-neutral-50 rounded-md"
             >
               <div className="w-full h-48 mt-auto">
-                <Line data={lineData} updateMode="active" options={{ maintainAspectRatio: false }} />
+                <Line
+                  data={lineData}
+                  updateMode="active"
+                  options={{ maintainAspectRatio: false }}
+                />
               </div>
             </div>
           </div>
