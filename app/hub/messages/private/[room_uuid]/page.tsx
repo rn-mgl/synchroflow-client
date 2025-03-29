@@ -218,7 +218,7 @@ const PrivateMessages = () => {
           ) : (
             <ActiveMessagePanel
               roomName={`${activeRoom.name} ${activeRoom.surname}`}
-              isRoomCreator={user?.id === activeRoom.created_by}
+              isRoomCreator={parseInt(user?.id) === activeRoom.created_by}
               activeRoom={activeRoom}
               roomMessages={roomMessages}
               roomType="private"

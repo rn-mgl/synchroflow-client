@@ -251,7 +251,7 @@ const GroupMessages = () => {
 
       {canSeeGroupMembers ? (
         <GroupMembers
-          isRoomCreator={user?.id === activeRoom.created_by}
+          isRoomCreator={parseInt(user?.id) === activeRoom.created_by}
           toggleCanSeeGroupMembers={toggleCanSeeGroupMembers}
           getMessageRoom={() => getMessageRoom("group")}
         />
@@ -339,7 +339,7 @@ const GroupMessages = () => {
           ) : (
             <ActiveMessagePanel
               roomName={activeRoom.room_name}
-              isRoomCreator={user?.id === activeRoom.created_by}
+              isRoomCreator={parseInt(user?.id) === activeRoom.created_by}
               activeRoom={activeRoom}
               roomMessages={roomMessages}
               roomType="group"

@@ -78,7 +78,7 @@ const SingleTask = () => {
   const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
-  const isTaskCreator = user?.id === taskData.main_task_by;
+  const isTaskCreator = parseInt(user?.id) === taskData.main_task_by;
   const router = useRouter();
   const url = process.env.NEXT_PUBLIC_API_URL;
 
