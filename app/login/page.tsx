@@ -71,8 +71,18 @@ const Login = () => {
         });
 
         if (creds?.ok) {
-          socket.emit("connect_to_uuid", { uuid: data?.uuid });
-          router.push("/hub");
+          if (!data.verified) {
+            router.push("/sending?purpose=verify");
+          } else {
+            socket.emit("connect_to_uuid", { uuid: data?.uuid });
+            router.push("/hub");
+          }
+        } else {
+          handleMessages(
+            true,
+            "There was an error in setting your credentials.",
+            "error"
+          );
         }
       }
     } catch (error: any) {
