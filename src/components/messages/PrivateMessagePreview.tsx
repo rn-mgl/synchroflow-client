@@ -104,7 +104,7 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
           <p className="truncate max-w-[10ch] t:max-w-[40ch] l-s:max-w-[10ch] l-l:max-w-[25ch]">
             <span className="font-medium">
               {" "}
-              {latestMessage.message_from === Number(user?.id) && "You: "}
+              {latestMessage.message_from == user?.id && "You: "}
             </span>
             <span>
               {latestMessage.message ? (

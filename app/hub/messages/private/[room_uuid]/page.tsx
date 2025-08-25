@@ -75,7 +75,7 @@ const PrivateMessages = () => {
           dateSent={
             room.date_sent ? localizeDate(room.date_sent, true) : "mm/dd/yyyy"
           }
-          isSender={room.message_from === Number(user?.id)}
+          isSender={room.message_from == user?.id}
           isSelected={params?.room_uuid === room.message_room}
         />
         <div className="w-full h-[0.5px] min-h-[0.5px] bg-secondary-100" />
@@ -224,9 +224,7 @@ const PrivateMessages = () => {
           ) : (
             <ActiveMessagePanel
               roomName={`${activeRoom.name} ${activeRoom.surname}`}
-              isRoomCreator={
-                parseInt(Number(user?.id)) === activeRoom.created_by
-              }
+              isRoomCreator={parseInt(user?.id) === activeRoom.created_by}
               activeRoom={activeRoom}
               roomMessages={roomMessages}
               roomType="private"

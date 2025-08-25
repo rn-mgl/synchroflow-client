@@ -54,7 +54,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
   const roomType = path?.split("/")[3];
 
   const mappedMessages = props.roomMessages.map((message, index) => {
-    const isSender = message.message_from === Number(user?.id);
+    const isSender = message.message_from == user?.id;
 
     return (
       <div
