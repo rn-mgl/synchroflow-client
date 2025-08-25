@@ -170,7 +170,7 @@ const Invites = () => {
 
   const mappedSentTaskInvites = sentTaskInvites.map((taskInvite, index) => {
     const targetIdentity =
-      taskInvite.from_user === user?.id ? "invited" : "from"; // check if im the sender and use the other user's data
+      taskInvite.from_user === Number(user?.id) ? "invited" : "from"; // check if im the sender and use the other user's data
     const name = taskInvite[`${targetIdentity}_name`];
     const surname = taskInvite[`${targetIdentity}_surname`];
     const email = taskInvite[`${targetIdentity}_email`];
@@ -200,7 +200,7 @@ const Invites = () => {
   const mappedReceivedTaskInvites = receivedTaskInvites.map(
     (taskInvite, index) => {
       const targetIdentity =
-        taskInvite.from_user === user?.id ? "invited" : "from"; // check if im the invited and use my data
+        taskInvite.from_user === Number(user?.id) ? "invited" : "from"; // check if im the invited and use my data
       const name = taskInvite[`${targetIdentity}_name`];
       const surname = taskInvite[`${targetIdentity}_surname`];
       const email = taskInvite[`${targetIdentity}_email`];
@@ -237,7 +237,7 @@ const Invites = () => {
   const mappedSentAssociateInvites = sentAssociateInvites.map(
     (associateInvite, index) => {
       const targetIdentity =
-        associateInvite.from_user === user?.id ? "invited" : "from"; // check if im the invited and use my data
+        associateInvite.from_user === Number(user?.id) ? "invited" : "from"; // check if im the invited and use my data
       const image = associateInvite[`${targetIdentity}_image`];
       const name = associateInvite[`${targetIdentity}_name`];
       const surname = associateInvite[`${targetIdentity}_surname`];
@@ -264,7 +264,7 @@ const Invites = () => {
   const mappedReceivedAssociateInvites = receivedAssociateInvites.map(
     (associateInvite, index) => {
       const targetIdentity =
-        associateInvite.from_user === user?.id ? "invited" : "from"; // check if im the invited and use my data
+        associateInvite.from_user === Number(user?.id) ? "invited" : "from"; // check if im the invited and use my data
       const image = associateInvite[`${targetIdentity}_image`];
       const name = associateInvite[`${targetIdentity}_name`];
       const surname = associateInvite[`${targetIdentity}_surname`];

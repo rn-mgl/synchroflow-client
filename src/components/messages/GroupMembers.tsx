@@ -121,7 +121,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
 
           {props.isRoomCreator ? (
             <div className="ml-auto relative">
-              {member.user_id !== user?.id ? (
+              {member.user_id !== Number(user?.id) ? (
                 <button
                   onClick={() =>
                     handleSelectedGroupMember(member.message_member_uuid)

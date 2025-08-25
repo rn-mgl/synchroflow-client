@@ -15,7 +15,10 @@ import {
 import { BsArrowLeft, BsFillSendFill } from "react-icons/bs";
 import FilePreview from "../global/FilePreview";
 import FileViewer from "../global/FileViewer";
-import { MessageRoomsStateProps, RoomMessagesStateProps } from "../hooks/useMessage";
+import {
+  MessageRoomsStateProps,
+  RoomMessagesStateProps,
+} from "../hooks/useMessage";
 import { localizeDate, localizeTime } from "../utils/dateUtils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -51,7 +54,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
   const roomType = path?.split("/")[3];
 
   const mappedMessages = props.roomMessages.map((message, index) => {
-    const isSender = message.message_from === user?.id;
+    const isSender = message.message_from === Number(user?.id);
 
     return (
       <div
@@ -60,7 +63,11 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
         className={`w-fit max-w-[80%] rounded-md t:max-w-[60%] flex  ustify-center
                    group relative flex-col ${isSender ? "ml-auto" : "mr-auto"}`}
       >
-        <div className={`w-fit flex relative ${isSender ? "flex-row-reverse ml-auto" : "flex-row mr-auto"}`}>
+        <div
+          className={`w-fit flex relative ${
+            isSender ? "flex-row-reverse ml-auto" : "flex-row mr-auto"
+          }`}
+        >
           <div
             className={`rounded-md p-2 gap-4 flex flex-col items-center justify-center w-full ${
               isSender ? " bg-primary-500" : " bg-secondary-500"
@@ -68,13 +75,20 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
           >
             {message.message ? (
               <p
-                className={`text-white ${isSender ? "text-right ml-auto" : "text-left mr-auto"} break-word break-words`}
+                className={`text-white ${
+                  isSender ? "text-right ml-auto" : "text-left mr-auto"
+                } break-word break-words`}
               >
                 {message.message}
               </p>
             ) : null}
 
-            {message.message_file ? <FileViewer file={message.message_file} type={message.message_file_type} /> : null}
+            {message.message_file ? (
+              <FileViewer
+                file={message.message_file}
+                type={message.message_file_type}
+              />
+            ) : null}
           </div>
         </div>
 
@@ -83,7 +97,8 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
             className={`whitespace-nowrap text-xs font-light 
                     ${isSender ? "text-right ml-auto" : "text-left mr-auto"}`}
           >
-            Sent {localizeDate(message.date_sent, true)} | {localizeTime(message.date_sent)}
+            Sent {localizeDate(message.date_sent, true)} |{" "}
+            {localizeTime(message.date_sent)}
           </p>
         ) : null}
       </div>
@@ -104,7 +119,9 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
           <BsArrowLeft className="text-primary-500" />
         </Link>
 
-        <p className="font-bold max-w-[20ch] truncate t:max-w-none t:truncate">{props.roomName}</p>
+        <p className="font-bold max-w-[20ch] truncate t:max-w-none t:truncate">
+          {props.roomName}
+        </p>
         {props.roomType === "group" ? (
           <div className="ml-auto flex flex-row gap-4 text-sm">
             {props.activePanelToolTip ? (
@@ -197,7 +214,12 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
 
           <div className="flex flex-row gap-2 items-center justify-center mt-auto t:gap-4">
             <label>
-              <input ref={props.rawFile} onChange={(e) => props.selectedFileViewer(e)} type="file" className="hidden" />
+              <input
+                ref={props.rawFile}
+                onChange={(e) => props.selectedFileViewer(e)}
+                type="file"
+                className="hidden"
+              />
               <div
                 className="p-2.5 hover:bg-primary-100 transition-all outline-none
                 rounded-lg flex flex-col items-center justify-center t:p-4"

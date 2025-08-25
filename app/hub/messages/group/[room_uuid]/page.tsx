@@ -103,7 +103,7 @@ const GroupMessages = () => {
             room.date_sent ? localizeDate(room.date_sent, true) : "mm/dd/yyyy"
           }
           isSelected={params?.room_uuid === room.message_room}
-          isSender={room.message_from === user?.id}
+          isSender={room.message_from === Number(user?.id)}
         />
         <div className="w-full h-[0.5px] min-h-[0.5px] bg-secondary-100" />
       </React.Fragment>
@@ -280,7 +280,7 @@ const GroupMessages = () => {
 
       {canSeeGroupMembers ? (
         <GroupMembers
-          isRoomCreator={parseInt(user?.id) === activeRoom.created_by}
+          isRoomCreator={parseInt(Number(user?.id)) === activeRoom.created_by}
           toggleCanSeeGroupMembers={toggleCanSeeGroupMembers}
           getMessageRoom={() => getMessageRoom("group")}
         />
@@ -368,7 +368,9 @@ const GroupMessages = () => {
           ) : (
             <ActiveMessagePanel
               roomName={activeRoom.room_name}
-              isRoomCreator={parseInt(user?.id) === activeRoom.created_by}
+              isRoomCreator={
+                parseInt(Number(user?.id)) === activeRoom.created_by
+              }
               activeRoom={activeRoom}
               roomMessages={roomMessages}
               roomType="group"
