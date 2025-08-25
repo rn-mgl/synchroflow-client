@@ -235,15 +235,27 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
   }, [getSubtask]);
 
   React.useEffect(() => {
-    socket.on("refetch_assigned_subtask", async () => {
+    const handle = async () => {
       await getAllMainTaskCollaborators();
-    });
+    };
+
+    socket.on("refetch_assigned_subtask", handle);
+
+    return () => {
+      socket.off("refetch_assigned_subtask", handle);
+    };
   }, [socket, getAllMainTaskCollaborators]);
 
   React.useEffect(() => {
-    socket.on("reflect_update_subtask", async () => {
+    const handle = async () => {
       await getSubtask();
-    });
+    };
+
+    socket.on("reflect_update_subtask", handle);
+
+    return () => {
+      socket.off("reflect_update_subtask", handle);
+    };
   }, [socket, getSubtask]);
 
   return (

@@ -312,50 +312,68 @@ const Invites = () => {
   }, [getReceivedAssociateInvites]);
 
   React.useEffect(() => {
-    socket.on("reflect_send_main_task_invite", async () => {
+    const handle = async () => {
       await getReceivedTaskInvites();
-    });
+    };
+
+    socket.on("reflect_send_main_task_invite", handle);
+
+    return () => {
+      socket.off("reflect_send_main_task_invite", handle);
+    };
   }, [socket, getReceivedTaskInvites]);
 
   React.useEffect(() => {
-    socket.on("reflect_send_associate_invite", async () => {
+    const handle = async () => {
       await getReceivedAssociateInvites();
       await getNotifications();
-    });
+    };
+
+    socket.on("reflect_send_associate_invite", handle);
+
+    return () => {
+      socket.off("reflect_send_associate_invite", handle);
+    };
   }, [socket, getReceivedAssociateInvites, getNotifications]);
 
   React.useEffect(() => {
-    socket.on(
-      "reflect_remove_associate_invite",
-      async (args: {
-        inviteUUID: string;
-        invitedRoom: string;
-        fromRoom: string;
-      }) => {
-        await removeSentAssociateInvites(
-          args.inviteUUID,
-          args.invitedRoom,
-          args.fromRoom
-        );
-      }
-    );
+    const handle = async (args: {
+      inviteUUID: string;
+      invitedRoom: string;
+      fromRoom: string;
+    }) => {
+      await removeSentAssociateInvites(
+        args.inviteUUID,
+        args.invitedRoom,
+        args.fromRoom
+      );
+    };
+
+    socket.on("reflect_remove_associate_invite", handle);
+
+    return () => {
+      socket.off("reflect_remove_associate_invite", handle);
+    };
   }, [socket, removeSentAssociateInvites]);
 
   React.useEffect(() => {
-    socket.on(
-      "reflect_remove_task_invite",
-      async (args: {
-        inviteUUID: string;
-        invitedRoom: string;
-        fromRoom: string;
-      }) => {
-        await removeSentTaskInvites(
-          args.inviteUUID,
-          args.invitedRoom,
-          args.fromRoom
-        );
-      }
-    );
+    const handle = async (args: {
+      inviteUUID: string;
+      invitedRoom: string;
+      fromRoom: string;
+    }) => {
+      await removeSentTaskInvites(
+        args.inviteUUID,
+        args.invitedRoom,
+        args.fromRoom
+      );
+    };
+
+    socket.on("reflect_remove_task_invite", handle);
+
+    return () => {
+      socket.off("reflect_remove_task_invite", handle);
+    };
   }, [socket, removeSentTaskInvites]);
 
   return (

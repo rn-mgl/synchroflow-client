@@ -146,9 +146,15 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
   }, [getUsers]);
 
   React.useEffect(() => {
-    socket.on("reflect_send_associate_invite", () => {
-      getUsers();
-    });
+    const handle = async () => {
+      await getUsers();
+    };
+
+    socket.on("reflect_send_associate_invite", handle);
+
+    return () => {
+      socket.off("reflect_send_associate_invite", handle);
+    };
   }, [socket, getUsers]);
 
   return (

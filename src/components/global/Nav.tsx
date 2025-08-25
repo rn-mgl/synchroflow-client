@@ -170,11 +170,17 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
   }, [getNotifications]);
 
   React.useEffect(() => {
-    if (user?.uuid) {
-      socket.on("room_rejoin", () => {
-        socket.emit("rejoin_user_uuid", { room: user?.uuid });
-      });
-    }
+    if (!user?.uuid) return;
+
+    const handle = () => {
+      socket.emit("rejoin_user_uuid", { room: user?.uuid });
+    };
+
+    socket.on("room_rejoin", handle);
+
+    return () => {
+      socket.off("room_rejoin", handle);
+    };
   }, [socket, user?.uuid]);
 
   return (

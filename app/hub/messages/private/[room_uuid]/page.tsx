@@ -136,14 +136,20 @@ const PrivateMessages = () => {
   }, [getMessageRoom]);
 
   React.useEffect(() => {
-    socket.on("get_messages", async (args: { room: string }) => {
+    const handle = async (args: { room: string }) => {
       await getMessageRoomMessages("private");
       await getNotifications();
       toggleCheckedNotifications(false);
       if (settings.message_notification && args.room !== user?.uuid) {
         audioRef.current?.play();
       }
-    });
+    };
+
+    socket.on("get_messages", handle);
+
+    return () => {
+      socket.off("get_messages", handle);
+    };
   }, [
     socket,
     searchFilter,

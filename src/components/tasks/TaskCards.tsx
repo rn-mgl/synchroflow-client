@@ -80,14 +80,17 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
   }, [getCollaborators]);
 
   React.useEffect(() => {
-    socket.on(
-      "refetch_tasks_collaborators",
-      async (args: { mainTaskUUID: string }) => {
-        if (props.taskUUID === args.mainTaskUUID) {
-          await getCollaborators();
-        }
+    const handle = async (args: { mainTaskUUID: string }) => {
+      if (props.taskUUID === args.mainTaskUUID) {
+        await getCollaborators();
       }
-    );
+    };
+
+    socket.on("refetch_tasks_collaborators", handle);
+
+    return () => {
+      socket.off("refetch_tasks_collaborators", handle);
+    };
   }, [socket, props.taskUUID, getCollaborators]);
 
   return (

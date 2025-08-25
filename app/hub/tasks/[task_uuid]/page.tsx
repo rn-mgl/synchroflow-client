@@ -302,58 +302,94 @@ const SingleTask = () => {
   }, [getSingleTaskCollborators]);
 
   React.useEffect(() => {
-    socket.on(
-      "refetch_tasks_collaborators",
-      async (args: { mainTaskUUID: string }) => {
-        if (params?.task_uuid === args.mainTaskUUID) {
-          await getSingleTaskCollborators();
-        }
+    const handle = async (args: { mainTaskUUID: string }) => {
+      if (params?.task_uuid === args.mainTaskUUID) {
+        await getSingleTaskCollborators();
       }
-    );
+    };
+
+    socket.on("refetch_tasks_collaborators", handle);
+
+    return () => {
+      socket.off("refetch_tasks_collaborators", handle);
+    };
   }, [socket, params?.task_uuid, getSingleTaskCollborators]);
 
   React.useEffect(() => {
-    socket.on("reflect_update_task", async () => {
+    const handle = async () => {
       await getSingleTask();
-    });
+    };
+
+    socket.on("reflect_update_task", handle);
+
+    return () => {
+      socket.off("reflect_update_task", handle);
+    };
   }, [socket, getSingleTask]);
 
   React.useEffect(() => {
-    socket.on("refetch_assigned_subtask", async () => {
+    const handle = async () => {
       await getAssignedSubTasks();
-    });
+    };
+
+    socket.on("refetch_assigned_subtask", handle);
+
+    return () => {
+      socket.off("refetch_assigned_subtask", handle);
+    };
   }, [socket, getAssignedSubTasks]);
 
   React.useEffect(() => {
-    socket.on("reflect_update_subtask", async () => {
+    const handle = async () => {
       await getAssignedSubTasks();
-    });
+    };
+
+    socket.on("reflect_update_subtask", handle);
+
+    return () => {
+      socket.off("reflect_update_subtask", handle);
+    };
   }, [socket, getAssignedSubTasks]);
 
   React.useEffect(() => {
-    socket.on("reflect_delete_subtask", async () => {
+    const handle = async () => {
       await getAssignedSubTasks();
       handleSelectedSubTask("");
-    });
+    };
+
+    socket.on("reflect_delete_subtask", handle);
+
+    return () => {
+      socket.off("reflect_delete_subtask", handle);
+    };
   }, [socket, getAssignedSubTasks]);
 
   React.useEffect(() => {
-    socket.on("reflect_delete_task", async (args: { mainTaskUUID: string }) => {
+    const handle = async (args: { mainTaskUUID: string }) => {
       if (args.mainTaskUUID === params?.task_uuid) {
         router.push("/hub/tasks");
       }
-    });
+    };
+
+    socket.on("reflect_delete_task", handle);
+
+    return () => {
+      socket.off("reflect_delete_task", handle);
+    };
   }, [socket, params?.task_uuid, router]);
 
   React.useEffect(() => {
-    socket.on(
-      "reflect_remove_collaborator",
-      async (args: { mainTaskUUID: string }) => {
-        if (args.mainTaskUUID === params?.task_uuid) {
-          router.push("/hub/tasks");
-        }
+    const handle = async (args: { mainTaskUUID: string }) => {
+      if (args.mainTaskUUID === params?.task_uuid) {
+        router.push("/hub/tasks");
       }
-    );
+    };
+
+    socket.on("reflect_remove_collaborator", handle);
+
+    return () => {
+      socket.off("reflect_remove_collaborator", handle);
+    };
   }, [socket, params?.task_uuid, router]);
 
   return (

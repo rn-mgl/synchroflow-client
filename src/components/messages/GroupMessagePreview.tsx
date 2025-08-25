@@ -52,9 +52,15 @@ const GroupMessagePreview: React.FC<GroupMessagePreviewProps> = (props) => {
   }, [getLatestMessage]);
 
   React.useEffect(() => {
-    socket.on("get_messages", async () => {
+    const handle = async () => {
       await getLatestMessage();
-    });
+    };
+
+    socket.on("get_messages", handle);
+
+    return () => {
+      socket.off("get_messages", handle);
+    };
   }, [socket, getLatestMessage]);
 
   return (

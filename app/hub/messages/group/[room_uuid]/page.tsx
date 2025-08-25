@@ -182,40 +182,69 @@ const GroupMessages = () => {
   }, [getMessageRoom]);
 
   React.useEffect(() => {
-    socket.on("reflect_add_group_member", async () => {
+    const handle = async () => {
       await getMessageRooms(searchFilter, "group");
       await getNotifications();
-    });
+    };
+
+    socket.on("reflect_add_group_member", handle);
+
+    return () => {
+      socket.off("reflect_add_group_member", handle);
+    };
   }, [socket, searchFilter, getMessageRooms, getNotifications]);
 
   React.useEffect(() => {
-    socket.on("reflect_update_group_room", async () => {
+    const handle = async () => {
       await getMessageRooms(searchFilter, "group");
       await getMessageRoom("group");
-    });
+    };
+
+    socket.on("reflect_update_group_room", handle);
+
+    return () => {
+      socket.off("reflect_update_group_room", handle);
+    };
   }, [socket, searchFilter, getMessageRooms, getMessageRoom]);
 
   React.useEffect(() => {
-    socket.on("reflect_remove_group_member", async () => {
+    const handle = async () => {
       await getMessageRooms(searchFilter, "group");
-    });
+    };
+
+    socket.on("reflect_remove_group_member", handle);
+
+    return () => {
+      socket.off("reflect_remove_group_member", handle);
+    };
   }, [socket, searchFilter, , getMessageRooms]);
 
   React.useEffect(() => {
-    socket.on("reflect_delete_group_room", async () => {
+    const handle = async () => {
       await getMessageRooms(searchFilter, "group");
-    });
+    };
+    socket.on("reflect_delete_group_room", handle);
+
+    return () => {
+      socket.off("reflect_delete_group_room", handle);
+    };
   }, [socket, searchFilter, , getMessageRooms]);
 
   React.useEffect(() => {
-    socket.on("get_messages", async (args: { room: string }) => {
+    const handle = async (args: { room: string }) => {
       await getMessageRoomMessages("group");
       await getNotifications();
       toggleCheckedNotifications(false);
       if (settings.message_notification && args.room !== user?.uuid) {
         audioRef.current?.play();
       }
-    });
+    };
+
+    socket.on("get_messages", handle);
+
+    return () => {
+      socket.off("get_messages", handle);
+    };
   }, [
     socket,
     searchFilter,

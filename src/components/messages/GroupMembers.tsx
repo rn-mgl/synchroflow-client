@@ -173,12 +173,18 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
   }, [getGroupMembers]);
 
   React.useEffect(() => {
-    socket.on("get_group_members", (args) => {
-      getGroupMembers();
+    const handle = async (args: { room: string }) => {
+      await getGroupMembers();
       if (args.room === user?.uuid) {
         toggleCanSeeGroupMembers();
       }
-    });
+    };
+
+    socket.on("get_group_members", handle);
+
+    return () => {
+      socket.off("get_group_members", handle);
+    };
   }, [socket, user?.uuid, toggleCanSeeGroupMembers, getGroupMembers]);
 
   return (

@@ -11,7 +11,12 @@ import useTasks from "@/components//hooks/useTasks";
 import CreateTask from "@/components//tasks/CreateTask";
 import TaskCards from "@/components//tasks/TaskCards";
 import React from "react";
-import { AiOutlineClose, AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
+import {
+  AiOutlineClose,
+  AiOutlinePlus,
+  AiOutlineSearch,
+  AiOutlineTool,
+} from "react-icons/ai";
 
 const Tasks = () => {
   const [canCreateTask, setCanCreateTask] = React.useState(false);
@@ -26,7 +31,12 @@ const Tasks = () => {
     getCollaboratedTasks,
   } = useTasks();
   const { activeFilterOptions, toggleActiveFilterOptions } = useFilter();
-  const { activeSortOptions, sortFilter, handleSortFilter, toggleActiveSortOptions } = useSortFilter("deadline");
+  const {
+    activeSortOptions,
+    sortFilter,
+    handleSortFilter,
+    toggleActiveSortOptions,
+  } = useSortFilter("deadline");
   const {
     searchFilter,
     searchCategory,
@@ -57,19 +67,21 @@ const Tasks = () => {
     );
   });
 
-  const mappedCollaboratedTaskCardsToday = collaboratedTasksToday.map((task, index) => {
-    return (
-      <TaskCards
-        key={index}
-        banner={task.main_task_banner}
-        title={task.main_task_title}
-        subTitle={task.main_task_subtitle}
-        status={task.main_task_status}
-        deadline={task.main_task_end_date}
-        taskUUID={task.main_task_uuid}
-      />
-    );
-  });
+  const mappedCollaboratedTaskCardsToday = collaboratedTasksToday.map(
+    (task, index) => {
+      return (
+        <TaskCards
+          key={index}
+          banner={task.main_task_banner}
+          title={task.main_task_title}
+          subTitle={task.main_task_subtitle}
+          status={task.main_task_status}
+          deadline={task.main_task_end_date}
+          taskUUID={task.main_task_uuid}
+        />
+      );
+    }
+  );
 
   const mappedMyTaskCards = myTasks.map((task, index) => {
     return (
@@ -116,12 +128,18 @@ const Tasks = () => {
   }, [getCollaboratedTasksToday, sortFilter, searchFilter, searchCategory]);
 
   React.useEffect(() => {
-    socket.on("reflect_delete_task", async () => {
+    const handle = async () => {
       await getMyTasks(sortFilter, searchFilter, searchCategory);
       await getCollaboratedTasks(sortFilter, searchFilter, searchCategory);
       await getMyTasksToday(sortFilter, searchFilter, searchCategory);
       await getCollaboratedTasksToday(sortFilter, searchFilter, searchCategory);
-    });
+    };
+
+    socket.on("reflect_delete_task", handle);
+
+    return () => {
+      socket.off("reflect_delete_task", handle);
+    };
   }, [
     socket,
     sortFilter,
@@ -134,11 +152,17 @@ const Tasks = () => {
   ]);
 
   React.useEffect(() => {
-    socket.on("reflect_remove_collaborator", async () => {
+    const handle = async () => {
       await getCollaboratedTasks(sortFilter, searchFilter, searchCategory);
       await getMyTasksToday(sortFilter, searchFilter, searchCategory);
       await getCollaboratedTasksToday(sortFilter, searchFilter, searchCategory);
-    });
+    };
+
+    socket.on("reflect_remove_collaborator", handle);
+
+    return () => {
+      socket.off("reflect_remove_collaborator", handle);
+    };
   }, [
     socket,
     sortFilter,
@@ -150,12 +174,18 @@ const Tasks = () => {
   ]);
 
   React.useEffect(() => {
-    socket.on("reflect_update_task", async () => {
+    const handle = async () => {
       await getMyTasks(sortFilter, searchFilter, searchCategory);
       await getCollaboratedTasks(sortFilter, searchFilter, searchCategory);
       await getMyTasksToday(sortFilter, searchFilter, searchCategory);
       await getCollaboratedTasksToday(sortFilter, searchFilter, searchCategory);
-    });
+    };
+
+    socket.on("reflect_update_task", handle);
+
+    return () => {
+      socket.off("reflect_update_task", handle);
+    };
   }, [
     socket,
     sortFilter,
@@ -177,8 +207,12 @@ const Tasks = () => {
           {canCreateTask ? (
             <CreateTask
               toggleCanCreateTask={toggleCanCreateTask}
-              getMyTasks={() => getMyTasks(sortFilter, searchFilter, searchCategory)}
-              getCollaboratedTasks={() => getCollaboratedTasks(sortFilter, searchFilter, searchCategory)}
+              getMyTasks={() =>
+                getMyTasks(sortFilter, searchFilter, searchCategory)
+              }
+              getCollaboratedTasks={() =>
+                getCollaboratedTasks(sortFilter, searchFilter, searchCategory)
+              }
             />
           ) : null}
 
@@ -187,7 +221,9 @@ const Tasks = () => {
 
             <div className="flex flex-row justify-center h-full w-full ">
               <div
-                className={`flex flex-row gap-4 h-fit w-full ${activeFilterOptions && "m-s:flex-wrap t:flex-nowrap"}`}
+                className={`flex flex-row gap-4 h-fit w-full ${
+                  activeFilterOptions && "m-s:flex-wrap t:flex-nowrap"
+                }`}
               >
                 <SearchFilter
                   placeholder="Search Task"

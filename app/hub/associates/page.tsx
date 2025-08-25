@@ -13,13 +13,24 @@ import useSearchFilter from "@/components//hooks/useSearchFilter";
 import useSortFilter from "@/components//hooks/useSortFilter";
 import { useSession } from "next-auth/react";
 import React from "react";
-import { AiOutlineClose, AiOutlinePlus, AiOutlineSearch, AiOutlineTool } from "react-icons/ai";
+import {
+  AiOutlineClose,
+  AiOutlinePlus,
+  AiOutlineSearch,
+  AiOutlineTool,
+} from "react-icons/ai";
 
 const Associates = () => {
-  const [disconnectFromAssociate, setDisconnectFromAssociate] = React.useState("");
+  const [disconnectFromAssociate, setDisconnectFromAssociate] =
+    React.useState("");
   const [canAddAssociate, setCanAddAssociate] = React.useState(false);
   const { activeFilterOptions, toggleActiveFilterOptions } = useFilter();
-  const { activeSortOptions, sortFilter, handleSortFilter, toggleActiveSortOptions } = useSortFilter("date added");
+  const {
+    activeSortOptions,
+    sortFilter,
+    handleSortFilter,
+    toggleActiveSortOptions,
+  } = useSortFilter("date added");
   const {
     searchFilter,
     searchCategory,
@@ -28,7 +39,12 @@ const Associates = () => {
     handleSearchCategory,
     toggleActiveSearchOptions,
   } = useSearchFilter("name");
-  const { allAssociates, recentAssociates, getAllAssociates, getRecentAssociates } = useAssociates();
+  const {
+    allAssociates,
+    recentAssociates,
+    getAllAssociates,
+    getRecentAssociates,
+  } = useAssociates();
 
   const { socket } = useGlobalContext();
   const { data: session } = useSession();
@@ -36,7 +52,9 @@ const Associates = () => {
 
   // need to optimize
   const socketDisconnectAssociate = () => {
-    const associate = allAssociates.find((associate) => associate.associate_uuid === disconnectFromAssociate);
+    const associate = allAssociates.find(
+      (associate) => associate.associate_uuid === disconnectFromAssociate
+    );
     socket.emit("disconnect_associate", {
       room: associate?.of_uuid,
     });
@@ -50,18 +68,22 @@ const Associates = () => {
   };
 
   const handleDisconnectFromAssociate = (associateUUID: string) => {
-    setDisconnectFromAssociate((prev) => (prev === associateUUID ? "" : associateUUID));
+    setDisconnectFromAssociate((prev) =>
+      prev === associateUUID ? "" : associateUUID
+    );
   };
 
-  const mappedRecentAssociateCards = recentAssociates.map((associate, index) => {
-    return (
-      <RecentAssociateCards
-        key={index}
-        associate={associate}
-        targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
-      />
-    );
-  });
+  const mappedRecentAssociateCards = recentAssociates.map(
+    (associate, index) => {
+      return (
+        <RecentAssociateCards
+          key={index}
+          associate={associate}
+          targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
+        />
+      );
+    }
+  );
 
   const mappedAssociateCards = allAssociates.map((associate, index) => {
     return (
@@ -69,7 +91,9 @@ const Associates = () => {
         key={index}
         associate={associate}
         targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
-        handleDisconnectFromAssociate={() => handleDisconnectFromAssociate(associate.associate_uuid)}
+        handleDisconnectFromAssociate={() =>
+          handleDisconnectFromAssociate(associate.associate_uuid)
+        }
       />
     );
   });
@@ -83,11 +107,24 @@ const Associates = () => {
   }, [getRecentAssociates, sortFilter, searchFilter, searchCategory]);
 
   React.useEffect(() => {
-    socket.on("refetch_associates", () => {
-      getAllAssociates(sortFilter, searchFilter, searchCategory);
-      getRecentAssociates(sortFilter, searchFilter, searchCategory);
-    });
-  }, [socket, sortFilter, searchFilter, searchCategory, getAllAssociates, getRecentAssociates]);
+    const handle = async () => {
+      await getAllAssociates(sortFilter, searchFilter, searchCategory);
+      await getRecentAssociates(sortFilter, searchFilter, searchCategory);
+    };
+
+    socket.on("refetch_associates", handle);
+
+    return () => {
+      socket.off("refetch_associates", handle);
+    };
+  }, [
+    socket,
+    sortFilter,
+    searchFilter,
+    searchCategory,
+    getAllAssociates,
+    getRecentAssociates,
+  ]);
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">
@@ -100,7 +137,9 @@ const Associates = () => {
             title="Confirm Associate Disconnection"
             message="are you sure you want to disconnect with this associate?"
             apiRoute={`associates/${disconnectFromAssociate}`}
-            toggleConfirmation={() => handleDisconnectFromAssociate(disconnectFromAssociate)}
+            toggleConfirmation={() =>
+              handleDisconnectFromAssociate(disconnectFromAssociate)
+            }
             refetchData={async () => {
               getAllAssociates(sortFilter, searchFilter, searchCategory);
               getRecentAssociates(sortFilter, searchFilter, searchCategory);
@@ -109,14 +148,18 @@ const Associates = () => {
           />
         ) : null}
 
-        {canAddAssociate ? <AddAssociate toggleCanAddAssociate={toggleCanAddAssociate} /> : null}
+        {canAddAssociate ? (
+          <AddAssociate toggleCanAddAssociate={toggleCanAddAssociate} />
+        ) : null}
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
           <div className="bg-white w-full p-4 flex flex-col gap-4 rounded-lg h-fit ">
             <p className="font-semibold text-xl">Explore Associates</p>
 
             <div className="flex flex-row justify-center h-full w-full ">
               <div
-                className={`flex flex-row gap-4 h-fit w-full ${activeFilterOptions && "m-s:flex-wrap t:flex-nowrap"}`}
+                className={`flex flex-row gap-4 h-fit w-full ${
+                  activeFilterOptions && "m-s:flex-wrap t:flex-nowrap"
+                }`}
               >
                 <SearchFilter
                   placeholder="Search Task"
