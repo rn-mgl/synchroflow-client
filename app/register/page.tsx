@@ -39,7 +39,7 @@ const Register = () => {
   const { disable, handleDisable } = useDisable();
   const { visiblePassword, toggleVisiblePassword } = useVisiblePassword();
 
-  const url = process.env.NEXT_PUBLIC_API_URL;
+  const url = process.env.API_URL;
   const router = useRouter();
 
   const handleRegisterCredentials = (

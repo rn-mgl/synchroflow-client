@@ -22,7 +22,7 @@ const VERIFICATION_STATUS = {
 const Verify = () => {
   const [status, setStatus] = React.useState("verifying");
 
-  const url = process.env.NEXT_PUBLIC_API_URL;
+  const url = process.env.API_URL;
   const params = useParams();
   const { message, handleMessages } = usePopUpMessage();
 

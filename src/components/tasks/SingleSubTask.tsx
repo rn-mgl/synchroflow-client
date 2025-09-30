@@ -71,7 +71,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
   const { data: session } = useSession();
   const user = session?.user;
   const params = useParams();
-  const url = process.env.NEXT_PUBLIC_API_URL;
+  const url = process.env.API_URL;
 
   const handleActivePage = (page: "details" | "associates") => {
     setActivePage(page);

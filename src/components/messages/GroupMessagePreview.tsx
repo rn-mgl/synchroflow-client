@@ -29,7 +29,7 @@ const GroupMessagePreview: React.FC<GroupMessagePreviewProps> = (props) => {
   const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
-  const url = process.env.NEXT_PUBLIC_API_URL;
+  const url = process.env.API_URL;
 
   const getLatestMessage = React.useCallback(async () => {
     if (user?.token && props.messageRoom) {

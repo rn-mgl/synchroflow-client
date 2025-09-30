@@ -47,7 +47,7 @@ const EditUserData: React.FC<EditTaskProps> = (props) => {
   const { fileData, rawFile, removeRawFile, selectedFileViewer, uploadFile } =
     useFile();
 
-  const url = process.env.NEXT_PUBLIC_API_URL;
+  const url = process.env.API_URL;
   const { data: session } = useSession();
   const user = session?.user;
   const params = useParams();
