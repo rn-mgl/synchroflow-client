@@ -10,7 +10,7 @@ interface AppContextData {
 const AppContext = React.createContext<AppContextData | null>(null);
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
-  const url = process.env.API_URL as string;
+  const url = process.env.NEXT_PUBLIC_API_URL as string;
   const socket = io(url);
 
   return (

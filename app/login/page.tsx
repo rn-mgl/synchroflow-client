@@ -40,7 +40,7 @@ const Login = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const user = session?.user;
-  const url = process.env.API_URL;
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const handleLoginCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;

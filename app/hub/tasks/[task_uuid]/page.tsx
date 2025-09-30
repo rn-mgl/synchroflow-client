@@ -80,7 +80,7 @@ const SingleTask = () => {
   const user = session?.user;
   const isTaskCreator = parseInt(user?.id) === taskData.main_task_by;
   const router = useRouter();
-  const url = process.env.API_URL;
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const toggleCanInvite = () => {
     setCanInvite((prev) => !prev);

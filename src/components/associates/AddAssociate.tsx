@@ -64,7 +64,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
   const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
-  const url = process.env.API_URL;
+  const url = process.env.NEXT_PUBLIC_API_URL;
 
   const socketAssociateInvite = (room: string) => {
     socket.emit("send_associate_invite", { room });
