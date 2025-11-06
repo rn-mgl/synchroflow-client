@@ -18,9 +18,9 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
 
     setSocket(socketInstance);
 
-    // return () => {
-    //   disconnectSocket();
-    // };
+    return () => {
+      disconnectSocket();
+    };
   }, []);
 
   return (
