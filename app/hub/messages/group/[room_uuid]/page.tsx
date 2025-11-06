@@ -143,7 +143,7 @@ const GroupMessages = () => {
         }
         await getMessageRoomMessages("group");
         await getMessageRooms(searchFilter, "group");
-        socket.emit("send_message", { rooms: data.rooms });
+        socket?.emit("send_message", { rooms: data.rooms });
       }
     } catch (error) {
       console.log(error);
@@ -162,7 +162,7 @@ const GroupMessages = () => {
       if (data.deletedRoom) {
         getMessageRooms(searchFilter, "group");
         toggleCanDeleteGroupMessage();
-        socket.emit("delete_group_room", { rooms: data.rooms });
+        socket?.emit("delete_group_room", { rooms: data.rooms });
       }
     } catch (error) {
       console.log(error);
@@ -187,10 +187,10 @@ const GroupMessages = () => {
       await getNotifications();
     };
 
-    socket.on("reflect_add_group_member", handle);
+    socket?.on("reflect_add_group_member", handle);
 
     return () => {
-      socket.off("reflect_add_group_member", handle);
+      socket?.off("reflect_add_group_member", handle);
     };
   }, [socket, searchFilter, getMessageRooms, getNotifications]);
 
@@ -200,10 +200,10 @@ const GroupMessages = () => {
       await getMessageRoom("group");
     };
 
-    socket.on("reflect_update_group_room", handle);
+    socket?.on("reflect_update_group_room", handle);
 
     return () => {
-      socket.off("reflect_update_group_room", handle);
+      socket?.off("reflect_update_group_room", handle);
     };
   }, [socket, searchFilter, getMessageRooms, getMessageRoom]);
 
@@ -212,10 +212,10 @@ const GroupMessages = () => {
       await getMessageRooms(searchFilter, "group");
     };
 
-    socket.on("reflect_remove_group_member", handle);
+    socket?.on("reflect_remove_group_member", handle);
 
     return () => {
-      socket.off("reflect_remove_group_member", handle);
+      socket?.off("reflect_remove_group_member", handle);
     };
   }, [socket, searchFilter, , getMessageRooms]);
 
@@ -223,10 +223,10 @@ const GroupMessages = () => {
     const handle = async () => {
       await getMessageRooms(searchFilter, "group");
     };
-    socket.on("reflect_delete_group_room", handle);
+    socket?.on("reflect_delete_group_room", handle);
 
     return () => {
-      socket.off("reflect_delete_group_room", handle);
+      socket?.off("reflect_delete_group_room", handle);
     };
   }, [socket, searchFilter, , getMessageRooms]);
 
@@ -240,10 +240,10 @@ const GroupMessages = () => {
       }
     };
 
-    socket.on("get_messages", handle);
+    socket?.on("get_messages", handle);
 
     return () => {
-      socket.off("get_messages", handle);
+      socket?.off("get_messages", handle);
     };
   }, [
     socket,

@@ -104,7 +104,7 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
       if (data.updateTask) {
         props.toggleCanEditTask();
         await props.getSingleTask();
-        socket.emit("update_task", { rooms: data.rooms });
+        socket?.emit("update_task", { rooms: data.rooms });
       }
     } catch (error) {
       handleLoader(false);

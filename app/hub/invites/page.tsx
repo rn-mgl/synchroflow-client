@@ -47,7 +47,7 @@ const Invites = () => {
           if (data) {
             await getSentTaskInvites();
             await getReceivedTaskInvites();
-            socket.emit("remove_task_invite", {
+            socket?.emit("remove_task_invite", {
               inviteUUID,
               invitedRoom: invitedUserUUID,
               fromRoom: inviteFromUUID,
@@ -81,7 +81,7 @@ const Invites = () => {
               invitedUserUUID,
               inviteFromUUID
             );
-            socket.emit("accept_task_invite", {
+            socket?.emit("accept_task_invite", {
               inviteUUID,
               invitedRoom: invitedUserUUID,
               fromRoom: inviteFromUUID,
@@ -115,7 +115,7 @@ const Invites = () => {
           if (data) {
             await getSentAssociateInvites();
             await getReceivedAssociateInvites();
-            socket.emit("remove_associate_invite", {
+            socket?.emit("remove_associate_invite", {
               inviteUUID,
               invitedRoom: invitedUserUUID,
               fromRoom: inviteFromUUID,
@@ -154,7 +154,7 @@ const Invites = () => {
               invitedUserUUID,
               inviteFromUUID
             );
-            socket.emit("accept_associate_invite", {
+            socket?.emit("accept_associate_invite", {
               inviteUUID,
               invitedRoom: invitedUserUUID,
               fromRoom: inviteFromUUID,
@@ -316,10 +316,10 @@ const Invites = () => {
       await getReceivedTaskInvites();
     };
 
-    socket.on("reflect_send_main_task_invite", handle);
+    socket?.on("reflect_send_main_task_invite", handle);
 
     return () => {
-      socket.off("reflect_send_main_task_invite", handle);
+      socket?.off("reflect_send_main_task_invite", handle);
     };
   }, [socket, getReceivedTaskInvites]);
 
@@ -329,10 +329,10 @@ const Invites = () => {
       await getNotifications();
     };
 
-    socket.on("reflect_send_associate_invite", handle);
+    socket?.on("reflect_send_associate_invite", handle);
 
     return () => {
-      socket.off("reflect_send_associate_invite", handle);
+      socket?.off("reflect_send_associate_invite", handle);
     };
   }, [socket, getReceivedAssociateInvites, getNotifications]);
 
@@ -349,10 +349,10 @@ const Invites = () => {
       );
     };
 
-    socket.on("reflect_remove_associate_invite", handle);
+    socket?.on("reflect_remove_associate_invite", handle);
 
     return () => {
-      socket.off("reflect_remove_associate_invite", handle);
+      socket?.off("reflect_remove_associate_invite", handle);
     };
   }, [socket, removeSentAssociateInvites]);
 
@@ -369,10 +369,10 @@ const Invites = () => {
       );
     };
 
-    socket.on("reflect_remove_task_invite", handle);
+    socket?.on("reflect_remove_task_invite", handle);
 
     return () => {
-      socket.off("reflect_remove_task_invite", handle);
+      socket?.off("reflect_remove_task_invite", handle);
     };
   }, [socket, removeSentTaskInvites]);
 

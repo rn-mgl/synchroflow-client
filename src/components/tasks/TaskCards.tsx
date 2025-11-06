@@ -86,10 +86,10 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
       }
     };
 
-    socket.on("refetch_tasks_collaborators", handle);
+    socket?.on("refetch_tasks_collaborators", handle);
 
     return () => {
-      socket.off("refetch_tasks_collaborators", handle);
+      socket?.off("refetch_tasks_collaborators", handle);
     };
   }, [socket, props.taskUUID, getCollaborators]);
 

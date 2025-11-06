@@ -116,7 +116,10 @@ const PrivateMessages = () => {
         }
         await getMessageRoomMessages("private");
         await getMessageRooms(searchFilter, "private");
-        socket.emit("send_message", { rooms: data.rooms });
+
+        if (socket) {
+          socket?.emit("send_message", { rooms: data.rooms });
+        }
       }
     } catch (error) {
       console.log(error);
@@ -145,10 +148,10 @@ const PrivateMessages = () => {
       }
     };
 
-    socket.on("get_messages", handle);
+    socket?.on("get_messages", handle);
 
     return () => {
-      socket.off("get_messages", handle);
+      socket?.off("get_messages", handle);
     };
   }, [
     socket,

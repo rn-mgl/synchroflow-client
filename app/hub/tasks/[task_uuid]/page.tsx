@@ -197,7 +197,7 @@ const SingleTask = () => {
       if (data.deleteTask) {
         toggleCanDeleteTask();
         router.push("/hub/tasks");
-        socket.emit("delete_task", {
+        socket?.emit("delete_task", {
           mainTaskUUID: params?.task_uuid,
           rooms: data.rooms,
         });
@@ -221,7 +221,7 @@ const SingleTask = () => {
       if (data.deleteCollaborator) {
         toggleCanLeaveTask();
         router.push("/hub/tasks");
-        socket.emit("leave_task", {
+        socket?.emit("leave_task", {
           mainTaskUUID: params?.task_uuid,
           rooms: data.rooms,
         });
@@ -245,7 +245,7 @@ const SingleTask = () => {
       if (data.deleteCollaborator) {
         handleCollaboratorToRemove("");
         await getSingleTaskCollborators();
-        socket.emit("remove_collaborator", {
+        socket?.emit("remove_collaborator", {
           mainTaskUUID: params?.task_uuid,
           rooms: data.rooms,
         });
@@ -308,10 +308,10 @@ const SingleTask = () => {
       }
     };
 
-    socket.on("refetch_tasks_collaborators", handle);
+    socket?.on("refetch_tasks_collaborators", handle);
 
     return () => {
-      socket.off("refetch_tasks_collaborators", handle);
+      socket?.off("refetch_tasks_collaborators", handle);
     };
   }, [socket, params?.task_uuid, getSingleTaskCollborators]);
 
@@ -320,10 +320,10 @@ const SingleTask = () => {
       await getSingleTask();
     };
 
-    socket.on("reflect_update_task", handle);
+    socket?.on("reflect_update_task", handle);
 
     return () => {
-      socket.off("reflect_update_task", handle);
+      socket?.off("reflect_update_task", handle);
     };
   }, [socket, getSingleTask]);
 
@@ -332,10 +332,10 @@ const SingleTask = () => {
       await getAssignedSubTasks();
     };
 
-    socket.on("refetch_assigned_subtask", handle);
+    socket?.on("refetch_assigned_subtask", handle);
 
     return () => {
-      socket.off("refetch_assigned_subtask", handle);
+      socket?.off("refetch_assigned_subtask", handle);
     };
   }, [socket, getAssignedSubTasks]);
 
@@ -344,10 +344,10 @@ const SingleTask = () => {
       await getAssignedSubTasks();
     };
 
-    socket.on("reflect_update_subtask", handle);
+    socket?.on("reflect_update_subtask", handle);
 
     return () => {
-      socket.off("reflect_update_subtask", handle);
+      socket?.off("reflect_update_subtask", handle);
     };
   }, [socket, getAssignedSubTasks]);
 
@@ -357,10 +357,10 @@ const SingleTask = () => {
       handleSelectedSubTask("");
     };
 
-    socket.on("reflect_delete_subtask", handle);
+    socket?.on("reflect_delete_subtask", handle);
 
     return () => {
-      socket.off("reflect_delete_subtask", handle);
+      socket?.off("reflect_delete_subtask", handle);
     };
   }, [socket, getAssignedSubTasks]);
 
@@ -371,10 +371,10 @@ const SingleTask = () => {
       }
     };
 
-    socket.on("reflect_delete_task", handle);
+    socket?.on("reflect_delete_task", handle);
 
     return () => {
-      socket.off("reflect_delete_task", handle);
+      socket?.off("reflect_delete_task", handle);
     };
   }, [socket, params?.task_uuid, router]);
 
@@ -385,10 +385,10 @@ const SingleTask = () => {
       }
     };
 
-    socket.on("reflect_remove_collaborator", handle);
+    socket?.on("reflect_remove_collaborator", handle);
 
     return () => {
-      socket.off("reflect_remove_collaborator", handle);
+      socket?.off("reflect_remove_collaborator", handle);
     };
   }, [socket, params?.task_uuid, router]);
 

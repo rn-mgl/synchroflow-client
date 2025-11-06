@@ -67,7 +67,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
   const url = process.env.NEXT_PUBLIC_API_URL;
 
   const socketAssociateInvite = (room: string) => {
-    socket.emit("send_associate_invite", { room });
+    socket?.emit("send_associate_invite", { room });
   };
 
   const getUsers = React.useCallback(async () => {
@@ -150,10 +150,10 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
       await getUsers();
     };
 
-    socket.on("reflect_send_associate_invite", handle);
+    socket?.on("reflect_send_associate_invite", handle);
 
     return () => {
-      socket.off("reflect_send_associate_invite", handle);
+      socket?.off("reflect_send_associate_invite", handle);
     };
   }, [socket, getUsers]);
 

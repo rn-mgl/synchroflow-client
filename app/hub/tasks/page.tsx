@@ -135,10 +135,10 @@ const Tasks = () => {
       await getCollaboratedTasksToday(sortFilter, searchFilter, searchCategory);
     };
 
-    socket.on("reflect_delete_task", handle);
+    socket?.on("reflect_delete_task", handle);
 
     return () => {
-      socket.off("reflect_delete_task", handle);
+      socket?.off("reflect_delete_task", handle);
     };
   }, [
     socket,
@@ -158,10 +158,10 @@ const Tasks = () => {
       await getCollaboratedTasksToday(sortFilter, searchFilter, searchCategory);
     };
 
-    socket.on("reflect_remove_collaborator", handle);
+    socket?.on("reflect_remove_collaborator", handle);
 
     return () => {
-      socket.off("reflect_remove_collaborator", handle);
+      socket?.off("reflect_remove_collaborator", handle);
     };
   }, [
     socket,
@@ -181,10 +181,10 @@ const Tasks = () => {
       await getCollaboratedTasksToday(sortFilter, searchFilter, searchCategory);
     };
 
-    socket.on("reflect_update_task", handle);
+    socket?.on("reflect_update_task", handle);
 
     return () => {
-      socket.off("reflect_update_task", handle);
+      socket?.off("reflect_update_task", handle);
     };
   }, [
     socket,

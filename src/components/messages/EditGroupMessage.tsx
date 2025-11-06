@@ -82,7 +82,7 @@ const EditGroupMessage: React.FC<EditGroupMessageProps> = (props) => {
         await props.getMessageRoom();
         await props.getMessageRooms();
         props.toggleCanEditGroupMessage();
-        socket.emit("update_group_room", { rooms: data.rooms });
+        socket?.emit("update_group_room", { rooms: data.rooms });
       }
     } catch (error) {
       console.log(error);

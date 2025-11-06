@@ -94,7 +94,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
       );
       if (data) {
         await getAllMainTaskCollaborators();
-        socket.emit("assign_sub_task", { room: collaboratorUUID });
+        socket?.emit("assign_sub_task", { room: collaboratorUUID });
       }
     } catch (error) {
       console.log(error);
@@ -114,7 +114,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
       );
       if (data) {
         await getAllMainTaskCollaborators();
-        socket.emit("revoke_sub_task", { room: collaboratorUserUUID });
+        socket?.emit("revoke_sub_task", { room: collaboratorUserUUID });
       }
     } catch (error) {
       console.log(error);
@@ -175,7 +175,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
         await props.getCreatedSubTasks();
         toggleCanDeleteSubTask();
 
-        socket.emit("delete_subtask", { rooms: data.rooms });
+        socket?.emit("delete_subtask", { rooms: data.rooms });
       }
     } catch (error) {
       console.log(error);
@@ -239,10 +239,10 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
       await getAllMainTaskCollaborators();
     };
 
-    socket.on("refetch_assigned_subtask", handle);
+    socket?.on("refetch_assigned_subtask", handle);
 
     return () => {
-      socket.off("refetch_assigned_subtask", handle);
+      socket?.off("refetch_assigned_subtask", handle);
     };
   }, [socket, getAllMainTaskCollaborators]);
 
@@ -251,10 +251,10 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
       await getSubtask();
     };
 
-    socket.on("reflect_update_subtask", handle);
+    socket?.on("reflect_update_subtask", handle);
 
     return () => {
-      socket.off("reflect_update_subtask", handle);
+      socket?.off("reflect_update_subtask", handle);
     };
   }, [socket, getSubtask]);
 

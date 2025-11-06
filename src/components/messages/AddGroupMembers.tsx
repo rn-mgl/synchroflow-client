@@ -58,7 +58,7 @@ const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
       );
       if (data) {
         await getPossibleGroupMembers();
-        socket.emit("add_group_member", { room: memberUUID });
+        socket?.emit("add_group_member", { room: memberUUID });
       }
     } catch (error) {
       console.log(error);

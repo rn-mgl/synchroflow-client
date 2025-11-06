@@ -58,7 +58,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
       (groupMember) => groupMember.message_member_uuid === selectedGroupMember
     );
 
-    socket.emit("remove_group_member", { room: memberUUID?.user_uuid });
+    socket?.emit("remove_group_member", { room: memberUUID?.user_uuid });
   };
 
   const getGroupMembers = React.useCallback(async () => {
@@ -180,10 +180,10 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
       }
     };
 
-    socket.on("get_group_members", handle);
+    socket?.on("get_group_members", handle);
 
     return () => {
-      socket.off("get_group_members", handle);
+      socket?.off("get_group_members", handle);
     };
   }, [socket, user?.uuid, toggleCanSeeGroupMembers, getGroupMembers]);
 

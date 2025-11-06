@@ -169,7 +169,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
         handleMessages(true, "Invite sent successfully", "info");
         handleLoader(false);
         props.toggleCanInvite();
-        socket.emit("send_main_task_invite", { rooms: associatesToInvite });
+        socket?.emit("send_main_task_invite", { rooms: associatesToInvite });
       }
     } catch (error) {
       handleLoader(false);

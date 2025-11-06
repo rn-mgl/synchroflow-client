@@ -74,7 +74,9 @@ const Login = () => {
           if (!data.verified) {
             router.push("/sending?purpose=verify");
           } else {
-            socket.emit("connect_to_uuid", { uuid: data?.uuid });
+            if (socket) {
+              socket?.emit("connect_to_uuid", { uuid: data?.uuid });
+            }
             router.push("/hub");
           }
         } else {

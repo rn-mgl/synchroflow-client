@@ -55,10 +55,10 @@ const Associates = () => {
     const associate = allAssociates.find(
       (associate) => associate.associate_uuid === disconnectFromAssociate
     );
-    socket.emit("disconnect_associate", {
+    socket?.emit("disconnect_associate", {
       room: associate?.of_uuid,
     });
-    socket.emit("disconnect_associate", {
+    socket?.emit("disconnect_associate", {
       room: associate?.is_uuid,
     });
   };
@@ -112,10 +112,10 @@ const Associates = () => {
       await getRecentAssociates(sortFilter, searchFilter, searchCategory);
     };
 
-    socket.on("refetch_associates", handle);
+    socket?.on("refetch_associates", handle);
 
     return () => {
-      socket.off("refetch_associates", handle);
+      socket?.off("refetch_associates", handle);
     };
   }, [
     socket,

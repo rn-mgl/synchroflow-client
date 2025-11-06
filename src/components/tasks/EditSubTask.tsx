@@ -83,7 +83,7 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
         await props.getSubTask();
         await props.getCreatedSubTasks();
         props.toggleCanEditSubTask();
-        socket.emit("update_subtask", { rooms: data.rooms });
+        socket?.emit("update_subtask", { rooms: data.rooms });
       }
     } catch (error) {
       handleLoader(false);
