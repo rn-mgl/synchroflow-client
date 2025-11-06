@@ -7,6 +7,7 @@ export const getSocket = () => {
     const url = process.env.NEXT_PUBLIC_API_URL as string;
     socket = io(url, {
       autoConnect: true,
+      transports: ["websocket", "polling"],
     });
   }
 
@@ -16,5 +17,6 @@ export const getSocket = () => {
 export const disconnectSocket = () => {
   if (socket) {
     socket.disconnect();
+    socket = null;
   }
 };
