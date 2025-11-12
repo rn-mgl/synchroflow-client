@@ -24,6 +24,7 @@ interface TaskInvitesStateProps extends InvitesStateProps {
   main_task_invite_uuid: string;
   main_task_priority: "critical" | "important" | "none";
   main_task_uuid: string;
+  main_task_invite_message: string;
 }
 
 interface AssociateInvitesStateProps extends InvitesStateProps {

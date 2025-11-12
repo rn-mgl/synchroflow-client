@@ -10,7 +10,9 @@ interface ReceivedAssociateInvitesProps {
   declineReceivedAssociateInvites: () => Promise<void>;
 }
 
-const ReceivedAssociateInvitesCard: React.FC<ReceivedAssociateInvitesProps> = (props) => {
+const ReceivedAssociateInvitesCard: React.FC<ReceivedAssociateInvitesProps> = (
+  props
+) => {
   return (
     <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-full select-none">
       <div
@@ -24,7 +26,7 @@ const ReceivedAssociateInvitesCard: React.FC<ReceivedAssociateInvitesProps> = (p
         />
 
         <div className="w-full flex flex-row justify-between gap-4">
-          <p className="font-bold truncate">
+          <p className="font-light truncate">
             {props.name} {props.surname}
           </p>
           <p className="font-light truncate">{props.email}</p>

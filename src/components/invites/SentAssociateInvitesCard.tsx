@@ -9,7 +9,9 @@ interface SendAssociateInvitesProps {
   removeSentAssociateInvites: () => Promise<void>;
 }
 
-const SentAssociateInvitesCard: React.FC<SendAssociateInvitesProps> = (props) => {
+const SentAssociateInvitesCard: React.FC<SendAssociateInvitesProps> = (
+  props
+) => {
   return (
     <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-full select-none">
       <div
@@ -30,7 +32,7 @@ const SentAssociateInvitesCard: React.FC<SendAssociateInvitesProps> = (props) =>
         </div>
 
         <div className="w-full flex flex-row justify-between gap-4">
-          <p className="font-bold truncate">
+          <p className="font-light truncate">
             {props.name} {props.surname}
           </p>
           <p className="font-light truncate">{props.email}</p>

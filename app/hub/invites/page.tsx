@@ -175,7 +175,6 @@ const Invites = () => {
     const surname = taskInvite[`${targetIdentity}_surname`];
     const email = taskInvite[`${targetIdentity}_email`];
 
-    console.log(targetIdentity);
     return (
       <SentTaskInvitesCard
         key={index}
@@ -186,6 +185,7 @@ const Invites = () => {
         main_task_title={taskInvite.main_task_title}
         main_task_banner={taskInvite.main_task_banner}
         main_task_priority={taskInvite.main_task_priority}
+        main_task_invite_message={taskInvite.main_task_invite_message}
         removeSentTaskInvites={() =>
           removeSentTaskInvites(
             taskInvite.main_task_invite_uuid,
@@ -214,6 +214,7 @@ const Invites = () => {
           main_task_title={taskInvite.main_task_title}
           main_task_banner={taskInvite.main_task_banner}
           main_task_priority={taskInvite.main_task_priority}
+          main_task_invite_message={taskInvite.main_task_invite_message}
           declineReceivedTaskInvites={() =>
             removeSentTaskInvites(
               taskInvite.main_task_invite_uuid,
