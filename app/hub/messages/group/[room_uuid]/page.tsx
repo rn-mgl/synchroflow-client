@@ -1,5 +1,6 @@
 "use client";
-import { useGlobalContext } from "@/base/context";
+import { useGlobalContext } from "@/base/src/contexts/context";
+import { useSettings } from "@/base/src/contexts/settingsContext";
 import SearchFilter from "@/components/filter/SearchFilter";
 import DeleteConfirmation from "@/components/global/DeleteConfirmation";
 import useAudio from "@/components/hooks/useAudio";
@@ -8,7 +9,6 @@ import useFilter from "@/components/hooks/useFilter";
 import useMessage from "@/components/hooks/useMessage";
 import useNotification from "@/components/hooks/useNotification";
 import useSearchFilter from "@/components/hooks/useSearchFilter";
-import useSettings from "@/components/hooks/useSettings";
 import ActiveMessagePanel from "@/components/messages/ActiveMessagePanel";
 import AddGroupMembers from "@/components/messages/AddGroupMembers";
 import CreateGroupMessage from "@/components/messages/CreateGroupMessage";

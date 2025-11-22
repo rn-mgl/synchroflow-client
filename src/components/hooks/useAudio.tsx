@@ -1,5 +1,5 @@
 import React from "react";
-import useSettings from "./useSettings";
+import { useSettings } from "@/base/src/contexts/settingsContext";
 
 export default function useAudio() {
   const audioRef = React.useRef<HTMLAudioElement>(null);

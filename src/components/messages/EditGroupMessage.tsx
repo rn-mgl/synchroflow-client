@@ -1,5 +1,5 @@
 "use client";
-import { useGlobalContext } from "@/base/context";
+import { useGlobalContext } from "@/base/src/contexts/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";

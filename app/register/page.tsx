@@ -16,7 +16,6 @@ import Message from "@/components//global/Message";
 import useDisable from "@/components//hooks/useDisable";
 import PasswordComp from "@/components//input/PasswordComp";
 import { useRouter } from "next/navigation";
-import { useGlobalContext } from "../../context";
 
 import {
   AiOutlineEye,

@@ -1,5 +1,5 @@
 "use client";
-import { useGlobalContext } from "@/base/context";
+import { useGlobalContext } from "@/base/src/contexts/context";
 import General from "@/components/settings/General";
 import Notification from "@/components/settings/Notification";
 import axios from "axios";
@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import React from "react";
 // import notificationSound from "@/public/music/NotificationSound.mp3";
 import useAudio from "@/components/hooks/useAudio";
-import useSettings from "@/components/hooks/useSettings";
+import { useSettings } from "@/base/src/contexts/settingsContext";
 
 const Settings = () => {
   const [activeNav, setActiveNav] = React.useState<"general" | "notification">(
@@ -45,10 +45,6 @@ const Settings = () => {
       console.log(error);
     }
   };
-
-  React.useEffect(() => {
-    getUserSettings();
-  }, [getUserSettings]);
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">

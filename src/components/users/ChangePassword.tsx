@@ -4,7 +4,7 @@ import React from "react";
 import { AiOutlineClose, AiOutlineLock, AiOutlineUnlock } from "react-icons/ai";
 import PasswordComp from "../input/PasswordComp";
 import axios from "axios";
-import { useGlobalContext } from "@/base/context";
+import { useGlobalContext } from "@/base/src/contexts/context";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 

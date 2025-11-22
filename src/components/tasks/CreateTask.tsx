@@ -9,7 +9,7 @@ import {
   AiOutlinePlus,
 } from "react-icons/ai";
 import { MdSubtitles, MdTitle } from "react-icons/md";
-import { useGlobalContext } from "../../../context";
+import { useGlobalContext } from "@/base/src/contexts/context";
 import Loading from "../global/Loading";
 import useFile from "../hooks/useFile";
 import useLoader from "../hooks/useLoading";

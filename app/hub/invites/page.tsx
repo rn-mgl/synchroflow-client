@@ -1,6 +1,6 @@
 "use client";
 
-import { useGlobalContext } from "@/base/context";
+import { useGlobalContext } from "@/base/src/contexts/context";
 import useInvites from "@/components/hooks/useInvites";
 import useNotification from "@/components/hooks/useNotification";
 import ReceivedAssociateInvitesCard from "@/components/invites/ReceivedAssociateInvitesCard";

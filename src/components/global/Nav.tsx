@@ -5,7 +5,7 @@ import React from "react";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useGlobalContext } from "../../../context";
+import { useGlobalContext } from "@/base/src/contexts/context";
 import usePopUpMessage from "../hooks/usePopUpMessage";
 import Message from "./Message";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useGlobalContext } from "@/base/context";
+import { useGlobalContext } from "@/base/src/contexts/context";
 import Loading from "@/components//global/Loading";
 import Message from "@/components//global/Message";
 import useDisable from "@/components//hooks/useDisable";

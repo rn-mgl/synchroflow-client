@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { localizeDate } from "../utils/dateUtils";
-import { useGlobalContext } from "@/base/context";
+import { useGlobalContext } from "@/base/src/contexts/context";
 import { useSession } from "next-auth/react";
 import { TbMoodX } from "react-icons/tb";
 import axios from "axios";

@@ -1,5 +1,5 @@
 "use client";
-import { useGlobalContext } from "@/base/context";
+import { useGlobalContext } from "@/base/src/contexts/context";
 import AddAssociate from "@/components/associates/AddAssociate";
 import AssociateCards from "@/components/associates/AssociateCards";
 import RecentAssociateCards from "@/components/associates/RecentAssociateCards";

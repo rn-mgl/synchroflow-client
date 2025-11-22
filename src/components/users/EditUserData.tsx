@@ -10,7 +10,7 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 import TextComp from "../input/TextComp";
-import { useGlobalContext } from "@/base/context";
+import { useGlobalContext } from "@/base/src/contexts/context";
 import { useSession } from "next-auth/react";
 import useFile from "../hooks/useFile";
 import TextAreaComp from "../input/TextAreaComp";

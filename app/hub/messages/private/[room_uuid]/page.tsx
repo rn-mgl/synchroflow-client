@@ -1,5 +1,6 @@
 "use client";
-import { useGlobalContext } from "@/base/context";
+import { useGlobalContext } from "@/base/src/contexts/context";
+import { useSettings } from "@/base/src/contexts/settingsContext";
 import SearchFilter from "@/components/filter/SearchFilter";
 import useAudio from "@/components/hooks/useAudio";
 import useFile from "@/components/hooks/useFile";
@@ -7,7 +8,6 @@ import useFilter from "@/components/hooks/useFilter";
 import useMessage from "@/components/hooks/useMessage";
 import useNotification from "@/components/hooks/useNotification";
 import useSearchFilter from "@/components/hooks/useSearchFilter";
-import useSettings from "@/components/hooks/useSettings";
 import ActiveMessagePanel from "@/components/messages/ActiveMessagePanel";
 import PrivateMessagePreview from "@/components/messages/PrivateMessagePreview";
 import StandByMessagePanel from "@/components/messages/StandByMessagePanel";
@@ -144,7 +144,6 @@ const PrivateMessages = () => {
       toggleCheckedNotifications(false);
 
       if (settings.message_notification) {
-        console.log(123);
         audioRef.current?.play();
       }
     };

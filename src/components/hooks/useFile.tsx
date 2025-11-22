@@ -1,6 +1,6 @@
 import axios from "axios";
 import React from "react";
-import { useGlobalContext } from "../../../context";
+import { useGlobalContext } from "@/base/src/contexts/context";
 import { useSession } from "next-auth/react";
 
 export default function useFile() {

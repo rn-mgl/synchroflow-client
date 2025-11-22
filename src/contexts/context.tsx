@@ -2,7 +2,7 @@
 import React from "react";
 
 import { io, Socket } from "socket.io-client";
-import { disconnectSocket, getSocket } from "./src/components/utils/socket";
+import { disconnectSocket, getSocket } from "@/components/utils/socket";
 
 interface AppContextData {
   socket: Socket | null;

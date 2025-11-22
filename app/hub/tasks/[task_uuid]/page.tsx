@@ -1,5 +1,5 @@
 "use client";
-import { useGlobalContext } from "@/base/context";
+import { useGlobalContext } from "@/base/src/contexts/context";
 import DeleteConfirmation from "@/components/global/DeleteConfirmation";
 import SendTaskInvite from "@/components/invites/SendTaskInvite";
 import AsssignedSubTasks from "@/components/tasks/AsssignedSubTasks";

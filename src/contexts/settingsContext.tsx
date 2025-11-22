@@ -1,4 +1,3 @@
-import { useGlobalContext } from "@/base/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
@@ -11,7 +10,27 @@ interface SettingsStateProps {
   associate_invite: boolean;
 }
 
-export default function useSettings() {
+interface SettingsContextInterface {
+  settings: SettingsStateProps;
+  handleUserGeneralSettings: (
+    e: React.ChangeEvent<HTMLInputElement>,
+    audioRef: React.RefObject<HTMLAudioElement>
+  ) => void;
+  handleUserNotificationSettings: (
+    name:
+      | "message_notification"
+      | "task_update"
+      | "task_deadline"
+      | "associate_invite"
+  ) => void;
+  getUserSettings: () => Promise<void>;
+}
+
+const SettingsContext = React.createContext<SettingsContextInterface | null>(
+  null
+);
+
+const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
   const [settings, setSettings] = React.useState<SettingsStateProps>({
     notification_sound: 50,
     associate_invite: true,
@@ -71,7 +90,6 @@ export default function useSettings() {
           headers: { Authorization: user?.token },
         });
         if (data) {
-          console.log(data);
           setSettings(data);
         }
       } catch (error) {
@@ -80,10 +98,26 @@ export default function useSettings() {
     }
   }, [url, user?.token]);
 
-  return {
-    settings,
-    getUserSettings,
-    handleUserGeneralSettings,
-    handleUserNotificationSettings,
-  };
-}
+  React.useEffect(() => {
+    getUserSettings();
+  }, [getUserSettings]);
+
+  return (
+    <SettingsContext.Provider
+      value={{
+        settings,
+        getUserSettings,
+        handleUserGeneralSettings,
+        handleUserNotificationSettings,
+      }}
+    >
+      {children}
+    </SettingsContext.Provider>
+  );
+};
+
+export const useSettings = () => {
+  return React.useContext(SettingsContext)!;
+};
+
+export { SettingsContext, SettingsProvider };
