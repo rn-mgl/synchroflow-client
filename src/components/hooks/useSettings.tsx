@@ -71,6 +71,7 @@ export default function useSettings() {
           headers: { Authorization: user?.token },
         });
         if (data) {
+          console.log(data);
           setSettings(data);
         }
       } catch (error) {

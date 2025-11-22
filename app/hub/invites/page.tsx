@@ -1,12 +1,12 @@
 "use client";
 
 import { useGlobalContext } from "@/base/context";
-import useInvites from "@/components//hooks/useInvites";
-import useNotification from "@/components//hooks/useNotification";
-import ReceivedAssociateInvitesCard from "@/components//invites/ReceivedAssociateInvitesCard";
-import ReceivedTaskInvitesCard from "@/components//invites/ReceivedTaskInvitesCard";
-import SentAssociateInvitesCard from "@/components//invites/SentAssociateInvitesCard";
-import SentTaskInvitesCard from "@/components//invites/SentTaskInvitesCard";
+import useInvites from "@/components/hooks/useInvites";
+import useNotification from "@/components/hooks/useNotification";
+import ReceivedAssociateInvitesCard from "@/components/invites/ReceivedAssociateInvitesCard";
+import ReceivedTaskInvitesCard from "@/components/invites/ReceivedTaskInvitesCard";
+import SentAssociateInvitesCard from "@/components/invites/SentAssociateInvitesCard";
+import SentTaskInvitesCard from "@/components/invites/SentTaskInvitesCard";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";

@@ -1,15 +1,15 @@
 "use client";
 import { useGlobalContext } from "@/base/context";
-import SearchFilter from "@/components//filter/SearchFilter";
-import SearchOptions from "@/components//filter/SearchOptions";
-import SortFilter from "@/components//filter/SortFilter";
-import useFilter from "@/components//hooks/useFilter";
-import useNotification from "@/components//hooks/useNotification";
-import useSearchFilter from "@/components//hooks/useSearchFilter";
-import useSortFilter from "@/components//hooks/useSortFilter";
-import useTasks from "@/components//hooks/useTasks";
-import CreateTask from "@/components//tasks/CreateTask";
-import TaskCards from "@/components//tasks/TaskCards";
+import SearchFilter from "@/components/filter/SearchFilter";
+import SearchOptions from "@/components/filter/SearchOptions";
+import SortFilter from "@/components/filter/SortFilter";
+import useFilter from "@/components/hooks/useFilter";
+import useNotification from "@/components/hooks/useNotification";
+import useSearchFilter from "@/components/hooks/useSearchFilter";
+import useSortFilter from "@/components/hooks/useSortFilter";
+import useTasks from "@/components/hooks/useTasks";
+import CreateTask from "@/components/tasks/CreateTask";
+import TaskCards from "@/components/tasks/TaskCards";
 import React from "react";
 import {
   AiOutlineClose,

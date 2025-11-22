@@ -1,18 +1,17 @@
 "use client";
 import { useGlobalContext } from "@/base/context";
-import SearchFilter from "@/components//filter/SearchFilter";
-import useAudio from "@/components//hooks/useAudio";
-import useFile from "@/components//hooks/useFile";
-import useFilter from "@/components//hooks/useFilter";
-import useMessage from "@/components//hooks/useMessage";
-import useNotification from "@/components//hooks/useNotification";
-import useSearchFilter from "@/components//hooks/useSearchFilter";
-import useSettings from "@/components//hooks/useSettings";
-import ActiveMessagePanel from "@/components//messages/ActiveMessagePanel";
-import PrivateMessagePreview from "@/components//messages/PrivateMessagePreview";
-import StandByMessagePanel from "@/components//messages/StandByMessagePanel";
-import { localizeDate } from "@/components//utils/dateUtils";
-import notifSound from "@/public//music/NotificationSound.mp3";
+import SearchFilter from "@/components/filter/SearchFilter";
+import useAudio from "@/components/hooks/useAudio";
+import useFile from "@/components/hooks/useFile";
+import useFilter from "@/components/hooks/useFilter";
+import useMessage from "@/components/hooks/useMessage";
+import useNotification from "@/components/hooks/useNotification";
+import useSearchFilter from "@/components/hooks/useSearchFilter";
+import useSettings from "@/components/hooks/useSettings";
+import ActiveMessagePanel from "@/components/messages/ActiveMessagePanel";
+import PrivateMessagePreview from "@/components/messages/PrivateMessagePreview";
+import StandByMessagePanel from "@/components/messages/StandByMessagePanel";
+import { localizeDate } from "@/components/utils/dateUtils";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -143,7 +142,9 @@ const PrivateMessages = () => {
       await getMessageRoomMessages("private");
       await getNotifications();
       toggleCheckedNotifications(false);
-      if (settings.message_notification && args.room !== user?.uuid) {
+
+      if (settings.message_notification) {
+        console.log(123);
         audioRef.current?.play();
       }
     };
@@ -245,7 +246,11 @@ const PrivateMessages = () => {
             />
           )}
 
-          <audio ref={audioRef} src={notifSound} />
+          <audio ref={audioRef}>
+            <source
+              src={`${process.env.NEXT_PUBLIC_SITE_URL}/music/NotificationSound.mp3`}
+            />
+          </audio>
         </div>
       </div>
     </div>

@@ -1,16 +1,16 @@
 "use client";
 import { useGlobalContext } from "@/base/context";
-import AddAssociate from "@/components//associates/AddAssociate";
-import AssociateCards from "@/components//associates/AssociateCards";
-import RecentAssociateCards from "@/components//associates/RecentAssociateCards";
-import SearchFilter from "@/components//filter/SearchFilter";
-import SearchOptions from "@/components//filter/SearchOptions";
-import SortFilter from "@/components//filter/SortFilter";
-import DeleteConfirmation from "@/components//global/DeleteConfirmation";
-import useAssociates from "@/components//hooks/useAssociates";
-import useFilter from "@/components//hooks/useFilter";
-import useSearchFilter from "@/components//hooks/useSearchFilter";
-import useSortFilter from "@/components//hooks/useSortFilter";
+import AddAssociate from "@/components/associates/AddAssociate";
+import AssociateCards from "@/components/associates/AssociateCards";
+import RecentAssociateCards from "@/components/associates/RecentAssociateCards";
+import SearchFilter from "@/components/filter/SearchFilter";
+import SearchOptions from "@/components/filter/SearchOptions";
+import SortFilter from "@/components/filter/SortFilter";
+import DeleteConfirmation from "@/components/global/DeleteConfirmation";
+import useAssociates from "@/components/hooks/useAssociates";
+import useFilter from "@/components/hooks/useFilter";
+import useSearchFilter from "@/components/hooks/useSearchFilter";
+import useSortFilter from "@/components/hooks/useSortFilter";
 import { useSession } from "next-auth/react";
 import React from "react";
 import {

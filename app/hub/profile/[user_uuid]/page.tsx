@@ -1,9 +1,9 @@
 "use client";
 
 import { useGlobalContext } from "@/base/context";
-import useDashboard from "@/components//hooks/useDashboard";
-import ChangePassword from "@/components//users/ChangePassword";
-import EditUserData from "@/components//users/EditUserData";
+import useDashboard from "@/components/hooks/useDashboard";
+import ChangePassword from "@/components/users/ChangePassword";
+import EditUserData from "@/components/users/EditUserData";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
