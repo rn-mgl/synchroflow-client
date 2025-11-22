@@ -1,5 +1,8 @@
 "use client";
 
+import axios from "axios";
+import { useSession } from "next-auth/react";
+import { useParams } from "next/navigation";
 import React from "react";
 import {
   AiFillPicture,
@@ -9,14 +12,9 @@ import {
   AiOutlineRadarChart,
   AiOutlineUser,
 } from "react-icons/ai";
-import TextComp from "../input/TextComp";
-import { useGlobalContext } from "@/base/src/contexts/context";
-import { useSession } from "next-auth/react";
 import useFile from "../hooks/useFile";
 import TextAreaComp from "../input/TextAreaComp";
-import axios from "axios";
-import { useParams } from "next/navigation";
-import { isSpecialCharacter } from "../utils/specialCharsUtils";
+import TextComp from "../input/TextComp";
 
 interface ProfileStateProps {
   name: string;
@@ -56,8 +54,6 @@ const EditUserData: React.FC<EditTaskProps> = (props) => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-
-    if (isSpecialCharacter(value)) return;
 
     setUserData((prev) => {
       return {
