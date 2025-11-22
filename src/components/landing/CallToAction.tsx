@@ -17,9 +17,11 @@ const CallToAction = () => {
           Synchronize Your Flow
         </p>
         <p className="text-center leading-relaxed text-sm m-l:text-base t:text-lg l-s:text-xl text-secondary-500">
-          Embark on a journey towards ultimate productivity and seamless teamwork. Join SynchroFlow, where tasks sync in
-          real-time and collaboration knows no bounds. Let&apos;s revolutionize task management together! Start your
-          journey with us today and achieve more, effortlessly.
+          Embark on a journey towards ultimate productivity and seamless
+          teamwork. Join SynchroFlow, where tasks sync in real-time and
+          collaboration knows no bounds. Let&apos;s revolutionize task
+          management together! Start your journey with us today and achieve
+          more, effortlessly.
         </p>
 
         <Link
