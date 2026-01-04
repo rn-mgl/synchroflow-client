@@ -10,7 +10,7 @@ interface SelectCompProps {
 const SelectComp: React.FC<SelectCompProps> = (props) => {
   const mappedLabelValues = props.labelValuePair.map((pair, index) => {
     return (
-      <option value={pair.value} key={index}>
+      <option value={pair.value} key={pair.value}>
         {pair.label}
       </option>
     );
