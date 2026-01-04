@@ -62,7 +62,7 @@ const PrivateMessages = () => {
 
   const mappedPrivateMessageRoomPreviews = messageRooms.map((room, index) => {
     return (
-      <React.Fragment key={room.message_room}>
+      <React.Fragment key={index}>
         <PrivateMessagePreview
           image={room.image}
           name={room.name}

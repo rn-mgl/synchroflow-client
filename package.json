@@ -21,7 +21,6 @@
     "eslint": "^9.23.0",
     "eslint-config-next": "^15.2.4",
     "file-loader": "^6.2.0",
-    "nanoid": "^5.1.6",
     "next": "^15.2.4",
     "next-auth": "^4.24.5",
     "postcss": "^8.4.33",

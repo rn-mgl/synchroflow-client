@@ -59,7 +59,7 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
             right: `${index}rem`,
             backgroundImage: `url(${collaborator.image})`,
           }}
-          key={collaborator.user_uuid}
+          key={index}
           className="w-6 h-6 rounded-full bg-secondary-300 
           border-2 border-white absolute bg-cover bg-center group"
         >

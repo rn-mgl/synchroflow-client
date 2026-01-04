@@ -56,7 +56,7 @@ const Tasks = () => {
   const mappedMyTaskCardsToday = myTasksToday.map((task, index) => {
     return (
       <TaskCards
-        key={task.main_task_uuid}
+        key={index}
         banner={task.main_task_banner}
         title={task.main_task_title}
         subTitle={task.main_task_subtitle}
@@ -71,7 +71,7 @@ const Tasks = () => {
     (task, index) => {
       return (
         <TaskCards
-          key={task.main_task_uuid}
+          key={index}
           banner={task.main_task_banner}
           title={task.main_task_title}
           subTitle={task.main_task_subtitle}
@@ -86,7 +86,7 @@ const Tasks = () => {
   const mappedMyTaskCards = myTasks.map((task, index) => {
     return (
       <TaskCards
-        key={task.main_task_uuid}
+        key={index}
         banner={task.main_task_banner}
         title={task.main_task_title}
         subTitle={task.main_task_subtitle}
@@ -100,7 +100,7 @@ const Tasks = () => {
   const mappedCollaboratedTaskCards = collaboratedTasks.map((task, index) => {
     return (
       <TaskCards
-        key={task.main_task_uuid}
+        key={index}
         banner={task.main_task_banner}
         title={task.main_task_title}
         subTitle={task.main_task_subtitle}

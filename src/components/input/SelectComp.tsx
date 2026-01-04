@@ -1,4 +1,3 @@
-import { nanoid } from "nanoid";
 import React from "react";
 
 interface SelectCompProps {
@@ -11,7 +10,7 @@ interface SelectCompProps {
 const SelectComp: React.FC<SelectCompProps> = (props) => {
   const mappedLabelValues = props.labelValuePair.map((pair, index) => {
     return (
-      <option value={pair.value} key={nanoid()}>
+      <option value={pair.value} key={index}>
         {pair.label}
       </option>
     );

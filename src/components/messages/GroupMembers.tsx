@@ -97,7 +97,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
   const mappedGroupMembers = groupMembers.map((member, index) => {
     return (
       <div
-        key={member.user_uuid}
+        key={index}
         className="flex flex-col items-center justify-center w-full gap-2 "
       >
         <div className="p-2 rounded-md w-full flex flex-row items-center justify-start gap-4">

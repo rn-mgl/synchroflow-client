@@ -63,7 +63,7 @@ const Hub = () => {
     (associate, index) => {
       return (
         <AssociateCards
-          key={associate.associate_uuid}
+          key={index}
           associate={associate}
           targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
         />
@@ -71,7 +71,7 @@ const Hub = () => {
     }
   );
 
-  const mappedTasksToday = myTasksToday.map((tasks, index) => {
+  const mappedTasksToday = myTasksToday.map((_, index) => {
     if ((index + 1) % 2 === 0) return;
 
     const currTask = myTasksToday[index];
@@ -79,7 +79,7 @@ const Hub = () => {
 
     return (
       <div
-        key={tasks.main_task_uuid}
+        key={index}
         className="flex flex-col w-full h-full gap-4 items-center justify-start min-w-full"
       >
         {currTask ? (
@@ -149,7 +149,7 @@ const Hub = () => {
     );
   });
 
-  const mappedUpcomingTasks = myUpcomingTasks.map((tasks, index) => {
+  const mappedUpcomingTasks = myUpcomingTasks.map((_, index) => {
     if ((index + 1) % 2 === 0) return;
 
     const currTask = myUpcomingTasks[index];
@@ -157,7 +157,7 @@ const Hub = () => {
 
     return (
       <div
-        key={tasks.main_task_uuid}
+        key={index}
         className="flex flex-row w-full h-full gap-4 items-center justify-start min-w-full"
       >
         {currTask ? (

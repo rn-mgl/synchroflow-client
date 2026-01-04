@@ -15,17 +15,14 @@ interface CreatedSubTasksProps {
   createdSubTasks: Array<CreatedSubTasksStateProps>;
 }
 
-const CreatedSubTasks: React.FC<CreatedSubTasksProps> = ({
-  getCreatedSubTasks,
-  ...props
-}) => {
+const CreatedSubTasks: React.FC<CreatedSubTasksProps> = ({ getCreatedSubTasks, ...props }) => {
   const mappedCreatedSubtasks = props.createdSubTasks.map((subTask, index) => {
     return (
       <button
         onClick={() => props.handleSelectedSubTask(subTask.sub_task_uuid)}
         className="flex flex-row gap-2 items-center justify-start 
                   w-full p-2 bg-primary-500 text-white rounded-md"
-        key={subTask.sub_task_uuid}
+        key={index}
       >
         <div>
           <BsFillDiamondFill className="text-xs" />
