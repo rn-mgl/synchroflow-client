@@ -1,5 +1,6 @@
 import React from "react";
 import { MdManageSearch } from "react-icons/md";
+import { nanoid } from "nanoid";
 
 interface SearchOptionsProps {
   searchCategory: string;
@@ -11,21 +12,27 @@ interface SearchOptionsProps {
 }
 
 const SearchOptions: React.FC<SearchOptionsProps> = (props) => {
-  const mappedSearchCategories = props.searchCategories.map((category, index) => {
-    return (
-      <button
-        key={index}
-        onClick={() => {
-          props.handleSearchCategory(category);
-          props.toggleActiveSearchOptions();
-        }}
-        className={`p-4 rounded-lg border-[1px] flex flex-col items-center justify-center text-xs capitalize
-            ${props.searchCategory === category ? "bg-primary-500 text-white" : "bg-white"} shadow-md`}
-      >
-        {category}
-      </button>
-    );
-  });
+  const mappedSearchCategories = props.searchCategories.map(
+    (category, index) => {
+      return (
+        <button
+          key={nanoid()}
+          onClick={() => {
+            props.handleSearchCategory(category);
+            props.toggleActiveSearchOptions();
+          }}
+          className={`p-4 rounded-lg border-[1px] flex flex-col items-center justify-center text-xs capitalize
+            ${
+              props.searchCategory === category
+                ? "bg-primary-500 text-white"
+                : "bg-white"
+            } shadow-md`}
+        >
+          {category}
+        </button>
+      );
+    }
+  );
 
   return (
     <div

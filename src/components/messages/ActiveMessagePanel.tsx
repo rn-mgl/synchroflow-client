@@ -58,7 +58,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
 
     return (
       <div
-        key={index}
+        key={message.message_uuid}
         onClick={() => props.handleSelectedMessage(message.message_uuid)}
         className={`w-fit max-w-[80%] rounded-md t:max-w-[60%] flex  ustify-center
                    group relative flex-col ${isSender ? "ml-auto" : "mr-auto"}`}

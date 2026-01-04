@@ -124,7 +124,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
   const mappedUsers = users.map((user, index) => {
     return (
       <AssociateCardsInvite
-        key={index}
+        key={user.user_uuid}
         name={user.name}
         surname={user.surname}
         email={user.email}

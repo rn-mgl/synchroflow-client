@@ -76,8 +76,6 @@ const EditGroupMessage: React.FC<EditGroupMessageProps> = (props) => {
         { headers: { Authorization: user?.token }, params: { type: "name" } }
       );
 
-      console.log(data);
-
       if (data.updatedRoom) {
         await props.getMessageRoom();
         await props.getMessageRooms();

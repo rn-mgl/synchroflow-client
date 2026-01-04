@@ -14,22 +14,27 @@ interface AssignedSubTasksProps {
   assignedSubTasks: Array<SubTasksStateProps>;
 }
 
-const AssignedSubTasks: React.FC<AssignedSubTasksProps> = ({ getAssignedSubTasks, ...props }) => {
-  const mappedAssignedSubtasks = props.assignedSubTasks.map((subTask, index) => {
-    return (
-      <button
-        onClick={() => props.handleSelectedSubTask(subTask.sub_task_uuid)}
-        className="flex flex-row gap-2 items-center justify-start 
+const AssignedSubTasks: React.FC<AssignedSubTasksProps> = ({
+  getAssignedSubTasks,
+  ...props
+}) => {
+  const mappedAssignedSubtasks = props.assignedSubTasks.map(
+    (subTask, index) => {
+      return (
+        <button
+          onClick={() => props.handleSelectedSubTask(subTask.sub_task_uuid)}
+          className="flex flex-row gap-2 items-center justify-start 
                 w-full p-2 bg-primary-500 text-white rounded-md"
-        key={index}
-      >
-        <div>
-          <BsFillDiamondFill className="text-xs" />
-        </div>
-        <p>{subTask.sub_task_title}</p>
-      </button>
-    );
-  });
+          key={subTask.sub_task_uuid}
+        >
+          <div>
+            <BsFillDiamondFill className="text-xs" />
+          </div>
+          <p>{subTask.sub_task_title}</p>
+        </button>
+      );
+    }
+  );
 
   React.useEffect(() => {
     getAssignedSubTasks();

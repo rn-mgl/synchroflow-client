@@ -91,7 +91,7 @@ const GroupMessages = () => {
 
   const mappedGroupMessageRoomPreviews = messageRooms.map((room, index) => {
     return (
-      <React.Fragment key={index}>
+      <React.Fragment key={room.message_room}>
         <GroupMessagePreview
           roomImage={room.room_image}
           roomName={room.room_name}

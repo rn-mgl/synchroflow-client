@@ -24,6 +24,7 @@ import { IoNotifications } from "react-icons/io5";
 import { MdGroupAdd } from "react-icons/md";
 import { localizeDate, localizeTime } from "../utils/dateUtils";
 import useNotification from "../hooks/useNotification";
+import { nanoid } from "nanoid";
 
 interface UserData {
   email: string;
@@ -114,7 +115,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 
     return (
       <div
-        key={index}
+        key={nanoid()}
         className="w-full p-2 rounded-md bg-neutral-50 flex flex-col items-center justify-center gap-2"
       >
         <div className="flex flex-row w-full items-center justify-between gap-4">

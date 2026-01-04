@@ -19,6 +19,7 @@ import useLoader from "../hooks/useLoading";
 import usePopUpMessage from "../hooks/usePopUpMessage";
 import useSearchFilter from "../hooks/useSearchFilter";
 import TextAreaComp from "../input/TextAreaComp";
+import { localizeDate } from "../utils/dateUtils";
 
 interface SendTaskInviteProps {
   taskUUID: string;
@@ -95,7 +96,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
       <button
         type="button"
         onClick={() => handleAssociateToInvite(associate.user_uuid)}
-        key={index}
+        key={associate.user_uuid}
         className="flex flex-row gap-4 justify-center min-w-[16rem] w-80 h-full select-none relative"
       >
         {associatesToInvite.includes(associate.user_uuid) ? (
@@ -121,22 +122,6 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
           <p className="text-xs my-auto text-justify leading-relaxed indent-10">
             {associate.status}
           </p>
-
-          <div className="flex flex-row justify-between items-center mt-4">
-            <div className="flex flex-row gap-1 items-center justify-center text-xs">
-              <div>
-                <AiOutlineFileText className="text-sm" />
-              </div>
-              <p>template deadline</p>
-            </div>
-
-            <div className="flex flex-row gap-1 items-center justify-center relative text-xs">
-              <div>
-                <AiFillStar className="text-warning-500 text-sm" />
-              </div>
-              <p>4.5 (750 Reviews)</p>
-            </div>
-          </div>
         </div>
       </button>
     );

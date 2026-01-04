@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import React from "react";
 import { BsFilter } from "react-icons/bs";
 
@@ -14,13 +15,17 @@ const SortFilter: React.FC<SortFilterProps> = (props) => {
   const mappedSortKeys = props.sortKeys.map((sortKey, index) => {
     return (
       <button
-        key={index}
+        key={nanoid()}
         onClick={() => {
           props.handleSortFilter(sortKey);
           props.toggleActiveSortOptions();
         }}
         className={`p-4 rounded-lg border-[1px] flex flex-col items-center justify-center text-xs  capitalize
-                  ${sortKey === props.sortFilter ? "bg-primary-500 text-white" : "bg-white"} shadow-md`}
+                  ${
+                    sortKey === props.sortFilter
+                      ? "bg-primary-500 text-white"
+                      : "bg-white"
+                  } shadow-md`}
       >
         {sortKey}
       </button>
@@ -43,7 +48,9 @@ const SortFilter: React.FC<SortFilterProps> = (props) => {
           <div>
             <BsFilter className="text-base text-secondary-300 t:text-lg l-s:text-xl " />
           </div>
-          <p className="text-xs capitalize whitespace-nowrap">Sort by: {props.sortFilter}</p>
+          <p className="text-xs capitalize whitespace-nowrap">
+            Sort by: {props.sortFilter}
+          </p>
         </button>
       </div>
 
