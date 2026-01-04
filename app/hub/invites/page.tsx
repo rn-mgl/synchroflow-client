@@ -177,7 +177,7 @@ const Invites = () => {
 
     return (
       <SentTaskInvitesCard
-        key={index}
+        key={taskInvite.invited_user_uuid}
         name={name}
         surname={surname}
         email={email}
@@ -206,7 +206,7 @@ const Invites = () => {
       const email = taskInvite[`${targetIdentity}_email`];
       return (
         <ReceivedTaskInvitesCard
-          key={index}
+          key={taskInvite.from_user_uuid}
           name={name}
           surname={surname}
           email={email}
@@ -245,7 +245,7 @@ const Invites = () => {
       const email = associateInvite[`${targetIdentity}_email`];
       return (
         <SentAssociateInvitesCard
-          key={index}
+          key={associateInvite.invited_user_uuid}
           image={image}
           name={name}
           surname={surname}
@@ -272,7 +272,7 @@ const Invites = () => {
       const email = associateInvite[`${targetIdentity}_email`];
       return (
         <ReceivedAssociateInvitesCard
-          key={index}
+          key={associateInvite.from_user_uuid}
           image={image}
           name={name}
           surname={surname}

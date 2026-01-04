@@ -77,7 +77,7 @@ const Associates = () => {
     (associate, index) => {
       return (
         <RecentAssociateCards
-          key={index}
+          key={associate.associate_uuid}
           associate={associate}
           targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
         />
@@ -88,7 +88,7 @@ const Associates = () => {
   const mappedAssociateCards = allAssociates.map((associate, index) => {
     return (
       <AssociateCards
-        key={index}
+        key={associate.associate_uuid}
         associate={associate}
         targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
         handleDisconnectFromAssociate={() =>

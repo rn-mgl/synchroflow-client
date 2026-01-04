@@ -185,7 +185,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
   const mappedCollaborators = collaborators.map((collaborator, index) => {
     return (
       <div
-        key={index}
+        key={collaborator.user_uuid}
         className="flex flex-col gap-2 items-center justify-start w-full"
       >
         <div className="flex flex-row gap-2 items-center justify-start w-full">

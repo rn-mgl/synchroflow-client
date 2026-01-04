@@ -95,7 +95,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
       <button
         type="button"
         onClick={() => handleAssociateToInvite(associate.user_uuid)}
-        key={index}
+        key={associate.user_uuid}
         className="flex flex-row gap-4 justify-center min-w-[16rem] w-80 h-full select-none relative"
       >
         {associatesToInvite.includes(associate.user_uuid) ? (
