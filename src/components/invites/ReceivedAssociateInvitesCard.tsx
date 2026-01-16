@@ -14,14 +14,14 @@ const ReceivedAssociateInvitesCard: React.FC<ReceivedAssociateInvitesProps> = (
   props
 ) => {
   return (
-    <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-full select-none">
+    <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 select-none min-h-[16rem] h-auto">
       <div
         className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md
                     transition-all"
       >
         <div
           style={{ backgroundImage: `url(${props.image})` }}
-          className="w-full h-72 bg-top bg-cover bg-no-repeat bg-primary-100 rounded-md 
+          className="w-full h-40 bg-top bg-cover bg-no-repeat bg-primary-100 rounded-md 
                 overflow-hidden flex flex-col items-center justify-center group"
         />
 

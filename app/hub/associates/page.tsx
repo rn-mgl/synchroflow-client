@@ -216,33 +216,29 @@ const Associates = () => {
             Add Associates
           </button>
 
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-36">
-            <div className="flex flex-row justify-between w-full">
-              <p className="font-semibold">Recent Associates</p>
+          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[8rem] h-auto">
+            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
+              <p>Recent Associates</p>
             </div>
 
-            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
-              <div
-                className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
-                  transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
-              >
-                {mappedRecentAssociateCards}
-              </div>
+            <div
+              className="w-full h-full flex flex-row items-center justify-start gap-4 
+                         overflow-x-auto cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
+            >
+              {mappedRecentAssociateCards}
             </div>
           </div>
 
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-72">
-            <div className="flex flex-row justify-between w-full">
-              <p className="font-semibold">Associates</p>
+          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[20rem] h-auto">
+            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
+              <p>Associates</p>
             </div>
 
-            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
-              <div
-                className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
-                  transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
-              >
-                {mappedAssociateCards}
-              </div>
+            <div
+              className="w-full h-full flex flex-row items-center justify-start gap-4 
+                         overflow-x-auto cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
+            >
+              {mappedAssociateCards}
             </div>
           </div>
         </div>

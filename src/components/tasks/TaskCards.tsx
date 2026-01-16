@@ -1,12 +1,12 @@
+import { useGlobalContext } from "@/base/src/contexts/context";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
-import { localizeDate } from "../utils/dateUtils";
-import { useGlobalContext } from "@/base/src/contexts/context";
-import { useSession } from "next-auth/react";
 import { TbMoodX } from "react-icons/tb";
-import axios from "axios";
-import Image from "next/image";
+import { localizeDate } from "../utils/dateUtils";
+import { PRIORITY_STYLE } from "../utils/taskUtils";
 
 interface TaskCardProps {
   title: string;
@@ -15,6 +15,7 @@ interface TaskCardProps {
   status: string;
   taskUUID: string;
   deadline: string;
+  priority: string;
 }
 
 interface CollaboratorsProps {
@@ -96,9 +97,13 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
   return (
     <Link
       href={`/hub/tasks/${props.taskUUID}`}
-      className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-full select-none"
+      className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 select-none min-h-[16rem] h-auto"
     >
       <div className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md">
+        <p className="font-bold text-left max-w-[12ch] truncate text-sm">
+          {props.title}
+        </p>
+
         <div
           style={{ backgroundImage: `url(${props.banner})` }}
           className="bg-primary-100 w-full h-36 rounded-md bg-center bg-cover
@@ -107,35 +112,30 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
         />
 
         <div className="w-full flex flex-row justify-between">
-          <p className="font-bold text-left max-w-[12ch] truncate">
-            {props.title}
+          <p
+            className={`font-medium text-left max-w-[12ch] truncate text-sm capitalize ${
+              PRIORITY_STYLE[props.priority as keyof object]
+            }`}
+          >
+            {props.priority}
           </p>
-          <p className="font-light text-right max-w-[12ch] truncate">
-            {props.subTitle}
+          <p className="font-light text-right max-w-[12ch] truncate text-sm italic capitalize">
+            {props.status}
           </p>
-        </div>
-
-        <div className="flex flex-col w-full gap-1">
-          <div className="flex justify-between text-sm">
-            <p className="font-bold text-secondary-400">Progress</p>
-            <p className="text-primary-500 capitalize">{props.status}</p>
-          </div>
         </div>
 
         <div className="flex flex-row justify-between items-center">
-          <div className="flex flex-row gap-2 items-center justify-center">
-            <div>
-              <AiOutlineClockCircle className="text-xl" />
-            </div>
-            <p className="text-sm">{localizeDate(props.deadline, false)}</p>
+          <div className="flex flex-row gap-1 items-center justify-center text-xs">
+            <AiOutlineClockCircle />
+            <p className="text-xs">{localizeDate(props.deadline, false)}</p>
           </div>
 
-          <div className="flex flex-row gap-2 items-center justify-center relative">
+          <div className="flex flex-row gap-1 items-center justify-center relative">
             {collaborators.length ? (
               mappedCollaborators
             ) : (
               <div className="opacity-50">
-                <TbMoodX className="text-xl" />
+                <TbMoodX />
               </div>
             )}
           </div>

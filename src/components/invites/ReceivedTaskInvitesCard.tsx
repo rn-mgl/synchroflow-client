@@ -17,7 +17,7 @@ interface ReceivedTaskInvitesProps {
 
 const ReceivedTaskInvitesCard: React.FC<ReceivedTaskInvitesProps> = (props) => {
   return (
-    <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-full select-none">
+    <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 select-none min-h-[16rem] h-auto">
       <div
         className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md
                     transition-all"
@@ -42,7 +42,7 @@ const ReceivedTaskInvitesCard: React.FC<ReceivedTaskInvitesProps> = (props) => {
 
         <div
           style={{ backgroundImage: `url(${props.main_task_banner})` }}
-          className="w-full h-72 bg-center bg-cover bg-no-repeat rounded-md 
+          className="w-full h-40 bg-center bg-cover bg-no-repeat rounded-md 
                     overflow-hidden group p-2 text-xs bg-neutral-200 overflow-y-auto cstm-scrollbar"
         >
           {props.main_task_invite_message}

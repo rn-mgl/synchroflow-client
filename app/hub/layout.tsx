@@ -5,9 +5,13 @@ export const metadata: Metadata = {
   title: "SynchroFlow | Hub",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className="fixed top-0 left-0 w-full h-screen">
+    <div className="fixed top-0 left-0 w-full h-screen min-h-screen">
       <Nav>{children}</Nav>
     </div>
   );

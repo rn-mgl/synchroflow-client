@@ -56,6 +56,7 @@ const Tasks = () => {
   const mappedMyTaskCardsToday = myTasksToday.map((task, index) => {
     return (
       <TaskCards
+        priority={task.main_task_priority}
         key={task.main_task_uuid}
         banner={task.main_task_banner}
         title={task.main_task_title}
@@ -71,6 +72,7 @@ const Tasks = () => {
     (task, index) => {
       return (
         <TaskCards
+          priority={task.main_task_priority}
           key={task.main_task_uuid}
           banner={task.main_task_banner}
           title={task.main_task_title}
@@ -86,6 +88,7 @@ const Tasks = () => {
   const mappedMyTaskCards = myTasks.map((task, index) => {
     return (
       <TaskCards
+        priority={task.main_task_priority}
         key={task.main_task_uuid}
         banner={task.main_task_banner}
         title={task.main_task_title}
@@ -100,6 +103,7 @@ const Tasks = () => {
   const mappedCollaboratedTaskCards = collaboratedTasks.map((task, index) => {
     return (
       <TaskCards
+        priority={task.main_task_priority}
         key={task.main_task_uuid}
         banner={task.main_task_banner}
         title={task.main_task_title}
@@ -199,10 +203,7 @@ const Tasks = () => {
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">
-      <div
-        className="max-w-screen-2xl flex flex-col justify-start 
-                items-center w-full h-full"
-      >
+      <div className="max-w-screen-2xl flex flex-col justify-start items-center w-full h-auto">
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
           {canCreateTask ? (
             <CreateTask
@@ -280,63 +281,55 @@ const Tasks = () => {
             Create Task
           </button>
 
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-80">
-            <div className="flex flex-row justify-between w-full">
-              <p className="font-semibold">Today&apos;s Task</p>
+          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[20rem] h-auto">
+            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
+              <p>My Tasks</p>
             </div>
 
-            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
-              <div
-                className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
-                transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
-              >
-                {mappedMyTaskCardsToday}
-              </div>
+            <div
+              className="w-full h-full flex flex-row items-center justify-start gap-4 
+                         overflow-x-auto cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
+            >
+              {mappedMyTaskCards}
             </div>
           </div>
 
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-80">
-            <div className="flex flex-row justify-between w-full">
-              <p className="font-semibold">Today&apos;s Collaboration</p>
+          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[20rem] h-auto">
+            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
+              <p>Tasks Today</p>
             </div>
 
-            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
-              <div
-                className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
-                transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
-              >
-                {mappedCollaboratedTaskCardsToday}
-              </div>
+            <div
+              className="w-full h-full flex flex-row items-center justify-start gap-4 
+                         overflow-x-auto cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
+            >
+              {mappedMyTaskCardsToday}
             </div>
           </div>
 
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-80">
-            <div className="flex flex-row justify-between w-full">
-              <p className="font-semibold">My Tasks</p>
+          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[20rem] h-auto">
+            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
+              <p>Today&apos;s Collaboration</p>
             </div>
 
-            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
-              <div
-                className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
-                transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
-              >
-                {mappedMyTaskCards}
-              </div>
+            <div
+              className="w-full h-full flex flex-row items-center justify-start gap-4 
+                         overflow-x-auto cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
+            >
+              {mappedCollaboratedTaskCardsToday}
             </div>
           </div>
 
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-80">
-            <div className="flex flex-row justify-between w-full">
-              <p className="font-semibold">My Collaborations</p>
+          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[20rem] h-auto">
+            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
+              <p>My Collaborations</p>
             </div>
 
-            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
-              <div
-                className="absolute w-full h-full flex flex-row gap-4 items-center justify-start 
-                transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar"
-              >
-                {mappedCollaboratedTaskCards}
-              </div>
+            <div
+              className="w-full h-full flex flex-row items-center justify-start gap-4 
+                         overflow-x-auto cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
+            >
+              {mappedCollaboratedTaskCards}
             </div>
           </div>
         </div>

@@ -33,7 +33,9 @@ const AssociateCards: React.FC<AssociateCardsProps> = (props) => {
             <p className="text-xs max-w-[20ch] truncate">{role}</p>
           </div>
         </div>
-        <p className="text-xs my-auto text-justify leading-relaxed indent-10">{status}</p>
+        <p className="text-xs my-auto text-justify leading-relaxed indent-6 h-full bg-neutral-100 rounded-sm p-2">
+          {status}
+        </p>
       </div>
       {props.handleDisconnectFromAssociate ? (
         <button

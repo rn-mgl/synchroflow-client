@@ -13,7 +13,7 @@ const RecentAssociateCards: React.FC<RecentAssociateCardsProps> = (props) => {
   const role = props.associate[`${props.targetIdentity}_role`];
 
   return (
-    <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-full select-none ">
+    <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-fit select-none ">
       <div className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md overflow-y-auto">
         <div className="flex flex-row gap-1 items-center justify-center">
           <div

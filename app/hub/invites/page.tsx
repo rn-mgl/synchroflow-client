@@ -379,104 +379,57 @@ const Invites = () => {
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">
-      <div
-        className="max-w-screen-2xl flex flex-col justify-start 
-            items-center w-full h-full"
-      >
+      <div className="max-w-screen-2xl flex flex-col justify-start items-center w-full h-auto">
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-80">
-            <div className="flex flex-row justify-between w-full">
-              <p className="font-semibold">Sent Task Invites</p>
+          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 h-auto min-h-[20rem]">
+            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
+              <p>Sent Task Invites</p>
             </div>
 
-            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
-              <div
-                className={`absolute w-full h-full flex flex-row gap-4 items-center 
-                  transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar ${
-                    sentTaskInvites.length ? "justify-start" : "justify-center"
-                  }`}
-              >
-                {sentTaskInvites.length ? (
-                  mappedSentTaskInvites
-                ) : (
-                  <p className="opacity-50 select-none">no sent invites</p>
-                )}
-              </div>
+            <div
+              className="w-full h-full flex flex-row items-center justify-start gap-4 
+                         overflow-x-auto cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
+            >
+              {mappedSentTaskInvites}
             </div>
           </div>
-        </div>
 
-        <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-[26rem] ">
-            <div className="flex flex-row justify-between w-full">
-              <p className="font-semibold">Received Task Invites</p>
+          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 h-auto min-h-[20rem]">
+            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
+              <p>Received Task Invites</p>
             </div>
 
-            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
-              <div
-                className={`absolute w-full h-full flex flex-row gap-4 items-center 
-                  transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar ${
-                    receivedTaskInvites.length
-                      ? "justify-start"
-                      : "justify-center"
-                  }`}
-              >
-                {receivedTaskInvites.length ? (
-                  mappedReceivedTaskInvites
-                ) : (
-                  <p className="opacity-50 select-none">no received invites</p>
-                )}
-              </div>
+            <div
+              className="w-full h-full flex flex-row items-center justify-start gap-4 
+                         overflow-x-auto cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
+            >
+              {mappedReceivedTaskInvites}
             </div>
           </div>
-        </div>
 
-        <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-80">
-            <div className="flex flex-row justify-between w-full">
-              <p className="font-semibold">Sent Associate Invites</p>
+          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 h-auto min-h-[20rem]">
+            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
+              <p>Sent Associate Invites</p>
             </div>
 
-            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
-              <div
-                className={`absolute w-full h-full flex flex-row gap-4 items-center 
-                  transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar ${
-                    sentAssociateInvites.length
-                      ? "justify-start"
-                      : "justify-center"
-                  }`}
-              >
-                {sentAssociateInvites.length ? (
-                  mappedSentAssociateInvites
-                ) : (
-                  <p className="opacity-50 select-none">no sent invites</p>
-                )}
-              </div>
+            <div
+              className="w-full h-full flex flex-row items-center justify-start gap-4 
+                         overflow-x-auto cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
+            >
+              {mappedSentAssociateInvites}
             </div>
           </div>
-        </div>
 
-        <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
-          <div className="w-full flex flex-col gap-2 rounded-lg items-center h-[26rem]">
-            <div className="flex flex-row justify-between w-full">
-              <p className="font-semibold">Received Associate Invites</p>
+          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 h-auto min-h-[20rem]">
+            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
+              <p>Received Associate Invites</p>
             </div>
 
-            <div className="relative flex flex-row gap-4 w-full h-full overflow-x-hidden items-center justify-start">
-              <div
-                className={`absolute w-full h-full flex flex-row gap-4 items-center 
-                  transition-all task-scroller p-2 overflow-x-auto cstm-scrollbar ${
-                    receivedAssociateInvites.length
-                      ? "justify-start"
-                      : "justify-center"
-                  }`}
-              >
-                {receivedAssociateInvites.length ? (
-                  mappedReceivedAssociateInvites
-                ) : (
-                  <p className="opacity-50 select-none">no received invites</p>
-                )}
-              </div>
+            <div
+              className="w-full h-full flex flex-row items-center justify-start gap-4 
+                         overflow-x-auto cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
+            >
+              {mappedReceivedAssociateInvites}
             </div>
           </div>
         </div>
