@@ -97,7 +97,7 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
   return (
     <Link
       href={`/hub/tasks/${props.taskUUID}`}
-      className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 select-none min-h-[16rem] h-auto"
+      className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 select-none min-h-[16rem] h-auto max-h-[20rem]"
     >
       <div className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md">
         <p className="font-bold text-left max-w-[12ch] truncate text-sm">

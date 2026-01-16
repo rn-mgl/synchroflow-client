@@ -7,13 +7,21 @@ import CreateSubTask from "@/components/tasks/CreateSubTask";
 import CreatedSubTasks from "@/components/tasks/CreatedSubTasks";
 import EditTask from "@/components/tasks/EditTask";
 import SingleSubTask from "@/components/tasks/SingleSubTask";
-import SingleTaskMainData from "@/components/tasks/SingleTaskMainData";
+import { localizeDate } from "@/components/utils/dateUtils";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
-import { AiOutlineDelete, AiOutlinePlus } from "react-icons/ai";
+import {
+  AiOutlineClockCircle,
+  AiOutlineClose,
+  AiOutlineDelete,
+  AiOutlineEdit,
+  AiOutlineEllipsis,
+  AiOutlinePlus,
+  AiOutlineUser,
+} from "react-icons/ai";
 import { BsArrowLeft } from "react-icons/bs";
 
 interface SingleTaskDataStateProps {
@@ -393,7 +401,7 @@ const SingleTask = () => {
   }, [socket, params?.task_uuid, router]);
 
   return (
-    <div className="flex flex-col items-center justify-start w-full h-auto">
+    <div className="flex flex-col items-center justify-start w-full h-full">
       <div
         className="max-w-screen-2xl flex flex-col justify-start 
             items-center w-full h-full"
@@ -464,37 +472,145 @@ const SingleTask = () => {
           />
         ) : null}
 
-        <div className="flex flex-col p-4 items-center justify-start w-full h-auto t:p-10  gap-4">
+        <div className="flex flex-col p-4 items-center justify-start w-full h-auto l-s:h-full t:p-10 gap-4 l-s:overflow-hidden">
           <Link
             href="/hub/tasks"
             className="mr-auto hover:bg-secondary-500 transition-all
-                      hover:bg-opacity-10 p-2 rounded-full"
+                      hover:bg-opacity-10 p-2 rounded-full pt-0"
           >
             <BsArrowLeft className="text-lg" />
           </Link>
 
-          <div className="grid grid-cols-1 items-center justify-start w-full h-full gap-8 l-s:grid-cols-3">
-            <SingleTaskMainData
-              activeToolTip={activeToolTip}
-              isTaskCreator={isTaskCreator}
-              mainTaskBanner={taskData.main_task_banner}
-              mainTaskDescription={taskData.main_task_description}
-              mainTaskEndDate={taskData.main_task_end_date}
-              mainTaskStartDate={taskData.main_task_start_date}
-              mainTaskSubtitle={taskData.main_task_subtitle}
-              mainTaskTitle={taskData.main_task_title}
-              collaboratorCount={collaborators.length}
-              toggleCanInvite={toggleCanInvite}
-              toggleCanDeleteTask={toggleCanDeleteTask}
-              toggleCanEditTask={toggleCanEditTask}
-              toggleActiveToolTip={toggleActiveToolTip}
-              toggleCanLeaveTask={toggleCanLeaveTask}
-            />
+          <div className="grid grid-cols-1 items-center justify-start w-full h-auto l-s:h-full gap-8 l-s:grid-cols-3 l-s:overflow-hidden">
+            <div className="flex flex-col items-center justify-start w-full h-auto l-s:h-full gap-8 col-span-1 l-s:col-span-2 l-s:overflow-hidden">
+              <div className="flex flex-col gap-2 w-full items-start justify-start">
+                <div className="flex flex-row w-full justify-between items-center">
+                  <p className="text-2xl font-medium text-secondary-500">
+                    {taskData.main_task_title}
+                  </p>
 
-            <div className="flex flex-col items-center justify-start w-full h-full gap-8 col-span-1 ">
-              <div className="flex flex-col items-center justify-start w-full gap-2 col-span-1 ">
+                  <div className="relative flex self-end ">
+                    <button
+                      onClick={toggleActiveToolTip}
+                      className="hover:bg-secondary-100 p-2 
+                      rounded-full transition-all"
+                    >
+                      {activeToolTip ? (
+                        <AiOutlineClose />
+                      ) : (
+                        <AiOutlineEllipsis className="text-lg" />
+                      )}
+                    </button>
+
+                    {activeToolTip ? (
+                      <div
+                        className="w-40 absolute animate-fadeIn flex flex-col items-start justify-center gap-2 
+                                -translate-x-full bg-secondary-300 p-1 rounded-lg transition-all delay-200 
+                                font-medium shadow-lg text-white text-xs"
+                      >
+                        {isTaskCreator ? (
+                          <>
+                            <button
+                              onClick={toggleCanEditTask}
+                              className="flex flex-row w-full items-center gap-2 hover:bg-secondary-400 p-2 rounded-md transition-all"
+                            >
+                              <AiOutlineEdit />
+                              Edit
+                            </button>
+                            <div className=" w-full min-h-[1px] h-[1px] bg-secondary-400" />
+                            <button
+                              onClick={toggleCanDeleteTask}
+                              className="flex flex-row w-full items-center gap-2 hover:bg-secondary-400 p-2 rounded-md transition-all"
+                            >
+                              <AiOutlineDelete />
+                              Delete
+                            </button>
+                          </>
+                        ) : (
+                          <>
+                            <button
+                              onClick={toggleCanLeaveTask}
+                              className="flex flex-row w-full items-center gap-2 hover:bg-secondary-400 p-2 rounded-md transition-all"
+                            >
+                              <AiOutlineEdit />
+                              Leave
+                            </button>
+                          </>
+                        )}
+                      </div>
+                    ) : null}
+                  </div>
+                </div>
+
+                <div
+                  style={{
+                    backgroundImage: `url(${taskData.main_task_banner})`,
+                  }}
+                  className="w-full rounded-2xl h-48 bg-primary-300 bg-center  bg-cover l-s:h-56 p-4 flex flex-col"
+                />
+
+                <div className="flex flex-row gap-2 text-secondary-400 text-sm">
+                  <p>{taskData.main_task_subtitle}</p>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2 items-start justify-start w-full">
+                <div className="flex flex-row gap-2 text-sm">
+                  <div className="flex flex-row items-center justify-center gap-1">
+                    <div>
+                      <AiOutlineUser className="text-lg text-secondary-400" />
+                    </div>
+                    {collaborators.length}{" "}
+                    {collaborators.length > 1
+                      ? "Collaborators"
+                      : "Collaborator"}
+                  </div>
+                  {isTaskCreator ? (
+                    <>
+                      |
+                      <button
+                        onClick={toggleCanInvite}
+                        className="text-primary-500 flex flex-row items-center justify-center gap-1 hover:underline underline-offset-2"
+                      >
+                        <AiOutlinePlus className="text-xs" />
+                        Invite
+                      </button>
+                    </>
+                  ) : null}
+                </div>
+
+                <div className="flex flex-row gap-2 items-center text-sm">
+                  <div>
+                    <AiOutlineClockCircle className="text-lg text-secondary-400" />
+                  </div>
+                  <p>
+                    {localizeDate(taskData.main_task_start_date, true)} -{" "}
+                    {localizeDate(taskData.main_task_end_date, true)}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500 h-full overflow-y-hidden">
+                <p className="text-xl font-medium ">Description</p>
+
+                <div
+                  className="flex flex-col w-full rounded-md overflow-y-auto max-h-[16rem] h-[16rem] l-s:h-full l-s:max-h-none bg-neutral-150 p-2 cstm-scrollbar
+                            l-s:p-4"
+                >
+                  <p className="leading-relaxed text-xs">
+                    {taskData.main_task_description}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center justify-start w-full h-auto gap-8 col-span-1 l-s:h-full overflow-hidden">
+              <div
+                className="flex flex-col items-center justify-start w-full gap-2 col-span-1 min-h-[20rem] max-h-[20rem] h-80 overflow-y-auto
+                          l-s:max-h-none l-s:h-full"
+              >
                 <div className="flex flex-row w-full items-center justify-between">
-                  <p className="text-2xl font-medium mr-auto">
+                  <p className="text-xl font-medium mr-auto">
                     {isTaskCreator ? "Created Sub Tasks" : "Your Sub Tasks"}
                   </p>
 
@@ -524,12 +640,15 @@ const SingleTask = () => {
                 )}
               </div>
 
-              <div className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500">
-                <p className="font-medium text-2xl">
+              <div
+                className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500 min-h-[20rem] max-h-[20rem] h-80 
+                          l-s:max-h-none l-s:h-full"
+              >
+                <p className="font-medium text-xl">
                   {collaborators.length > 1 ? "Collaborators" : "Collaborator"}
                 </p>
 
-                <div className="flex flex-col gap-2 w-full">
+                <div className="flex flex-col gap-2 w-full bg-neutral-150 overflow-y-auto h-full rounded-md">
                   {mappedCollaborators}
                 </div>
               </div>

@@ -42,7 +42,7 @@ const CreatedSubTasks: React.FC<CreatedSubTasksProps> = ({
   return (
     <div
       className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500 
-                  max-h-[15rem] overflow-y-auto cstm-scrollbar-2"
+              overflow-y-auto cstm-scrollbar-2 bg-neutral-150 p-2 rounded-md h-full"
     >
       {mappedCreatedSubtasks}
     </div>

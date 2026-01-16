@@ -388,9 +388,8 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 
       <div className="flex flex-col flex-1 w-full relative z-0">
         <div
-          className="w-full p-7 border-b-[1px] border-b-secondary-100  
-                  flex flex-row items-center justify-center gap-4 bg-white transition-all
-                  flex-1"
+          className="w-full p-4 border-b-[1px] border-b-secondary-100  
+                  flex flex-row items-center justify-center gap-4 bg-white transition-all"
         >
           <div className="flex-col hidden l-s:flex ">
             <p className="font-light text-xs">Welcome,</p>
@@ -454,7 +453,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
         ) : null}
 
         <div
-          className="w-full h-screen flex flex-col overflow-y-auto justify-start 
+          className="w-full flex-1 flex flex-col overflow-y-auto justify-start 
                     cstm-scrollbar bg-neutral-50 relative"
         >
           {children}

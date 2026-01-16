@@ -24,7 +24,7 @@ const SentTaskInvitesCard: React.FC<SendTaskInvitesProps> = (props) => {
         <div className="w-full flex flex-row justify-between">
           <p className="font-bold truncate">{props.main_task_title}</p>
           <p
-            className={`font-medium truncate ${
+            className={`font-medium truncate capitalize ${
               PRIORITY_STYLE[props.main_task_priority]
             }`}
           >
