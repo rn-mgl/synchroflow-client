@@ -5,14 +5,15 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { AiFillCalendar, AiOutlineClose, AiOutlineMore } from "react-icons/ai";
-import { localizeDate } from "../utils/dateUtils";
-import { MdAssignmentAdd } from "react-icons/md";
 import { IoPersonRemove } from "react-icons/io5";
+import { MdAssignmentAdd } from "react-icons/md";
 import DeleteConfirmation from "../global/DeleteConfirmation";
-import { useParams } from "next/navigation";
+import { localizeDate } from "../utils/dateUtils";
 
 interface GroupMembersProps {
   isRoomCreator: boolean;
+  messageRoom: string;
+  roomCreator: number;
   toggleCanSeeGroupMembers: () => void;
   getMessageRoom: () => Promise<void>;
 }
@@ -23,7 +24,7 @@ interface GroupMembersStateProps {
   image: string;
   date_added: string;
   message_member_uuid: string;
-  user_id: string;
+  user_id: number;
   user_uuid: string;
 }
 
@@ -40,12 +41,11 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
   const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
-  const params = useParams();
   const url = process.env.NEXT_PUBLIC_API_URL;
 
   const handleSelectedGroupMember = (groupMemberUUID: string) => {
     setSelectedGroupMember((prev) =>
-      prev === groupMemberUUID ? "" : groupMemberUUID
+      prev === groupMemberUUID ? "" : groupMemberUUID,
     );
   };
 
@@ -55,7 +55,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
 
   const socketRemoveGroupMember = () => {
     const memberUUID = groupMembers.find(
-      (groupMember) => groupMember.message_member_uuid === selectedGroupMember
+      (groupMember) => groupMember.message_member_uuid === selectedGroupMember,
     );
 
     socket?.emit("remove_group_member", { room: memberUUID?.user_uuid });
@@ -66,7 +66,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
       try {
         const { data } = await axios.get(`${url}/group_message_members`, {
           headers: { Authorization: user?.token },
-          params: { messageRoom: params?.room_uuid, type: "all members" },
+          params: { messageRoom: props.messageRoom, type: "all members" },
         });
         if (data) {
           setGroupMembers(data);
@@ -75,14 +75,14 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
         console.log(error);
       }
     }
-  }, [url, user?.token, params?.room_uuid]);
+  }, [url, user?.token, props.messageRoom]);
 
   const makeGroupOwner = async (ownerUUID: string) => {
     try {
       const { data } = await axios.patch(
-        `${url}/group_message_rooms/${params?.room_uuid}`,
+        `${url}/group_message_rooms/${props.messageRoom}`,
         { ownerUUID },
-        { headers: { Authorization: user?.token }, params: { type: "owner" } }
+        { headers: { Authorization: user?.token }, params: { type: "owner" } },
       );
 
       if (data) {
@@ -109,6 +109,12 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
           <div className="flex flex-col items-start justify-center">
             <p className="w-full text-sm whitespace-nowrap truncate max-w-[12ch] font-bold t:max-w-[50ch]">
               {member.name} {member.surname}
+              {member.user_id === props.roomCreator ? (
+                <span className="font-light"> | Owner</span>
+              ) : null}
+              {member.user_id === parseInt(user.id) ? (
+                <span className="font-light"> | You</span>
+              ) : null}
             </p>
 
             <p className="w-full text-xs flex flex-row gap-1 items-center">
@@ -119,7 +125,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
             </p>
           </div>
 
-          {props.isRoomCreator ? (
+          {props.isRoomCreator && member.user_id !== parseInt(user.id) ? (
             <div className="ml-auto relative">
               {member.user_id !== user?.id ? (
                 <button
@@ -155,7 +161,12 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
                         hover:bg-secondary-300 hover:text-white transition-all"
                   >
                     <IoPersonRemove />
-                    <span>Remove</span>
+
+                    <span>
+                      {parseInt(user.id) === member.user_id
+                        ? "Leave"
+                        : "Remove"}
+                    </span>
                   </button>
                 </div>
               ) : null}

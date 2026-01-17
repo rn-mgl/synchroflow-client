@@ -108,9 +108,9 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
     const action = notification.purpose.includes("group member")
       ? "added you as a"
       : notification.purpose.includes("message") ||
-        notification.purpose.includes("invite")
-      ? "sent a"
-      : "notification on";
+          notification.purpose.includes("invite")
+        ? "sent a"
+        : "notification on";
 
     return (
       <div
@@ -291,7 +291,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 
           <Link
             onClick={() => toggleNavIsVisible("link")}
-            href="/hub/messages/private/me"
+            href="/hub/messages"
             className={`flex flex-row items-center justify-center gap-4 w-full p-4 
                       hover:bg-neutral-150 rounded-lg text-secondary-500 transition-all 
                       active:bg-gradient-to-br active:from-primary-100 active:to-primary-500

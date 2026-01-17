@@ -3,7 +3,7 @@ import React from "react";
 export default function useSearchFilter(initialSearchCategory: string) {
   const [searchFilter, setSearchFilter] = React.useState("");
   const [searchCategory, setSearchCategory] = React.useState(
-    initialSearchCategory
+    initialSearchCategory,
   );
   const [activeSearchOptions, setActiveSearchOptions] = React.useState(false);
 
@@ -14,7 +14,7 @@ export default function useSearchFilter(initialSearchCategory: string) {
 
       setSearchFilter(value);
     },
-    []
+    [],
   );
 
   const handleSearchCategory = React.useCallback((searchCategory: string) => {

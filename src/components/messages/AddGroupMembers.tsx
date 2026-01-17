@@ -9,6 +9,7 @@ import { AiOutlineClose, AiOutlineUserAdd } from "react-icons/ai";
 
 interface AddGroupMembersProps {
   toggleCanAddGroupMembers: () => void;
+  messageRoom: string;
 }
 
 interface AddGroupMembersStateProps {
@@ -30,7 +31,7 @@ const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
   const { socket } = useGlobalContext();
   const { data: session } = useSession();
   const user = session?.user;
-  const params = useParams();
+
   const url = process.env.NEXT_PUBLIC_API_URL;
 
   const getPossibleGroupMembers = React.useCallback(async () => {
@@ -38,7 +39,7 @@ const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
       try {
         const { data } = await axios.get(`${url}/group_message_members`, {
           headers: { Authorization: user?.token },
-          params: { messageRoom: params?.room_uuid, type: "possible members" },
+          params: { messageRoom: props.messageRoom, type: "possible members" },
         });
         if (data) {
           setGroupMembers(data);
@@ -47,14 +48,14 @@ const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, user?.token, params?.room_uuid]);
+  }, [url, user?.token, props.messageRoom]);
 
   const addToGroup = async (memberUUID: string) => {
     try {
       const { data } = await axios.post(
         `${url}/group_message_members`,
-        { memberUUID, groupRoomUUID: params?.room_uuid },
-        { headers: { Authorization: user?.token } }
+        { memberUUID, groupRoomUUID: props.messageRoom },
+        { headers: { Authorization: user?.token } },
       );
       if (data) {
         await getPossibleGroupMembers();

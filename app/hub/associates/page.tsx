@@ -53,7 +53,7 @@ const Associates = () => {
   // need to optimize
   const socketDisconnectAssociate = () => {
     const associate = allAssociates.find(
-      (associate) => associate.associate_uuid === disconnectFromAssociate
+      (associate) => associate.associate_uuid === disconnectFromAssociate,
     );
     socket?.emit("disconnect_associate", {
       room: associate?.of_uuid,
@@ -69,7 +69,7 @@ const Associates = () => {
 
   const handleDisconnectFromAssociate = (associateUUID: string) => {
     setDisconnectFromAssociate((prev) =>
-      prev === associateUUID ? "" : associateUUID
+      prev === associateUUID ? "" : associateUUID,
     );
   };
 
@@ -82,7 +82,7 @@ const Associates = () => {
           targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
         />
       );
-    }
+    },
   );
 
   const mappedAssociateCards = allAssociates.map((associate, index) => {

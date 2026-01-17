@@ -1,4 +1,5 @@
 "use client";
+
 import { useGlobalContext } from "@/base/src/contexts/context";
 import { useSettings } from "@/base/src/contexts/settingsContext";
 import SearchFilter from "@/components/filter/SearchFilter";
@@ -14,27 +15,21 @@ import AddGroupMembers from "@/components/messages/AddGroupMembers";
 import CreateGroupMessage from "@/components/messages/CreateGroupMessage";
 import EditGroupMessage from "@/components/messages/EditGroupMessage";
 import GroupMembers from "@/components/messages/GroupMembers";
-import GroupMessagePreview from "@/components/messages/GroupMessagePreview";
+import MessagePreview from "@/components/messages/MessagePreview";
 import StandByMessagePanel from "@/components/messages/StandByMessagePanel";
 import { localizeDate } from "@/components/utils/dateUtils";
-// import notifSound from "@/public/music/NotificationSound.mp3";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { useParams } from "next/navigation";
 import React from "react";
 import { AiOutlinePlus, AiOutlineSearch } from "react-icons/ai";
 
-const GroupMessages = () => {
+const Messages = () => {
   const [activePanelToolTip, setActivePanelToolTip] = React.useState(false);
   const [canEditGroupMessage, setCanEditGroupMessage] = React.useState(false);
   const [canDeleteGroupMessage, setCanDeleteGroupMessage] =
     React.useState(false);
   const [canSeeGroupMembers, setCanSeeGroupMembers] = React.useState(false);
   const [canAddGroupMembers, setCanAddGroupMembers] = React.useState(false);
-  const { audioRef } = useAudio();
-  const { activeFilterOptions } = useFilter();
-  const { searchFilter, handleSearchFilter } = useSearchFilter("name");
   const {
     roomMessages,
     messageRooms,
@@ -42,26 +37,106 @@ const GroupMessages = () => {
     messageRef,
     selectedMessage,
     canCreateGroupMessage,
+    messageType,
     getMessageRooms,
     getMessageRoomMessages,
     handleSelectedMessage,
     toggleCanCreateGroupMessage,
     getMessageRoom,
+    handleMessageType,
+    clearActiveRoom,
   } = useMessage();
-  const { getNotifications, toggleCheckedNotifications } = useNotification();
-
+  const { activeFilterOptions } = useFilter();
+  const { searchFilter, handleSearchFilter } = useSearchFilter("name");
   const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } =
     useFile();
   const { settings } = useSettings();
+  const { audioRef } = useAudio();
+  const { getNotifications, toggleCheckedNotifications } = useNotification();
 
-  const { socket } = useGlobalContext();
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
-  const params = useParams();
+
   const url = process.env.NEXT_PUBLIC_API_URL;
+  const { socket } = useGlobalContext();
+
+  const sendMessage = async () => {
+    if (!messageRef.current?.innerText && !rawFile.current?.value) {
+      return;
+    }
+
+    if (!activeRoom) return;
+
+    let messageFile = null;
+
+    if (rawFile.current?.value) {
+      messageFile = await uploadFile(rawFile.current?.files);
+    }
+
+    try {
+      const { data } = await axios.post(
+        `${url}/${messageType}_messages`,
+        {
+          messageRoom: activeRoom.message_room,
+          messageToUUID: activeRoom.user_uuid,
+          message: messageRef.current?.innerText,
+          messageFile,
+          messageFileType: messageFile ? fileData.type : null,
+        },
+        { headers: { Authorization: user?.token } },
+      );
+
+      if (data.message) {
+        if (messageRef.current) {
+          messageRef.current.innerText = "";
+        }
+
+        if (rawFile.current?.value) {
+          removeRawFile();
+        }
+
+        await getMessageRoomMessages(messageType, activeRoom.message_room);
+        await getMessageRooms(searchFilter, messageType);
+
+        if (socket) {
+          socket?.emit("send_message", { rooms: data.rooms });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteGroupRoom = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.delete(
+        `${url}/group_message_rooms/${activeRoom.message_room}`,
+        {
+          headers: { Authorization: user?.token },
+        },
+      );
+      if (data.deletedRoom) {
+        getMessageRooms(searchFilter, "group");
+        toggleCanDeleteGroupMessage();
+        socket?.emit("delete_group_room", { rooms: data.rooms });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const toggleActivePanelToolTip = () => {
     setActivePanelToolTip((prev) => !prev);
+  };
+
+  const handleMessagePanelKeys = async (
+    e: React.KeyboardEvent<HTMLDivElement>,
+  ) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      await sendMessage();
+    }
   };
 
   const toggleCanEditGroupMessage = () => {
@@ -80,21 +155,13 @@ const GroupMessages = () => {
     setCanAddGroupMembers((prev) => !prev);
   };
 
-  const handleMessagePanelKeys = async (
-    e: React.KeyboardEvent<HTMLDivElement>
-  ) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      await sendMessage();
-    }
-  };
-
-  const mappedGroupMessageRoomPreviews = messageRooms.map((room, index) => {
+  const mappedMessageRooms = messageRooms.map((room) => {
     return (
       <React.Fragment key={room.message_room}>
-        <GroupMessagePreview
-          roomImage={room.room_image}
-          roomName={room.room_name}
+        <MessagePreview
+          roomType={messageType}
+          image={room.image}
+          name={`${room.name} ${room.surname}`}
           status="sent"
           latestMessage={room.message}
           latestFile={room.message_file}
@@ -102,84 +169,18 @@ const GroupMessages = () => {
           dateSent={
             room.date_sent ? localizeDate(room.date_sent, true) : "mm/dd/yyyy"
           }
-          isSelected={params?.room_uuid === room.message_room}
           isSender={room.message_from == user?.id}
+          isSelected={activeRoom.message_room === room.message_room}
+          getMessageRoom={() => getMessageRoom(messageType, room.message_room)}
         />
         <div className="w-full h-[0.5px] min-h-[0.5px] bg-secondary-100" />
       </React.Fragment>
     );
   });
 
-  const sendMessage = async () => {
-    if (!messageRef.current?.innerText && !rawFile.current?.value) {
-      return;
-    }
-
-    let messageFile = null;
-
-    if (rawFile.current?.value) {
-      messageFile = await uploadFile(rawFile.current?.files);
-    }
-
-    try {
-      const { data } = await axios.post(
-        `${url}/group_messages`,
-        {
-          messageRoom: params?.room_uuid,
-          messageToUUID: activeRoom.user_uuid,
-          message: messageRef.current?.innerText,
-          messageFile,
-          messageFileType: messageFile ? fileData.type : null,
-        },
-        { headers: { Authorization: user?.token } }
-      );
-
-      if (data.message) {
-        if (messageRef.current) {
-          messageRef.current.innerText = "";
-        }
-        if (rawFile.current?.value) {
-          removeRawFile();
-        }
-        await getMessageRoomMessages("group");
-        await getMessageRooms(searchFilter, "group");
-        socket?.emit("send_message", { rooms: data.rooms });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const deleteGroupRoom = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      const { data } = await axios.delete(
-        `${url}/group_message_rooms/${params?.room_uuid}`,
-        {
-          headers: { Authorization: user?.token },
-        }
-      );
-      if (data.deletedRoom) {
-        getMessageRooms(searchFilter, "group");
-        toggleCanDeleteGroupMessage();
-        socket?.emit("delete_group_room", { rooms: data.rooms });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   React.useEffect(() => {
-    getMessageRooms(searchFilter, "group");
-  }, [getMessageRooms, searchFilter]);
-
-  React.useEffect(() => {
-    getMessageRoomMessages("group");
-  }, [getMessageRoomMessages]);
-
-  React.useEffect(() => {
-    getMessageRoom("group");
-  }, [getMessageRoom]);
+    getMessageRooms(searchFilter, messageType);
+  }, [getMessageRooms, searchFilter, messageType]);
 
   React.useEffect(() => {
     const handle = async () => {
@@ -197,7 +198,7 @@ const GroupMessages = () => {
   React.useEffect(() => {
     const handle = async () => {
       await getMessageRooms(searchFilter, "group");
-      await getMessageRoom("group");
+      await getMessageRoom("group", activeRoom.message_room);
     };
 
     socket?.on("reflect_update_group_room", handle);
@@ -205,7 +206,13 @@ const GroupMessages = () => {
     return () => {
       socket?.off("reflect_update_group_room", handle);
     };
-  }, [socket, searchFilter, getMessageRooms, getMessageRoom]);
+  }, [
+    socket,
+    searchFilter,
+    getMessageRooms,
+    getMessageRoom,
+    activeRoom.message_room,
+  ]);
 
   React.useEffect(() => {
     const handle = async () => {
@@ -217,7 +224,7 @@ const GroupMessages = () => {
     return () => {
       socket?.off("reflect_remove_group_member", handle);
     };
-  }, [socket, searchFilter, , getMessageRooms]);
+  }, [socket, searchFilter, getMessageRooms]);
 
   React.useEffect(() => {
     const handle = async () => {
@@ -228,11 +235,11 @@ const GroupMessages = () => {
     return () => {
       socket?.off("reflect_delete_group_room", handle);
     };
-  }, [socket, searchFilter, , getMessageRooms]);
+  }, [socket, searchFilter, getMessageRooms]);
 
   React.useEffect(() => {
     const handle = async (args: { room: string }) => {
-      await getMessageRoomMessages("group");
+      await getMessageRoomMessages(messageType, activeRoom.message_room);
       await getNotifications();
       toggleCheckedNotifications(false);
 
@@ -247,8 +254,10 @@ const GroupMessages = () => {
       socket?.off("get_messages", handle);
     };
   }, [
+    activeRoom,
     socket,
     searchFilter,
+    messageType,
     audioRef,
     user?.uuid,
     settings.message_notification,
@@ -275,35 +284,44 @@ const GroupMessages = () => {
           groupMessageData={activeRoom}
           getMessageRooms={() => getMessageRooms(searchFilter, "group")}
           toggleCanEditGroupMessage={toggleCanEditGroupMessage}
-          getMessageRoom={() => getMessageRoom("group")}
+          getMessageRoom={() =>
+            getMessageRoom("group", activeRoom.message_room)
+          }
         />
       ) : null}
 
       {canSeeGroupMembers ? (
         <GroupMembers
+          roomCreator={activeRoom.created_by}
           isRoomCreator={parseInt(user?.id) === activeRoom.created_by}
           toggleCanSeeGroupMembers={toggleCanSeeGroupMembers}
-          getMessageRoom={() => getMessageRoom("group")}
+          messageRoom={activeRoom.message_room}
+          getMessageRoom={() =>
+            getMessageRoom("group", activeRoom.message_room)
+          }
         />
       ) : null}
 
       {canAddGroupMembers ? (
-        <AddGroupMembers toggleCanAddGroupMembers={toggleCanAddGroupMembers} />
+        <AddGroupMembers
+          messageRoom={activeRoom.message_room}
+          toggleCanAddGroupMembers={toggleCanAddGroupMembers}
+        />
       ) : null}
 
       {canDeleteGroupMessage ? (
         <DeleteConfirmation
-          apiRoute={`group_message_rooms/${params?.room_uuid}`}
+          apiRoute={`group_message_rooms/${activeRoom.message_room}`}
           message="deleting a group will also delete its members and messages"
           title="Delete Group Message?"
           toggleConfirmation={toggleCanDeleteGroupMessage}
           customDelete={deleteGroupRoom}
           refetchData={() => {
             getMessageRooms(searchFilter, "group");
+            clearActiveRoom();
           }}
         />
       ) : null}
-
       <div
         className="max-w-screen-2xl flex flex-col justify-start
             items-center w-full h-full l-s:overflow-hidden"
@@ -322,7 +340,7 @@ const GroupMessages = () => {
                 }`}
               >
                 <SearchFilter
-                  placeholder="Search Task"
+                  placeholder={`Search ${messageType === "private" ? "Associate" : "Group"}`}
                   name="searchInput"
                   onChange={handleSearchFilter}
                   required={false}
@@ -333,18 +351,18 @@ const GroupMessages = () => {
               </div>
 
               <div className="w-full flex flex-row items-center justify-between">
-                <Link
-                  href={`/hub/messages/private/me`}
-                  className="p-2 w-20 transition-all"
+                <button
+                  onClick={() => handleMessageType("private")}
+                  className={`p-2 w-20 transition-all ${messageType === "private" ? "border-primary-500 border-b-2 text-primary-500" : ""}`}
                 >
                   Private
-                </Link>
-                <Link
-                  href={`/hub/messages/group/me`}
-                  className="p-2 w-20 transition-all border-primary-500 border-b-2 text-primary-500"
+                </button>
+                <button
+                  onClick={() => handleMessageType("group")}
+                  className={`p-2 w-20 transition-all ${messageType === "group" ? "border-primary-500 border-b-2 text-primary-500" : ""}`}
                 >
                   Group
-                </Link>
+                </button>
               </div>
             </div>
 
@@ -352,15 +370,17 @@ const GroupMessages = () => {
               className="bg-white w-full flex flex-col gap-4 p-4 rounded-lg 
                         h-full l-s:col-span-1 overflow-y-auto cstm-scrollbar"
             >
-              <button
-                onClick={toggleCanCreateGroupMessage}
-                className="w-full p-2 bg-primary-500 text-white font-bold rounded-md flex 
+              {messageType === "group" ? (
+                <button
+                  onClick={toggleCanCreateGroupMessage}
+                  className="w-full p-2 bg-primary-500 text-white font-bold rounded-md flex 
                           flex-row items-center justify-center gap-2"
-              >
-                <p>Create Group</p> <AiOutlinePlus className="text-lg" />
-              </button>
+                >
+                  <p>Create Group</p> <AiOutlinePlus className="text-lg" />
+                </button>
+              ) : null}
 
-              {mappedGroupMessageRoomPreviews}
+              {mappedMessageRooms}
             </div>
           </div>
 
@@ -372,34 +392,29 @@ const GroupMessages = () => {
               isRoomCreator={parseInt(user?.id) === activeRoom.created_by}
               activeRoom={activeRoom}
               roomMessages={roomMessages}
-              roomType="group"
+              roomType={messageType}
               messageRef={messageRef}
               selectedMessage={selectedMessage}
               rawFile={rawFile}
               fileData={fileData}
               activePanelToolTip={activePanelToolTip}
+              clearActiveRoom={clearActiveRoom}
               toggleActivePanelToolTip={toggleActivePanelToolTip}
               selectedFileViewer={selectedFileViewer}
               removeRawFile={removeRawFile}
               handleSelectedMessage={handleSelectedMessage}
               sendMessage={sendMessage}
+              handleMessagePanelKeys={handleMessagePanelKeys}
               toggleCanEditGroupMessage={toggleCanEditGroupMessage}
               toggleCanDeleteGroupMessage={toggleCanDeleteGroupMessage}
               toggleCanSeeGroupMembers={toggleCanSeeGroupMembers}
               toggleCanAddGroupMembers={toggleCanAddGroupMembers}
-              handleMessagePanelKeys={handleMessagePanelKeys}
             />
           )}
-
-          <audio ref={audioRef}>
-            <source
-              src={`${process.env.NEXT_PUBLIC_SITE_URL}/music/NotificationSound.mp3`}
-            />
-          </audio>
         </div>
       </div>
     </div>
   );
 };
 
-export default GroupMessages;
+export default Messages;

@@ -59,6 +59,10 @@ export default function useMessage() {
     room_name: "",
   });
 
+  const [messageType, setMessageType] = React.useState<"private" | "group">(
+    "private",
+  );
+
   const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
@@ -71,6 +75,27 @@ export default function useMessage() {
   const toggleCanCreateGroupMessage = React.useCallback(() => {
     setCanCreateGroupMessage((prev) => !prev);
   }, []);
+
+  const handleMessageType = (type: "private" | "group") => {
+    setMessageType(type);
+  };
+
+  const clearActiveRoom = () => {
+    setActiveRoom({
+      image: "",
+      name: "",
+      surname: "",
+      message_room: "",
+      message: "",
+      message_file: "",
+      message_from: -1,
+      user_uuid: "",
+      date_sent: "",
+      created_by: -1,
+      room_image: "",
+      room_name: "",
+    });
+  };
 
   const getMessageRooms = React.useCallback(
     async (searchFilter: string, roomType: "private" | "group") => {
@@ -88,19 +113,19 @@ export default function useMessage() {
         }
       }
     },
-    [url, user?.token]
+    [url, user?.token],
   );
 
   const getMessageRoomMessages = React.useCallback(
-    async (roomType: "private" | "group") => {
+    async (roomType: "private" | "group", roomUUID: string) => {
       if (user?.token) {
         try {
           const { data } = await axios.get(
-            `${url}/${roomType}_message_rooms/${params?.room_uuid}`,
+            `${url}/${roomType}_message_rooms/${roomUUID}`,
             {
               headers: { Authorization: user?.token },
               params: { type: "messages" },
-            }
+            },
           );
           if (data) {
             setRoomMessages(data);
@@ -110,29 +135,30 @@ export default function useMessage() {
         }
       }
     },
-    [url, user?.token, params?.room_uuid]
+    [url, user?.token],
   );
 
   const getMessageRoom = React.useCallback(
-    async (roomType: "private" | "group") => {
-      if (user?.token && params?.room_uuid) {
+    async (roomType: "private" | "group", roomUUID: string) => {
+      if (user?.token) {
         try {
           const { data } = await axios.get(
-            `${url}/${roomType}_message_rooms/${params?.room_uuid}`,
+            `${url}/${roomType}_message_rooms/${roomUUID}`,
             {
               headers: { Authorization: user?.token },
               params: { type: "main" },
-            }
+            },
           );
           if (data) {
             setActiveRoom(data);
+            await getMessageRoomMessages(roomType, roomUUID);
           }
         } catch (error) {
           console.log(error);
         }
       }
     },
-    [url, user?.token, params?.room_uuid]
+    [url, user?.token, getMessageRoomMessages],
   );
 
   return {
@@ -142,10 +168,13 @@ export default function useMessage() {
     messageRef,
     selectedMessage,
     canCreateGroupMessage,
+    messageType,
     getMessageRooms,
     getMessageRoomMessages,
     handleSelectedMessage,
     toggleCanCreateGroupMessage,
     getMessageRoom,
+    handleMessageType,
+    clearActiveRoom,
   };
 }

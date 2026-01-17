@@ -14,7 +14,7 @@ interface Props {
 const SearchFilter: React.FC<Props> = (props) => {
   return (
     <div
-      className={`w-full relative flex-row items-center justify-between max-w-screen-m-m mr-auto h-fit t:flex
+      className={`w-full relative flex-row items-center justify-between mr-auto h-fit t:flex
                 ${props.activeFilterOptions ? "hidden" : "flex"}`}
     >
       <input

@@ -6,12 +6,10 @@ import { useSession } from "next-auth/react";
 import React from "react";
 import { BsCheck, BsCheckAll, BsDot } from "react-icons/bs";
 import { localizeDate } from "../utils/dateUtils";
-import Link from "next/link";
 
-interface PrivateMessagePreviewProps {
+interface MessagePreviewProps {
   image: string | null;
   name: string;
-  surname: string;
   latestMessage: string;
   latestFile: string;
   status: "sent" | "read" | "unread";
@@ -19,9 +17,11 @@ interface PrivateMessagePreviewProps {
   isSelected: boolean;
   isSender: boolean;
   messageRoom: string;
+  roomType: "private" | "group";
+  getMessageRoom: () => Promise<void>;
 }
 
-const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
+const MessagePreview: React.FC<MessagePreviewProps> = (props) => {
   const [latestMessage, setLatestMessage] = React.useState({
     message: "",
     message_file: "",
@@ -37,7 +37,7 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
   const getLatestMessage = React.useCallback(async () => {
     if (user?.token && props.messageRoom) {
       try {
-        const { data } = await axios.get(`${url}/private_messages`, {
+        const { data } = await axios.get(`${url}/${props.roomType}_messages`, {
           headers: { Authorization: user?.token },
           params: { messageRoom: props.messageRoom, type: "latest" },
         });
@@ -48,7 +48,7 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, props.messageRoom, user?.token]);
+  }, [url, props.messageRoom, user?.token, props.roomType]);
 
   React.useEffect(() => {
     getLatestMessage();
@@ -67,9 +67,8 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
   }, [socket, getLatestMessage]);
 
   return (
-    <Link
-      href={`/hub/messages/private/${props.messageRoom}`}
-      shallow={true}
+    <button
+      onClick={props.getMessageRoom}
       className={`w-full p-2 rounded-lg hover:bg-neutral-50 
                 flex flex-row items-center gap-2 transition-all
                 ${props.isSelected && "bg-primary-100"}`}
@@ -84,7 +83,7 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
       <div className="w-full h-full flex flex-col justify-between items-center">
         <div className="flex flex-row justify-center items-center w-full gap-4">
           <p className="font-bold text-sm max-w-[12ch] truncate mr-auto  l-l:max-w-[20ch]">
-            {props.name} {props.surname}
+            {props.name}
           </p>
 
           <div>
@@ -103,7 +102,6 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
         <div className="flex flex-row justify-between items-center w-full text-xs">
           <p className="truncate max-w-[10ch] t:max-w-[40ch] l-s:max-w-[10ch] l-l:max-w-[25ch]">
             <span className="font-medium">
-              {" "}
               {latestMessage.message_from == user?.id && "You: "}
             </span>
             <span>
@@ -124,8 +122,8 @@ const PrivateMessagePreview: React.FC<PrivateMessagePreviewProps> = (props) => {
           </p>
         </div>
       </div>
-    </Link>
+    </button>
   );
 };
 
-export default PrivateMessagePreview;
+export default MessagePreview;

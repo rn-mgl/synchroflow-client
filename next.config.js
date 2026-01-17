@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   env: {
     NEXTAUTH_URL: process.env.NEXT_PUBLIC_SITE_URL,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,

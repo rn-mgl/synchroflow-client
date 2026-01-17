@@ -7,7 +7,6 @@ import {
   AiOutlineDelete,
   AiOutlineEdit,
   AiOutlineEllipsis,
-  AiOutlineMore,
   AiOutlinePaperClip,
   AiOutlineTeam,
   AiOutlineUserAdd,
@@ -20,8 +19,6 @@ import {
   RoomMessagesStateProps,
 } from "../hooks/useMessage";
 import { localizeDate, localizeTime } from "../utils/dateUtils";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 
 interface ActiveMessagePanelProps {
   roomName?: string;
@@ -39,6 +36,7 @@ interface ActiveMessagePanelProps {
   removeRawFile: () => void;
   handleSelectedMessage: (messageUUID: string) => void;
   sendMessage: () => void;
+  clearActiveRoom: () => void;
   handleMessagePanelKeys: (e: React.KeyboardEvent<HTMLDivElement>) => void;
   toggleCanEditGroupMessage?: () => void;
   toggleCanDeleteGroupMessage?: () => void;
@@ -49,9 +47,6 @@ interface ActiveMessagePanelProps {
 const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
   const { data: session } = useSession();
   const user = session?.user;
-
-  const path = usePathname();
-  const roomType = path?.split("/")[3];
 
   const mappedMessages = props.roomMessages.map((message, index) => {
     const isSender = message.message_from == user?.id;
@@ -115,9 +110,9 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
         className="flex flex-row w-full items-center justify-start p-4 border-b-[1px] 
                 border-b-primary-100 gap-4"
       >
-        <Link href={`/hub/messages/${roomType}/me`} shallow={true}>
+        <button onClick={props.clearActiveRoom}>
           <BsArrowLeft className="text-primary-500" />
-        </Link>
+        </button>
 
         <p className="font-bold max-w-[20ch] truncate t:max-w-none t:truncate">
           {props.roomName}
