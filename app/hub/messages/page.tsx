@@ -160,8 +160,12 @@ const Messages = () => {
       <React.Fragment key={room.message_room}>
         <MessagePreview
           roomType={messageType}
-          image={room.image}
-          name={`${room.name} ${room.surname}`}
+          image={messageType === "private" ? room.image : room.room_image}
+          name={
+            messageType === "private"
+              ? `${room.name} ${room.surname}`
+              : room.room_name
+          }
           status="sent"
           latestMessage={room.message}
           latestFile={room.message_file}
@@ -352,13 +356,19 @@ const Messages = () => {
 
               <div className="w-full flex flex-row items-center justify-between">
                 <button
-                  onClick={() => handleMessageType("private")}
+                  onClick={() => {
+                    handleMessageType("private");
+                    clearActiveRoom();
+                  }}
                   className={`p-2 w-20 transition-all ${messageType === "private" ? "border-primary-500 border-b-2 text-primary-500" : ""}`}
                 >
                   Private
                 </button>
                 <button
-                  onClick={() => handleMessageType("group")}
+                  onClick={() => {
+                    handleMessageType("group");
+                    clearActiveRoom();
+                  }}
                   className={`p-2 w-20 transition-all ${messageType === "group" ? "border-primary-500 border-b-2 text-primary-500" : ""}`}
                 >
                   Group

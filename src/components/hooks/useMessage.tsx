@@ -1,7 +1,5 @@
-import { useGlobalContext } from "@/base/src/contexts/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useParams } from "next/navigation";
 import React from "react";
 
 export interface MessageRoomsStateProps {
@@ -66,7 +64,6 @@ export default function useMessage() {
   const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
   const user = session?.user;
-  const params = useParams();
 
   const handleSelectedMessage = React.useCallback((messageUUID: string) => {
     setSelectedMessage((prev) => (prev === messageUUID ? "" : messageUUID));
@@ -77,6 +74,10 @@ export default function useMessage() {
   }, []);
 
   const handleMessageType = (type: "private" | "group") => {
+    if (type !== messageType) {
+      setMessageRooms([]);
+    }
+
     setMessageType(type);
   };
 
