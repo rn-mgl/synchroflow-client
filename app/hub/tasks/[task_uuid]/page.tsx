@@ -116,7 +116,7 @@ const SingleTask = () => {
 
   const handleCollaboratorToRemove = (collaboratorUUID: string) => {
     setCollaboratorToRemove((prev) =>
-      prev === collaboratorUUID ? "" : collaboratorUUID
+      prev === collaboratorUUID ? "" : collaboratorUUID,
     );
   };
 
@@ -131,7 +131,7 @@ const SingleTask = () => {
           `${url}/main_tasks/${params?.task_uuid}`,
           {
             headers: { Authorization: user?.token },
-          }
+          },
         );
 
         if (data) {
@@ -199,7 +199,7 @@ const SingleTask = () => {
         `${url}/main_tasks/${params?.task_uuid}`,
         {
           headers: { Authorization: user?.token },
-        }
+        },
       );
 
       if (data.deleteTask) {
@@ -223,7 +223,7 @@ const SingleTask = () => {
         {
           headers: { Authorization: user?.token },
           params: { type: "leave", mainTaskUUID: params?.task_uuid },
-        }
+        },
       );
 
       if (data.deleteCollaborator) {
@@ -247,7 +247,7 @@ const SingleTask = () => {
         {
           headers: { Authorization: user?.token },
           params: { type: "delete", mainTaskUUID: params?.task_uuid },
-        }
+        },
       );
 
       if (data.deleteCollaborator) {
@@ -283,7 +283,7 @@ const SingleTask = () => {
               <button
                 onClick={() =>
                   setCollaboratorToRemove(
-                    collaborator.main_task_collaborator_uuid
+                    collaborator.main_task_collaborator_uuid,
                   )
                 }
                 className="p-2 rounded-full hover:bg-primary-500  
@@ -648,7 +648,7 @@ const SingleTask = () => {
                   {collaborators.length > 1 ? "Collaborators" : "Collaborator"}
                 </p>
 
-                <div className="flex flex-col gap-2 w-full bg-neutral-150 overflow-y-auto h-full rounded-md">
+                <div className="flex flex-col gap-2 w-full bg-neutral-150 overflow-y-auto h-full rounded-md p-2">
                   {mappedCollaborators}
                 </div>
               </div>
