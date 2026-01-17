@@ -421,6 +421,12 @@ const Messages = () => {
               toggleCanAddGroupMembers={toggleCanAddGroupMembers}
             />
           )}
+
+          <audio ref={audioRef}>
+            <source
+              src={`${process.env.NEXT_PUBLIC_SITE_URL}/music/NotificationSound.mp3`}
+            />
+          </audio>
         </div>
       </div>
     </div>
