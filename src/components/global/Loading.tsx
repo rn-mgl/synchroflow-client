@@ -11,11 +11,26 @@ const Loading = () => {
           style={{ animationDelay: "0s" }}
           className="w-3 h-3 rounded-full bg-primary-400 animate-loading drop-shadow-md"
         />
-        <div style={{ animationDelay: "-0.2s" }} className="w-3 h-3 rounded-full bg-primary-500 animate-loading" />
-        <div style={{ animationDelay: "-0.4s" }} className="w-3 h-3 rounded-full bg-primary-600 animate-loading" />
-        <div style={{ animationDelay: "-0.6s" }} className="w-3 h-3 rounded-full bg-primary-700 animate-loading" />
-        <div style={{ animationDelay: "-0.8s" }} className="w-3 h-3 rounded-full bg-primary-800 animate-loading" />
-        <div style={{ animationDelay: "-1s" }} className="w-3 h-3 rounded-full bg-primary-900 animate-loading" />
+        <div
+          style={{ animationDelay: "-0.2s" }}
+          className="w-3 h-3 rounded-full bg-primary-500 animate-loading"
+        />
+        <div
+          style={{ animationDelay: "-0.4s" }}
+          className="w-3 h-3 rounded-full bg-primary-600 animate-loading"
+        />
+        <div
+          style={{ animationDelay: "-0.6s" }}
+          className="w-3 h-3 rounded-full bg-primary-700 animate-loading"
+        />
+        <div
+          style={{ animationDelay: "-0.8s" }}
+          className="w-3 h-3 rounded-full bg-primary-800 animate-loading"
+        />
+        <div
+          style={{ animationDelay: "-1s" }}
+          className="w-3 h-3 rounded-full bg-primary-900 animate-loading"
+        />
       </div>
     </div>
   );

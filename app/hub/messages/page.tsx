@@ -4,9 +4,11 @@ import { useGlobalContext } from "@/base/src/contexts/context";
 import { useSettings } from "@/base/src/contexts/settingsContext";
 import SearchFilter from "@/components/filter/SearchFilter";
 import DeleteConfirmation from "@/components/global/DeleteConfirmation";
+import Loading from "@/components/global/Loading";
 import useAudio from "@/components/hooks/useAudio";
 import useFile from "@/components/hooks/useFile";
 import useFilter from "@/components/hooks/useFilter";
+import useLoader from "@/components/hooks/useLoading";
 import useMessage from "@/components/hooks/useMessage";
 import useNotification from "@/components/hooks/useNotification";
 import useSearchFilter from "@/components/hooks/useSearchFilter";
@@ -30,6 +32,7 @@ const Messages = () => {
     React.useState(false);
   const [canSeeGroupMembers, setCanSeeGroupMembers] = React.useState(false);
   const [canAddGroupMembers, setCanAddGroupMembers] = React.useState(false);
+  const [canLeaveGroup, setCanLeaveGroup] = React.useState(false);
   const {
     roomMessages,
     messageRooms,
@@ -52,6 +55,7 @@ const Messages = () => {
     useFile();
   const { settings } = useSettings();
   const { audioRef } = useAudio();
+  const { isLoading, handleLoader } = useLoader();
   const { getNotifications, toggleCheckedNotifications } = useNotification();
 
   const { data: session } = useSession({ required: true });
@@ -153,6 +157,36 @@ const Messages = () => {
 
   const toggleCanAddGroupMembers = () => {
     setCanAddGroupMembers((prev) => !prev);
+  };
+
+  const toggleCanLeaveGroup = () => {
+    setCanLeaveGroup((prev) => !prev);
+  };
+
+  const leaveGroup = async () => {
+    try {
+      handleLoader(true);
+      if (user.token) {
+        const { data } = await axios.delete(
+          `${url}/group_message_members/${user.id}`,
+          {
+            headers: { Authorization: user.token },
+            params: { action: "leave" },
+          },
+        );
+
+        if (data) {
+          socket?.emit("leave_group", { rooms: data.members });
+          getMessageRooms(searchFilter, "group");
+          clearActiveRoom();
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      toggleCanLeaveGroup();
+      handleLoader(false);
+    }
   };
 
   const mappedMessageRooms = messageRooms.map((room) => {
@@ -271,6 +305,10 @@ const Messages = () => {
     toggleCheckedNotifications,
   ]);
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
   return (
     <div
       className="flex flex-col items-center justify-start w-full h-full
@@ -326,6 +364,17 @@ const Messages = () => {
           }}
         />
       ) : null}
+
+      {canLeaveGroup ? (
+        <DeleteConfirmation
+          apiRoute={`group_message_members/${user.id}`}
+          message="do you want to leave this group?"
+          title="Leave Group"
+          customDelete={leaveGroup}
+          toggleConfirmation={toggleCanLeaveGroup}
+        />
+      ) : null}
+
       <div
         className="max-w-screen-2xl flex flex-col justify-start
             items-center w-full h-full l-s:overflow-hidden"
@@ -408,6 +457,7 @@ const Messages = () => {
               rawFile={rawFile}
               fileData={fileData}
               activePanelToolTip={activePanelToolTip}
+              toggleCanLeaveGroup={toggleCanLeaveGroup}
               clearActiveRoom={clearActiveRoom}
               toggleActivePanelToolTip={toggleActivePanelToolTip}
               selectedFileViewer={selectedFileViewer}

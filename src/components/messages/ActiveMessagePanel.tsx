@@ -10,6 +10,7 @@ import {
   AiOutlinePaperClip,
   AiOutlineTeam,
   AiOutlineUserAdd,
+  AiOutlineUserDelete,
 } from "react-icons/ai";
 import { BsArrowLeft, BsFillSendFill } from "react-icons/bs";
 import FilePreview from "../global/FilePreview";
@@ -31,6 +32,7 @@ interface ActiveMessagePanelProps {
   fileData: { name: string; url: string; type: string };
   activePanelToolTip: boolean;
   roomType: "private" | "group";
+  toggleCanLeaveGroup: () => void;
   toggleActivePanelToolTip: () => void;
   selectedFileViewer: (e: React.ChangeEvent<HTMLInputElement>) => void;
   removeRawFile: () => void;
@@ -127,6 +129,14 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
                             hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-full"
                 >
                   <AiOutlineTeam />
+                </button>
+
+                <button
+                  onClick={props.toggleCanLeaveGroup}
+                  className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-full"
+                >
+                  <AiOutlineUserDelete />
                 </button>
 
                 {props.isRoomCreator ? (

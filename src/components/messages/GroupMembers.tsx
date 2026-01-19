@@ -196,7 +196,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
     return () => {
       socket?.off("get_group_members", handle);
     };
-  }, [socket, user?.uuid, toggleCanSeeGroupMembers, getGroupMembers]);
+  }, [socket, user?.uuid, getGroupMembers, toggleCanSeeGroupMembers]);
 
   return (
     <div
@@ -207,6 +207,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
       {canDeleteGroupMember ? (
         <DeleteConfirmation
           apiRoute={`group_message_members/${selectedGroupMember}`}
+          params={{ action: "remove" }}
           message="do you want to remove this member?"
           title="Remove Group Member"
           toggleConfirmation={toggleCanDeleteGroupMember}
