@@ -42,7 +42,7 @@ const Register = () => {
   const router = useRouter();
 
   const handleRegisterCredentials = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -56,7 +56,7 @@ const Register = () => {
   };
 
   const submitRegistration = async (
-    e: React.FormEvent<HTMLFormElement>
+    e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
 
@@ -74,7 +74,7 @@ const Register = () => {
       handleMessages(
         true,
         "Password length must not be less than 8 characters.",
-        "warning"
+        "warning",
       );
       handleLoader(false);
       handleDisable(false);
@@ -89,11 +89,17 @@ const Register = () => {
       if (data) {
         router.push("/sending?purpose=verify");
       }
-    } catch (error: any) {
+    } catch (error) {
       console.log(error);
       handleLoader(false);
       handleDisable(false);
-      handleMessages(true, error?.response?.data, "error");
+      handleMessages(
+        true,
+        axios.isAxiosError(error)
+          ? error?.response?.data
+          : "An unexpected error occurred.",
+        "error",
+      );
     }
   };
 

@@ -28,7 +28,7 @@ interface ActiveMessagePanelProps {
   roomMessages: Array<RoomMessagesStateProps>;
   messageRef: RefObject<HTMLDivElement>;
   selectedMessage: string;
-  rawFile: any;
+  rawFile: HTMLInputElement | null;
   fileData: { name: string; url: string; type: string };
   activePanelToolTip: boolean;
   roomType: "private" | "group";

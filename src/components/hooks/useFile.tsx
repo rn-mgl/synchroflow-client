@@ -9,7 +9,7 @@ export default function useFile() {
     url: "",
     type: "",
   });
-  const rawFile = React.useRef<any>();
+  const rawFile = React.useRef<HTMLInputElement | null>(null);
 
   const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession();
@@ -38,11 +38,12 @@ export default function useFile() {
   const removeRawFile = () => {
     setFileData({ name: "", url: "", type: "" });
     if (rawFile.current) {
-      rawFile.current.value = null;
+      rawFile.current.value = "";
+      rawFile.current.files = null;
     }
   };
 
-  const uploadFile = async (file: any) => {
+  const uploadFile = async (file: FileList | null) => {
     try {
       if (!file || file.length < 1) {
         return null;

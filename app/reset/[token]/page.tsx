@@ -66,17 +66,23 @@ const Reset = () => {
         `${url}/password/new/${params?.token}`,
         {
           newPassword,
-        }
+        },
       );
 
       if (data) {
         router.push("/login");
       }
-    } catch (error: any) {
+    } catch (error) {
       console.log(error);
       handleLoader(false);
       handleDisable(false);
-      handleMessages(true, error?.response?.data, "error");
+      handleMessages(
+        true,
+        axios.isAxiosError(error)
+          ? error?.response?.data
+          : "An unexpected error occurred.",
+        "error",
+      );
     }
   };
 

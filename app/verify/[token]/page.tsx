@@ -32,10 +32,16 @@ const Verify = () => {
       if (data) {
         setStatus("verified");
       }
-    } catch (error: any) {
+    } catch (error) {
       console.log(error);
       setStatus("rejected");
-      handleMessages(true, error?.response?.data, "error");
+      handleMessages(
+        true,
+        axios.isAxiosError(error)
+          ? error?.response?.data
+          : "An unexpected error occurred.",
+        "error",
+      );
     }
   }, [url, params?.token, handleMessages]);
 
@@ -58,8 +64,8 @@ const Verify = () => {
               status === "verifying"
                 ? verifying
                 : status === "verified"
-                ? verified
-                : rejected
+                  ? verified
+                  : rejected
             }
             alt="status"
             className="w-96 saturate-150 drop-shadow-md animate-float"

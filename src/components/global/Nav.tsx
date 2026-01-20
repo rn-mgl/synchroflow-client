@@ -81,9 +81,15 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
   const logOut = async () => {
     try {
       await signOut({ callbackUrl: "/", redirect: true });
-    } catch (error: any) {
+    } catch (error) {
       console.log(error);
-      handleMessages(true, error?.response?.data, "error");
+      handleMessages(
+        true,
+        axios.isAxiosError(error)
+          ? error?.response?.data
+          : "An unexpected error occurred.",
+        "error",
+      );
     }
   };
 
@@ -97,9 +103,15 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
         if (data) {
           setUserData(data);
         }
-      } catch (error: any) {
+      } catch (error) {
         console.log(error);
-        handleMessages(true, error?.response?.data, "error");
+        handleMessages(
+          true,
+          axios.isAxiosError(error)
+            ? error?.response?.data
+            : "An unexpected error occurred.",
+          "error",
+        );
       }
     }
   }, [url, user?.token, user?.uuid, handleMessages]);
