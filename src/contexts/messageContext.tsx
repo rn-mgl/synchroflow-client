@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import React from "react";
+import React, { RefObject } from "react";
 
 export interface MessageRoomsStateProps {
   image: string;
@@ -29,19 +29,64 @@ export interface RoomMessagesStateProps {
   message_uuid: string;
 }
 
-export default function useMessage() {
-  const messageRef = React.useRef<HTMLDivElement>(null); // used a separate use ref to clear div content after sending message
+interface MessageContextInterface {
+  roomMessages: RoomMessagesStateProps[];
+  messageRooms: MessageRoomsStateProps[];
+  activeRoom: MessageRoomsStateProps;
+  messageRef: RefObject<HTMLDivElement | null>;
+  selectedMessage: string;
+  canCreateGroupMessage: boolean;
+  messageType: "private" | "group";
+  activePanelToolTip: boolean;
+  canEditGroupMessage: boolean;
+  canDeleteGroupMessage: boolean;
+  canSeeGroupMembers: boolean;
+  canAddGroupMembers: boolean;
+  canLeaveGroup: boolean;
+  getMessageRooms: (
+    searchFilter: string,
+    roomType: "private" | "group",
+  ) => Promise<void>;
+  getMessageRoomMessages: (
+    roomType: "private" | "group",
+    roomUUID: string,
+  ) => Promise<void>;
+  handleSelectedMessage: (messageUUID: string) => void;
+  toggleCanCreateGroupMessage: () => void;
+  getMessageRoom: (
+    roomType: "private" | "group",
+    roomUUID: string,
+  ) => Promise<void>;
+  handleMessageType: (type: "private" | "group") => void;
+  clearActiveRoom: () => void;
+  toggleActivePanelToolTip: () => void;
+  toggleCanEditGroupMessage: () => void;
+  toggleCanDeleteGroupMessage: () => void;
+  toggleCanSeeGroupMembers: () => void;
+  toggleCanAddGroupMembers: () => void;
+  toggleCanLeaveGroup: () => void;
+}
+
+const MessageContext = React.createContext<MessageContextInterface | null>(
+  null,
+);
+
+const MessageProvider = ({ children }: { children: React.ReactNode }) => {
+  const messageRef = React.useRef<HTMLDivElement | null>(null); // used a separate use ref to clear div content after sending message
 
   const [messageRooms, setMessageRooms] = React.useState<
     Array<MessageRoomsStateProps>
   >([]);
+
   const [roomMessages, setRoomMessages] = React.useState<
     Array<RoomMessagesStateProps>
   >([]);
+
   const [canCreateGroupMessage, setCanCreateGroupMessage] =
     React.useState(false);
 
   const [selectedMessage, setSelectedMessage] = React.useState("");
+
   const [activeRoom, setActiveRoom] = React.useState<MessageRoomsStateProps>({
     image: "",
     name: "",
@@ -60,6 +105,19 @@ export default function useMessage() {
   const [messageType, setMessageType] = React.useState<"private" | "group">(
     "private",
   );
+
+  const [activePanelToolTip, setActivePanelToolTip] = React.useState(false);
+
+  const [canEditGroupMessage, setCanEditGroupMessage] = React.useState(false);
+
+  const [canDeleteGroupMessage, setCanDeleteGroupMessage] =
+    React.useState(false);
+
+  const [canSeeGroupMembers, setCanSeeGroupMembers] = React.useState(false);
+
+  const [canAddGroupMembers, setCanAddGroupMembers] = React.useState(false);
+
+  const [canLeaveGroup, setCanLeaveGroup] = React.useState(false);
 
   const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession({ required: true });
@@ -96,6 +154,30 @@ export default function useMessage() {
       room_image: "",
       room_name: "",
     });
+  };
+
+  const toggleActivePanelToolTip = () => {
+    setActivePanelToolTip((prev) => !prev);
+  };
+
+  const toggleCanEditGroupMessage = () => {
+    setCanEditGroupMessage((prev) => !prev);
+  };
+
+  const toggleCanDeleteGroupMessage = () => {
+    setCanDeleteGroupMessage((prev) => !prev);
+  };
+
+  const toggleCanSeeGroupMembers = () => {
+    setCanSeeGroupMembers((prev) => !prev);
+  };
+
+  const toggleCanAddGroupMembers = () => {
+    setCanAddGroupMembers((prev) => !prev);
+  };
+
+  const toggleCanLeaveGroup = () => {
+    setCanLeaveGroup((prev) => !prev);
   };
 
   const getMessageRooms = React.useCallback(
@@ -162,20 +244,50 @@ export default function useMessage() {
     [url, user?.token, getMessageRoomMessages],
   );
 
-  return {
-    roomMessages,
-    messageRooms,
-    activeRoom,
-    messageRef,
-    selectedMessage,
-    canCreateGroupMessage,
-    messageType,
-    getMessageRooms,
-    getMessageRoomMessages,
-    handleSelectedMessage,
-    toggleCanCreateGroupMessage,
-    getMessageRoom,
-    handleMessageType,
-    clearActiveRoom,
-  };
-}
+  return (
+    <MessageContext.Provider
+      value={{
+        roomMessages,
+        messageRooms,
+        activeRoom,
+        messageRef,
+        selectedMessage,
+        canCreateGroupMessage,
+        messageType,
+        activePanelToolTip,
+        canEditGroupMessage,
+        canDeleteGroupMessage,
+        canSeeGroupMembers,
+        canAddGroupMembers,
+        canLeaveGroup,
+        getMessageRooms,
+        getMessageRoomMessages,
+        handleSelectedMessage,
+        toggleCanCreateGroupMessage,
+        getMessageRoom,
+        handleMessageType,
+        clearActiveRoom,
+        toggleActivePanelToolTip,
+        toggleCanEditGroupMessage,
+        toggleCanDeleteGroupMessage,
+        toggleCanSeeGroupMembers,
+        toggleCanAddGroupMembers,
+        toggleCanLeaveGroup,
+      }}
+    >
+      {children}
+    </MessageContext.Provider>
+  );
+};
+
+export { MessageContext, MessageProvider };
+
+export const useMessageContext = () => {
+  const messageContext = React.useContext(MessageContext);
+
+  if (!messageContext) {
+    throw new Error(`No context generated for message.`);
+  }
+
+  return messageContext;
+};

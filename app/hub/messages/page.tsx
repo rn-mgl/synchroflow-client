@@ -1,6 +1,7 @@
 "use client";
 
 import { useGlobalContext } from "@/base/src/contexts/context";
+import { useMessageContext } from "@/base/src/contexts/messageContext";
 import { useSettings } from "@/base/src/contexts/settingsContext";
 import SearchFilter from "@/components/filter/SearchFilter";
 import DeleteConfirmation from "@/components/global/DeleteConfirmation";
@@ -9,7 +10,6 @@ import useAudio from "@/components/hooks/useAudio";
 import useFile from "@/components/hooks/useFile";
 import useFilter from "@/components/hooks/useFilter";
 import useLoader from "@/components/hooks/useLoading";
-import useMessage from "@/components/hooks/useMessage";
 import useNotification from "@/components/hooks/useNotification";
 import useSearchFilter from "@/components/hooks/useSearchFilter";
 import ActiveMessagePanel from "@/components/messages/ActiveMessagePanel";
@@ -26,13 +26,6 @@ import React from "react";
 import { AiOutlinePlus, AiOutlineSearch } from "react-icons/ai";
 
 const Messages = () => {
-  const [activePanelToolTip, setActivePanelToolTip] = React.useState(false);
-  const [canEditGroupMessage, setCanEditGroupMessage] = React.useState(false);
-  const [canDeleteGroupMessage, setCanDeleteGroupMessage] =
-    React.useState(false);
-  const [canSeeGroupMembers, setCanSeeGroupMembers] = React.useState(false);
-  const [canAddGroupMembers, setCanAddGroupMembers] = React.useState(false);
-  const [canLeaveGroup, setCanLeaveGroup] = React.useState(false);
   const {
     roomMessages,
     messageRooms,
@@ -41,6 +34,12 @@ const Messages = () => {
     selectedMessage,
     canCreateGroupMessage,
     messageType,
+    activePanelToolTip,
+    canEditGroupMessage,
+    canDeleteGroupMessage,
+    canSeeGroupMembers,
+    canAddGroupMembers,
+    canLeaveGroup,
     getMessageRooms,
     getMessageRoomMessages,
     handleSelectedMessage,
@@ -48,7 +47,13 @@ const Messages = () => {
     getMessageRoom,
     handleMessageType,
     clearActiveRoom,
-  } = useMessage();
+    toggleActivePanelToolTip,
+    toggleCanEditGroupMessage,
+    toggleCanDeleteGroupMessage,
+    toggleCanSeeGroupMembers,
+    toggleCanAddGroupMembers,
+    toggleCanLeaveGroup,
+  } = useMessageContext();
   const { activeFilterOptions } = useFilter();
   const { searchFilter, handleSearchFilter } = useSearchFilter("name");
   const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } =
@@ -130,10 +135,6 @@ const Messages = () => {
     }
   };
 
-  const toggleActivePanelToolTip = () => {
-    setActivePanelToolTip((prev) => !prev);
-  };
-
   const handleMessagePanelKeys = async (
     e: React.KeyboardEvent<HTMLDivElement>,
   ) => {
@@ -141,26 +142,6 @@ const Messages = () => {
       e.preventDefault();
       await sendMessage();
     }
-  };
-
-  const toggleCanEditGroupMessage = () => {
-    setCanEditGroupMessage((prev) => !prev);
-  };
-
-  const toggleCanDeleteGroupMessage = () => {
-    setCanDeleteGroupMessage((prev) => !prev);
-  };
-
-  const toggleCanSeeGroupMembers = () => {
-    setCanSeeGroupMembers((prev) => !prev);
-  };
-
-  const toggleCanAddGroupMembers = () => {
-    setCanAddGroupMembers((prev) => !prev);
-  };
-
-  const toggleCanLeaveGroup = () => {
-    setCanLeaveGroup((prev) => !prev);
   };
 
   const leaveGroup = async () => {

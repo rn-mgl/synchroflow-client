@@ -18,7 +18,7 @@ import FileViewer from "../global/FileViewer";
 import {
   MessageRoomsStateProps,
   RoomMessagesStateProps,
-} from "../hooks/useMessage";
+} from "../../contexts/messageContext";
 import { localizeDate, localizeTime } from "../utils/dateUtils";
 
 interface ActiveMessagePanelProps {
@@ -26,7 +26,7 @@ interface ActiveMessagePanelProps {
   isRoomCreator: boolean;
   activeRoom: MessageRoomsStateProps;
   roomMessages: Array<RoomMessagesStateProps>;
-  messageRef: RefObject<HTMLDivElement>;
+  messageRef: RefObject<HTMLDivElement | null>;
   selectedMessage: string;
   rawFile: RefObject<HTMLInputElement | null>;
   fileData: { name: string; url: string; type: string };
@@ -211,7 +211,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
               placeholder="Aa"
               onKeyDown={(e) => props.handleMessagePanelKeys(e)}
               contentEditable={true}
-              ref={props.messageRef}
+              ref={props.messageRef as RefObject<HTMLDivElement>}
               className="border-none outline-none cstm-scrollbar h-auto w-full max-h-[12rem] overflow-y-auto 
                         relative whitespace-pre-wrap break-words"
             ></div>

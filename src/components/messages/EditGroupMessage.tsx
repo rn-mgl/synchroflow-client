@@ -11,7 +11,7 @@ import {
 } from "react-icons/ai";
 import { MdTitle } from "react-icons/md";
 import useFile from "../hooks/useFile";
-import { MessageRoomsStateProps } from "../hooks/useMessage";
+import { MessageRoomsStateProps } from "../../contexts/messageContext";
 import TextComp from "../input/TextComp";
 
 interface EditGroupMessageProps {
