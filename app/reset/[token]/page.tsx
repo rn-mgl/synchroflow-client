@@ -86,8 +86,6 @@ const Reset = () => {
     }
   };
 
-  console.log(1);
-
   return (
     <div className="absolute top-0 left-0 flex flex-col items-center justify-center w-full min-h-screen h-screen bg-white">
       {message.active ? (
