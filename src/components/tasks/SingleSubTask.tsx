@@ -39,7 +39,7 @@ interface SingleSubTaskProps {
 
 const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
   const [activePage, setActivePage] = React.useState<"details" | "associates">(
-    "details"
+    "details",
   );
   const [subTaskData, setSubTaskData] = React.useState<SubTaskDataStateProps>({
     date_created: "",
@@ -68,7 +68,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
   const [canDeleteSubTask, setCanDeleteSubTask] = React.useState(false);
 
   const { socket } = useGlobalContext();
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
   const params = useParams();
   const url = process.env.NEXT_PUBLIC_API_URL;
@@ -90,7 +90,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
       const { data } = await axios.post(
         `${url}/sub_task_collaborators`,
         { subTaskUUID: props.selectedSubTask, collaboratorUUID },
-        { headers: { Authorization: user?.token } }
+        { headers: { Authorization: user?.token } },
       );
       if (data) {
         await getAllMainTaskCollaborators();
@@ -103,14 +103,14 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
 
   const revokeAssignedSubTask = async (
     collaboratorUUID: string,
-    collaboratorUserUUID: string
+    collaboratorUserUUID: string,
   ) => {
     try {
       const { data } = await axios.delete(
         `${url}/sub_task_collaborators/${collaboratorUUID}`,
         {
           headers: { Authorization: user?.token },
-        }
+        },
       );
       if (data) {
         await getAllMainTaskCollaborators();
@@ -148,7 +148,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
           `${url}/sub_tasks/${props.selectedSubTask}`,
           {
             headers: { Authorization: user?.token },
-          }
+          },
         );
         if (data) {
           setSubTaskData(data);
@@ -167,7 +167,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
         {
           headers: { Authorization: user?.token },
           params: { mainTaskUUID: params?.task_uuid },
-        }
+        },
       );
 
       if (data.deleteSubTask) {
@@ -203,7 +203,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
                 onClick={() =>
                   revokeAssignedSubTask(
                     collaborator.sub_task_collaborator_uuid,
-                    collaborator.user_uuid
+                    collaborator.user_uuid,
                   )
                 }
                 className="flex flex-row gap-2 text-error-500 items-center hover:underline 

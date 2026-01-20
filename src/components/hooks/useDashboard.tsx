@@ -31,7 +31,7 @@ export default function useDashboard() {
   >([]);
 
   const url = process.env.NEXT_PUBLIC_API_URL;
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
 
   const getTasksCount = React.useCallback(async () => {

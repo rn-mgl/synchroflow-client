@@ -18,7 +18,7 @@ const Hub = () => {
   const { myTasksToday, myUpcomingTasks, getMyTasksToday, getMyUpcomingTasks } =
     useTasks();
   const { searchFilter } = useSearchFilter("title");
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
 
   Chart.register(ArcElement);

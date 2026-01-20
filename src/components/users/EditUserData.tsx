@@ -46,12 +46,12 @@ const EditUserData: React.FC<EditTaskProps> = (props) => {
     useFile();
 
   const url = process.env.NEXT_PUBLIC_API_URL;
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
   const params = useParams();
 
   const handleUserData = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
 
@@ -89,7 +89,7 @@ const EditUserData: React.FC<EditTaskProps> = (props) => {
         {
           headers: { Authorization: user?.token },
           params: { type: "identifier" },
-        }
+        },
       );
 
       if (data) {

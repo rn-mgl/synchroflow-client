@@ -32,14 +32,14 @@ export default function useAssociates() {
   >([]);
 
   const url = process.env.NEXT_PUBLIC_API_URL;
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
 
   const getAllAssociates = React.useCallback(
     async (
       sortFilter: string,
       searchFilter: string,
-      searchCategory: string
+      searchCategory: string,
     ) => {
       if (user?.token) {
         try {
@@ -55,14 +55,14 @@ export default function useAssociates() {
         }
       }
     },
-    [url, user?.token]
+    [url, user?.token],
   );
 
   const getRecentAssociates = React.useCallback(
     async (
       sortFilter: string,
       searchFilter: string,
-      searchCategory: string
+      searchCategory: string,
     ) => {
       if (user?.token) {
         try {
@@ -83,7 +83,7 @@ export default function useAssociates() {
         }
       }
     },
-    [url, user?.token]
+    [url, user?.token],
   );
 
   return {

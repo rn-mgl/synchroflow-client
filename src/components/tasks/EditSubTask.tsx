@@ -46,7 +46,7 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
   const { isLoading, handleLoader } = useLoader();
 
   const { socket } = useGlobalContext();
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
   const params = useParams();
   const url = process.env.NEXT_PUBLIC_API_URL;
@@ -54,7 +54,7 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
   const handleTaskData = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -77,7 +77,7 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
         {
           headers: { Authorization: user?.token },
           params: { mainTaskUUID: params?.task_uuid },
-        }
+        },
       );
       if (data.updateSubTask) {
         await props.getSubTask();

@@ -62,7 +62,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
   const { message, handleMessages } = usePopUpMessage();
 
   const { socket } = useGlobalContext();
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
   const url = process.env.NEXT_PUBLIC_API_URL;
 
@@ -91,7 +91,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
       const { data } = await axios.post(
         `${url}/associate_invites`,
         { inviteTo },
-        { headers: { Authorization: user?.token } }
+        { headers: { Authorization: user?.token } },
       );
       if (data) {
         await getUsers();
@@ -109,7 +109,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
       const { data } = await axios.delete(
         `${url}/associate_invites/${inviteUUID}`,
 
-        { headers: { Authorization: user?.token } }
+        { headers: { Authorization: user?.token } },
       );
       if (data) {
         await getUsers();

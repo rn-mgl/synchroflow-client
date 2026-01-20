@@ -21,7 +21,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
   });
 
   const url = process.env.NEXT_PUBLIC_API_URL;
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
   const params = useParams();
 
@@ -63,7 +63,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
         {
           headers: { Authorization: user?.token },
           params: { type: "password" },
-        }
+        },
       );
 
       if (data) {

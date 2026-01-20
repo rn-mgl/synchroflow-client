@@ -56,7 +56,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
   const { message, handleMessages } = usePopUpMessage();
 
   const { socket } = useGlobalContext();
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const path = usePathname();
   const user = session?.user;
   const url = process.env.NEXT_PUBLIC_API_URL;

@@ -10,9 +10,12 @@ export const authOptions: AuthOptions = {
 
       credentials: {},
 
-      async authorize(credentials, req): Promise<any> {
+      async authorize(
+        credentials: Record<string, string> | undefined,
+        req,
+      ): Promise<User | any> {
         if (credentials) {
-          const user = credentials;
+          const user = { ...credentials, id: parseInt(credentials.id) };
           return user;
         } else {
           return null;

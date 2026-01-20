@@ -33,7 +33,7 @@ const CreateGroupMessage: React.FC<CreateGroupMessageProps> = (props) => {
     useFile();
 
   const url = process.env.NEXT_PUBLIC_API_URL;
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
 
   const handleGroupMessageData = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +61,7 @@ const CreateGroupMessage: React.FC<CreateGroupMessageProps> = (props) => {
       const { data } = await axios.post(
         `${url}/group_message_rooms`,
         { groupMessageData },
-        { headers: { Authorization: user?.token } }
+        { headers: { Authorization: user?.token } },
       );
       if (data) {
         props.toggleCanCreateGroupMessage();

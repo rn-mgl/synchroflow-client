@@ -37,7 +37,7 @@ interface AssociatesStateProps {
 const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
   const [inviteMessage, setInviteMessage] = React.useState("");
   const [associatesToInvite, setAssociatesToInvite] = React.useState<string[]>(
-    []
+    [],
   );
   const [associates, setAssociates] = React.useState<
     Array<AssociatesStateProps>
@@ -51,7 +51,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
 
   const { socket } = useGlobalContext();
   const url = process.env.NEXT_PUBLIC_API_URL;
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
   const params = useParams();
 
@@ -65,7 +65,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
     setAssociatesToInvite((prev) =>
       prev.includes(associateUUID)
         ? prev.filter((associate) => associate !== associateUUID)
-        : [...prev, associateUUID]
+        : [...prev, associateUUID],
     );
   };
 
@@ -151,7 +151,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
       handleMessages(
         true,
         "Please select an associate before sending an invite.",
-        "error"
+        "error",
       );
       return;
     }
@@ -162,7 +162,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
       const { data } = await axios.post(
         `${url}/main_task_invites`,
         { associatesToInvite, inviteMessage, taskUUID: props.taskUUID },
-        { headers: { Authorization: user?.token } }
+        { headers: { Authorization: user?.token } },
       );
 
       if (data) {

@@ -30,7 +30,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = (props) => {
   });
 
   const { socket } = useGlobalContext();
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
   const url = process.env.NEXT_PUBLIC_API_URL;
 

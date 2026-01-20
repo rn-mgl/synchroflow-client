@@ -35,7 +35,7 @@ const AssociateDetails: React.FC<AssociateProps> = (props) => {
   });
 
   const url = process.env.NEXT_PUBLIC_API_URL;
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
 
   const getAssociate = React.useCallback(async () => {
@@ -45,7 +45,7 @@ const AssociateDetails: React.FC<AssociateProps> = (props) => {
           `${url}/associates/${props.associateUUID}`,
           {
             headers: { Authorization: user?.token },
-          }
+          },
         );
         if (data) {
           setAssociateData(data);

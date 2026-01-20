@@ -39,13 +39,13 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
   const { isLoading, handleLoader } = useLoader();
 
   const url = process.env.NEXT_PUBLIC_API_URL;
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
 
   const handleTaskData = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -73,7 +73,7 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
       const { data } = await axios.post(
         `${url}/main_tasks`,
         { mainTaskData },
-        { headers: { Authorization: user?.token } }
+        { headers: { Authorization: user?.token } },
       );
       if (data) {
         await props.getMyTasks();

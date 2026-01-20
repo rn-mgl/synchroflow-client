@@ -56,14 +56,14 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
 
   const params = useParams();
   const { socket } = useGlobalContext();
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
   const url = process.env.NEXT_PUBLIC_API_URL;
 
   const handleTaskData = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -99,7 +99,7 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
       const { data } = await axios.patch(
         `${url}/main_tasks/${params?.task_uuid}`,
         { mainTaskData },
-        { headers: { Authorization: user?.token } }
+        { headers: { Authorization: user?.token } },
       );
       if (data.updateTask) {
         props.toggleCanEditTask();

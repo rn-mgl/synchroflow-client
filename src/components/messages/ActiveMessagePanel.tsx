@@ -47,7 +47,7 @@ interface ActiveMessagePanelProps {
 }
 
 const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
 
   const mappedMessages = props.roomMessages.map((message, index) => {

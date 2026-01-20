@@ -45,7 +45,7 @@ export default function useInvites() {
     React.useState<Array<AssociateInvitesStateProps>>([]);
 
   const url = process.env.NEXT_PUBLIC_API_URL;
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
 
   const getSentTaskInvites = React.useCallback(async () => {

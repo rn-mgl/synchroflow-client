@@ -84,7 +84,7 @@ const SingleTask = () => {
 
   const params = useParams();
   const { socket } = useGlobalContext();
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
   const isTaskCreator = parseInt(user?.id) === taskData.main_task_by;
   const router = useRouter();

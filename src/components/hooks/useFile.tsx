@@ -12,7 +12,7 @@ export default function useFile() {
   const rawFile = React.useRef<HTMLInputElement | null>(null);
 
   const url = process.env.NEXT_PUBLIC_API_URL;
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
 
   const selectedFileViewer = (e: React.ChangeEvent<HTMLInputElement>) => {

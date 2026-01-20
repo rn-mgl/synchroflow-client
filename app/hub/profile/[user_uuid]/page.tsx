@@ -37,7 +37,7 @@ const Profile = () => {
 
   const { tasksCount, getTasksCount } = useDashboard();
   const url = process.env.NEXT_PUBLIC_API_URL;
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
   const params = useParams();
 

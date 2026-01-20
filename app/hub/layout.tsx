@@ -1,9 +1,7 @@
-import Nav from "@/components//global/Nav";
-import { Metadata } from "next";
+"use client";
 
-export const metadata: Metadata = {
-  title: "SynchroFlow | Hub",
-};
+import { SettingsProvider } from "@/base/src/contexts/settingsContext";
+import Nav from "@/components//global/Nav";
 
 export default function RootLayout({
   children,
@@ -11,8 +9,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="fixed top-0 left-0 w-full h-screen min-h-screen">
-      <Nav>{children}</Nav>
-    </div>
+    <SettingsProvider>
+      <div className="fixed top-0 left-0 w-full h-screen min-h-screen">
+        <Nav>{children}</Nav>
+      </div>
+    </SettingsProvider>
   );
 }

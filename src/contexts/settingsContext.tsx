@@ -14,20 +14,20 @@ interface SettingsContextInterface {
   settings: SettingsStateProps;
   handleUserGeneralSettings: (
     e: React.ChangeEvent<HTMLInputElement>,
-    audioRef: React.RefObject<HTMLAudioElement>
+    audioRef: React.RefObject<HTMLAudioElement>,
   ) => void;
   handleUserNotificationSettings: (
     name:
       | "message_notification"
       | "task_update"
       | "task_deadline"
-      | "associate_invite"
+      | "associate_invite",
   ) => void;
   getUserSettings: () => Promise<void>;
 }
 
 const SettingsContext = React.createContext<SettingsContextInterface | null>(
-  null
+  null,
 );
 
 const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
@@ -40,13 +40,13 @@ const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   const url = process.env.NEXT_PUBLIC_API_URL;
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
 
   const handleUserGeneralSettings = React.useCallback(
     (
       e: React.ChangeEvent<HTMLInputElement>,
-      audioRef: React.RefObject<HTMLAudioElement>
+      audioRef: React.RefObject<HTMLAudioElement>,
     ) => {
       const { name, value } = e.target;
 
@@ -62,7 +62,7 @@ const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
         };
       });
     },
-    []
+    [],
   );
 
   const handleUserNotificationSettings = React.useCallback(
@@ -71,7 +71,7 @@ const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
         | "message_notification"
         | "task_update"
         | "task_deadline"
-        | "associate_invite"
+        | "associate_invite",
     ) => {
       setSettings((prev) => {
         return {
@@ -80,7 +80,7 @@ const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
         };
       });
     },
-    []
+    [],
   );
 
   const getUserSettings = React.useCallback(async () => {

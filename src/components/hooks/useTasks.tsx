@@ -29,7 +29,7 @@ export default function useTasks() {
   >([]);
 
   const url = process.env.NEXT_PUBLIC_API_URL;
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
 
   const getMyUpcomingTasks = React.useCallback(async () => {
@@ -55,7 +55,7 @@ export default function useTasks() {
     async (
       sortFilter: string,
       searchFilter: string,
-      searchCategory: string
+      searchCategory: string,
     ) => {
       if (user?.token) {
         try {
@@ -77,14 +77,14 @@ export default function useTasks() {
         }
       }
     },
-    [url, user?.token]
+    [url, user?.token],
   );
 
   const getCollaboratedTasksToday = React.useCallback(
     async (
       sortFilter: string,
       searchFilter: string,
-      searchCategory: string
+      searchCategory: string,
     ) => {
       if (user?.token) {
         try {
@@ -106,14 +106,14 @@ export default function useTasks() {
         }
       }
     },
-    [url, user?.token]
+    [url, user?.token],
   );
 
   const getMyTasks = React.useCallback(
     async (
       sortFilter: string,
       searchFilter: string,
-      searchCategory: string
+      searchCategory: string,
     ) => {
       if (user?.token) {
         try {
@@ -135,14 +135,14 @@ export default function useTasks() {
         }
       }
     },
-    [url, user?.token]
+    [url, user?.token],
   );
 
   const getCollaboratedTasks = React.useCallback(
     async (
       sortFilter: string,
       searchFilter: string,
-      searchCategory: string
+      searchCategory: string,
     ) => {
       if (user?.token) {
         try {
@@ -164,7 +164,7 @@ export default function useTasks() {
         }
       }
     },
-    [url, user?.token]
+    [url, user?.token],
   );
 
   return {

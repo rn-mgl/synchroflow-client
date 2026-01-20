@@ -11,7 +11,7 @@ import { useSettings } from "@/base/src/contexts/settingsContext";
 
 const Settings = () => {
   const [activeNav, setActiveNav] = React.useState<"general" | "notification">(
-    "general"
+    "general",
   );
 
   const {
@@ -24,7 +24,7 @@ const Settings = () => {
   const { audioRef } = useAudio();
 
   const url = process.env.NEXT_PUBLIC_API_URL;
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
 
   const handleActiveNav = (type: "general" | "notification") => {
@@ -36,7 +36,7 @@ const Settings = () => {
       const { data } = await axios.patch(
         `${url}/user_settings`,
         { settings },
-        { headers: { Authorization: user?.token } }
+        { headers: { Authorization: user?.token } },
       );
       if (data) {
         await getUserSettings();

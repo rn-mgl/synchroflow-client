@@ -20,7 +20,7 @@ interface DeleteConfirmationProps {
 
 const DeleteConfirmation: React.FC<DeleteConfirmationProps> = (props) => {
   const url = process.env.NEXT_PUBLIC_API_URL;
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
   const router = useRouter();
   const { isLoading, handleLoader } = useLoader();

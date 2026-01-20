@@ -31,14 +31,14 @@ const CreateSubTask: React.FC<CreateSubTaskProps> = (props) => {
   const params = useParams();
 
   const { socket } = useGlobalContext();
-  const { data: session } = useSession();
+  const { data: session } = useSession({ required: true });
   const user = session?.user;
   const url = process.env.NEXT_PUBLIC_API_URL;
 
   const handleTaskData = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
+    >,
   ) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -58,7 +58,7 @@ const CreateSubTask: React.FC<CreateSubTaskProps> = (props) => {
       const { data } = await axios.post(
         `${url}/sub_tasks`,
         { subTaskData, mainTaskUUID: params?.task_uuid },
-        { headers: { Authorization: user?.token } }
+        { headers: { Authorization: user?.token } },
       );
       if (data) {
         await props.getCreatedSubTasks();
