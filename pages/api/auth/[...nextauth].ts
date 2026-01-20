@@ -1,4 +1,5 @@
-import NextAuth, { AuthOptions } from "next-auth";
+import NextAuth, { AuthOptions, User, type Session } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: AuthOptions = {
@@ -40,9 +41,9 @@ export const authOptions: AuthOptions = {
       return token;
     },
 
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       if (token.user) {
-        session.user = token.user;
+        session.user = token.user as User;
       }
       return session;
     },

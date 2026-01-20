@@ -68,7 +68,7 @@ const Hub = () => {
           targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
         />
       );
-    }
+    },
   );
 
   const mappedTasksToday = myTasksToday.map((task, index) => {
