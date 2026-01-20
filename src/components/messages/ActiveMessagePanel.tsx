@@ -28,7 +28,7 @@ interface ActiveMessagePanelProps {
   roomMessages: Array<RoomMessagesStateProps>;
   messageRef: RefObject<HTMLDivElement>;
   selectedMessage: string;
-  rawFile: HTMLInputElement | null;
+  rawFile: RefObject<HTMLInputElement | null>;
   fileData: { name: string; url: string; type: string };
   activePanelToolTip: boolean;
   roomType: "private" | "group";
@@ -220,7 +220,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
           <div className="flex flex-row gap-2 items-center justify-center mt-auto t:gap-4">
             <label>
               <input
-                ref={props.rawFile}
+                ref={props.rawFile as React.RefObject<HTMLInputElement>}
                 onChange={(e) => props.selectedFileViewer(e)}
                 type="file"
                 className="hidden"
