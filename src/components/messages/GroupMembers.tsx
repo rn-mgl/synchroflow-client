@@ -112,7 +112,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
               {member.user_id === props.roomCreator ? (
                 <span className="font-light"> | Owner</span>
               ) : null}
-              {member.user_id === parseInt(user.id) ? (
+              {member.user_id === user?.id ? (
                 <span className="font-light"> | You</span>
               ) : null}
             </p>
@@ -125,7 +125,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
             </p>
           </div>
 
-          {props.isRoomCreator && member.user_id !== parseInt(user.id) ? (
+          {props.isRoomCreator && member.user_id !== user?.id ? (
             <div className="ml-auto relative">
               {member.user_id !== user?.id ? (
                 <button
@@ -163,9 +163,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
                     <IoPersonRemove />
 
                     <span>
-                      {parseInt(user.id) === member.user_id
-                        ? "Leave"
-                        : "Remove"}
+                      {user?.id === member.user_id ? "Leave" : "Remove"}
                     </span>
                   </button>
                 </div>

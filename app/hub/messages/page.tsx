@@ -166,11 +166,11 @@ const Messages = () => {
   const leaveGroup = async () => {
     try {
       handleLoader(true);
-      if (user.token) {
+      if (user?.token) {
         const { data } = await axios.delete(
-          `${url}/group_message_members/${user.id}`,
+          `${url}/group_message_members/${user?.id}`,
           {
-            headers: { Authorization: user.token },
+            headers: { Authorization: user?.token },
             params: { action: "leave" },
           },
         );
@@ -335,7 +335,7 @@ const Messages = () => {
       {canSeeGroupMembers ? (
         <GroupMembers
           roomCreator={activeRoom.created_by}
-          isRoomCreator={parseInt(user?.id) === activeRoom.created_by}
+          isRoomCreator={user?.id === activeRoom.created_by}
           toggleCanSeeGroupMembers={toggleCanSeeGroupMembers}
           messageRoom={activeRoom.message_room}
           getMessageRoom={() =>
@@ -367,7 +367,7 @@ const Messages = () => {
 
       {canLeaveGroup ? (
         <DeleteConfirmation
-          apiRoute={`group_message_members/${user.id}`}
+          apiRoute={`group_message_members/${user?.id}`}
           message="do you want to leave this group?"
           title="Leave Group"
           customDelete={leaveGroup}
@@ -448,7 +448,7 @@ const Messages = () => {
           ) : (
             <ActiveMessagePanel
               roomName={activeRoom.room_name}
-              isRoomCreator={parseInt(user?.id) === activeRoom.created_by}
+              isRoomCreator={user?.id === activeRoom.created_by}
               activeRoom={activeRoom}
               roomMessages={roomMessages}
               roomType={messageType}
