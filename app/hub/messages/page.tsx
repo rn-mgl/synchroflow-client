@@ -31,6 +31,7 @@ const Messages = () => {
     messageRooms,
     activeRoom,
     messageRef,
+    scrollRef,
     selectedMessage,
     canCreateGroupMessage,
     messageType,
@@ -434,6 +435,7 @@ const Messages = () => {
               roomMessages={roomMessages}
               roomType={messageType}
               messageRef={messageRef}
+              scrollRef={scrollRef}
               selectedMessage={selectedMessage}
               rawFile={rawFile}
               fileData={fileData}

@@ -1,3 +1,4 @@
+import useLoader from "@/components/hooks/useLoading";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React, { RefObject } from "react";
@@ -34,6 +35,7 @@ interface MessageContextInterface {
   messageRooms: MessageRoomsStateProps[];
   activeRoom: MessageRoomsStateProps;
   messageRef: RefObject<HTMLDivElement | null>;
+  scrollRef: RefObject<HTMLDivElement | null>;
   selectedMessage: string;
   canCreateGroupMessage: boolean;
   messageType: "private" | "group";
@@ -74,6 +76,8 @@ const MessageContext = React.createContext<MessageContextInterface | null>(
 const MessageProvider = ({ children }: { children: React.ReactNode }) => {
   const messageRef = React.useRef<HTMLDivElement | null>(null); // used a separate use ref to clear div content after sending message
 
+  const scrollRef = React.useRef<HTMLDivElement | null>(null);
+
   const [messageRooms, setMessageRooms] = React.useState<
     Array<MessageRoomsStateProps>
   >([]);
@@ -86,6 +90,10 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
     React.useState(false);
 
   const [selectedMessage, setSelectedMessage] = React.useState("");
+
+  const [messageLimit, setMessageLimit] = React.useState(20);
+
+  const { isLoading, handleLoader } = useLoader();
 
   const [activeRoom, setActiveRoom] = React.useState<MessageRoomsStateProps>({
     image: "",
@@ -201,24 +209,42 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
 
   const getMessageRoomMessages = React.useCallback(
     async (roomType: "private" | "group", roomUUID: string) => {
-      if (user?.token) {
+      if (user?.token && !isLoading) {
+        handleLoader(true);
         try {
           const { data } = await axios.get(
             `${url}/${roomType}_message_rooms/${roomUUID}`,
             {
               headers: { Authorization: user?.token },
-              params: { type: "messages" },
+              params: {
+                type: "messages",
+                limit: messageLimit,
+              },
             },
           );
+
           if (data) {
+            if (data.length !== roomMessages.length) {
+              setMessageLimit((prev) => prev + 20);
+            }
+
             setRoomMessages(data);
           }
         } catch (error) {
           console.log(error);
+        } finally {
+          handleLoader(false);
         }
       }
     },
-    [url, user?.token],
+    [
+      url,
+      user?.token,
+      messageLimit,
+      handleLoader,
+      isLoading,
+      roomMessages.length,
+    ],
   );
 
   const getMessageRoom = React.useCallback(
@@ -244,6 +270,30 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
     [url, user?.token, getMessageRoomMessages],
   );
 
+  React.useEffect(() => {
+    const messagesContainer = scrollRef.current;
+
+    if (!messagesContainer) return;
+
+    const handleScroll = () => {
+      if (
+        Math.floor(
+          messagesContainer.scrollTop +
+            messagesContainer.scrollHeight -
+            messagesContainer.clientHeight,
+        ) <= 5
+      ) {
+        getMessageRoomMessages(messageType, activeRoom.message_room);
+      }
+    };
+
+    messagesContainer.addEventListener("scroll", handleScroll);
+
+    return () => {
+      messagesContainer.removeEventListener("scroll", handleScroll);
+    };
+  }, [messageType, activeRoom.message_room, getMessageRoomMessages]);
+
   return (
     <MessageContext.Provider
       value={{
@@ -251,6 +301,7 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
         messageRooms,
         activeRoom,
         messageRef,
+        scrollRef,
         selectedMessage,
         canCreateGroupMessage,
         messageType,

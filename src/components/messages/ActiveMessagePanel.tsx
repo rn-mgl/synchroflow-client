@@ -29,6 +29,7 @@ interface ActiveMessagePanelProps {
   messageRef: RefObject<HTMLDivElement | null>;
   selectedMessage: string;
   rawFile: RefObject<HTMLInputElement | null>;
+  scrollRef: RefObject<HTMLDivElement | null>;
   fileData: { name: string; url: string; type: string };
   activePanelToolTip: boolean;
   roomType: "private" | "group";
@@ -187,8 +188,9 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
       </div>
 
       <div
+        ref={props.scrollRef as RefObject<HTMLDivElement>}
         className="flex flex-col-reverse w-full h-full p-4 items-center justify-start
-                  gap-4 overflow-y-auto cstm-scrollbar whitespace-pre-wrap"
+                  gap-4 overflow-y-auto cstm-scrollbar whitespace-pre-wrap bg-slate-300"
       >
         {props.rawFile.current?.value ? (
           <FilePreview
