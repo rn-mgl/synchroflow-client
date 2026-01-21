@@ -3,9 +3,9 @@ import axios from "axios";
 import { signOut, useSession } from "next-auth/react";
 import React from "react";
 
+import { useGlobalContext } from "@/base/src/contexts/context";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useGlobalContext } from "@/base/src/contexts/context";
 import usePopUpMessage from "../hooks/usePopUpMessage";
 import Message from "./Message";
 
@@ -22,8 +22,8 @@ import {
 } from "react-icons/ai";
 import { IoNotifications } from "react-icons/io5";
 import { MdGroupAdd } from "react-icons/md";
+import { useNotificationContext } from "../../contexts/notificationContext";
 import { localizeDate, localizeTime } from "../utils/dateUtils";
-import useNotification from "../hooks/useNotification";
 
 interface UserData {
   email: string;
@@ -49,10 +49,12 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
     notificationIsVisible,
     notifications,
     checkedNotifications,
+    scrollRef,
     toggleNotificationIsVisible,
     toggleCheckedNotifications,
     getNotifications,
-  } = useNotification();
+  } = useNotificationContext();
+
   const { message, handleMessages } = usePopUpMessage();
 
   const { socket } = useGlobalContext();
@@ -176,10 +178,6 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
   React.useEffect(() => {
     getUser();
   }, [getUser]);
-
-  React.useEffect(() => {
-    getNotifications();
-  }, [getNotifications]);
 
   React.useEffect(() => {
     if (!user?.uuid || !socket) return;
@@ -419,7 +417,9 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 
           <button
             onClick={async () => {
-              await getNotifications();
+              if (!notificationIsVisible) {
+                await getNotifications();
+              }
               toggleNotificationIsVisible();
               toggleCheckedNotifications(true);
             }}
@@ -458,7 +458,10 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 
             <div className="w-full h-[1px] bg-secondary-300" />
 
-            <div className="flex flex-col items-center justify-start w-full h-full gap-2 overflow-y-auto cstm-scrollbar-2">
+            <div
+              ref={scrollRef}
+              className="flex flex-col items-center justify-start w-full h-full gap-2 overflow-y-auto cstm-scrollbar-2"
+            >
               {mappedNotifications}
             </div>
           </div>

@@ -234,14 +234,7 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
         }
       }
     },
-    [
-      url,
-      user?.token,
-      messageLimit,
-      handleLoader,
-      isLoading,
-      roomMessages.length,
-    ],
+    [url, user?.token, messageLimit, handleLoader, isLoading],
   );
 
   const getMessageRoom = React.useCallback(

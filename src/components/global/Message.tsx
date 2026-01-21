@@ -36,7 +36,7 @@ const Message: React.FC<MessageProps> = ({ message, handleMessages }) => {
 
   return (
     <div
-      className={`fixed top-5 p-2 rounded-md z-[100]
+      className={`fixed top-5 p-2 rounded-md z-[100] t:mx-auto l-l:bottom-5 l-l:left-auto l-l:right-5 l-l:top-auto
                  w-10/12 border-2 whitespace-normal text-center flex flex-col items-center 
                  justify-start gap-2 text-sm ${MESSAGE_STYLE[message.type as keyof object]}
                  animate-slideIn max-w-lg`}

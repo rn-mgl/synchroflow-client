@@ -2,6 +2,7 @@
 
 import { useGlobalContext } from "@/base/src/contexts/context";
 import { useMessageContext } from "@/base/src/contexts/messageContext";
+import { useNotificationContext } from "@/base/src/contexts/notificationContext";
 import { useSettings } from "@/base/src/contexts/settingsContext";
 import SearchFilter from "@/components/filter/SearchFilter";
 import DeleteConfirmation from "@/components/global/DeleteConfirmation";
@@ -10,7 +11,6 @@ import useAudio from "@/components/hooks/useAudio";
 import useFile from "@/components/hooks/useFile";
 import useFilter from "@/components/hooks/useFilter";
 import useLoader from "@/components/hooks/useLoading";
-import useNotification from "@/components/hooks/useNotification";
 import useSearchFilter from "@/components/hooks/useSearchFilter";
 import ActiveMessagePanel from "@/components/messages/ActiveMessagePanel";
 import AddGroupMembers from "@/components/messages/AddGroupMembers";
@@ -62,7 +62,8 @@ const Messages = () => {
   const { settings } = useSettings();
   const { audioRef } = useAudio();
   const { isLoading, handleLoader } = useLoader();
-  const { getNotifications, toggleCheckedNotifications } = useNotification();
+  const { getNotifications, toggleCheckedNotifications } =
+    useNotificationContext();
 
   const { data: session } = useSession({ required: true });
   const user = session?.user;

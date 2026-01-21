@@ -1,8 +1,8 @@
 "use client";
 
 import { useGlobalContext } from "@/base/src/contexts/context";
+import { useNotificationContext } from "@/base/src/contexts/notificationContext";
 import useInvites from "@/components/hooks/useInvites";
-import useNotification from "@/components/hooks/useNotification";
 import ReceivedAssociateInvitesCard from "@/components/invites/ReceivedAssociateInvitesCard";
 import ReceivedTaskInvitesCard from "@/components/invites/ReceivedTaskInvitesCard";
 import SentAssociateInvitesCard from "@/components/invites/SentAssociateInvitesCard";
@@ -22,7 +22,8 @@ const Invites = () => {
     getSentAssociateInvites,
     getReceivedAssociateInvites,
   } = useInvites();
-  const { getNotifications } = useNotification();
+
+  const { getNotifications } = useNotificationContext();
 
   const { socket } = useGlobalContext();
   const { data: session } = useSession({ required: true });
