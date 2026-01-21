@@ -224,10 +224,7 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
           );
 
           if (data) {
-            if (data.length !== roomMessages.length) {
-              setMessageLimit((prev) => prev + 20);
-            }
-
+            setMessageLimit((prev) => prev + 20);
             setRoomMessages(data);
           }
         } catch (error) {
