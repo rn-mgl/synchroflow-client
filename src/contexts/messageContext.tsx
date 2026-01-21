@@ -262,6 +262,9 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
             setActiveRoom(data);
             setMessageLimit(20);
             await getMessageRoomMessages(roomType, roomUUID);
+            if (scrollRef.current) {
+              scrollRef.current.scrollTo({ top: 0 });
+            }
           }
         } catch (error) {
           console.log(error);

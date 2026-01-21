@@ -190,7 +190,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
       <div
         ref={props.scrollRef as RefObject<HTMLDivElement>}
         className="flex flex-col-reverse w-full h-full p-4 items-center justify-start
-                  gap-4 overflow-y-auto cstm-scrollbar whitespace-pre-wrap bg-slate-300"
+                  gap-4 overflow-y-auto cstm-scrollbar whitespace-pre-wrap"
       >
         {props.rawFile.current?.value ? (
           <FilePreview
@@ -200,6 +200,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
             removeRawFile={props.removeRawFile}
           />
         ) : null}
+
         {mappedMessages}
       </div>
 
