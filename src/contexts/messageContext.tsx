@@ -260,6 +260,7 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
           );
           if (data) {
             setActiveRoom(data);
+            setMessageLimit(20);
             await getMessageRoomMessages(roomType, roomUUID);
           }
         } catch (error) {
