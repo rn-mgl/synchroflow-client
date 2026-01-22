@@ -12,6 +12,7 @@ export default function RootLayout({
   return (
     <SettingsProvider>
       <NotificationProvider>
+        <title>Synchroflow</title>
         <div className="fixed top-0 left-0 w-full h-screen min-h-screen">
           <Nav>{children}</Nav>
         </div>

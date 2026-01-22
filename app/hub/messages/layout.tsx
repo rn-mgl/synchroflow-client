@@ -7,5 +7,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <MessageProvider>{children}</MessageProvider>;
+  return (
+    <MessageProvider>
+      <title>Synchroflow | Messages</title>
+      {children}
+    </MessageProvider>
+  );
 }

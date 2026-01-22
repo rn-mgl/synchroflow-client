@@ -432,7 +432,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
           </button>
 
           <Link
-            href={`/hub/profile/${userData?.user_uuid}`}
+            href={`/hub/profile/${userData?.user_uuid ?? 0}`}
             style={{
               backgroundImage: userData?.image
                 ? `url(${userData?.image})`
