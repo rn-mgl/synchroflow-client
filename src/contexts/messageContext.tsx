@@ -38,7 +38,7 @@ interface MessageContextInterface {
   scrollRef: RefObject<HTMLDivElement | null>;
   selectedMessage: string;
   canCreateGroupMessage: boolean;
-  messageType: "private" | "group";
+  roomType: "private" | "group";
   activePanelToolTip: boolean;
   canEditGroupMessage: boolean;
   canDeleteGroupMessage: boolean;
@@ -59,7 +59,7 @@ interface MessageContextInterface {
     roomType: "private" | "group",
     roomUUID: string,
   ) => Promise<void>;
-  handleMessageType: (type: "private" | "group") => void;
+  handleRoomType: (type: "private" | "group") => void;
   clearActiveRoom: () => void;
   toggleActivePanelToolTip: () => void;
   toggleCanEditGroupMessage: () => void;
@@ -110,7 +110,7 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
     room_name: "",
   });
 
-  const [messageType, setMessageType] = React.useState<"private" | "group">(
+  const [roomType, setRoomType] = React.useState<"private" | "group">(
     "private",
   );
 
@@ -139,12 +139,12 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
     setCanCreateGroupMessage((prev) => !prev);
   }, []);
 
-  const handleMessageType = (type: "private" | "group") => {
-    if (type !== messageType) {
-      setMessageRooms([]);
-    }
+  const handleRoomType = (type: "private" | "group") => {
+    if (type === roomType) return;
 
-    setMessageType(type);
+    setMessageRooms([]);
+    setRoomType(type);
+    clearActiveRoom();
   };
 
   const clearActiveRoom = () => {
@@ -277,7 +277,7 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
             messagesContainer.clientHeight,
         ) <= 5
       ) {
-        getMessageRoomMessages(messageType, activeRoom.message_room);
+        getMessageRoomMessages(roomType, activeRoom.message_room);
       }
     };
 
@@ -286,7 +286,7 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       messagesContainer.removeEventListener("scroll", handleScroll);
     };
-  }, [messageType, activeRoom.message_room, getMessageRoomMessages]);
+  }, [roomType, activeRoom.message_room, getMessageRoomMessages]);
 
   return (
     <MessageContext.Provider
@@ -298,7 +298,7 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
         scrollRef,
         selectedMessage,
         canCreateGroupMessage,
-        messageType,
+        roomType,
         activePanelToolTip,
         canEditGroupMessage,
         canDeleteGroupMessage,
@@ -310,7 +310,7 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
         handleSelectedMessage,
         toggleCanCreateGroupMessage,
         getMessageRoom,
-        handleMessageType,
+        handleRoomType,
         clearActiveRoom,
         toggleActivePanelToolTip,
         toggleCanEditGroupMessage,

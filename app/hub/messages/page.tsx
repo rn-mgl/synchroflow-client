@@ -34,7 +34,7 @@ const Messages = () => {
     scrollRef,
     selectedMessage,
     canCreateGroupMessage,
-    messageType,
+    roomType,
     activePanelToolTip,
     canEditGroupMessage,
     canDeleteGroupMessage,
@@ -46,7 +46,7 @@ const Messages = () => {
     handleSelectedMessage,
     toggleCanCreateGroupMessage,
     getMessageRoom,
-    handleMessageType,
+    handleRoomType,
     clearActiveRoom,
     toggleActivePanelToolTip,
     toggleCanEditGroupMessage,
@@ -86,7 +86,7 @@ const Messages = () => {
 
     try {
       const { data } = await axios.post(
-        `${url}/${messageType}_messages`,
+        `${url}/${roomType}_messages`,
         {
           messageRoom: activeRoom.message_room,
           messageToUUID: activeRoom.user_uuid,
@@ -106,8 +106,8 @@ const Messages = () => {
           removeRawFile();
         }
 
-        await getMessageRoomMessages(messageType, activeRoom.message_room);
-        await getMessageRooms(searchFilter, messageType);
+        await getMessageRoomMessages(roomType, activeRoom.message_room);
+        await getMessageRooms(searchFilter, roomType);
 
         if (socket) {
           socket?.emit("send_message", { rooms: data.rooms });
@@ -176,10 +176,10 @@ const Messages = () => {
     return (
       <React.Fragment key={room.message_room}>
         <MessagePreview
-          roomType={messageType}
-          image={messageType === "private" ? room.image : room.room_image}
+          roomType={roomType}
+          image={roomType === "private" ? room.image : room.room_image}
           name={
-            messageType === "private"
+            roomType === "private"
               ? `${room.name} ${room.surname}`
               : room.room_name
           }
@@ -192,7 +192,7 @@ const Messages = () => {
           }
           isSender={room.message_from == user?.id}
           isSelected={activeRoom.message_room === room.message_room}
-          getMessageRoom={() => getMessageRoom(messageType, room.message_room)}
+          getMessageRoom={() => getMessageRoom(roomType, room.message_room)}
         />
         <div className="w-full h-[0.5px] min-h-[0.5px] bg-secondary-100" />
       </React.Fragment>
@@ -200,8 +200,8 @@ const Messages = () => {
   });
 
   React.useEffect(() => {
-    getMessageRooms(searchFilter, messageType);
-  }, [getMessageRooms, searchFilter, messageType]);
+    getMessageRooms(searchFilter, roomType);
+  }, [getMessageRooms, searchFilter, roomType]);
 
   React.useEffect(() => {
     const handle = async () => {
@@ -260,7 +260,7 @@ const Messages = () => {
 
   React.useEffect(() => {
     const handle = async (args: { room: string }) => {
-      await getMessageRoomMessages(messageType, activeRoom.message_room);
+      await getMessageRoomMessages(roomType, activeRoom.message_room);
       await getNotifications();
       toggleCheckedNotifications(false);
 
@@ -278,7 +278,7 @@ const Messages = () => {
     activeRoom,
     socket,
     searchFilter,
-    messageType,
+    roomType,
     audioRef,
     user?.uuid,
     settings.message_notification,
@@ -376,7 +376,7 @@ const Messages = () => {
                 }`}
               >
                 <SearchFilter
-                  placeholder={`Search ${messageType === "private" ? "Associate" : "Group"}`}
+                  placeholder={`Search ${roomType === "private" ? "Associate" : "Group"}`}
                   name="searchInput"
                   onChange={handleSearchFilter}
                   required={false}
@@ -388,20 +388,14 @@ const Messages = () => {
 
               <div className="w-full flex flex-row items-center justify-between">
                 <button
-                  onClick={() => {
-                    handleMessageType("private");
-                    clearActiveRoom();
-                  }}
-                  className={`p-2 w-20 transition-all ${messageType === "private" ? "border-primary-500 border-b-2 text-primary-500" : ""}`}
+                  onClick={() => handleRoomType("private")}
+                  className={`p-2 w-20 transition-all ${roomType === "private" ? "border-primary-500 border-b-2 text-primary-500" : ""}`}
                 >
                   Private
                 </button>
                 <button
-                  onClick={() => {
-                    handleMessageType("group");
-                    clearActiveRoom();
-                  }}
-                  className={`p-2 w-20 transition-all ${messageType === "group" ? "border-primary-500 border-b-2 text-primary-500" : ""}`}
+                  onClick={() => handleRoomType("group")}
+                  className={`p-2 w-20 transition-all ${roomType === "group" ? "border-primary-500 border-b-2 text-primary-500" : ""}`}
                 >
                   Group
                 </button>
@@ -412,7 +406,7 @@ const Messages = () => {
               className="bg-white w-full flex flex-col gap-4 p-4 rounded-lg 
                         h-full l-s:col-span-1 overflow-y-auto cstm-scrollbar"
             >
-              {messageType === "group" ? (
+              {roomType === "group" ? (
                 <button
                   onClick={toggleCanCreateGroupMessage}
                   className="w-full p-2 bg-primary-500 text-white font-bold rounded-md flex 
@@ -434,7 +428,7 @@ const Messages = () => {
               isRoomCreator={user?.id === activeRoom.created_by}
               activeRoom={activeRoom}
               roomMessages={roomMessages}
-              roomType={messageType}
+              roomType={roomType}
               messageRef={messageRef}
               scrollRef={scrollRef}
               selectedMessage={selectedMessage}
