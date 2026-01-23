@@ -194,7 +194,7 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
         try {
           const { data } = await axios.get(`${url}/${roomType}_message_rooms`, {
             headers: { Authorization: user?.token },
-            params: { searchFilter },
+            params: { searchFilter, roomType },
           });
           if (data) {
             setMessageRooms(data);
@@ -219,6 +219,7 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
               params: {
                 type: "messages",
                 limit: messageLimit,
+                roomType,
               },
             },
           );
@@ -245,7 +246,7 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
             `${url}/${roomType}_message_rooms/${roomUUID}`,
             {
               headers: { Authorization: user?.token },
-              params: { type: "main" },
+              params: { type: "main", roomType },
             },
           );
           if (data) {

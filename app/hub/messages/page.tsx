@@ -88,6 +88,7 @@ const Messages = () => {
       const { data } = await axios.post(
         `${url}/${roomType}_messages`,
         {
+          roomType,
           messageRoom: activeRoom.message_room,
           messageToUUID: activeRoom.user_uuid,
           message: messageRef.current?.innerText,
@@ -124,7 +125,7 @@ const Messages = () => {
       const { data } = await axios.delete(
         `${url}/group_message_rooms/${activeRoom.message_room}`,
         {
-          headers: { Authorization: user?.token },
+          headers: { Authorization: user?.token, roomType },
         },
       );
       if (data.deletedRoom) {
@@ -154,7 +155,7 @@ const Messages = () => {
           `${url}/group_message_members/${user?.id}`,
           {
             headers: { Authorization: user?.token },
-            params: { action: "leave" },
+            params: { action: "leave", roomType },
           },
         );
 
