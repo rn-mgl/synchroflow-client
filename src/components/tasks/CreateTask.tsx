@@ -11,8 +11,8 @@ import {
 import { MdSubtitles, MdTitle } from "react-icons/md";
 import { useGlobalContext } from "@/base/src/contexts/context";
 import Loading from "../global/Loading";
-import useFile from "../hooks/useFile";
-import useLoader from "../hooks/useLoading";
+import useFile from "../../hooks/useFile";
+import useLoader from "../../hooks/useLoading";
 import DateComp from "../input/DateComp";
 import SelectComp from "../input/SelectComp";
 import TextAreaComp from "../input/TextAreaComp";

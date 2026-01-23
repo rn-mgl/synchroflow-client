@@ -12,7 +12,7 @@ import {
   AiOutlineRadarChart,
   AiOutlineUser,
 } from "react-icons/ai";
-import useFile from "../hooks/useFile";
+import useFile from "../../hooks/useFile";
 import TextAreaComp from "../input/TextAreaComp";
 import TextComp from "../input/TextComp";
 

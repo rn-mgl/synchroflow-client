@@ -5,7 +5,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
 import { BsCheck, BsCheckAll, BsDot } from "react-icons/bs";
-import { localizeDate } from "../utils/dateUtils";
+import { localizeDate } from "../../utils/dateUtils";
 
 interface MessagePreviewProps {
   image: string | null;

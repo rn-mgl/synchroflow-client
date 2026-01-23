@@ -3,10 +3,10 @@ import { useSession } from "next-auth/react";
 import React from "react";
 
 import AssociateCards from "@/components//associates/AssociateCards";
-import useAssociates from "@/components//hooks/useAssociates";
-import useDashboard from "@/components//hooks/useDashboard";
-import useSearchFilter from "@/components//hooks/useSearchFilter";
-import useTasks from "@/components//hooks/useTasks";
+import useAssociates from "@/src/hooks/useAssociates";
+import useDashboard from "@/src/hooks/useDashboard";
+import useSearchFilter from "@/src/hooks/useSearchFilter";
+import useTasks from "@/src/hooks/useTasks";
 import { ArcElement, Chart } from "chart.js/auto";
 import Link from "next/link";
 import { Line, Pie } from "react-chartjs-2";

@@ -8,7 +8,7 @@ import { AiFillCalendar, AiOutlineClose, AiOutlineMore } from "react-icons/ai";
 import { IoPersonRemove } from "react-icons/io5";
 import { MdAssignmentAdd } from "react-icons/md";
 import DeleteConfirmation from "../global/DeleteConfirmation";
-import { localizeDate } from "../utils/dateUtils";
+import { localizeDate } from "../../utils/dateUtils";
 
 interface GroupMembersProps {
   isRoomCreator: boolean;

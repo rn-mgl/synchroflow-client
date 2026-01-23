@@ -7,10 +7,10 @@ import SearchFilter from "@/components/filter/SearchFilter";
 import SearchOptions from "@/components/filter/SearchOptions";
 import SortFilter from "@/components/filter/SortFilter";
 import DeleteConfirmation from "@/components/global/DeleteConfirmation";
-import useAssociates from "@/components/hooks/useAssociates";
-import useFilter from "@/components/hooks/useFilter";
-import useSearchFilter from "@/components/hooks/useSearchFilter";
-import useSortFilter from "@/components/hooks/useSortFilter";
+import useAssociates from "@/src/hooks/useAssociates";
+import useFilter from "@/src/hooks/useFilter";
+import useSearchFilter from "@/src/hooks/useSearchFilter";
+import useSortFilter from "@/src/hooks/useSortFilter";
 import { useSession } from "next-auth/react";
 import React from "react";
 import {

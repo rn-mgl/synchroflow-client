@@ -19,7 +19,7 @@ import {
   MessageRoomsStateProps,
   RoomMessagesStateProps,
 } from "../../contexts/messageContext";
-import { localizeDate, localizeTime } from "../utils/dateUtils";
+import { localizeDate, localizeTime } from "../../utils/dateUtils";
 
 interface ActiveMessagePanelProps {
   roomName?: string;

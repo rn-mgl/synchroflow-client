@@ -1,4 +1,4 @@
-import useLoader from "@/components/hooks/useLoading";
+import useLoader from "@/src/hooks/useLoading";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React, { RefObject } from "react";

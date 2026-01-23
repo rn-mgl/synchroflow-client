@@ -6,7 +6,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
 // import notificationSound from "@/public/music/NotificationSound.mp3";
-import useAudio from "@/components/hooks/useAudio";
+import useAudio from "@/src/hooks/useAudio";
 import { useSettings } from "@/base/src/contexts/settingsContext";
 
 const Settings = () => {

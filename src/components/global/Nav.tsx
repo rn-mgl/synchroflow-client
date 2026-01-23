@@ -6,7 +6,7 @@ import React from "react";
 import { useGlobalContext } from "@/base/src/contexts/context";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import usePopUpMessage from "../hooks/usePopUpMessage";
+import usePopUpMessage from "../../hooks/usePopUpMessage";
 import Message from "./Message";
 
 import {
@@ -23,7 +23,7 @@ import {
 import { IoNotifications } from "react-icons/io5";
 import { MdGroupAdd } from "react-icons/md";
 import { useNotificationContext } from "../../contexts/notificationContext";
-import { localizeDate, localizeTime } from "../utils/dateUtils";
+import { localizeDate, localizeTime } from "../../utils/dateUtils";
 
 interface UserData {
   email: string;

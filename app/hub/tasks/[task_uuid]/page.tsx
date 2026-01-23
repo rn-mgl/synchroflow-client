@@ -7,7 +7,7 @@ import CreateSubTask from "@/components/tasks/CreateSubTask";
 import CreatedSubTasks from "@/components/tasks/CreatedSubTasks";
 import EditTask from "@/components/tasks/EditTask";
 import SingleSubTask from "@/components/tasks/SingleSubTask";
-import { localizeDate } from "@/components/utils/dateUtils";
+import { localizeDate } from "@/src/utils/dateUtils";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";

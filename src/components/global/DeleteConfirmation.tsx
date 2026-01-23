@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
-import useLoader from "../hooks/useLoading";
+import useLoader from "../../hooks/useLoading";
 import Loading from "./Loading";
 
 interface DeleteConfirmationProps {

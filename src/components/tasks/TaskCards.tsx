@@ -5,8 +5,8 @@ import Link from "next/link";
 import React from "react";
 import { AiOutlineClockCircle } from "react-icons/ai";
 import { TbMoodX } from "react-icons/tb";
-import { localizeDate } from "../utils/dateUtils";
-import { PRIORITY_STYLE } from "../utils/taskUtils";
+import { localizeDate } from "../../utils/dateUtils";
+import { PRIORITY_STYLE } from "../../utils/taskUtils";
 
 interface TaskCardProps {
   title: string;

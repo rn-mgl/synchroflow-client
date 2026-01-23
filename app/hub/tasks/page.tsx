@@ -4,10 +4,10 @@ import { useNotificationContext } from "@/base/src/contexts/notificationContext"
 import SearchFilter from "@/components/filter/SearchFilter";
 import SearchOptions from "@/components/filter/SearchOptions";
 import SortFilter from "@/components/filter/SortFilter";
-import useFilter from "@/components/hooks/useFilter";
-import useSearchFilter from "@/components/hooks/useSearchFilter";
-import useSortFilter from "@/components/hooks/useSortFilter";
-import useTasks from "@/components/hooks/useTasks";
+import useFilter from "@/src/hooks/useFilter";
+import useSearchFilter from "@/src/hooks/useSearchFilter";
+import useSortFilter from "@/src/hooks/useSortFilter";
+import useTasks from "@/src/hooks/useTasks";
 import CreateTask from "@/components/tasks/CreateTask";
 import TaskCards from "@/components/tasks/TaskCards";
 import React from "react";

@@ -8,10 +8,10 @@ import SearchFilter from "../filter/SearchFilter";
 import SearchOptions from "../filter/SearchOptions";
 import SortFilter from "../filter/SortFilter";
 import Message from "../global/Message";
-import useFilter from "../hooks/useFilter";
-import usePopUpMessage from "../hooks/usePopUpMessage";
-import useSearchFilter from "../hooks/useSearchFilter";
-import useSortFilter from "../hooks/useSortFilter";
+import useFilter from "../../hooks/useFilter";
+import usePopUpMessage from "../../hooks/usePopUpMessage";
+import useSearchFilter from "../../hooks/useSearchFilter";
+import useSortFilter from "../../hooks/useSortFilter";
 import AssociateCardsInvite from "./AssociateCardsInvite";
 
 interface AddAssociateProps {

@@ -1,6 +1,6 @@
 "use client";
-import useLoader from "@/components//hooks/useLoading";
-import usePopUpMessage from "@/components//hooks/usePopUpMessage";
+import useLoader from "@/src/hooks/useLoading";
+import usePopUpMessage from "@/src/hooks/usePopUpMessage";
 import TextComp from "@/components//input/TextComp";
 import signup from "@/public//auth/Signup.svg";
 
@@ -13,7 +13,7 @@ import isEmail from "validator/lib/isEmail";
 
 import Loading from "@/components//global/Loading";
 import Message from "@/components//global/Message";
-import useDisable from "@/components//hooks/useDisable";
+import useDisable from "@/src/hooks/useDisable";
 import PasswordComp from "@/components//input/PasswordComp";
 import { useRouter } from "next/navigation";
 
@@ -23,7 +23,7 @@ import {
   AiOutlineUser,
   AiOutlineMail,
 } from "react-icons/ai";
-import { useVisiblePassword } from "@/components//hooks/useVisiblePassword";
+import { useVisiblePassword } from "@/src/hooks/useVisiblePassword";
 
 const Register = () => {
   const [registerCredentials, setRegisterCredentials] = React.useState({

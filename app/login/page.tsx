@@ -3,10 +3,10 @@
 import { useGlobalContext } from "@/base/src/contexts/context";
 import Loading from "@/components//global/Loading";
 import Message from "@/components//global/Message";
-import useDisable from "@/components//hooks/useDisable";
-import useLoader from "@/components//hooks/useLoading";
-import usePopUpMessage from "@/components//hooks/usePopUpMessage";
-import { useVisiblePassword } from "@/components//hooks/useVisiblePassword";
+import useDisable from "@/src/hooks/useDisable";
+import useLoader from "@/src/hooks/useLoading";
+import usePopUpMessage from "@/src/hooks/usePopUpMessage";
+import { useVisiblePassword } from "@/src/hooks/useVisiblePassword";
 import PasswordComp from "@/components//input/PasswordComp";
 import TextComp from "@/components//input/TextComp";
 

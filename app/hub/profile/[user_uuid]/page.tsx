@@ -1,7 +1,7 @@
 "use client";
 
 import { useGlobalContext } from "@/base/src/contexts/context";
-import useDashboard from "@/components/hooks/useDashboard";
+import useDashboard from "@/src/hooks/useDashboard";
 import ChangePassword from "@/components/users/ChangePassword";
 import EditUserData from "@/components/users/EditUserData";
 import axios from "axios";

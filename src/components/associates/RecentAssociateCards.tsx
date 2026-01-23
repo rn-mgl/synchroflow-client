@@ -1,5 +1,5 @@
 import React from "react";
-import { AssociatesProps } from "../hooks/useAssociates";
+import { AssociatesProps } from "../../hooks/useAssociates";
 
 interface RecentAssociateCardsProps {
   associate: AssociatesProps;

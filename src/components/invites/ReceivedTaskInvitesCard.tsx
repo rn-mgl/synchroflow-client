@@ -1,5 +1,5 @@
 import React from "react";
-import { PRIORITY_STYLE } from "../utils/taskUtils";
+import { PRIORITY_STYLE } from "../../utils/taskUtils";
 import Image from "next/image";
 
 interface ReceivedTaskInvitesProps {

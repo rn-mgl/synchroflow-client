@@ -10,7 +10,7 @@ import {
   AiOutlinePlus,
 } from "react-icons/ai";
 import { MdTitle } from "react-icons/md";
-import useFile from "../hooks/useFile";
+import useFile from "../../hooks/useFile";
 import TextComp from "../input/TextComp";
 
 interface CreateGroupMessageProps {

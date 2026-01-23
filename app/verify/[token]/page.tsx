@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import React from "react";
 import { BsArrowRight } from "react-icons/bs";
-import usePopUpMessage from "@/components//hooks/usePopUpMessage";
+import usePopUpMessage from "@/src/hooks/usePopUpMessage";
 import Message from "@/components//global/Message";
 
 const VERIFICATION_STATUS = {

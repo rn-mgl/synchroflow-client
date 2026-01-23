@@ -6,12 +6,12 @@ import React from "react";
 import { AiOutlineClose } from "react-icons/ai";
 import { MdSubtitles, MdTitle } from "react-icons/md";
 import Loading from "../global/Loading";
-import useLoader from "../hooks/useLoading";
+import useLoader from "../../hooks/useLoading";
 import DateComp from "../input/DateComp";
 import SelectComp from "../input/SelectComp";
 import TextAreaComp from "../input/TextAreaComp";
 import TextComp from "../input/TextComp";
-import { dateTimeForInput } from "../utils/dateUtils";
+import { dateTimeForInput } from "../../utils/dateUtils";
 import { useParams } from "next/navigation";
 
 interface SubTaskDataStateProps {

@@ -2,7 +2,7 @@
 
 import { useGlobalContext } from "@/base/src/contexts/context";
 import { useNotificationContext } from "@/base/src/contexts/notificationContext";
-import useInvites from "@/components/hooks/useInvites";
+import useInvites from "@/src/hooks/useInvites";
 import ReceivedAssociateInvitesCard from "@/components/invites/ReceivedAssociateInvitesCard";
 import ReceivedTaskInvitesCard from "@/components/invites/ReceivedTaskInvitesCard";
 import SentAssociateInvitesCard from "@/components/invites/SentAssociateInvitesCard";

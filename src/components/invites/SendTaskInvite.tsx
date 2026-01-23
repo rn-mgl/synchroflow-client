@@ -14,10 +14,10 @@ import {
 import SearchFilter from "../filter/SearchFilter";
 import Loading from "../global/Loading";
 import Message from "../global/Message";
-import useFilter from "../hooks/useFilter";
-import useLoader from "../hooks/useLoading";
-import usePopUpMessage from "../hooks/usePopUpMessage";
-import useSearchFilter from "../hooks/useSearchFilter";
+import useFilter from "../../hooks/useFilter";
+import useLoader from "../../hooks/useLoading";
+import usePopUpMessage from "../../hooks/usePopUpMessage";
+import useSearchFilter from "../../hooks/useSearchFilter";
 import TextAreaComp from "../input/TextAreaComp";
 
 interface SendTaskInviteProps {

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { localizeDate, localizeTime } from "../utils/dateUtils";
+import { localizeDate, localizeTime } from "../../utils/dateUtils";
 
 interface SubTaskDataProps {
   selectedSubTask: string;
@@ -32,7 +32,9 @@ const SubTaskData: React.FC<SubTaskDataProps> = (props) => {
 
       <div className="w-full gap-2 flex flex-col min-h-[10rem] max-h-80 overflow-y-auto cstm-scrollbar-2 border-b-2 border-primary-500 p-2">
         <p className="text-xs font-light">Description</p>
-        <p className="capitalize whitespace-pre-wrap break-words">{props.sub_task_description} </p>
+        <p className="capitalize whitespace-pre-wrap break-words">
+          {props.sub_task_description}{" "}
+        </p>
       </div>
 
       <div className="flex flex-row w-full gap-4 items-center">
@@ -50,13 +52,15 @@ const SubTaskData: React.FC<SubTaskDataProps> = (props) => {
         <div className="w-full gap-2 flex flex-col border-b-2 border-primary-500 p-2">
           <p className="text-xs font-light">Start Date</p>
           <p className="capitalize">
-            {localizeDate(props.sub_task_start_date, false)} | {localizeTime(props.sub_task_start_date)}
+            {localizeDate(props.sub_task_start_date, false)} |{" "}
+            {localizeTime(props.sub_task_start_date)}
           </p>
         </div>
         <div className="w-full gap-2 flex flex-col border-b-2 border-primary-500 p-2">
           <p className="text-xs font-light">End Date</p>
           <p className="capitalize">
-            {localizeDate(props.sub_task_end_date, false)} | {localizeTime(props.sub_task_end_date)}
+            {localizeDate(props.sub_task_end_date, false)} |{" "}
+            {localizeTime(props.sub_task_end_date)}
           </p>
         </div>
       </div>

@@ -3,9 +3,9 @@
 import { useGlobalContext } from "@/base/src/contexts/context";
 import Loading from "@/components//global/Loading";
 import Message from "@/components//global/Message";
-import useDisable from "@/components//hooks/useDisable";
-import useLoader from "@/components//hooks/useLoading";
-import usePopUpMessage from "@/components//hooks/usePopUpMessage";
+import useDisable from "@/src/hooks/useDisable";
+import useLoader from "@/src/hooks/useLoading";
+import usePopUpMessage from "@/src/hooks/usePopUpMessage";
 import PasswordComp from "@/components//input/PasswordComp";
 
 import newPassword from "@/public//auth/NewPassword.svg";
