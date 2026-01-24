@@ -15,7 +15,7 @@ interface GroupMembersProps {
   messageRoom: string;
   roomCreator: number;
   toggleCanSeeGroupMembers: () => void;
-  getMessageRoom: () => Promise<void>;
+  getRoom: () => Promise<void>;
 }
 
 interface GroupMembersStateProps {
@@ -87,7 +87,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
 
       if (data) {
         toggleCanSeeGroupMembers();
-        await props.getMessageRoom();
+        await props.getRoom();
       }
     } catch (error) {
       console.log(error);

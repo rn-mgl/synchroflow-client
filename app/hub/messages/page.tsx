@@ -41,11 +41,11 @@ const Messages = () => {
     canSeeGroupMembers,
     canAddGroupMembers,
     canLeaveGroup,
-    getMessageRooms,
-    getMessageRoomMessages,
+    getAllMessageRooms,
+    getRoomMessages,
     handleSelectedMessage,
     toggleCanCreateGroupMessage,
-    getMessageRoom,
+    getRoom,
     handleRoomType,
     clearActiveRoom,
     toggleActivePanelToolTip,
@@ -107,8 +107,8 @@ const Messages = () => {
           removeRawFile();
         }
 
-        await getMessageRoomMessages(roomType, activeRoom.message_room);
-        await getMessageRooms(searchFilter, roomType);
+        await getRoomMessages(roomType, activeRoom.message_room);
+        await getAllMessageRooms(searchFilter, roomType);
 
         if (socket) {
           socket?.emit("send_message", { rooms: data.rooms });
@@ -129,7 +129,7 @@ const Messages = () => {
         },
       );
       if (data.deletedRoom) {
-        getMessageRooms(searchFilter, "group");
+        getAllMessageRooms(searchFilter, "group");
         toggleCanDeleteGroupMessage();
         socket?.emit("delete_group_room", { rooms: data.rooms });
       }
@@ -161,7 +161,7 @@ const Messages = () => {
 
         if (data) {
           socket?.emit("leave_group", { rooms: data.members });
-          getMessageRooms(searchFilter, "group");
+          getAllMessageRooms(searchFilter, "group");
           clearActiveRoom();
         }
       }
@@ -193,7 +193,7 @@ const Messages = () => {
           }
           isSender={room.message_from == user?.id}
           isSelected={activeRoom.message_room === room.message_room}
-          getMessageRoom={() => getMessageRoom(roomType, room.message_room)}
+          getRoom={() => getRoom(roomType, room.message_room)}
         />
         <div className="w-full h-[0.5px] min-h-[0.5px] bg-secondary-100" />
       </React.Fragment>
@@ -201,12 +201,12 @@ const Messages = () => {
   });
 
   React.useEffect(() => {
-    getMessageRooms(searchFilter, roomType);
-  }, [getMessageRooms, searchFilter, roomType]);
+    getAllMessageRooms(searchFilter, roomType);
+  }, [getAllMessageRooms, searchFilter, roomType]);
 
   React.useEffect(() => {
     const handle = async () => {
-      await getMessageRooms(searchFilter, "group");
+      await getAllMessageRooms(searchFilter, "group");
       await getNotifications();
     };
 
@@ -215,12 +215,12 @@ const Messages = () => {
     return () => {
       socket?.off("reflect_add_group_member", handle);
     };
-  }, [socket, searchFilter, getMessageRooms, getNotifications]);
+  }, [socket, searchFilter, getAllMessageRooms, getNotifications]);
 
   React.useEffect(() => {
     const handle = async () => {
-      await getMessageRooms(searchFilter, "group");
-      await getMessageRoom("group", activeRoom.message_room);
+      await getAllMessageRooms(searchFilter, "group");
+      await getRoom("group", activeRoom.message_room);
     };
 
     socket?.on("reflect_update_group_room", handle);
@@ -231,14 +231,14 @@ const Messages = () => {
   }, [
     socket,
     searchFilter,
-    getMessageRooms,
-    getMessageRoom,
+    getAllMessageRooms,
+    getRoom,
     activeRoom.message_room,
   ]);
 
   React.useEffect(() => {
     const handle = async () => {
-      await getMessageRooms(searchFilter, "group");
+      await getAllMessageRooms(searchFilter, "group");
     };
 
     socket?.on("reflect_remove_group_member", handle);
@@ -246,22 +246,22 @@ const Messages = () => {
     return () => {
       socket?.off("reflect_remove_group_member", handle);
     };
-  }, [socket, searchFilter, getMessageRooms]);
+  }, [socket, searchFilter, getAllMessageRooms]);
 
   React.useEffect(() => {
     const handle = async () => {
-      await getMessageRooms(searchFilter, "group");
+      await getAllMessageRooms(searchFilter, "group");
     };
     socket?.on("reflect_delete_group_room", handle);
 
     return () => {
       socket?.off("reflect_delete_group_room", handle);
     };
-  }, [socket, searchFilter, getMessageRooms]);
+  }, [socket, searchFilter, getAllMessageRooms]);
 
   React.useEffect(() => {
     const handle = async (args: { room: string }) => {
-      await getMessageRoomMessages(roomType, activeRoom.message_room);
+      await getRoomMessages(roomType, activeRoom.message_room);
       await getNotifications();
       toggleCheckedNotifications(false);
 
@@ -284,7 +284,7 @@ const Messages = () => {
     user?.uuid,
     settings.message_notification,
     settings.notification_sound,
-    getMessageRoomMessages,
+    getRoomMessages,
     getNotifications,
     toggleCheckedNotifications,
   ]);
@@ -301,18 +301,16 @@ const Messages = () => {
       {canCreateGroupMessage ? (
         <CreateGroupMessage
           toggleCanCreateGroupMessage={toggleCanCreateGroupMessage}
-          getMessageRooms={() => getMessageRooms(searchFilter, "group")}
+          getAllMessageRooms={() => getAllMessageRooms(searchFilter, "group")}
         />
       ) : null}
 
       {canEditGroupMessage ? (
         <EditGroupMessage
           groupMessageData={activeRoom}
-          getMessageRooms={() => getMessageRooms(searchFilter, "group")}
+          getAllMessageRooms={() => getAllMessageRooms(searchFilter, "group")}
           toggleCanEditGroupMessage={toggleCanEditGroupMessage}
-          getMessageRoom={() =>
-            getMessageRoom("group", activeRoom.message_room)
-          }
+          getRoom={() => getRoom("group", activeRoom.message_room)}
         />
       ) : null}
 
@@ -322,9 +320,7 @@ const Messages = () => {
           isRoomCreator={user?.id === activeRoom.created_by}
           toggleCanSeeGroupMembers={toggleCanSeeGroupMembers}
           messageRoom={activeRoom.message_room}
-          getMessageRoom={() =>
-            getMessageRoom("group", activeRoom.message_room)
-          }
+          getRoom={() => getRoom("group", activeRoom.message_room)}
         />
       ) : null}
 
@@ -343,7 +339,7 @@ const Messages = () => {
           toggleConfirmation={toggleCanDeleteGroupMessage}
           customDelete={deleteGroupRoom}
           refetchData={() => {
-            getMessageRooms(searchFilter, "group");
+            getAllMessageRooms(searchFilter, "group");
             clearActiveRoom();
           }}
         />

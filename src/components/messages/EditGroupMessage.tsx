@@ -16,9 +16,9 @@ import TextComp from "../input/TextComp";
 
 interface EditGroupMessageProps {
   toggleCanEditGroupMessage: () => void;
-  getMessageRooms: () => Promise<void>;
+  getAllMessageRooms: () => Promise<void>;
   groupMessageData: MessageRoomsStateProps;
-  getMessageRoom: () => Promise<void>;
+  getRoom: () => Promise<void>;
 }
 
 interface GroupMessageStateProps {
@@ -77,8 +77,8 @@ const EditGroupMessage: React.FC<EditGroupMessageProps> = (props) => {
       );
 
       if (data.updatedRoom) {
-        await props.getMessageRoom();
-        await props.getMessageRooms();
+        await props.getRoom();
+        await props.getAllMessageRooms();
         props.toggleCanEditGroupMessage();
         socket?.emit("update_group_room", { rooms: data.rooms });
       }

@@ -18,7 +18,7 @@ interface MessagePreviewProps {
   isSender: boolean;
   messageRoom: string;
   roomType: "private" | "group";
-  getMessageRoom: () => Promise<void>;
+  getRoom: () => Promise<void>;
 }
 
 const MessagePreview: React.FC<MessagePreviewProps> = (props) => {
@@ -68,7 +68,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = (props) => {
 
   return (
     <button
-      onClick={props.getMessageRoom}
+      onClick={props.getRoom}
       className={`w-full p-2 rounded-lg hover:bg-neutral-50 
                 flex flex-row items-center gap-2 transition-all
                 ${props.isSelected && "bg-primary-100"}`}

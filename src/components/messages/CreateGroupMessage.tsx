@@ -15,7 +15,7 @@ import TextComp from "../input/TextComp";
 
 interface CreateGroupMessageProps {
   toggleCanCreateGroupMessage: () => void;
-  getMessageRooms: () => Promise<void>;
+  getAllMessageRooms: () => Promise<void>;
 }
 
 interface GroupMessageStateProps {
@@ -65,7 +65,7 @@ const CreateGroupMessage: React.FC<CreateGroupMessageProps> = (props) => {
       );
       if (data) {
         props.toggleCanCreateGroupMessage();
-        await props.getMessageRooms();
+        await props.getAllMessageRooms();
       }
     } catch (error) {
       console.log(error);
