@@ -7,23 +7,36 @@ import { useSettings } from "@/base/src/contexts/settingsContext";
 import SearchFilter from "@/components/filter/SearchFilter";
 import DeleteConfirmation from "@/components/global/DeleteConfirmation";
 import Loading from "@/components/global/Loading";
+import AddRoomMember from "@/components/messages/AddRoomMember";
+import CreateRoom from "@/components/messages/CreateRoom";
+import EditRoom from "@/components/messages/EditRoom";
+import RoomMembers from "@/components/messages/RoomMembers";
+import MessagePreview from "@/components/messages/MessagePreview";
+import StandByMessagePanel from "@/components/messages/StandByMessagePanel";
+import FilePreview from "@/src/components/global/FilePreview";
+import FileViewer from "@/src/components/global/FileViewer";
 import useAudio from "@/src/hooks/useAudio";
 import useFile from "@/src/hooks/useFile";
 import useFilter from "@/src/hooks/useFilter";
 import useLoader from "@/src/hooks/useLoading";
 import useSearchFilter from "@/src/hooks/useSearchFilter";
-import ActiveMessagePanel from "@/components/messages/ActiveMessagePanel";
-import AddGroupMembers from "@/components/messages/AddGroupMembers";
-import CreateGroupMessage from "@/components/messages/CreateGroupMessage";
-import EditGroupMessage from "@/components/messages/EditGroupMessage";
-import GroupMembers from "@/components/messages/GroupMembers";
-import MessagePreview from "@/components/messages/MessagePreview";
-import StandByMessagePanel from "@/components/messages/StandByMessagePanel";
-import { localizeDate } from "@/src/utils/dateUtils";
+import { localizeDate, localizeTime } from "@/src/utils/dateUtils";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import React from "react";
-import { AiOutlinePlus, AiOutlineSearch } from "react-icons/ai";
+import React, { RefObject } from "react";
+import {
+  AiOutlineClose,
+  AiOutlineDelete,
+  AiOutlineEdit,
+  AiOutlineEllipsis,
+  AiOutlinePaperClip,
+  AiOutlinePlus,
+  AiOutlineSearch,
+  AiOutlineTeam,
+  AiOutlineUserAdd,
+  AiOutlineUserDelete,
+} from "react-icons/ai";
+import { BsArrowLeft, BsFillSendFill } from "react-icons/bs";
 
 const Messages = () => {
   const {
@@ -33,26 +46,26 @@ const Messages = () => {
     messageRef,
     scrollRef,
     selectedMessage,
-    canCreateGroupMessage,
+    canCreateRoom,
     roomType,
     activePanelToolTip,
-    canEditGroupMessage,
-    canDeleteGroupMessage,
-    canSeeGroupMembers,
-    canAddGroupMembers,
+    canEditRoom,
+    canDeleteRoom,
+    canSeeRoomMembers,
+    canAddRoomMember,
     canLeaveGroup,
     getAllMessageRooms,
     getRoomMessages,
     handleSelectedMessage,
-    toggleCanCreateGroupMessage,
+    toggleCanCreateRoom,
     getRoom,
     handleRoomType,
     clearActiveRoom,
     toggleActivePanelToolTip,
-    toggleCanEditGroupMessage,
-    toggleCanDeleteGroupMessage,
-    toggleCanSeeGroupMembers,
-    toggleCanAddGroupMembers,
+    toggleCanEditRoom,
+    toggleCanDeleteRoom,
+    toggleCanSeeRoomMembers,
+    toggleCanAddRoomMember,
     toggleCanLeaveGroup,
   } = useMessageContext();
   const { activeFilterOptions } = useFilter();
@@ -86,11 +99,10 @@ const Messages = () => {
 
     try {
       const { data } = await axios.post(
-        `${url}/${roomType}_messages`,
+        `${url}/messages`,
         {
           roomType,
           messageRoom: activeRoom.message_room,
-          messageToUUID: activeRoom.user_uuid,
           message: messageRef.current?.innerText,
           messageFile,
           messageFileType: messageFile ? fileData.type : null,
@@ -123,14 +135,14 @@ const Messages = () => {
     e.preventDefault();
     try {
       const { data } = await axios.delete(
-        `${url}/group_message_rooms/${activeRoom.message_room}`,
+        `${url}/message_rooms/${activeRoom.message_room}`,
         {
           headers: { Authorization: user?.token, roomType },
         },
       );
       if (data.deletedRoom) {
         getAllMessageRooms(searchFilter, "group");
-        toggleCanDeleteGroupMessage();
+        toggleCanDeleteRoom();
         socket?.emit("delete_group_room", { rooms: data.rooms });
       }
     } catch (error) {
@@ -151,13 +163,14 @@ const Messages = () => {
     try {
       handleLoader(true);
       if (user?.token) {
-        const { data } = await axios.delete(
-          `${url}/group_message_members/${user?.id}`,
-          {
-            headers: { Authorization: user?.token },
-            params: { action: "leave", roomType },
+        const { data } = await axios.delete(`${url}/room_members/${user?.id}`, {
+          headers: { Authorization: user?.token },
+          params: {
+            action: "leave",
+            roomType,
+            messageRoom: activeRoom.message_room,
           },
-        );
+        });
 
         if (data) {
           socket?.emit("leave_group", { rooms: data.members });
@@ -178,25 +191,67 @@ const Messages = () => {
       <React.Fragment key={room.message_room}>
         <MessagePreview
           roomType={roomType}
-          image={roomType === "private" ? room.image : room.room_image}
-          name={
-            roomType === "private"
-              ? `${room.name} ${room.surname}`
-              : room.room_name
-          }
+          image={room.room_image}
+          name={room.room_name}
           status="sent"
-          latestMessage={room.message}
-          latestFile={room.message_file}
           messageRoom={room.message_room}
-          dateSent={
-            room.date_sent ? localizeDate(room.date_sent, true) : "mm/dd/yyyy"
-          }
-          isSender={room.message_from == user?.id}
           isSelected={activeRoom.message_room === room.message_room}
           getRoom={() => getRoom(roomType, room.message_room)}
         />
         <div className="w-full h-[0.5px] min-h-[0.5px] bg-secondary-100" />
       </React.Fragment>
+    );
+  });
+
+  const mappedMessages = roomMessages.map((message, index) => {
+    const isSender = message.sender == user?.id;
+
+    return (
+      <div
+        key={message.message_uuid}
+        onClick={() => handleSelectedMessage(message.message_uuid)}
+        className={`w-fit max-w-[80%] rounded-md t:max-w-[60%] flex  ustify-center
+                   group relative flex-col ${isSender ? "ml-auto" : "mr-auto"}`}
+      >
+        <div
+          className={`w-fit flex relative ${
+            isSender ? "flex-row-reverse ml-auto" : "flex-row mr-auto"
+          }`}
+        >
+          <div
+            className={`rounded-md p-2 gap-4 flex flex-col items-center justify-center w-full ${
+              isSender ? " bg-primary-500" : " bg-secondary-500"
+            } `}
+          >
+            {message.message ? (
+              <p
+                className={`text-white ${
+                  isSender ? "text-right ml-auto" : "text-left mr-auto"
+                } break-word break-words`}
+              >
+                {message.message}
+              </p>
+            ) : null}
+
+            {message.message_file ? (
+              <FileViewer
+                file={message.message_file}
+                type={message.message_file_type}
+              />
+            ) : null}
+          </div>
+        </div>
+
+        {selectedMessage === message.message_uuid ? (
+          <p
+            className={`whitespace-nowrap text-xs font-light 
+                    ${isSender ? "text-right ml-auto" : "text-left mr-auto"}`}
+          >
+            Sent {localizeDate(message.date_sent, true)} |{" "}
+            {localizeTime(message.date_sent)}
+          </p>
+        ) : null}
+      </div>
     );
   });
 
@@ -293,50 +348,54 @@ const Messages = () => {
     return <Loading />;
   }
 
+  console.log(activeRoom);
+
   return (
     <div
       className="flex flex-col items-center justify-start w-full h-full
                 l-s:h-screen l-s:max-h-screen p-4 t:p-10 l-s:overflow-hidden"
     >
-      {canCreateGroupMessage ? (
-        <CreateGroupMessage
-          toggleCanCreateGroupMessage={toggleCanCreateGroupMessage}
+      {canCreateRoom ? (
+        <CreateRoom
+          toggleCanCreateRoom={toggleCanCreateRoom}
           getAllMessageRooms={() => getAllMessageRooms(searchFilter, "group")}
         />
       ) : null}
 
-      {canEditGroupMessage ? (
-        <EditGroupMessage
-          groupMessageData={activeRoom}
+      {canEditRoom ? (
+        <EditRoom
+          roomData={activeRoom}
           getAllMessageRooms={() => getAllMessageRooms(searchFilter, "group")}
-          toggleCanEditGroupMessage={toggleCanEditGroupMessage}
+          toggleCanEditRoom={toggleCanEditRoom}
           getRoom={() => getRoom("group", activeRoom.message_room)}
         />
       ) : null}
 
-      {canSeeGroupMembers ? (
-        <GroupMembers
+      {canSeeRoomMembers ? (
+        <RoomMembers
           roomCreator={activeRoom.created_by}
+          roomType={roomType}
           isRoomCreator={user?.id === activeRoom.created_by}
-          toggleCanSeeGroupMembers={toggleCanSeeGroupMembers}
+          toggleCanSeeRoomMembers={toggleCanSeeRoomMembers}
           messageRoom={activeRoom.message_room}
           getRoom={() => getRoom("group", activeRoom.message_room)}
         />
       ) : null}
 
-      {canAddGroupMembers ? (
-        <AddGroupMembers
+      {canAddRoomMember ? (
+        <AddRoomMember
+          roomType={roomType}
           messageRoom={activeRoom.message_room}
-          toggleCanAddGroupMembers={toggleCanAddGroupMembers}
+          toggleCanAddRoomMember={toggleCanAddRoomMember}
         />
       ) : null}
 
-      {canDeleteGroupMessage ? (
+      {canDeleteRoom ? (
         <DeleteConfirmation
           apiRoute={`group_message_rooms/${activeRoom.message_room}`}
           message="deleting a group will also delete its members and messages"
           title="Delete Group Message?"
-          toggleConfirmation={toggleCanDeleteGroupMessage}
+          toggleConfirmation={toggleCanDeleteRoom}
           customDelete={deleteGroupRoom}
           refetchData={() => {
             getAllMessageRooms(searchFilter, "group");
@@ -347,7 +406,7 @@ const Messages = () => {
 
       {canLeaveGroup ? (
         <DeleteConfirmation
-          apiRoute={`group_message_members/${user?.id}`}
+          apiRoute={`room_members/${user?.id}`}
           message="do you want to leave this group?"
           title="Leave Group"
           customDelete={leaveGroup}
@@ -405,7 +464,7 @@ const Messages = () => {
             >
               {roomType === "group" ? (
                 <button
-                  onClick={toggleCanCreateGroupMessage}
+                  onClick={toggleCanCreateRoom}
                   className="w-full p-2 bg-primary-500 text-white font-bold rounded-md flex 
                           flex-row items-center justify-center gap-2"
                 >
@@ -420,31 +479,158 @@ const Messages = () => {
           {!activeRoom.message_room ? (
             <StandByMessagePanel />
           ) : (
-            <ActiveMessagePanel
-              roomName={activeRoom.room_name}
-              isRoomCreator={user?.id === activeRoom.created_by}
-              activeRoom={activeRoom}
-              roomMessages={roomMessages}
-              roomType={roomType}
-              messageRef={messageRef}
-              scrollRef={scrollRef}
-              selectedMessage={selectedMessage}
-              rawFile={rawFile}
-              fileData={fileData}
-              activePanelToolTip={activePanelToolTip}
-              toggleCanLeaveGroup={toggleCanLeaveGroup}
-              clearActiveRoom={clearActiveRoom}
-              toggleActivePanelToolTip={toggleActivePanelToolTip}
-              selectedFileViewer={selectedFileViewer}
-              removeRawFile={removeRawFile}
-              handleSelectedMessage={handleSelectedMessage}
-              sendMessage={sendMessage}
-              handleMessagePanelKeys={handleMessagePanelKeys}
-              toggleCanEditGroupMessage={toggleCanEditGroupMessage}
-              toggleCanDeleteGroupMessage={toggleCanDeleteGroupMessage}
-              toggleCanSeeGroupMembers={toggleCanSeeGroupMembers}
-              toggleCanAddGroupMembers={toggleCanAddGroupMembers}
-            />
+            <div
+              className="l-s:col-span-2 w-full bg-white flex rounded-lg 
+                flex-col h-full top-0 z-20 fixed left-2/4 -translate-x-2/4 animate-fadeIn
+                l-s:static l-s:order-2 l-s:left-0 l-s:translate-x-0 l-s:overflow-hidden"
+            >
+              <div
+                className="flex flex-row w-full items-center justify-start p-4 border-b-[1px] 
+                border-b-primary-100 gap-4"
+              >
+                <button onClick={clearActiveRoom}>
+                  <BsArrowLeft className="text-primary-500" />
+                </button>
+
+                <div className="flex flex-row items-center justify-center gap-2">
+                  <div
+                    style={{ backgroundImage: `url(${activeRoom.room_image})` }}
+                    className="min-h-[2rem] min-w-[2rem] w-[2rem] h-[2rem] rounded-full
+                              bg-center bg-primary-100 bg-contain"
+                  />
+
+                  <p className="font-bold max-w-[20ch] truncate t:max-w-none t:truncate">
+                    {activeRoom.room_name}
+                  </p>
+                </div>
+
+                {roomType === "group" ? (
+                  <div className="ml-auto flex flex-row gap-4 text-sm">
+                    {activePanelToolTip ? (
+                      <React.Fragment>
+                        <button
+                          onClick={toggleCanSeeRoomMembers}
+                          className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-full"
+                        >
+                          <AiOutlineTeam />
+                        </button>
+
+                        <button
+                          onClick={toggleCanLeaveGroup}
+                          className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-full"
+                        >
+                          <AiOutlineUserDelete />
+                        </button>
+
+                        {activeRoom.created_by == user?.id ? (
+                          <React.Fragment>
+                            <button
+                              onClick={toggleCanEditRoom}
+                              className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-full"
+                            >
+                              <AiOutlineEdit />
+                            </button>
+                            <button
+                              onClick={toggleCanAddRoomMember}
+                              className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-full"
+                            >
+                              <AiOutlineUserAdd />
+                            </button>
+                            <button
+                              onClick={toggleCanDeleteRoom}
+                              className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
+                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-full"
+                            >
+                              <AiOutlineDelete />
+                            </button>
+                          </React.Fragment>
+                        ) : null}
+                      </React.Fragment>
+                    ) : null}
+
+                    {activePanelToolTip ? (
+                      <button
+                        onClick={toggleActivePanelToolTip}
+                        className="p-2 rounded-full hover:bg-secondary-100 animate-fadeIn"
+                      >
+                        <AiOutlineClose />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={toggleActivePanelToolTip}
+                        className="p-2 rounded-full hover:bg-secondary-100 animate-fadeIn"
+                      >
+                        <AiOutlineEllipsis />
+                      </button>
+                    )}
+                  </div>
+                ) : null}
+              </div>
+
+              <div
+                ref={scrollRef as RefObject<HTMLDivElement>}
+                className="flex flex-col-reverse w-full h-full p-4 items-center justify-start
+                  gap-4 overflow-y-auto cstm-scrollbar whitespace-pre-wrap"
+              >
+                {rawFile.current?.value ? (
+                  <FilePreview
+                    file={fileData.url}
+                    name={fileData.name}
+                    type={fileData.type}
+                    removeRawFile={removeRawFile}
+                  />
+                ) : null}
+
+                {mappedMessages}
+              </div>
+
+              <div
+                className=" l-s:col-span-2 w-full l-s:flex p-4 flex
+                flex-col-reverse gap-4 top-0 z-10"
+              >
+                <div className="flex flex-row w-full gap-4">
+                  <div className="flex flex-row items-center justify-center rounded-md w-full gap-4 bg-neutral-100 p-2">
+                    <div
+                      placeholder="Aa"
+                      onKeyDown={(e) => handleMessagePanelKeys(e)}
+                      contentEditable={true}
+                      ref={messageRef as RefObject<HTMLDivElement>}
+                      className="border-none outline-none cstm-scrollbar h-auto w-full max-h-[12rem] overflow-y-auto 
+                        relative whitespace-pre-wrap break-words"
+                    ></div>
+                  </div>
+
+                  <div className="flex flex-row gap-2 items-center justify-center mt-auto t:gap-4">
+                    <label>
+                      <input
+                        ref={rawFile as React.RefObject<HTMLInputElement>}
+                        onChange={(e) => selectedFileViewer(e)}
+                        type="file"
+                        className="hidden"
+                      />
+                      <div
+                        className="p-2.5 hover:bg-primary-100 transition-all outline-none
+                rounded-lg flex flex-col items-center justify-center t:p-4"
+                      >
+                        <AiOutlinePaperClip className="text-secondary-500 text-lg" />
+                      </div>
+                    </label>
+
+                    <button
+                      onClick={sendMessage}
+                      className="p-2.5 bg-primary-500 transition-all outline-none
+                rounded-lg flex flex-col items-center justify-center t:p-4"
+                    >
+                      <BsFillSendFill className="text-white text-lg" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
 
           <audio ref={audioRef}>

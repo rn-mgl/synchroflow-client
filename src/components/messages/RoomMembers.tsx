@@ -10,31 +10,32 @@ import { MdAssignmentAdd } from "react-icons/md";
 import DeleteConfirmation from "../global/DeleteConfirmation";
 import { localizeDate } from "../../utils/dateUtils";
 
-interface GroupMembersProps {
+interface RoomMembersProps {
   isRoomCreator: boolean;
   messageRoom: string;
   roomCreator: number;
-  toggleCanSeeGroupMembers: () => void;
+  roomType: "private" | "group";
+  toggleCanSeeRoomMembers: () => void;
   getRoom: () => Promise<void>;
 }
 
-interface GroupMembersStateProps {
+interface RoomMembersStateProps {
   name: string;
   surname: string;
   image: string;
   date_added: string;
-  message_member_uuid: string;
+  member_uuid: string;
   user_id: number;
   user_uuid: string;
 }
 
-const GroupMembers: React.FC<GroupMembersProps> = ({
-  toggleCanSeeGroupMembers,
+const RoomMembers: React.FC<RoomMembersProps> = ({
+  toggleCanSeeRoomMembers,
   ...props
 }) => {
-  const [groupMembers, setGroupMembers] = React.useState<
-    Array<GroupMembersStateProps>
-  >([]);
+  const [roomMembers, setRoomMembers] = React.useState<RoomMembersStateProps[]>(
+    [],
+  );
   const [selectedGroupMember, setSelectedGroupMember] = React.useState("");
   const [canDeleteGroupMember, setCanDeleteGroupMember] = React.useState(false);
 
@@ -54,39 +55,43 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
   };
 
   const socketRemoveGroupMember = () => {
-    const memberUUID = groupMembers.find(
-      (groupMember) => groupMember.message_member_uuid === selectedGroupMember,
+    const memberUUID = roomMembers.find(
+      (groupMember) => groupMember.member_uuid === selectedGroupMember,
     );
 
     socket?.emit("remove_group_member", { room: memberUUID?.user_uuid });
   };
 
-  const getGroupMembers = React.useCallback(async () => {
+  const getRoomMembers = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/group_message_members`, {
+        const { data } = await axios.get(`${url}/room_members`, {
           headers: { Authorization: user?.token },
-          params: { messageRoom: props.messageRoom, type: "all members" },
+          params: {
+            messageRoom: props.messageRoom,
+            type: "all members",
+            roomType: props.roomType,
+          },
         });
         if (data) {
-          setGroupMembers(data);
+          setRoomMembers(data);
         }
       } catch (error) {
         console.log(error);
       }
     }
-  }, [url, user?.token, props.messageRoom]);
+  }, [url, user?.token, props.messageRoom, props.roomType]);
 
   const makeGroupOwner = async (ownerUUID: string) => {
     try {
       const { data } = await axios.patch(
-        `${url}/group_message_rooms/${props.messageRoom}`,
-        { ownerUUID },
-        { headers: { Authorization: user?.token }, params: { type: "owner" } },
+        `${url}/message_rooms/${props.messageRoom}`,
+        { ownerUUID, type: "owner", roomType: props.roomType },
+        { headers: { Authorization: user?.token } },
       );
 
       if (data) {
-        toggleCanSeeGroupMembers();
+        toggleCanSeeRoomMembers();
         await props.getRoom();
       }
     } catch (error) {
@@ -94,7 +99,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
     }
   };
 
-  const mappedGroupMembers = groupMembers.map((member, index) => {
+  const mappedRoomMembers = roomMembers.map((member, index) => {
     return (
       <div
         key={member.user_uuid}
@@ -129,9 +134,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
             <div className="ml-auto relative">
               {member.user_id !== user?.id ? (
                 <button
-                  onClick={() =>
-                    handleSelectedGroupMember(member.message_member_uuid)
-                  }
+                  onClick={() => handleSelectedGroupMember(member.member_uuid)}
                   className=" p-2 rounded-lg hover:bg-secondary-100 transition-all"
                 >
                   {selectedGroupMember ? <AiOutlineClose /> : <AiOutlineMore />}
@@ -140,7 +143,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
                 <p className="text-xs italic font-light">You</p>
               )}
 
-              {selectedGroupMember === member.message_member_uuid ? (
+              {selectedGroupMember === member.member_uuid ? (
                 <div
                   className="w-40 rounded-md bg-secondary-200 absolute right-0 top-0 p-2 -translate-x-10
                         text-sm flex flex-col gap-2 animate-fadeIn"
@@ -178,14 +181,14 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
   });
 
   React.useEffect(() => {
-    getGroupMembers();
-  }, [getGroupMembers]);
+    getRoomMembers();
+  }, [getRoomMembers]);
 
   React.useEffect(() => {
     const handle = async (args: { room: string }) => {
-      await getGroupMembers();
+      await getRoomMembers();
       if (args.room === user?.uuid) {
-        toggleCanSeeGroupMembers();
+        toggleCanSeeRoomMembers();
       }
     };
 
@@ -194,7 +197,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
     return () => {
       socket?.off("get_group_members", handle);
     };
-  }, [socket, user?.uuid, getGroupMembers, toggleCanSeeGroupMembers]);
+  }, [socket, user?.uuid, getRoomMembers, toggleCanSeeRoomMembers]);
 
   return (
     <div
@@ -204,13 +207,13 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
     >
       {canDeleteGroupMember ? (
         <DeleteConfirmation
-          apiRoute={`group_message_members/${selectedGroupMember}`}
+          apiRoute={`room_members/${selectedGroupMember}`}
           params={{ action: "remove" }}
           message="do you want to remove this member?"
           title="Remove Group Member"
           toggleConfirmation={toggleCanDeleteGroupMember}
           refetchData={() => {
-            getGroupMembers();
+            getRoomMembers();
             socketRemoveGroupMember();
           }}
         />
@@ -220,7 +223,7 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
               max-w-screen-t overflow-y-auto cstm-scrollbar items-center justify-start"
       >
         <button
-          onClick={toggleCanSeeGroupMembers}
+          onClick={toggleCanSeeRoomMembers}
           type="button"
           className="ml-auto hover:bg-primary-500 rounded-full
             hover:bg-opacity-20 transition-all p-2"
@@ -229,11 +232,11 @@ const GroupMembers: React.FC<GroupMembersProps> = ({
         </button>
 
         <div className="w-full h-full flex flex-col items-center justify-start gap-2 overflow-y-auto cstm-scrollbar">
-          {mappedGroupMembers}
+          {mappedRoomMembers}
         </div>
       </div>
     </div>
   );
 };
 
-export default GroupMembers;
+export default RoomMembers;

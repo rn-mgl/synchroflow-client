@@ -73,9 +73,14 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
   const getUsers = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/users`, {
+        const { data } = await axios.get(`${url}/associate_invites`, {
           headers: { Authorization: user?.token },
-          params: { sortFilter, searchFilter, searchCategory },
+          params: {
+            sortFilter,
+            searchFilter,
+            searchCategory,
+            type: "available",
+          },
         });
         if (data) {
           setUsers(data);
@@ -103,24 +108,6 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
     }
   };
 
-  // add invitedUser params for socket
-  const cancelRequest = async (inviteUUID: string, invitedUser: string) => {
-    try {
-      const { data } = await axios.delete(
-        `${url}/associate_invites/${inviteUUID}`,
-
-        { headers: { Authorization: user?.token } },
-      );
-      if (data) {
-        await getUsers();
-        handleMessages(true, "Invite removed successfully", "info");
-        socketAssociateInvite(invitedUser);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const mappedUsers = users.map((user, index) => {
     return (
       <AssociateCardsInvite
@@ -132,11 +119,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
         status={user.status}
         role={user.role}
         user_uuid={user.user_uuid}
-        associate_invite_uuid={user.associate_invite_uuid}
         sendInvite={() => sendInvite(user.user_uuid)}
-        cancelRequest={() =>
-          cancelRequest(user.associate_invite_uuid, user.user_uuid)
-        }
       />
     );
   });
@@ -189,7 +172,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
               }`}
             >
               <SearchFilter
-                placeholder="Search Task"
+                placeholder="Search Associate"
                 name="searchInput"
                 onChange={handleSearchFilter}
                 required={false}

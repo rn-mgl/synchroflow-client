@@ -25,7 +25,7 @@ interface ActiveMessagePanelProps {
   roomName?: string;
   isRoomCreator: boolean;
   activeRoom: MessageRoomsStateProps;
-  roomMessages: Array<RoomMessagesStateProps>;
+  roomMessages: RoomMessagesStateProps[];
   messageRef: RefObject<HTMLDivElement | null>;
   selectedMessage: string;
   rawFile: RefObject<HTMLInputElement | null>;
@@ -52,7 +52,7 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
   const user = session?.user;
 
   const mappedMessages = props.roomMessages.map((message, index) => {
-    const isSender = message.message_from == user?.id;
+    const isSender = message.sender == user?.id;
 
     return (
       <div
@@ -117,9 +117,18 @@ const ActiveMessagePanel: React.FC<ActiveMessagePanelProps> = (props) => {
           <BsArrowLeft className="text-primary-500" />
         </button>
 
-        <p className="font-bold max-w-[20ch] truncate t:max-w-none t:truncate">
-          {props.roomName}
-        </p>
+        <div className="flex flex-row">
+          <div
+            style={{ backgroundImage: `url(${props.activeRoom.room_image})` }}
+            className="min-h-[3rem] min-w-[3rem] rounded-full
+                  bg-center bg-contain bg-primary-100"
+          />
+
+          <p className="font-bold max-w-[20ch] truncate t:max-w-none t:truncate">
+            {props.roomName}
+          </p>
+        </div>
+
         {props.roomType === "group" ? (
           <div className="ml-auto flex flex-row gap-4 text-sm">
             {props.activePanelToolTip ? (

@@ -10,7 +10,7 @@ interface SendAssociateInvitesProps {
 }
 
 const SentAssociateInvitesCard: React.FC<SendAssociateInvitesProps> = (
-  props
+  props,
 ) => {
   return (
     <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 select-none min-h-[16rem] h-auto">
@@ -32,10 +32,10 @@ const SentAssociateInvitesCard: React.FC<SendAssociateInvitesProps> = (
         </div>
 
         <div className="w-full flex flex-row justify-between gap-4">
-          <p className="truncate text-sm font-bold">
+          <p className="truncate text-xs font-bold">
             {props.name} {props.surname}
           </p>
-          <p className="font-light truncate text-sm italic">{props.email}</p>
+          <p className="font-light truncate text-xs italic">{props.email}</p>
         </div>
 
         <div className="flex flex-col gap-2 w-full items-center justify-center mt-auto">

@@ -11,39 +11,34 @@ import {
 } from "react-icons/ai";
 import { MdTitle } from "react-icons/md";
 import useFile from "../../hooks/useFile";
-import { MessageRoomsStateProps } from "../../contexts/messageContext";
 import TextComp from "../input/TextComp";
 
-interface EditGroupMessageProps {
-  toggleCanEditGroupMessage: () => void;
+interface CreateRoomProps {
+  toggleCanCreateRoom: () => void;
   getAllMessageRooms: () => Promise<void>;
-  groupMessageData: MessageRoomsStateProps;
-  getRoom: () => Promise<void>;
 }
 
-interface GroupMessageStateProps {
-  groupMessageName: string;
-  groupImage: string | null;
+interface RoomStateProps {
+  roomName: string;
+  roomImage: string | null;
 }
 
-const EditGroupMessage: React.FC<EditGroupMessageProps> = (props) => {
-  const [groupMessageData, setGroupMessageData] =
-    React.useState<GroupMessageStateProps>({
-      groupMessageName: props.groupMessageData.room_name,
-      groupImage: props.groupMessageData.room_image,
-    });
+const CreateRoom: React.FC<CreateRoomProps> = (props) => {
+  const [roomData, setRoomData] = React.useState<RoomStateProps>({
+    roomName: "",
+    roomImage: "",
+  });
   const { fileData, rawFile, removeRawFile, selectedFileViewer, uploadFile } =
     useFile();
 
-  const { socket } = useGlobalContext();
+  const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession({ required: true });
   const user = session?.user;
-  const url = process.env.NEXT_PUBLIC_API_URL;
 
-  const handleGroupMessageData = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleRoomData = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
     const value = e.target.value;
-    setGroupMessageData((prev) => {
+    setRoomData((prev) => {
       return {
         ...prev,
         [name]: value,
@@ -51,36 +46,25 @@ const EditGroupMessage: React.FC<EditGroupMessageProps> = (props) => {
     });
   };
 
-  const removeUploadedFile = () => {
-    setGroupMessageData((prev) => {
-      return {
-        ...prev,
-        groupImage: null,
-      };
-    });
-  };
-
-  const editGroup = async (e: React.FormEvent<HTMLFormElement>) => {
+  const createGroup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       let groupImage = null;
 
       if (rawFile.current?.value) {
         groupImage = await uploadFile(rawFile.current.files);
-        groupMessageData.groupImage = groupImage;
       }
 
-      const { data } = await axios.patch(
-        `${url}/group_message_rooms/${props.groupMessageData.message_room}`,
-        { groupMessageData },
-        { headers: { Authorization: user?.token }, params: { type: "name" } },
-      );
+      roomData.roomImage = groupImage;
 
-      if (data.updatedRoom) {
-        await props.getRoom();
+      const { data } = await axios.post(
+        `${url}/message_rooms`,
+        { roomData },
+        { headers: { Authorization: user?.token } },
+      );
+      if (data) {
+        props.toggleCanCreateRoom();
         await props.getAllMessageRooms();
-        props.toggleCanEditGroupMessage();
-        socket?.emit("update_group_room", { rooms: data.rooms });
       }
     } catch (error) {
       console.log(error);
@@ -94,12 +78,12 @@ const EditGroupMessage: React.FC<EditGroupMessageProps> = (props) => {
         flex flex-col items-center justify-start p-4 t:p-10"
     >
       <form
-        onSubmit={(e) => editGroup(e)}
+        onSubmit={(e) => createGroup(e)}
         className="w-full bg-white h-fit rounded-lg flex flex-col p-4 t:p-10 gap-4 my-auto
                   max-w-screen-t overflow-y-auto cstm-scrollbar items-center justify-start"
       >
         <button
-          onClick={props.toggleCanEditGroupMessage}
+          onClick={props.toggleCanCreateRoom}
           type="button"
           className="ml-auto hover:bg-primary-500 rounded-full 
                     hover:bg-opacity-20 transition-all p-2"
@@ -110,26 +94,22 @@ const EditGroupMessage: React.FC<EditGroupMessageProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Title</p>
           <TextComp
-            name="groupMessageName"
+            name="roomName"
             placeholder="Group Name..."
             required={true}
-            value={groupMessageData.groupMessageName}
-            onChange={handleGroupMessageData}
+            value={roomData.roomName}
+            onChange={handleRoomData}
             Icon={MdTitle}
           />
         </div>
 
         <div className="flex flex-col w-full items-center justify-center">
           <div
-            style={{
-              backgroundImage: `url(${
-                fileData.url ? fileData.url : groupMessageData.groupImage
-              })`,
-            }}
+            style={{ backgroundImage: `url(${fileData.url})` }}
             className="w-full h-40 rounded-xl flex flex-col items-center justify-center
                       border-2 border-primary-200 bg-center bg-cover"
           >
-            {rawFile.current?.value || groupMessageData.groupImage ? null : (
+            {rawFile.current?.value ? null : (
               <AiFillPicture className="text-primary-200 text-4xl" />
             )}
           </div>
@@ -146,18 +126,16 @@ const EditGroupMessage: React.FC<EditGroupMessageProps> = (props) => {
                 className="hidden peer"
                 onChange={(e) => selectedFileViewer(e)}
               />
-              {rawFile.current?.value || groupMessageData.groupImage ? null : (
+              {rawFile.current?.value ? null : (
                 <AiOutlinePlus className="text-primary-500 peer-checked animate-fadeIn" />
               )}
             </label>
 
-            {rawFile.current?.value || groupMessageData.groupImage ? (
+            {rawFile.current?.value ? (
               <button
                 type="button"
                 className="animate-fadeIn"
-                onClick={
-                  rawFile.current?.value ? removeRawFile : removeUploadedFile
-                }
+                onClick={removeRawFile}
               >
                 <AiOutlineDelete className="text-primary-500" />
               </button>
@@ -170,11 +148,11 @@ const EditGroupMessage: React.FC<EditGroupMessageProps> = (props) => {
           className="bg-primary-500 rounded-lg text-white 
                     font-bold p-2 w-full"
         >
-          Update
+          Create
         </button>
       </form>
     </div>
   );
 };
 
-export default EditGroupMessage;
+export default CreateRoom;

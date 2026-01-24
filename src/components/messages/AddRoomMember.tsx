@@ -7,25 +7,26 @@ import { useParams } from "next/navigation";
 import React from "react";
 import { AiOutlineClose, AiOutlineUserAdd } from "react-icons/ai";
 
-interface AddGroupMembersProps {
-  toggleCanAddGroupMembers: () => void;
+interface AddRoomMemberProps {
+  toggleCanAddRoomMember: () => void;
   messageRoom: string;
+  roomType: "private" | "group";
 }
 
-interface AddGroupMembersStateProps {
+interface AddRoomMemberStateProps {
   name: string;
   surname: string;
   email: string;
   image: string;
   date_added: string;
-  message_member_uuid: string;
+  member_uuid: string;
   user_id: string;
   user_uuid: string;
 }
 
-const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
-  const [groupMembers, setGroupMembers] = React.useState<
-    Array<AddGroupMembersStateProps>
+const AddRoomMember: React.FC<AddRoomMemberProps> = (props) => {
+  const [groupMembers, setRoomMember] = React.useState<
+    AddRoomMemberStateProps[]
   >([]);
 
   const { socket } = useGlobalContext();
@@ -34,31 +35,35 @@ const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
 
   const url = process.env.NEXT_PUBLIC_API_URL;
 
-  const getPossibleGroupMembers = React.useCallback(async () => {
+  const getPossibleRoomMembers = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/group_message_members`, {
+        const { data } = await axios.get(`${url}/room_members`, {
           headers: { Authorization: user?.token },
-          params: { messageRoom: props.messageRoom, type: "possible members" },
+          params: {
+            messageRoom: props.messageRoom,
+            type: "possible members",
+            roomType: props.roomType,
+          },
         });
         if (data) {
-          setGroupMembers(data);
+          setRoomMember(data);
         }
       } catch (error) {
         console.log(error);
       }
     }
-  }, [url, user?.token, props.messageRoom]);
+  }, [url, user?.token, props.messageRoom, props.roomType]);
 
-  const addToGroup = async (memberUUID: string) => {
+  const addToRoom = async (memberUUID: string) => {
     try {
       const { data } = await axios.post(
-        `${url}/group_message_members`,
-        { memberUUID, groupRoomUUID: props.messageRoom },
+        `${url}/room_members`,
+        { memberUUID, roomUUID: props.messageRoom, roomType: props.roomType },
         { headers: { Authorization: user?.token } },
       );
       if (data) {
-        await getPossibleGroupMembers();
+        await getPossibleRoomMembers();
         socket?.emit("add_group_member", { room: memberUUID });
       }
     } catch (error) {
@@ -89,7 +94,7 @@ const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
           </div>
 
           <button
-            onClick={() => addToGroup(member.user_uuid)}
+            onClick={() => addToRoom(member.user_uuid)}
             className="p-2 rounded-md hover:bg-primary-100 transition-all"
           >
             <AiOutlineUserAdd className="text-primary-500" />
@@ -102,8 +107,8 @@ const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
   });
 
   React.useEffect(() => {
-    getPossibleGroupMembers();
-  }, [getPossibleGroupMembers]);
+    getPossibleRoomMembers();
+  }, [getPossibleRoomMembers]);
 
   return (
     <div
@@ -116,7 +121,7 @@ const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
               max-w-screen-t overflow-y-auto cstm-scrollbar items-center justify-start"
       >
         <button
-          onClick={props.toggleCanAddGroupMembers}
+          onClick={props.toggleCanAddRoomMember}
           type="button"
           className="ml-auto hover:bg-primary-500 rounded-full
             hover:bg-opacity-20 transition-all p-2"
@@ -132,4 +137,4 @@ const AddGroupMembers: React.FC<AddGroupMembersProps> = (props) => {
   );
 };
 
-export default AddGroupMembers;
+export default AddRoomMember;

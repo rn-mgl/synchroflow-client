@@ -4,18 +4,11 @@ import { useSession } from "next-auth/react";
 import React, { RefObject } from "react";
 
 export interface MessageRoomsStateProps {
-  image: string;
-  name: string;
-  surname: string;
+  message_room_id: number;
   message_room: string;
-  message: string;
-  message_file: string;
-  message_from: number;
-  user_uuid: string;
-  date_sent: string;
-  created_by: number;
   room_image: string;
   room_name: string;
+  created_by: number;
 }
 
 export interface RoomMessagesStateProps {
@@ -26,7 +19,7 @@ export interface RoomMessagesStateProps {
   message: string;
   message_file: string | null;
   message_file_type: string | null;
-  message_from: number;
+  sender: number;
   message_uuid: string;
 }
 
@@ -37,13 +30,13 @@ interface MessageContextInterface {
   messageRef: RefObject<HTMLDivElement | null>;
   scrollRef: RefObject<HTMLDivElement | null>;
   selectedMessage: string;
-  canCreateGroupMessage: boolean;
+  canCreateRoom: boolean;
   roomType: "private" | "group";
   activePanelToolTip: boolean;
-  canEditGroupMessage: boolean;
-  canDeleteGroupMessage: boolean;
-  canSeeGroupMembers: boolean;
-  canAddGroupMembers: boolean;
+  canEditRoom: boolean;
+  canDeleteRoom: boolean;
+  canSeeRoomMembers: boolean;
+  canAddRoomMember: boolean;
   canLeaveGroup: boolean;
   getAllMessageRooms: (
     searchFilter: string,
@@ -54,15 +47,15 @@ interface MessageContextInterface {
     roomUUID: string,
   ) => Promise<void>;
   handleSelectedMessage: (messageUUID: string) => void;
-  toggleCanCreateGroupMessage: () => void;
+  toggleCanCreateRoom: () => void;
   getRoom: (roomType: "private" | "group", roomUUID: string) => Promise<void>;
   handleRoomType: (type: "private" | "group") => void;
   clearActiveRoom: () => void;
   toggleActivePanelToolTip: () => void;
-  toggleCanEditGroupMessage: () => void;
-  toggleCanDeleteGroupMessage: () => void;
-  toggleCanSeeGroupMembers: () => void;
-  toggleCanAddGroupMembers: () => void;
+  toggleCanEditRoom: () => void;
+  toggleCanDeleteRoom: () => void;
+  toggleCanSeeRoomMembers: () => void;
+  toggleCanAddRoomMember: () => void;
   toggleCanLeaveGroup: () => void;
 }
 
@@ -76,15 +69,14 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
   const scrollRef = React.useRef<HTMLDivElement | null>(null);
 
   const [messageRooms, setMessageRooms] = React.useState<
-    Array<MessageRoomsStateProps>
+    MessageRoomsStateProps[]
   >([]);
 
   const [roomMessages, setRoomMessages] = React.useState<
-    Array<RoomMessagesStateProps>
+    RoomMessagesStateProps[]
   >([]);
 
-  const [canCreateGroupMessage, setCanCreateGroupMessage] =
-    React.useState(false);
+  const [canCreateRoom, setCanCreateRoom] = React.useState(false);
 
   const [selectedMessage, setSelectedMessage] = React.useState("");
 
@@ -93,18 +85,11 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
   const { isLoading, handleLoader } = useLoader();
 
   const [activeRoom, setActiveRoom] = React.useState<MessageRoomsStateProps>({
-    image: "",
-    name: "",
-    surname: "",
     message_room: "",
-    message: "",
-    message_file: "",
-    message_from: -1,
-    user_uuid: "",
-    date_sent: "",
-    created_by: -1,
+    created_by: 0,
     room_image: "",
     room_name: "",
+    message_room_id: 0,
   });
 
   const [roomType, setRoomType] = React.useState<"private" | "group">(
@@ -113,14 +98,13 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [activePanelToolTip, setActivePanelToolTip] = React.useState(false);
 
-  const [canEditGroupMessage, setCanEditGroupMessage] = React.useState(false);
+  const [canEditRoom, setCanEditRoom] = React.useState(false);
 
-  const [canDeleteGroupMessage, setCanDeleteGroupMessage] =
-    React.useState(false);
+  const [canDeleteRoom, setCanDeleteRoom] = React.useState(false);
 
-  const [canSeeGroupMembers, setCanSeeGroupMembers] = React.useState(false);
+  const [canSeeRoomMembers, setCanSeeRoomMembers] = React.useState(false);
 
-  const [canAddGroupMembers, setCanAddGroupMembers] = React.useState(false);
+  const [canAddRoomMember, setCanAddRoomMember] = React.useState(false);
 
   const [canLeaveGroup, setCanLeaveGroup] = React.useState(false);
 
@@ -132,8 +116,8 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
     setSelectedMessage((prev) => (prev === messageUUID ? "" : messageUUID));
   }, []);
 
-  const toggleCanCreateGroupMessage = React.useCallback(() => {
-    setCanCreateGroupMessage((prev) => !prev);
+  const toggleCanCreateRoom = React.useCallback(() => {
+    setCanCreateRoom((prev) => !prev);
   }, []);
 
   const handleRoomType = (type: "private" | "group") => {
@@ -146,18 +130,11 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearActiveRoom = () => {
     setActiveRoom({
-      image: "",
-      name: "",
-      surname: "",
       message_room: "",
-      message: "",
-      message_file: "",
-      message_from: -1,
-      user_uuid: "",
-      date_sent: "",
-      created_by: -1,
+      created_by: 0,
       room_image: "",
       room_name: "",
+      message_room_id: 0,
     });
   };
 
@@ -165,20 +142,20 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
     setActivePanelToolTip((prev) => !prev);
   };
 
-  const toggleCanEditGroupMessage = () => {
-    setCanEditGroupMessage((prev) => !prev);
+  const toggleCanEditRoom = () => {
+    setCanEditRoom((prev) => !prev);
   };
 
-  const toggleCanDeleteGroupMessage = () => {
-    setCanDeleteGroupMessage((prev) => !prev);
+  const toggleCanDeleteRoom = () => {
+    setCanDeleteRoom((prev) => !prev);
   };
 
-  const toggleCanSeeGroupMembers = () => {
-    setCanSeeGroupMembers((prev) => !prev);
+  const toggleCanSeeRoomMembers = () => {
+    setCanSeeRoomMembers((prev) => !prev);
   };
 
-  const toggleCanAddGroupMembers = () => {
-    setCanAddGroupMembers((prev) => !prev);
+  const toggleCanAddRoomMember = () => {
+    setCanAddRoomMember((prev) => !prev);
   };
 
   const toggleCanLeaveGroup = () => {
@@ -189,7 +166,7 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
     async (searchFilter: string, roomType: "private" | "group") => {
       if (user?.token) {
         try {
-          const { data } = await axios.get(`${url}/${roomType}_message_rooms`, {
+          const { data } = await axios.get(`${url}/message_rooms`, {
             headers: { Authorization: user?.token },
             params: { searchFilter, roomType },
           });
@@ -209,17 +186,14 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
       if (user?.token && !isLoading) {
         handleLoader(true);
         try {
-          const { data } = await axios.get(
-            `${url}/${roomType}_message_rooms/${roomUUID}`,
-            {
-              headers: { Authorization: user?.token },
-              params: {
-                type: "messages",
-                limit: messageLimit,
-                roomType,
-              },
+          const { data } = await axios.get(`${url}/message_rooms/${roomUUID}`, {
+            headers: { Authorization: user?.token },
+            params: {
+              type: "messages",
+              limit: messageLimit,
+              roomType,
             },
-          );
+          });
 
           if (data) {
             setMessageLimit((prev) => prev + 20);
@@ -239,13 +213,10 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
     async (roomType: "private" | "group", roomUUID: string) => {
       if (user?.token) {
         try {
-          const { data } = await axios.get(
-            `${url}/${roomType}_message_rooms/${roomUUID}`,
-            {
-              headers: { Authorization: user?.token },
-              params: { type: "main", roomType },
-            },
-          );
+          const { data } = await axios.get(`${url}/message_rooms/${roomUUID}`, {
+            headers: { Authorization: user?.token },
+            params: { type: "main", roomType },
+          });
           if (data) {
             setActiveRoom(data);
             setMessageLimit(20);
@@ -295,26 +266,26 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
         messageRef,
         scrollRef,
         selectedMessage,
-        canCreateGroupMessage,
+        canCreateRoom,
         roomType,
         activePanelToolTip,
-        canEditGroupMessage,
-        canDeleteGroupMessage,
-        canSeeGroupMembers,
-        canAddGroupMembers,
+        canEditRoom,
+        canDeleteRoom,
+        canSeeRoomMembers,
+        canAddRoomMember,
         canLeaveGroup,
         getAllMessageRooms,
         getRoomMessages,
         handleSelectedMessage,
-        toggleCanCreateGroupMessage,
+        toggleCanCreateRoom,
         getRoom,
         handleRoomType,
         clearActiveRoom,
         toggleActivePanelToolTip,
-        toggleCanEditGroupMessage,
-        toggleCanDeleteGroupMessage,
-        toggleCanSeeGroupMembers,
-        toggleCanAddGroupMembers,
+        toggleCanEditRoom,
+        toggleCanDeleteRoom,
+        toggleCanSeeRoomMembers,
+        toggleCanAddRoomMember,
         toggleCanLeaveGroup,
       }}
     >

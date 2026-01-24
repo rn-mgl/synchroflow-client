@@ -10,12 +10,8 @@ import { localizeDate } from "../../utils/dateUtils";
 interface MessagePreviewProps {
   image: string | null;
   name: string;
-  latestMessage: string;
-  latestFile: string;
   status: "sent" | "read" | "unread";
-  dateSent: string;
   isSelected: boolean;
-  isSender: boolean;
   messageRoom: string;
   roomType: "private" | "group";
   getRoom: () => Promise<void>;
@@ -37,9 +33,13 @@ const MessagePreview: React.FC<MessagePreviewProps> = (props) => {
   const getLatestMessage = React.useCallback(async () => {
     if (user?.token && props.messageRoom) {
       try {
-        const { data } = await axios.get(`${url}/${props.roomType}_messages`, {
+        const { data } = await axios.get(`${url}/messages`, {
           headers: { Authorization: user?.token },
-          params: { messageRoom: props.messageRoom, type: "latest" },
+          params: {
+            messageRoom: props.messageRoom,
+            type: "latest",
+            roomType: props.roomType,
+          },
         });
         if (data) {
           setLatestMessage(data);
