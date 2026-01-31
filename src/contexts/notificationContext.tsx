@@ -16,7 +16,7 @@ interface NotificationContextInterface {
   notificationIsVisible: boolean;
   notifications: NotificationsStateProps[];
   checkedNotifications: boolean;
-  scrollRef: RefObject<HTMLDivElement>;
+  scrollRef: RefObject<HTMLDivElement | null>;
   toggleNotificationIsVisible: () => void;
   toggleCheckedNotifications: (checked: boolean) => void;
   getNotifications: () => Promise<void>;
