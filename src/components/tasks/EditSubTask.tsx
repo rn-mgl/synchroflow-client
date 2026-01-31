@@ -102,7 +102,7 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
       <form
         onSubmit={(e) => editSubTask(e)}
         className="w-full bg-white h-fit rounded-lg flex flex-col p-4 t:p-10 gap-4 my-auto
-                  max-w-screen-t overflow-y-auto cstm-scrollbar items-center justify-start"
+                  max-w-screen-l-s overflow-y-auto cstm-scrollbar items-center justify-start"
       >
         <button
           onClick={props.toggleCanEditSubTask}

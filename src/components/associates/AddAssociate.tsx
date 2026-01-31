@@ -151,7 +151,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
       ) : null}
       <div
         className="w-full bg-white h-full rounded-lg flex flex-col p-4 t:p-10 gap-4
-          max-w-screen-t items-center justify-start"
+          max-w-screen-l-s items-center justify-start"
       >
         <button
           onClick={props.toggleCanAddAssociate}

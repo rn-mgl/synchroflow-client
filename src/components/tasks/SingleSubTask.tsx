@@ -286,7 +286,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
 
       <div
         className="w-full bg-white h-full  rounded-lg flex flex-col t:p-10 gap-4 my-auto
-                  max-w-screen-t items-center justify-start"
+                  max-w-screen-l-s items-center justify-start"
       >
         <div className="w-full sticky flex flex-col items-center justify-end border-b-[1px] border-b-secondary-200 p-4">
           <button
