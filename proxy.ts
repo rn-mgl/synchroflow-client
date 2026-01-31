@@ -2,13 +2,13 @@ import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
 export default withAuth(
-  function middleware(req) {
+  function proxy(req) {
     if (req.nextUrl.pathname.includes("/hub") && !req.nextauth.token?.user) {
       return NextResponse.rewrite(
         new URL(
           "/login/?message=Please log in first before proceeding.",
-          req.url
-        )
+          req.url,
+        ),
       );
     }
   },
@@ -16,7 +16,7 @@ export default withAuth(
     callbacks: {
       authorized: ({ token }) => !!token?.user,
     },
-  }
+  },
 );
 
 export const config = { matcher: ["/hub/:path*"] };
