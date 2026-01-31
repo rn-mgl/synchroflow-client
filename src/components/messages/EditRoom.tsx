@@ -64,14 +64,16 @@ const EditRoom: React.FC<EditRoomProps> = (props) => {
     try {
       let roomImage = null;
 
+      const passedData = { ...roomData };
+
       if (rawFile.current?.value) {
         roomImage = await uploadFile(rawFile.current.files);
-        roomData.roomImage = roomImage;
+        passedData.roomImage = roomImage;
       }
 
       const { data } = await axios.patch(
         `${url}/message_rooms/${props.roomData.message_room}`,
-        { roomData, roomType: "group" },
+        { roomData: passedData, roomType: "group" },
         { headers: { Authorization: user?.token }, params: { type: "name" } },
       );
 
@@ -128,7 +130,7 @@ const EditRoom: React.FC<EditRoomProps> = (props) => {
             className="w-full h-40 rounded-xl flex flex-col items-center justify-center
                       border-2 border-primary-200 bg-center bg-cover"
           >
-            {rawFile.current?.value || roomData.roomImage ? null : (
+            {fileData.url || roomData.roomImage ? null : (
               <AiFillPicture className="text-primary-200 text-4xl" />
             )}
           </div>
@@ -145,18 +147,16 @@ const EditRoom: React.FC<EditRoomProps> = (props) => {
                 className="hidden peer"
                 onChange={(e) => selectedFileViewer(e)}
               />
-              {rawFile.current?.value || roomData.roomImage ? null : (
+              {fileData.url || roomData.roomImage ? null : (
                 <AiOutlinePlus className="text-primary-500 peer-checked animate-fadeIn" />
               )}
             </label>
 
-            {rawFile.current?.value || roomData.roomImage ? (
+            {fileData.url || roomData.roomImage ? (
               <button
                 type="button"
                 className="animate-fadeIn"
-                onClick={
-                  rawFile.current?.value ? removeRawFile : removeUploadedFile
-                }
+                onClick={fileData.url ? removeRawFile : removeUploadedFile}
               >
                 <AiOutlineDelete className="text-primary-500" />
               </button>

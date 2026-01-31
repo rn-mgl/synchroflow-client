@@ -91,14 +91,16 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
     try {
       let bannerURL = null;
 
+      const passedData = { ...mainTaskData };
+
       if (rawFile.current?.value) {
         bannerURL = await uploadFile(rawFile.current?.files);
-        mainTaskData.mainTaskBanner = bannerURL;
+        passedData.mainTaskBanner = bannerURL;
       }
 
       const { data } = await axios.patch(
         `${url}/main_tasks/${params?.task_uuid}`,
-        { mainTaskData },
+        { mainTaskData: passedData },
         { headers: { Authorization: user?.token } },
       );
       if (data.updateTask) {
@@ -143,7 +145,7 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
             className="w-full h-40 rounded-xl flex flex-col items-center justify-center
                       border-2 border-primary-200 bg-center bg-cover"
           >
-            {rawFile.current?.value || mainTaskData.mainTaskBanner ? null : (
+            {fileData.url || mainTaskData.mainTaskBanner ? null : (
               <AiFillPicture className="text-primary-200 text-4xl" />
             )}
           </div>
@@ -160,18 +162,16 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
                 className="hidden peer"
                 onChange={(e) => selectedFileViewer(e)}
               />
-              {rawFile.current?.value || mainTaskData.mainTaskBanner ? null : (
+              {fileData.url || mainTaskData.mainTaskBanner ? null : (
                 <AiOutlinePlus className="text-primary-500 peer-checked animate-fadeIn" />
               )}
             </label>
 
-            {rawFile.current?.value || mainTaskData.mainTaskBanner ? (
+            {fileData.url || mainTaskData.mainTaskBanner ? (
               <button
                 type="button"
                 className="animate-fadeIn"
-                onClick={
-                  rawFile.current?.value ? removeRawFile : removeUploadedFile
-                }
+                onClick={fileData.url ? removeRawFile : removeUploadedFile}
               >
                 <AiOutlineDelete className="text-primary-500" />
               </button>

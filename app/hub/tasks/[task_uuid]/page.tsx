@@ -141,7 +141,7 @@ const SingleTask = () => {
         console.log(error);
       }
     }
-  }, [url, user, params?.task_uuid]);
+  }, [url, user, params]);
 
   const getSingleTaskCollborators = React.useCallback(async () => {
     if (user?.token) {
@@ -158,7 +158,7 @@ const SingleTask = () => {
         console.log(error);
       }
     }
-  }, [url, user, params?.task_uuid]);
+  }, [url, user, params]);
 
   const getCreatedSubTasks = React.useCallback(async () => {
     if (isTaskCreator && user?.token) {
@@ -174,7 +174,7 @@ const SingleTask = () => {
         console.log(error);
       }
     }
-  }, [url, user, params?.task_uuid, isTaskCreator]);
+  }, [url, user, params, isTaskCreator]);
 
   const getAssignedSubTasks = React.useCallback(async () => {
     if (!isTaskCreator && user?.token) {
@@ -190,7 +190,7 @@ const SingleTask = () => {
         console.log(error);
       }
     }
-  }, [url, user, isTaskCreator, params?.task_uuid]);
+  }, [url, user, isTaskCreator, params]);
 
   const deleteTask = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();

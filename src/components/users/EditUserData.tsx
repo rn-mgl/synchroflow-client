@@ -81,15 +81,15 @@ const EditUserData: React.FC<EditTaskProps> = (props) => {
       ...userData,
     };
 
-    if (rawFile.current?.value) {
-      bannerURL = await uploadFile(rawFile.current?.files);
+    if (fileData.url && rawFile.current) {
+      bannerURL = await uploadFile(rawFile.current.files);
       passedData.image = bannerURL;
     }
 
     try {
       const { data } = await axios.patch(
         `${url}/users/${params?.user_uuid}`,
-        { userData },
+        { userData: passedData },
         {
           headers: { Authorization: user?.token },
           params: { type: "identifier" },
@@ -135,7 +135,7 @@ const EditUserData: React.FC<EditTaskProps> = (props) => {
             className="w-64 h-64 rounded-full flex flex-col items-center justify-center
                       border-2 border-primary-200 bg-center bg-cover "
           >
-            {rawFile.current?.value || userData.image ? null : (
+            {fileData.url || userData.image ? null : (
               <AiFillPicture className="text-primary-200 text-4xl" />
             )}
           </div>
@@ -152,18 +152,16 @@ const EditUserData: React.FC<EditTaskProps> = (props) => {
                 className="hidden peer"
                 onChange={(e) => selectedFileViewer(e)}
               />
-              {rawFile.current?.value || userData.image ? null : (
+              {fileData.url || userData.image ? null : (
                 <AiOutlinePlus className="text-primary-500 peer-checked animate-fadeIn" />
               )}
             </label>
 
-            {rawFile.current?.value || userData.image ? (
+            {fileData.url || userData.image ? (
               <button
                 type="button"
                 className="animate-fadeIn"
-                onClick={
-                  rawFile.current?.value ? removeRawFile : removeUploadedFile
-                }
+                onClick={fileData.url ? removeRawFile : removeUploadedFile}
               >
                 <AiOutlineDelete className="text-primary-500" />
               </button>

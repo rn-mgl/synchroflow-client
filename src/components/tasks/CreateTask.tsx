@@ -64,15 +64,17 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
     try {
       let bannerURL = null;
 
-      if (rawFile.current?.value) {
+      const passedData = { ...mainTaskData };
+
+      if (rawFile.current) {
         bannerURL = await uploadFile(rawFile.current?.files);
       }
 
-      mainTaskData.mainTaskBanner = bannerURL;
+      passedData.mainTaskBanner = bannerURL;
 
       const { data } = await axios.post(
         `${url}/main_tasks`,
-        { mainTaskData },
+        { mainTaskData: passedData },
         { headers: { Authorization: user?.token } },
       );
       if (data) {
@@ -113,7 +115,7 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
             className="w-full h-40 rounded-xl flex flex-col items-center justify-center
                       border-2 border-primary-200 bg-center bg-cover"
           >
-            {rawFile.current?.value ? null : (
+            {fileData.url ? null : (
               <AiFillPicture className="text-primary-200 text-4xl" />
             )}
           </div>
@@ -130,12 +132,12 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
                 className="hidden peer"
                 onChange={(e) => selectedFileViewer(e)}
               />
-              {rawFile.current?.value ? null : (
+              {fileData.url ? null : (
                 <AiOutlinePlus className="text-primary-500 peer-checked animate-fadeIn" />
               )}
             </label>
 
-            {rawFile.current?.value ? (
+            {fileData.url ? (
               <button
                 type="button"
                 className="animate-fadeIn"

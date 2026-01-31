@@ -139,7 +139,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, user, props.selectedSubTask, params?.task_uuid]);
+  }, [url, user, props.selectedSubTask, params]);
 
   const getSubtask = React.useCallback(async () => {
     if (user?.token) {

@@ -116,7 +116,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
         );
       }
     }
-  }, [url, user, user?.uuid, handleMessages]);
+  }, [url, user, handleMessages]);
 
   const mappedNotifications = notifications.map((notification, index) => {
     const action = notification.purpose.includes("group member")

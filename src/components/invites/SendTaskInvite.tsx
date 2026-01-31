@@ -88,7 +88,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, user, params?.task_uuid, searchFilter]);
+  }, [url, user, params, searchFilter]);
 
   const mappedAssociates = associates.map((associate, index) => {
     return (

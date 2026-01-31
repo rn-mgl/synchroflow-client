@@ -22,9 +22,6 @@ const Hub = () => {
   const user = session?.user;
 
   Chart.register(ArcElement);
-  Chart.defaults.font.family = "Poppins, sans-serif";
-  Chart.defaults.font.weight = "bold";
-  Chart.defaults.font.size = 12;
 
   const pieData = {
     labels: ["Ongoing", "Done", "Late"],
@@ -116,6 +113,14 @@ const Hub = () => {
   React.useEffect(() => {
     getMyUpcomingTasks();
   }, [getMyUpcomingTasks]);
+
+  React.useEffect(() => {
+    if (Chart.defaults) {
+      Chart.defaults.font.family = "Poppins, sans-serif";
+      Chart.defaults.font.weight = "bold";
+      Chart.defaults.font.size = 12;
+    }
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-start w-full min-h-screen h-auto ">

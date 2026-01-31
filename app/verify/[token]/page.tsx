@@ -43,7 +43,7 @@ const Verify = () => {
         "error",
       );
     }
-  }, [url, params?.token, handleMessages]);
+  }, [url, params, handleMessages]);
 
   React.useEffect(() => {
     verifyAccount();
