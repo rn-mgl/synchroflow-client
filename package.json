@@ -41,5 +41,7 @@
     "@types/react": "19.2.10",
     "@types/react-dom": "19.2.3"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "typescript-eslint": "^8.54.0"
+  }
 }

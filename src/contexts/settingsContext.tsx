@@ -14,7 +14,7 @@ interface SettingsContextInterface {
   settings: SettingsStateProps;
   handleUserGeneralSettings: (
     e: React.ChangeEvent<HTMLInputElement>,
-    audioRef: React.RefObject<HTMLAudioElement>,
+    audioRef: React.RefObject<HTMLAudioElement | null>,
   ) => void;
   handleUserNotificationSettings: (
     name:
@@ -46,7 +46,7 @@ const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
   const handleUserGeneralSettings = React.useCallback(
     (
       e: React.ChangeEvent<HTMLInputElement>,
-      audioRef: React.RefObject<HTMLAudioElement>,
+      audioRef: React.RefObject<HTMLAudioElement | null>,
     ) => {
       const { name, value } = e.target;
 

@@ -2,10 +2,10 @@ import React from "react";
 
 interface GeneralSettingsProps {
   notificationSound: number;
-  audioRef: React.RefObject<HTMLAudioElement>;
+  audioRef: React.RefObject<HTMLAudioElement | null>;
   handleUserGeneralSettings: (
     e: React.ChangeEvent<HTMLInputElement>,
-    audioRef: React.RefObject<HTMLAudioElement>
+    audioRef: React.RefObject<HTMLAudioElement | null>,
   ) => void;
   updateUserSettings: () => Promise<void>;
 }
