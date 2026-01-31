@@ -10,6 +10,28 @@ const nextConfig = {
 };
 
 const mp3Config = {
+  // Turbopack handles static assets automatically
+  // Audio files (.mp3, .ogg, .wav) are supported out of the box
+  experimental: {
+    turbo: {
+      rules: {
+        "*.mp3": {
+          loaders: ["@vercel/turbopack-loader"],
+          as: "*.js",
+        },
+        "*.ogg": {
+          loaders: ["@vercel/turbopack-loader"],
+          as: "*.js",
+        },
+        "*.wav": {
+          loaders: ["@vercel/turbopack-loader"],
+          as: "*.js",
+        },
+      },
+    },
+  },
+
+  // Keep webpack config as fallback for production builds
   webpack(config, options) {
     const { isServer } = options;
     config.module.rules.push({
