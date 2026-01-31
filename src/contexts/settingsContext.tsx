@@ -96,7 +96,7 @@ const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
         console.log(error);
       }
     }
-  }, [url, user?.token]);
+  }, [url, user]);
 
   React.useEffect(() => {
     getUserSettings();

@@ -141,7 +141,7 @@ const SingleTask = () => {
         console.log(error);
       }
     }
-  }, [url, user?.token, params?.task_uuid]);
+  }, [url, user, params?.task_uuid]);
 
   const getSingleTaskCollborators = React.useCallback(async () => {
     if (user?.token) {
@@ -158,7 +158,7 @@ const SingleTask = () => {
         console.log(error);
       }
     }
-  }, [url, user?.token, params?.task_uuid]);
+  }, [url, user, params?.task_uuid]);
 
   const getCreatedSubTasks = React.useCallback(async () => {
     if (isTaskCreator && user?.token) {
@@ -174,7 +174,7 @@ const SingleTask = () => {
         console.log(error);
       }
     }
-  }, [url, user?.token, params?.task_uuid, isTaskCreator]);
+  }, [url, user, params?.task_uuid, isTaskCreator]);
 
   const getAssignedSubTasks = React.useCallback(async () => {
     if (!isTaskCreator && user?.token) {
@@ -190,9 +190,9 @@ const SingleTask = () => {
         console.log(error);
       }
     }
-  }, [url, user?.token, isTaskCreator, params?.task_uuid]);
+  }, [url, user, isTaskCreator, params?.task_uuid]);
 
-  const deleteTask = async (e: React.FormEvent<HTMLFormElement>) => {
+  const deleteTask = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const { data } = await axios.delete(
@@ -215,7 +215,7 @@ const SingleTask = () => {
     }
   };
 
-  const leaveTask = async (e: React.FormEvent<HTMLFormElement>) => {
+  const leaveTask = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const { data } = await axios.delete(
@@ -239,7 +239,7 @@ const SingleTask = () => {
     }
   };
 
-  const removeCollaborator = async (e: React.FormEvent<HTMLFormElement>) => {
+  const removeCollaborator = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const { data } = await axios.delete(

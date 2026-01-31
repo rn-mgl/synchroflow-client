@@ -80,7 +80,7 @@ const RoomMembers: React.FC<RoomMembersProps> = ({
         console.log(error);
       }
     }
-  }, [url, user?.token, props.messageRoom, props.roomType]);
+  }, [url, user, props.messageRoom, props.roomType]);
 
   const makeGroupOwner = async (ownerUUID: string) => {
     try {

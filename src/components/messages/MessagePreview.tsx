@@ -48,7 +48,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, props.messageRoom, user?.token, props.roomType]);
+  }, [url, props.messageRoom, user, props.roomType]);
 
   React.useEffect(() => {
     getLatestMessage();

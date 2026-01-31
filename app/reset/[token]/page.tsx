@@ -52,7 +52,7 @@ const Reset = () => {
     });
   };
 
-  const resetPassword = async (e: React.FormEvent<HTMLFormElement>) => {
+  const resetPassword = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleLoader(true);
     handleDisable(true);

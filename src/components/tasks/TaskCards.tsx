@@ -49,7 +49,7 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, user?.token, props.taskUUID]);
+  }, [url, user, props.taskUUID]);
 
   const mappedCollaborators = collaborators
     .slice(0, collaborators.length < 5 ? collaborators.length : 5)

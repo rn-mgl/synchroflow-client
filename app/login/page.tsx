@@ -54,7 +54,7 @@ const Login = () => {
     });
   };
 
-  const submitLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const submitLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleLoader(true);
     handleDisable(true);

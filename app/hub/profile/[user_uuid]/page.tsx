@@ -63,7 +63,7 @@ const Profile = () => {
         console.log(error);
       }
     }
-  }, [url, user?.token, params?.user_uuid]);
+  }, [url, user, params?.user_uuid]);
 
   React.useEffect(() => {
     getUserData();

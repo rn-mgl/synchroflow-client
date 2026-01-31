@@ -44,7 +44,7 @@ const Forgot = () => {
     });
   };
 
-  const forgetPassword = async (e: React.FormEvent<HTMLFormElement>) => {
+  const forgetPassword = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleLoader(true);
     handleDisable(true);

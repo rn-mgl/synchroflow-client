@@ -67,7 +67,7 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
     });
   };
 
-  const editSubTask = async (e: React.FormEvent<HTMLFormElement>) => {
+  const editSubTask = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleLoader(true);
     try {

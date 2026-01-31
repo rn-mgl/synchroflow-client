@@ -59,7 +59,7 @@ const Invites = () => {
         }
       }
     },
-    [socket, url, user?.token, getReceivedTaskInvites, getSentTaskInvites],
+    [socket, url, user, getReceivedTaskInvites, getSentTaskInvites],
   );
 
   const acceptReceivedTaskInvites = React.useCallback(
@@ -94,7 +94,7 @@ const Invites = () => {
         }
       }
     },
-    [socket, url, user?.token, removeSentTaskInvites],
+    [socket, url, user, removeSentTaskInvites],
   );
 
   const removeSentAssociateInvites = React.useCallback(
@@ -127,13 +127,7 @@ const Invites = () => {
         }
       }
     },
-    [
-      user?.token,
-      url,
-      socket,
-      getSentAssociateInvites,
-      getReceivedAssociateInvites,
-    ],
+    [user, url, socket, getSentAssociateInvites, getReceivedAssociateInvites],
   );
 
   const acceptReceivedAssociateInvites = React.useCallback(
@@ -166,7 +160,7 @@ const Invites = () => {
         }
       }
     },
-    [socket, url, user?.token, removeSentAssociateInvites],
+    [socket, url, user, removeSentAssociateInvites],
   );
 
   const mappedSentTaskInvites = sentTaskInvites.map((taskInvite, index) => {

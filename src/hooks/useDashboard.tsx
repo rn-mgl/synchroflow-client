@@ -49,7 +49,7 @@ export default function useDashboard() {
         console.log(error);
       }
     }
-  }, [url, user?.token]);
+  }, [url, user]);
 
   return {
     tasksCount,

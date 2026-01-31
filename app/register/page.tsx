@@ -56,7 +56,7 @@ const Register = () => {
   };
 
   const submitRegistration = async (
-    e: React.FormEvent<HTMLFormElement>,
+    e: React.SubmitEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
 

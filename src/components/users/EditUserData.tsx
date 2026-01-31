@@ -72,14 +72,18 @@ const EditUserData: React.FC<EditTaskProps> = (props) => {
     });
   };
 
-  const editUserData = async (e: React.FormEvent<HTMLFormElement>) => {
+  const editUserData = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     let bannerURL = null;
 
+    const passedData = {
+      ...userData,
+    };
+
     if (rawFile.current?.value) {
       bannerURL = await uploadFile(rawFile.current?.files);
-      userData.image = bannerURL;
+      passedData.image = bannerURL;
     }
 
     try {

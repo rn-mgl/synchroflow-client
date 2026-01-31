@@ -5,9 +5,11 @@ export default function useAudio() {
   const audioRef = React.useRef<HTMLAudioElement>(null);
   const { settings } = useSettings();
 
-  if (audioRef.current) {
-    audioRef.current.volume = settings.notification_sound / 100;
-  }
+  React.useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = settings.notification_sound / 100;
+    }
+  }, [settings.notification_sound]);
 
   return {
     audioRef,

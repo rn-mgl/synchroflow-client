@@ -53,7 +53,7 @@ const AddRoomMember: React.FC<AddRoomMemberProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, user?.token, props.messageRoom, props.roomType]);
+  }, [url, user, props.messageRoom, props.roomType]);
 
   const addToRoom = async (memberUUID: string) => {
     try {

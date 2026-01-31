@@ -58,7 +58,7 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
     });
   };
 
-  const createMainTask = async (e: React.FormEvent<HTMLFormElement>) => {
+  const createMainTask = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleLoader(true);
     try {

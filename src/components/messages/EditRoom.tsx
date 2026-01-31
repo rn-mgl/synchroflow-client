@@ -59,7 +59,7 @@ const EditRoom: React.FC<EditRoomProps> = (props) => {
     });
   };
 
-  const editRoom = async (e: React.FormEvent<HTMLFormElement>) => {
+  const editRoom = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       let roomImage = null;

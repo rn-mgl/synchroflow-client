@@ -54,7 +54,7 @@ const AssociateDetails: React.FC<AssociateProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, props.associateUUID, user?.token]);
+  }, [url, props.associateUUID, user]);
 
   React.useEffect(() => {
     getAssociate();

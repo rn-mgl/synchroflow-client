@@ -89,7 +89,7 @@ const AddAssociate: React.FC<AddAssociateProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, user?.token, sortFilter, searchFilter, searchCategory]);
+  }, [url, user, sortFilter, searchFilter, searchCategory]);
 
   const sendInvite = async (inviteTo: string) => {
     try {

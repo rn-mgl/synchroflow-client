@@ -55,7 +55,7 @@ export default function useAssociates() {
         }
       }
     },
-    [url, user?.token],
+    [url, user],
   );
 
   const getRecentAssociates = React.useCallback(
@@ -83,7 +83,7 @@ export default function useAssociates() {
         }
       }
     },
-    [url, user?.token],
+    [url, user],
   );
 
   return {

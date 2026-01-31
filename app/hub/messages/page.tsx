@@ -131,13 +131,13 @@ const Messages = () => {
     }
   };
 
-  const deleteGroupRoom = async (e: React.FormEvent<HTMLFormElement>) => {
+  const deleteGroupRoom = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const { data } = await axios.delete(
         `${url}/message_rooms/${activeRoom.message_room}`,
         {
-          headers: { Authorization: user?.token, roomType },
+          headers: { Authorization: user, roomType },
         },
       );
       if (data.deletedRoom) {

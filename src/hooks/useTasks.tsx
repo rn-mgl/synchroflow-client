@@ -49,7 +49,7 @@ export default function useTasks() {
         console.log(error);
       }
     }
-  }, [url, user?.token]);
+  }, [url, user]);
 
   const getMyTasksToday = React.useCallback(
     async (
@@ -77,7 +77,7 @@ export default function useTasks() {
         }
       }
     },
-    [url, user?.token],
+    [url, user],
   );
 
   const getCollaboratedTasksToday = React.useCallback(
@@ -106,7 +106,7 @@ export default function useTasks() {
         }
       }
     },
-    [url, user?.token],
+    [url, user],
   );
 
   const getMyTasks = React.useCallback(
@@ -135,7 +135,7 @@ export default function useTasks() {
         }
       }
     },
-    [url, user?.token],
+    [url, user],
   );
 
   const getCollaboratedTasks = React.useCallback(
@@ -164,7 +164,7 @@ export default function useTasks() {
         }
       }
     },
-    [url, user?.token],
+    [url, user],
   );
 
   return {

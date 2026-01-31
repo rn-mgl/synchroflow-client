@@ -71,7 +71,7 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
         handleLoader(false);
       }
     }
-  }, [url, user?.token, notificationLimit, isLoading, handleLoader]);
+  }, [url, user, notificationLimit, isLoading, handleLoader]);
 
   React.useEffect(() => {
     if (!scrollRef.current) return;

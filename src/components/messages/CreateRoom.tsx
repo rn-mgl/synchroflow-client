@@ -46,7 +46,7 @@ const CreateRoom: React.FC<CreateRoomProps> = (props) => {
     });
   };
 
-  const createGroup = async (e: React.FormEvent<HTMLFormElement>) => {
+  const createGroup = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       let groupImage = null;

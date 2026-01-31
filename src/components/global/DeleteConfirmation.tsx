@@ -13,7 +13,7 @@ interface DeleteConfirmationProps {
   apiRoute: string;
   params?: Record<string, string | number>;
   redirectLink?: string;
-  customDelete?: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
+  customDelete?: (e: React.SubmitEvent<HTMLFormElement>) => Promise<void>;
   toggleConfirmation: () => void;
   refetchData?: (() => Promise<void>) | (() => void);
 }
@@ -25,7 +25,7 @@ const DeleteConfirmation: React.FC<DeleteConfirmationProps> = (props) => {
   const router = useRouter();
   const { isLoading, handleLoader } = useLoader();
 
-  const deleteData = async (e: React.FormEvent<HTMLFormElement>) => {
+  const deleteData = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       handleLoader(true);

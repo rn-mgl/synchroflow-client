@@ -62,7 +62,7 @@ export default function useInvites() {
         console.log(error);
       }
     }
-  }, [url, user?.token]);
+  }, [url, user]);
 
   const getReceivedTaskInvites = React.useCallback(async () => {
     if (user?.token) {
@@ -78,7 +78,7 @@ export default function useInvites() {
         console.log(error);
       }
     }
-  }, [url, user?.token]);
+  }, [url, user]);
 
   const getSentAssociateInvites = React.useCallback(async () => {
     if (user?.token) {
@@ -94,7 +94,7 @@ export default function useInvites() {
         console.log(error);
       }
     }
-  }, [url, user?.token]);
+  }, [url, user]);
 
   const getReceivedAssociateInvites = React.useCallback(async () => {
     if (user?.token) {
@@ -110,7 +110,7 @@ export default function useInvites() {
         console.log(error);
       }
     }
-  }, [url, user?.token]);
+  }, [url, user]);
 
   return {
     sentTaskInvites,

@@ -51,7 +51,7 @@ const CreateSubTask: React.FC<CreateSubTaskProps> = (props) => {
     });
   };
 
-  const createSubTask = async (e: React.FormEvent<HTMLFormElement>) => {
+  const createSubTask = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleLoader(true);
     try {

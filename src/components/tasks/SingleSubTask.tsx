@@ -139,7 +139,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, user?.token, props.selectedSubTask, params?.task_uuid]);
+  }, [url, user, props.selectedSubTask, params?.task_uuid]);
 
   const getSubtask = React.useCallback(async () => {
     if (user?.token) {
@@ -157,9 +157,9 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
         console.log(error);
       }
     }
-  }, [props.selectedSubTask, url, user?.token]);
+  }, [props.selectedSubTask, url, user]);
 
-  const deleteSubtask = async (e: React.FormEvent<HTMLFormElement>) => {
+  const deleteSubtask = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       const { data } = await axios.delete(

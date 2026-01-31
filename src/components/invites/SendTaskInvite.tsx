@@ -88,7 +88,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, user?.token, params?.task_uuid, searchFilter]);
+  }, [url, user, params?.task_uuid, searchFilter]);
 
   const mappedAssociates = associates.map((associate, index) => {
     return (
@@ -142,7 +142,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
     );
   });
 
-  const sendInvite = async (e: React.FormEvent<HTMLFormElement>) => {
+  const sendInvite = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleLoader(true);
 

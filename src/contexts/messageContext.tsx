@@ -178,7 +178,7 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
         }
       }
     },
-    [url, user?.token],
+    [url, user],
   );
 
   const getRoomMessages = React.useCallback(
@@ -206,7 +206,7 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
         }
       }
     },
-    [url, user?.token, messageLimit, handleLoader, isLoading],
+    [url, user, messageLimit, handleLoader, isLoading],
   );
 
   const getRoom = React.useCallback(
@@ -230,7 +230,7 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
         }
       }
     },
-    [url, user?.token, getRoomMessages],
+    [url, user, getRoomMessages],
   );
 
   React.useEffect(() => {

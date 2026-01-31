@@ -47,7 +47,7 @@ const ChangePassword: React.FC<ChangePasswordProps> = (props) => {
     });
   };
 
-  const changePassword = async (e: React.FormEvent<HTMLFormElement>) => {
+  const changePassword = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const { newPassword, retypedNewPassword } = password;
