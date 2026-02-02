@@ -71,13 +71,13 @@ const Hub = () => {
     return (
       <TaskCards
         key={task.task_uuid}
-        banner={task.task_banner}
-        deadline={task.task_end_date}
-        status={task.task_status}
-        subTitle={task.task_subtitle}
+        banner={task.banner}
+        deadline={task.end_date}
+        status={task.status}
+        subTitle={task.subtitle}
         taskUUID={task.task_uuid}
-        title={task.task_title}
-        priority={task.task_priority}
+        title={task.title}
+        priority={task.priority}
       />
     );
   });
@@ -86,13 +86,13 @@ const Hub = () => {
     return (
       <TaskCards
         key={task.task_uuid}
-        banner={task.task_banner}
-        deadline={task.task_end_date}
-        status={task.task_status}
-        subTitle={task.task_subtitle}
+        banner={task.banner}
+        deadline={task.end_date}
+        status={task.status}
+        subTitle={task.subtitle}
         taskUUID={task.task_uuid}
-        title={task.task_title}
-        priority={task.task_priority}
+        title={task.title}
+        priority={task.priority}
       />
     );
   });

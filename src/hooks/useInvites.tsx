@@ -19,12 +19,12 @@ interface InvitesStateProps {
 }
 
 interface TaskInvitesStateProps extends InvitesStateProps {
-  main_task_banner: string;
-  main_task_title: string;
-  main_task_invite_uuid: string;
-  main_task_priority: "critical" | "important" | "none";
-  main_task_uuid: string;
-  main_task_invite_message: string;
+  banner: string;
+  title: string;
+  task_invite_uuid: string;
+  priority: "critical" | "important" | "none";
+  task_uuid: string;
+  message: string;
 }
 
 interface AssociateInvitesStateProps extends InvitesStateProps {
@@ -51,7 +51,7 @@ export default function useInvites() {
   const getSentTaskInvites = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/main_task_invites`, {
+        const { data } = await axios.get(`${url}/task_invites`, {
           headers: { Authorization: user?.token },
           params: { type: "sent" },
         });
@@ -67,7 +67,7 @@ export default function useInvites() {
   const getReceivedTaskInvites = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/main_task_invites`, {
+        const { data } = await axios.get(`${url}/task_invites`, {
           headers: { Authorization: user?.token },
           params: { type: "received" },
         });

@@ -56,8 +56,8 @@ const CreateSubTask: React.FC<CreateSubTaskProps> = (props) => {
     handleLoader(true);
     try {
       const { data } = await axios.post(
-        `${url}/sub_tasks`,
-        { subTaskData, mainTaskUUID: params?.task_uuid },
+        `${url}/tasks`,
+        { subTaskData, taskUUID: params?.task_uuid },
         { headers: { Authorization: user?.token } },
       );
       if (data) {

@@ -21,16 +21,16 @@ import { dateTimeForInput, localizeTime } from "../../utils/dateUtils";
 import { useParams } from "next/navigation";
 
 interface SingleTaskDataStateProps {
-  main_task_banner: string | null;
-  main_task_by: number;
-  main_task_description: string;
-  main_task_priority: string;
-  main_task_start_date: string;
-  main_task_end_date: string;
-  main_task_status: string;
-  main_task_subtitle: string;
-  main_task_title: string;
-  main_task_uuid: string;
+  banner: string | null;
+  task_by: number;
+  description: string;
+  priority: string;
+  start_date: string;
+  end_date: string;
+  status: string;
+  subtitle: string;
+  title: string;
+  task_uuid: string;
 }
 
 interface EditTaskProps {
@@ -40,15 +40,15 @@ interface EditTaskProps {
 }
 
 const EditTask: React.FC<EditTaskProps> = (props) => {
-  const [mainTaskData, setMainTaskData] = React.useState({
-    mainTaskTitle: props.taskData.main_task_title,
-    mainTaskBanner: props.taskData.main_task_banner,
-    mainTaskSubtitle: props.taskData.main_task_subtitle,
-    mainTaskDescription: props.taskData.main_task_description,
-    mainTaskStatus: props.taskData.main_task_status,
-    mainTaskPriority: props.taskData.main_task_priority,
-    mainTaskStartDate: props.taskData.main_task_start_date,
-    mainTaskEndDate: props.taskData.main_task_end_date,
+  const [taskData, setTaskData] = React.useState({
+    taskTitle: props.taskData.title,
+    taskBanner: props.taskData.banner,
+    taskSubtitle: props.taskData.subtitle,
+    taskDescription: props.taskData.description,
+    taskStatus: props.taskData.status,
+    taskPriority: props.taskData.priority,
+    taskStartDate: props.taskData.start_date,
+    taskEndDate: props.taskData.end_date,
   });
   const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } =
     useFile();
@@ -68,7 +68,7 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
     const name = e.target.name;
     const value = e.target.value;
 
-    setMainTaskData((prev) => {
+    setTaskData((prev) => {
       return {
         ...prev,
         [name]: value,
@@ -77,30 +77,30 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
   };
 
   const removeUploadedFile = () => {
-    setMainTaskData((prev) => {
+    setTaskData((prev) => {
       return {
         ...prev,
-        mainTaskBanner: null,
+        taskBanner: null,
       };
     });
   };
 
-  const editMainTask = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const editTask = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleLoader(true);
     try {
       let bannerURL = null;
 
-      const passedData = { ...mainTaskData };
+      const passedData = { ...taskData };
 
       if (rawFile.current?.value) {
         bannerURL = await uploadFile(rawFile.current?.files);
-        passedData.mainTaskBanner = bannerURL;
+        passedData.taskBanner = bannerURL;
       }
 
       const { data } = await axios.patch(
-        `${url}/main_tasks/${params?.task_uuid}`,
-        { mainTaskData: passedData },
+        `${url}/tasks/${params?.task_uuid}`,
+        { taskData: passedData },
         { headers: { Authorization: user?.token } },
       );
       if (data.updateTask) {
@@ -122,7 +122,7 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
     >
       {isLoading ? <Loading /> : null}
       <form
-        onSubmit={(e) => editMainTask(e)}
+        onSubmit={(e) => editTask(e)}
         className="w-full bg-white h-full rounded-lg flex flex-col p-4 t:p-10 gap-4
                   max-w-screen-l-s overflow-y-auto cstm-scrollbar items-center justify-start"
       >
@@ -139,13 +139,13 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
           <div
             style={{
               backgroundImage: `url(${
-                fileData.url ? fileData.url : mainTaskData.mainTaskBanner
+                fileData.url ? fileData.url : taskData.taskBanner
               })`,
             }}
             className="w-full h-40 rounded-xl flex flex-col items-center justify-center
                       border-2 border-primary-200 bg-center bg-cover"
           >
-            {fileData.url || mainTaskData.mainTaskBanner ? null : (
+            {fileData.url || taskData.taskBanner ? null : (
               <AiFillPicture className="text-primary-200 text-4xl" />
             )}
           </div>
@@ -162,12 +162,12 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
                 className="hidden peer"
                 onChange={(e) => selectedFileViewer(e)}
               />
-              {fileData.url || mainTaskData.mainTaskBanner ? null : (
+              {fileData.url || taskData.taskBanner ? null : (
                 <AiOutlinePlus className="text-primary-500 peer-checked animate-fadeIn" />
               )}
             </label>
 
-            {fileData.url || mainTaskData.mainTaskBanner ? (
+            {fileData.url || taskData.taskBanner ? (
               <button
                 type="button"
                 className="animate-fadeIn"
@@ -182,10 +182,10 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Title</p>
           <TextComp
-            name="mainTaskTitle"
+            name="taskTitle"
             placeholder="Task Title..."
             required={true}
-            value={mainTaskData.mainTaskTitle}
+            value={taskData.taskTitle}
             onChange={handleTaskData}
             Icon={MdTitle}
           />
@@ -194,10 +194,10 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Sub Title</p>
           <TextComp
-            name="mainTaskSubtitle"
+            name="taskSubtitle"
             placeholder="Task Sub Title..."
             required={true}
-            value={mainTaskData.mainTaskSubtitle}
+            value={taskData.taskSubtitle}
             onChange={handleTaskData}
             Icon={MdSubtitles}
           />
@@ -206,9 +206,9 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Description</p>
           <TextAreaComp
-            name="mainTaskDescription"
+            name="taskDescription"
             placeholder="Task Description..."
-            value={mainTaskData.mainTaskDescription}
+            value={taskData.taskDescription}
             rows={5}
             required={true}
             onChange={handleTaskData}
@@ -218,8 +218,8 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Priority</p>
           <SelectComp
-            name="mainTaskPriority"
-            value={mainTaskData.mainTaskPriority}
+            name="taskPriority"
+            value={taskData.taskPriority}
             onChange={handleTaskData}
             labelValuePair={[
               { label: "Critical Task", value: "critical" },
@@ -232,8 +232,8 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Status</p>
           <SelectComp
-            name="mainTaskStatus"
-            value={mainTaskData.mainTaskStatus}
+            name="taskStatus"
+            value={taskData.taskStatus}
             onChange={handleTaskData}
             labelValuePair={[
               { label: "Ongoing", value: "ongoing" },
@@ -246,9 +246,9 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Start Date</p>
           <DateComp
-            name="mainTaskStartDate"
+            name="taskStartDate"
             required={true}
-            value={dateTimeForInput(mainTaskData.mainTaskStartDate)}
+            value={dateTimeForInput(taskData.taskStartDate)}
             onChange={handleTaskData}
           />
         </div>
@@ -256,9 +256,9 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">End Date</p>
           <DateComp
-            name="mainTaskEndDate"
+            name="taskEndDate"
             required={true}
-            value={dateTimeForInput(mainTaskData.mainTaskEndDate)}
+            value={dateTimeForInput(taskData.taskEndDate)}
             onChange={handleTaskData}
           />
         </div>

@@ -6,11 +6,11 @@ interface ReceivedTaskInvitesProps {
   name: string;
   surname: string;
   email: string;
-  main_task_invite_uuid: string;
-  main_task_title: string;
-  main_task_banner: string;
-  main_task_priority: "critical" | "important" | "none";
-  main_task_invite_message: string;
+  task_invite_uuid: string;
+  title: string;
+  banner: string;
+  priority: "critical" | "important" | "none";
+  message: string;
   acceptReceivedTaskInvites: () => Promise<void>;
   declineReceivedTaskInvites: () => Promise<void>;
 }
@@ -23,13 +23,13 @@ const ReceivedTaskInvitesCard: React.FC<ReceivedTaskInvitesProps> = (props) => {
                     transition-all"
       >
         <div className="w-full flex flex-row justify-between">
-          <p className="font-bold truncate">{props.main_task_title}</p>
+          <p className="font-bold truncate">{props.title}</p>
           <p
             className={`font-medium truncate capitalize ${
-              PRIORITY_STYLE[props.main_task_priority]
+              PRIORITY_STYLE[props.priority]
             }`}
           >
-            {props.main_task_priority}
+            {props.priority}
           </p>
         </div>
 
@@ -41,11 +41,11 @@ const ReceivedTaskInvitesCard: React.FC<ReceivedTaskInvitesProps> = (props) => {
         </div>
 
         <div
-          style={{ backgroundImage: `url(${props.main_task_banner})` }}
+          style={{ backgroundImage: `url(${props.banner})` }}
           className="w-full h-40 bg-center bg-cover bg-no-repeat rounded-md 
                     overflow-hidden group p-2 text-xs bg-neutral-200 overflow-y-auto cstm-scrollbar"
         >
-          {props.main_task_invite_message}
+          {props.message}
         </div>
 
         <div className="flex flex-col gap-2 w-full items-center justify-center mt-auto">

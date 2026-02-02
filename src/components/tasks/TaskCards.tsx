@@ -38,9 +38,9 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
   const getCollaborators = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/main_task_collaborators`, {
+        const { data } = await axios.get(`${url}/task_collaborators`, {
           headers: { Authorization: user?.token },
-          params: { mainTaskUUID: props.taskUUID },
+          params: { taskUUID: props.taskUUID },
         });
         if (data) {
           setCollaborators(data);
@@ -81,8 +81,8 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
   }, [getCollaborators]);
 
   React.useEffect(() => {
-    const handle = async (args: { mainTaskUUID: string }) => {
-      if (props.taskUUID === args.mainTaskUUID) {
+    const handle = async (args: { taskUUID: string }) => {
+      if (props.taskUUID === args.taskUUID) {
         await getCollaborators();
       }
     };

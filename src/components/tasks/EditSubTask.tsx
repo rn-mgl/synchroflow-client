@@ -16,14 +16,14 @@ import { useParams } from "next/navigation";
 
 interface SubTaskDataStateProps {
   date_created: string;
-  sub_task_uuid: string;
-  sub_task_title: string;
-  sub_task_subtitle: string;
-  sub_task_description: string;
-  sub_task_status: string;
-  sub_task_start_date: string;
-  sub_task_end_date: string;
-  sub_task_priority: string;
+  task_uuid: string;
+  title: string;
+  task_subtitle: string;
+  description: string;
+  status: string;
+  start_date: string;
+  end_date: string;
+  priority: string;
 }
 
 interface EditSubTaskProps {
@@ -35,13 +35,13 @@ interface EditSubTaskProps {
 
 const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
   const [subTaskData, setSubTaskData] = React.useState({
-    subTaskTitle: props.subTaskData.sub_task_title,
-    subTaskSubtitle: props.subTaskData.sub_task_subtitle,
-    subTaskDescription: props.subTaskData.sub_task_description,
-    subTaskPriority: props.subTaskData.sub_task_priority,
-    subTaskStatus: props.subTaskData.sub_task_status,
-    subTaskStartDate: props.subTaskData.sub_task_start_date,
-    subTaskEndDate: props.subTaskData.sub_task_end_date,
+    subTaskTitle: props.subTaskData.title,
+    subTaskSubtitle: props.subTaskData.task_subtitle,
+    subTaskDescription: props.subTaskData.description,
+    subTaskPriority: props.subTaskData.priority,
+    subTaskStatus: props.subTaskData.status,
+    subTaskStartDate: props.subTaskData.start_date,
+    subTaskEndDate: props.subTaskData.end_date,
   });
   const { isLoading, handleLoader } = useLoader();
 
@@ -72,11 +72,11 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
     handleLoader(true);
     try {
       const { data } = await axios.patch(
-        `${url}/sub_tasks/${props.subTaskData.sub_task_uuid}`,
+        `${url}/tasks/${props.subTaskData.task_uuid}`,
         { subTaskData },
         {
           headers: { Authorization: user?.token },
-          params: { mainTaskUUID: params?.task_uuid },
+          params: { taskUUID: params?.task_uuid },
         },
       );
       if (data.updateSubTask) {

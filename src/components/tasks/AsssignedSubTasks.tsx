@@ -3,9 +3,9 @@ import React from "react";
 import { BsFillDiamondFill } from "react-icons/bs";
 
 interface SubTasksStateProps {
-  sub_task_title: string;
-  sub_task_subtitle: string;
-  sub_task_uuid: string;
+  title: string;
+  subtitle: string;
+  task_uuid: string;
 }
 
 interface AssignedSubTasksProps {
@@ -22,18 +22,18 @@ const AssignedSubTasks: React.FC<AssignedSubTasksProps> = ({
     (subTask, index) => {
       return (
         <button
-          onClick={() => props.handleSelectedSubTask(subTask.sub_task_uuid)}
+          onClick={() => props.handleSelectedSubTask(subTask.task_uuid)}
           className="flex flex-row gap-2 items-center justify-start 
                 w-full p-2 bg-primary-500 text-white rounded-md"
-          key={subTask.sub_task_uuid}
+          key={subTask.task_uuid}
         >
           <div>
             <BsFillDiamondFill className="text-xs" />
           </div>
-          <p>{subTask.sub_task_title}</p>
+          <p>{subTask.title}</p>
         </button>
       );
-    }
+    },
   );
 
   React.useEffect(() => {

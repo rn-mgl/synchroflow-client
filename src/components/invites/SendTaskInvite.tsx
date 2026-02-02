@@ -72,11 +72,11 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
   const getAssociates = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/main_task_invites`, {
+        const { data } = await axios.get(`${url}/task_invites`, {
           headers: { Authorization: user?.token },
           params: {
             type: "invite associates",
-            mainTaskUUID: params?.task_uuid,
+            taskUUID: params?.task_uuid,
             searchFilter,
           },
         });
@@ -160,7 +160,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
       e.preventDefault();
 
       const { data } = await axios.post(
-        `${url}/main_task_invites`,
+        `${url}/task_invites`,
         { associatesToInvite, inviteMessage, taskUUID: props.taskUUID },
         { headers: { Authorization: user?.token } },
       );
@@ -169,7 +169,7 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
         handleMessages(true, "Invite sent successfully", "info");
         handleLoader(false);
         props.toggleCanInvite();
-        socket?.emit("send_main_task_invite", { rooms: associatesToInvite });
+        socket?.emit("send_task_invite", { rooms: associatesToInvite });
       }
     } catch (error) {
       handleLoader(false);

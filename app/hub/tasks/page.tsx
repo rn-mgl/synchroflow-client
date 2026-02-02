@@ -56,14 +56,14 @@ const Tasks = () => {
   const mappedMyTaskCardsToday = myTasksToday.map((task, index) => {
     return (
       <TaskCards
-        priority={task.main_task_priority}
-        key={task.main_task_uuid}
-        banner={task.main_task_banner}
-        title={task.main_task_title}
-        subTitle={task.main_task_subtitle}
-        status={task.main_task_status}
-        deadline={task.main_task_end_date}
-        taskUUID={task.main_task_uuid}
+        priority={task.priority}
+        key={task.task_uuid}
+        banner={task.banner}
+        title={task.title}
+        subTitle={task.subtitle}
+        status={task.status}
+        deadline={task.end_date}
+        taskUUID={task.task_uuid}
       />
     );
   });
@@ -72,14 +72,14 @@ const Tasks = () => {
     (task, index) => {
       return (
         <TaskCards
-          priority={task.main_task_priority}
-          key={task.main_task_uuid}
-          banner={task.main_task_banner}
-          title={task.main_task_title}
-          subTitle={task.main_task_subtitle}
-          status={task.main_task_status}
-          deadline={task.main_task_end_date}
-          taskUUID={task.main_task_uuid}
+          priority={task.priority}
+          key={task.task_uuid}
+          banner={task.banner}
+          title={task.title}
+          subTitle={task.subtitle}
+          status={task.status}
+          deadline={task.end_date}
+          taskUUID={task.task_uuid}
         />
       );
     },
@@ -88,14 +88,14 @@ const Tasks = () => {
   const mappedMyTaskCards = myTasks.map((task, index) => {
     return (
       <TaskCards
-        priority={task.main_task_priority}
-        key={task.main_task_uuid}
-        banner={task.main_task_banner}
-        title={task.main_task_title}
-        subTitle={task.main_task_subtitle}
-        status={task.main_task_status}
-        deadline={task.main_task_end_date}
-        taskUUID={task.main_task_uuid}
+        priority={task.priority}
+        key={task.task_uuid}
+        banner={task.banner}
+        title={task.title}
+        subTitle={task.subtitle}
+        status={task.status}
+        deadline={task.end_date}
+        taskUUID={task.task_uuid}
       />
     );
   });
@@ -103,14 +103,14 @@ const Tasks = () => {
   const mappedCollaboratedTaskCards = collaboratedTasks.map((task, index) => {
     return (
       <TaskCards
-        priority={task.main_task_priority}
-        key={task.main_task_uuid}
-        banner={task.main_task_banner}
-        title={task.main_task_title}
-        subTitle={task.main_task_subtitle}
-        status={task.main_task_status}
-        deadline={task.main_task_end_date}
-        taskUUID={task.main_task_uuid}
+        priority={task.priority}
+        key={task.task_uuid}
+        banner={task.banner}
+        title={task.title}
+        subTitle={task.subtitle}
+        status={task.status}
+        deadline={task.end_date}
+        taskUUID={task.task_uuid}
       />
     );
   });

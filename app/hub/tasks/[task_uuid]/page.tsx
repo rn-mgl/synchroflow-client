@@ -25,44 +25,44 @@ import {
 import { BsArrowLeft } from "react-icons/bs";
 
 interface SingleTaskDataStateProps {
-  main_task_banner: string | null;
-  main_task_by: number;
-  main_task_description: string;
-  main_task_priority: string;
-  main_task_start_date: string;
-  main_task_end_date: string;
-  main_task_status: string;
-  main_task_subtitle: string;
-  main_task_title: string;
-  main_task_uuid: string;
+  banner: string | null;
+  task_by: number;
+  description: string;
+  priority: string;
+  start_date: string;
+  end_date: string;
+  status: string;
+  subtitle: string;
+  title: string;
+  task_uuid: string;
 }
 
 interface SubTasksStateProps {
-  sub_task_title: string;
-  sub_task_subtitle: string;
-  sub_task_uuid: string;
+  title: string;
+  subtitle: string;
+  task_uuid: string;
 }
 
 interface CollaboratorsStateProps {
   name: string;
   surname: string;
   image: string;
-  main_task_collaborator_uuid: string;
+  task_collaborator_uuid: string;
   user_uuid: string;
 }
 
 const SingleTask = () => {
   const [taskData, setTaskData] = React.useState<SingleTaskDataStateProps>({
-    main_task_banner: "",
-    main_task_by: -1,
-    main_task_description: "",
-    main_task_priority: "",
-    main_task_start_date: "",
-    main_task_end_date: "",
-    main_task_status: "",
-    main_task_subtitle: "",
-    main_task_title: "",
-    main_task_uuid: "",
+    banner: "",
+    task_by: -1,
+    description: "",
+    priority: "",
+    start_date: "",
+    end_date: "",
+    status: "",
+    subtitle: "",
+    title: "",
+    task_uuid: "",
   });
   const [collaborators, setCollaborators] = React.useState<
     Array<CollaboratorsStateProps>
@@ -86,7 +86,7 @@ const SingleTask = () => {
   const { socket } = useGlobalContext();
   const { data: session } = useSession({ required: true });
   const user = session?.user;
-  const isTaskCreator = user?.id === taskData.main_task_by;
+  const isTaskCreator = user?.id === taskData.task_by;
   const router = useRouter();
   const url = process.env.NEXT_PUBLIC_API_URL;
 
@@ -127,12 +127,9 @@ const SingleTask = () => {
   const getSingleTask = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(
-          `${url}/main_tasks/${params?.task_uuid}`,
-          {
-            headers: { Authorization: user?.token },
-          },
-        );
+        const { data } = await axios.get(`${url}/tasks/${params?.task_uuid}`, {
+          headers: { Authorization: user?.token },
+        });
 
         if (data) {
           setTaskData(data);
@@ -146,9 +143,9 @@ const SingleTask = () => {
   const getSingleTaskCollborators = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/main_task_collaborators`, {
+        const { data } = await axios.get(`${url}/task_collaborators`, {
           headers: { Authorization: user?.token },
-          params: { mainTaskUUID: params?.task_uuid },
+          params: { taskUUID: params?.task_uuid },
         });
 
         if (data) {
@@ -163,9 +160,9 @@ const SingleTask = () => {
   const getCreatedSubTasks = React.useCallback(async () => {
     if (isTaskCreator && user?.token) {
       try {
-        const { data } = await axios.get(`${url}/sub_tasks`, {
+        const { data } = await axios.get(`${url}/tasks`, {
           headers: { Authorization: user?.token },
-          params: { type: "main task", mainTaskUUID: params?.task_uuid },
+          params: { type: "main task", taskUUID: params?.task_uuid },
         });
         if (data) {
           setCreatedSubTasks(data);
@@ -179,9 +176,9 @@ const SingleTask = () => {
   const getAssignedSubTasks = React.useCallback(async () => {
     if (!isTaskCreator && user?.token) {
       try {
-        const { data } = await axios.get(`${url}/sub_tasks`, {
+        const { data } = await axios.get(`${url}/tasks`, {
           headers: { Authorization: user?.token },
-          params: { type: "collaborated", mainTaskUUID: params?.task_uuid },
+          params: { type: "collaborated", taskUUID: params?.task_uuid },
         });
         if (data) {
           setAssignedSubTasks(data);
@@ -195,18 +192,15 @@ const SingleTask = () => {
   const deleteTask = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const { data } = await axios.delete(
-        `${url}/main_tasks/${params?.task_uuid}`,
-        {
-          headers: { Authorization: user?.token },
-        },
-      );
+      const { data } = await axios.delete(`${url}/tasks/${params?.task_uuid}`, {
+        headers: { Authorization: user?.token },
+      });
 
       if (data.deleteTask) {
         toggleCanDeleteTask();
         router.push("/hub/tasks");
         socket?.emit("delete_task", {
-          mainTaskUUID: params?.task_uuid,
+          taskUUID: params?.task_uuid,
           rooms: data.rooms,
         });
       }
@@ -219,10 +213,10 @@ const SingleTask = () => {
     e.preventDefault();
     try {
       const { data } = await axios.delete(
-        `${url}/main_task_collaborators/${params?.task_uuid}`,
+        `${url}/task_collaborators/${params?.task_uuid}`,
         {
           headers: { Authorization: user?.token },
-          params: { type: "leave", mainTaskUUID: params?.task_uuid },
+          params: { type: "leave", taskUUID: params?.task_uuid },
         },
       );
 
@@ -230,7 +224,7 @@ const SingleTask = () => {
         toggleCanLeaveTask();
         router.push("/hub/tasks");
         socket?.emit("leave_task", {
-          mainTaskUUID: params?.task_uuid,
+          taskUUID: params?.task_uuid,
           rooms: data.rooms,
         });
       }
@@ -243,10 +237,10 @@ const SingleTask = () => {
     e.preventDefault();
     try {
       const { data } = await axios.delete(
-        `${url}/main_task_collaborators/${collaboratorToRemove}`,
+        `${url}/task_collaborators/${collaboratorToRemove}`,
         {
           headers: { Authorization: user?.token },
-          params: { type: "delete", mainTaskUUID: params?.task_uuid },
+          params: { type: "delete", taskUUID: params?.task_uuid },
         },
       );
 
@@ -254,7 +248,7 @@ const SingleTask = () => {
         handleCollaboratorToRemove("");
         await getSingleTaskCollborators();
         socket?.emit("remove_collaborator", {
-          mainTaskUUID: params?.task_uuid,
+          taskUUID: params?.task_uuid,
           rooms: data.rooms,
         });
       }
@@ -282,9 +276,7 @@ const SingleTask = () => {
             {isTaskCreator && (
               <button
                 onClick={() =>
-                  setCollaboratorToRemove(
-                    collaborator.main_task_collaborator_uuid,
-                  )
+                  setCollaboratorToRemove(collaborator.task_collaborator_uuid)
                 }
                 className="p-2 rounded-full hover:bg-primary-500  
                         text-primary-500 hover:text-white transition-all"
@@ -310,8 +302,8 @@ const SingleTask = () => {
   }, [getSingleTaskCollborators]);
 
   React.useEffect(() => {
-    const handle = async (args: { mainTaskUUID: string }) => {
-      if (params?.task_uuid === args.mainTaskUUID) {
+    const handle = async (args: { taskUUID: string }) => {
+      if (params?.task_uuid === args.taskUUID) {
         await getSingleTaskCollborators();
       }
     };
@@ -373,8 +365,8 @@ const SingleTask = () => {
   }, [socket, getAssignedSubTasks]);
 
   React.useEffect(() => {
-    const handle = async (args: { mainTaskUUID: string }) => {
-      if (args.mainTaskUUID === params?.task_uuid) {
+    const handle = async (args: { taskUUID: string }) => {
+      if (args.taskUUID === params?.task_uuid) {
         router.push("/hub/tasks");
       }
     };
@@ -387,8 +379,8 @@ const SingleTask = () => {
   }, [socket, params?.task_uuid, router]);
 
   React.useEffect(() => {
-    const handle = async (args: { mainTaskUUID: string }) => {
-      if (args.mainTaskUUID === params?.task_uuid) {
+    const handle = async (args: { taskUUID: string }) => {
+      if (args.taskUUID === params?.task_uuid) {
         router.push("/hub/tasks");
       }
     };
@@ -408,7 +400,7 @@ const SingleTask = () => {
       >
         {canInvite ? (
           <SendTaskInvite
-            taskUUID={taskData.main_task_uuid}
+            taskUUID={taskData.task_uuid}
             toggleCanInvite={toggleCanInvite}
           />
         ) : null}
@@ -431,7 +423,7 @@ const SingleTask = () => {
 
         {canDeleteTask ? (
           <DeleteConfirmation
-            apiRoute={`main_tasks/${params?.task_uuid}`}
+            apiRoute={`tasks/${params?.task_uuid}`}
             toggleConfirmation={toggleCanDeleteTask}
             customDelete={deleteTask}
             redirectLink="/hub/tasks"
@@ -442,7 +434,7 @@ const SingleTask = () => {
 
         {canLeaveTask ? (
           <DeleteConfirmation
-            apiRoute={`main_task_collaborators/${params?.task_uuid}`}
+            apiRoute={`task_collaborators/${params?.task_uuid}`}
             toggleConfirmation={toggleCanLeaveTask}
             customDelete={leaveTask}
             redirectLink="/hub/tasks"
@@ -453,7 +445,7 @@ const SingleTask = () => {
 
         {collaboratorToRemove ? (
           <DeleteConfirmation
-            apiRoute={`main_task_collaborators/${params?.task_uuid}`}
+            apiRoute={`task_collaborators/${params?.task_uuid}`}
             toggleConfirmation={() =>
               handleCollaboratorToRemove(collaboratorToRemove)
             }
@@ -486,7 +478,7 @@ const SingleTask = () => {
               <div className="flex flex-col gap-2 w-full items-start justify-start">
                 <div className="flex flex-row w-full justify-between items-center">
                   <p className="text-2xl font-medium text-secondary-500">
-                    {taskData.main_task_title}
+                    {taskData.title}
                   </p>
 
                   <div className="relative flex self-end ">
@@ -544,13 +536,13 @@ const SingleTask = () => {
 
                 <div
                   style={{
-                    backgroundImage: `url(${taskData.main_task_banner})`,
+                    backgroundImage: `url(${taskData.banner})`,
                   }}
                   className="w-full rounded-2xl h-48 bg-primary-300 bg-center  bg-cover l-s:h-56 p-4 flex flex-col"
                 />
 
                 <div className="flex flex-row gap-2 text-secondary-400 text-sm">
-                  <p>{taskData.main_task_subtitle}</p>
+                  <p>{taskData.subtitle}</p>
                 </div>
               </div>
 
@@ -584,8 +576,8 @@ const SingleTask = () => {
                     <AiOutlineClockCircle className="text-lg text-secondary-400" />
                   </div>
                   <p>
-                    {localizeDate(taskData.main_task_start_date, true)} -{" "}
-                    {localizeDate(taskData.main_task_end_date, true)}
+                    {localizeDate(taskData.start_date, true)} -{" "}
+                    {localizeDate(taskData.end_date, true)}
                   </p>
                 </div>
               </div>
@@ -598,7 +590,7 @@ const SingleTask = () => {
                             l-s:p-4"
                 >
                   <p className="leading-relaxed text-xs">
-                    {taskData.main_task_description}
+                    {taskData.description}
                   </p>
                 </div>
               </div>

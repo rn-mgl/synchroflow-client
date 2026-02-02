@@ -25,14 +25,14 @@ interface CreateTaskProps {
 }
 
 const CreateTask: React.FC<CreateTaskProps> = (props) => {
-  const [mainTaskData, setMainTaskData] = React.useState({
-    mainTaskTitle: "",
-    mainTaskBanner: null,
-    mainTaskSubtitle: "",
-    mainTaskDescription: "",
+  const [taskData, setTaskData] = React.useState({
+    taskTitle: "",
+    taskBanner: null,
+    taskSubtitle: "",
+    taskDescription: "",
     maintTaskPriority: "important",
-    mainTaskStartDate: undefined,
-    mainTaskEndDate: undefined,
+    taskStartDate: "",
+    taskEndDate: "",
   });
   const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } =
     useFile();
@@ -50,7 +50,7 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
     const name = e.target.name;
     const value = e.target.value;
 
-    setMainTaskData((prev) => {
+    setTaskData((prev) => {
       return {
         ...prev,
         [name]: value,
@@ -58,23 +58,23 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
     });
   };
 
-  const createMainTask = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const createTask = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleLoader(true);
     try {
       let bannerURL = null;
 
-      const passedData = { ...mainTaskData };
+      const passedData = { ...taskData };
 
       if (rawFile.current) {
         bannerURL = await uploadFile(rawFile.current?.files);
       }
 
-      passedData.mainTaskBanner = bannerURL;
+      passedData.taskBanner = bannerURL;
 
       const { data } = await axios.post(
-        `${url}/main_tasks`,
-        { mainTaskData: passedData },
+        `${url}/tasks`,
+        { taskData: passedData },
         { headers: { Authorization: user?.token } },
       );
       if (data) {
@@ -96,7 +96,7 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
     >
       {isLoading ? <Loading /> : null}
       <form
-        onSubmit={(e) => createMainTask(e)}
+        onSubmit={(e) => createTask(e)}
         className="w-full bg-white h-full rounded-lg flex flex-col p-4 t:p-10 gap-4
                   max-w-screen-l-s overflow-y-auto cstm-scrollbar items-center justify-start"
       >
@@ -152,10 +152,10 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Title</p>
           <TextComp
-            name="mainTaskTitle"
+            name="taskTitle"
             placeholder="Task Title..."
             required={true}
-            value={mainTaskData.mainTaskTitle}
+            value={taskData.taskTitle}
             onChange={handleTaskData}
             Icon={MdTitle}
           />
@@ -164,10 +164,10 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Sub Title</p>
           <TextComp
-            name="mainTaskSubtitle"
+            name="taskSubtitle"
             placeholder="Task Sub Title..."
             required={true}
-            value={mainTaskData.mainTaskSubtitle}
+            value={taskData.taskSubtitle}
             onChange={handleTaskData}
             Icon={MdSubtitles}
           />
@@ -176,9 +176,9 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Description</p>
           <TextAreaComp
-            name="mainTaskDescription"
+            name="taskDescription"
             placeholder="Task Description..."
-            value={mainTaskData.mainTaskDescription}
+            value={taskData.taskDescription}
             rows={5}
             required={true}
             onChange={handleTaskData}
@@ -189,7 +189,7 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
           <p className="text-xs">Priority</p>
           <SelectComp
             name="maintTaskPriority"
-            value={mainTaskData.maintTaskPriority}
+            value={taskData.maintTaskPriority}
             onChange={handleTaskData}
             labelValuePair={[
               { label: "Critical Task", value: "critical" },
@@ -202,9 +202,9 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Start Date</p>
           <DateComp
-            name="mainTaskStartDate"
+            name="taskStartDate"
             required={true}
-            value={mainTaskData.mainTaskStartDate}
+            value={taskData.taskStartDate}
             onChange={handleTaskData}
           />
         </div>
@@ -212,9 +212,9 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">End Date</p>
           <DateComp
-            name="mainTaskEndDate"
+            name="taskEndDate"
             required={true}
-            value={mainTaskData.mainTaskEndDate}
+            value={taskData.taskEndDate}
             onChange={handleTaskData}
           />
         </div>

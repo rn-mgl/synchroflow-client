@@ -39,7 +39,7 @@ const Invites = () => {
       if (user?.token) {
         try {
           const { data } = await axios.delete(
-            `${url}/main_task_invites/${inviteUUID}`,
+            `${url}/task_invites/${inviteUUID}`,
             {
               headers: { Authorization: user?.token },
             },
@@ -64,7 +64,7 @@ const Invites = () => {
 
   const acceptReceivedTaskInvites = React.useCallback(
     async (
-      mainTaskUUID: string,
+      taskUUID: string,
       invitedUserUUID: string,
       inviteUUID: string,
       inviteFromUUID: string,
@@ -72,8 +72,8 @@ const Invites = () => {
       if (user?.token) {
         try {
           const { data } = await axios.post(
-            `${url}/main_task_collaborators`,
-            { mainTaskUUID, collaboratorUUID: invitedUserUUID },
+            `${url}/task_collaborators`,
+            { taskUUID, collaboratorUUID: invitedUserUUID },
             { headers: { Authorization: user?.token } },
           );
           if (data) {
@@ -86,7 +86,7 @@ const Invites = () => {
               inviteUUID,
               invitedRoom: invitedUserUUID,
               fromRoom: inviteFromUUID,
-              mainTaskUUID,
+              taskUUID,
             });
           }
         } catch (error) {
@@ -176,14 +176,14 @@ const Invites = () => {
         name={name}
         surname={surname}
         email={email}
-        main_task_invite_uuid={taskInvite.main_task_invite_uuid}
-        main_task_title={taskInvite.main_task_title}
-        main_task_banner={taskInvite.main_task_banner}
-        main_task_priority={taskInvite.main_task_priority}
-        main_task_invite_message={taskInvite.main_task_invite_message}
+        invite_uuid={taskInvite.task_invite_uuid}
+        title={taskInvite.title}
+        banner={taskInvite.banner}
+        priority={taskInvite.priority}
+        message={taskInvite.message}
         removeSentTaskInvites={() =>
           removeSentTaskInvites(
-            taskInvite.main_task_invite_uuid,
+            taskInvite.task_invite_uuid,
             taskInvite.invited_user_uuid,
             taskInvite.from_user_uuid,
           )
@@ -205,23 +205,23 @@ const Invites = () => {
           name={name}
           surname={surname}
           email={email}
-          main_task_invite_uuid={taskInvite.main_task_invite_uuid}
-          main_task_title={taskInvite.main_task_title}
-          main_task_banner={taskInvite.main_task_banner}
-          main_task_priority={taskInvite.main_task_priority}
-          main_task_invite_message={taskInvite.main_task_invite_message}
+          task_invite_uuid={taskInvite.task_invite_uuid}
+          title={taskInvite.title}
+          banner={taskInvite.banner}
+          priority={taskInvite.priority}
+          message={taskInvite.message}
           declineReceivedTaskInvites={() =>
             removeSentTaskInvites(
-              taskInvite.main_task_invite_uuid,
+              taskInvite.task_invite_uuid,
               taskInvite.invited_user_uuid,
               taskInvite.from_user_uuid,
             )
           }
           acceptReceivedTaskInvites={() =>
             acceptReceivedTaskInvites(
-              taskInvite.main_task_uuid,
+              taskInvite.task_uuid,
               taskInvite.invited_user_uuid,
-              taskInvite.main_task_invite_uuid,
+              taskInvite.task_invite_uuid,
               taskInvite.from_user_uuid,
             )
           }
@@ -312,10 +312,10 @@ const Invites = () => {
       await getReceivedTaskInvites();
     };
 
-    socket?.on("reflect_send_main_task_invite", handle);
+    socket?.on("reflect_send_invite", handle);
 
     return () => {
-      socket?.off("reflect_send_main_task_invite", handle);
+      socket?.off("reflect_send_invite", handle);
     };
   }, [socket, getReceivedTaskInvites]);
 

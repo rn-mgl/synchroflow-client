@@ -4,15 +4,14 @@ import { useSession } from "next-auth/react";
 import React from "react";
 
 interface TasksProps {
-  task_banner: string;
-  task_title: string;
-  task_subtitle: string;
-  task_status: string;
-  task_end_date: string;
+  banner: string;
+  title: string;
+  subtitle: string;
+  status: string;
+  end_date: string;
   task_uuid: string;
-  task_priority: string;
-  task_description?: string;
-  sub_task_description?: string;
+  priority: string;
+  description?: string;
 }
 
 export default function useTasks() {
