@@ -4,14 +4,14 @@ import { useSession } from "next-auth/react";
 import React from "react";
 
 interface TasksProps {
-  main_task_banner: string;
-  main_task_title: string;
-  main_task_subtitle: string;
-  main_task_status: string;
-  main_task_end_date: string;
-  main_task_uuid: string;
-  main_task_priority: string;
-  main_task_description?: string;
+  task_banner: string;
+  task_title: string;
+  task_subtitle: string;
+  task_status: string;
+  task_end_date: string;
+  task_uuid: string;
+  task_priority: string;
+  task_description?: string;
   sub_task_description?: string;
 }
 
@@ -35,7 +35,7 @@ export default function useTasks() {
   const getMyUpcomingTasks = React.useCallback(async () => {
     if (user?.token) {
       try {
-        const { data } = await axios.get(`${url}/main_tasks`, {
+        const { data } = await axios.get(`${url}/tasks`, {
           headers: { Authorization: user?.token },
           params: {
             type: "upcoming",
@@ -59,7 +59,7 @@ export default function useTasks() {
     ) => {
       if (user?.token) {
         try {
-          const { data } = await axios.get(`${url}/main_tasks`, {
+          const { data } = await axios.get(`${url}/tasks`, {
             headers: { Authorization: user?.token },
             params: {
               type: "my",
@@ -88,7 +88,7 @@ export default function useTasks() {
     ) => {
       if (user?.token) {
         try {
-          const { data } = await axios.get(`${url}/main_tasks`, {
+          const { data } = await axios.get(`${url}/tasks`, {
             headers: { Authorization: user?.token },
             params: {
               type: "collaborated",
@@ -117,7 +117,7 @@ export default function useTasks() {
     ) => {
       if (user?.token) {
         try {
-          const { data } = await axios.get(`${url}/main_tasks`, {
+          const { data } = await axios.get(`${url}/tasks`, {
             headers: { Authorization: user?.token },
             params: {
               type: "my",
@@ -146,7 +146,7 @@ export default function useTasks() {
     ) => {
       if (user?.token) {
         try {
-          const { data } = await axios.get(`${url}/main_tasks`, {
+          const { data } = await axios.get(`${url}/tasks`, {
             headers: { Authorization: user?.token },
             params: {
               type: "collaborated",

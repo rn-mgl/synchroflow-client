@@ -3,14 +3,13 @@ import { useSession } from "next-auth/react";
 import React from "react";
 
 import AssociateCards from "@/components//associates/AssociateCards";
+import TaskCards from "@/components/tasks/TaskCards";
 import useAssociates from "@/src/hooks/useAssociates";
 import useDashboard from "@/src/hooks/useDashboard";
 import useSearchFilter from "@/src/hooks/useSearchFilter";
 import useTasks from "@/src/hooks/useTasks";
 import { ArcElement, Chart } from "chart.js/auto";
-import Link from "next/link";
 import { Line, Pie } from "react-chartjs-2";
-import TaskCards from "@/components/tasks/TaskCards";
 
 const Hub = () => {
   const { tasksCount, weekTasksCount, getTasksCount } = useDashboard();
@@ -29,9 +28,9 @@ const Hub = () => {
       {
         label: "Tasks",
         data: [
-          tasksCount.ongoingMainTasksCount + tasksCount.ongoingSubTasksCount,
-          tasksCount.doneMainTasksCount + tasksCount.doneSubTasksCount,
-          tasksCount.lateMainTasksCount + tasksCount.lateSubTasksCount,
+          tasksCount.ongoingTasksCount,
+          tasksCount.doneTasksCount,
+          tasksCount.lateTasksCount,
         ],
         backgroundColor: ["#546FFFBD", "#9F84FDBD", "#BAC8FFBD"],
         borderColor: ["#546FFF", "#9F84FD", "#BAC8FF"],
@@ -71,14 +70,14 @@ const Hub = () => {
   const mappedTasksToday = myTasksToday.map((task, index) => {
     return (
       <TaskCards
-        key={task.main_task_uuid}
-        banner={task.main_task_banner}
-        deadline={task.main_task_end_date}
-        status={task.main_task_status}
-        subTitle={task.main_task_subtitle}
-        taskUUID={task.main_task_uuid}
-        title={task.main_task_title}
-        priority={task.main_task_priority}
+        key={task.task_uuid}
+        banner={task.task_banner}
+        deadline={task.task_end_date}
+        status={task.task_status}
+        subTitle={task.task_subtitle}
+        taskUUID={task.task_uuid}
+        title={task.task_title}
+        priority={task.task_priority}
       />
     );
   });
@@ -86,14 +85,14 @@ const Hub = () => {
   const mappedUpcomingTasks = myUpcomingTasks.map((task, index) => {
     return (
       <TaskCards
-        key={task.main_task_uuid}
-        banner={task.main_task_banner}
-        deadline={task.main_task_end_date}
-        status={task.main_task_status}
-        subTitle={task.main_task_subtitle}
-        taskUUID={task.main_task_uuid}
-        title={task.main_task_title}
-        priority={task.main_task_priority}
+        key={task.task_uuid}
+        banner={task.task_banner}
+        deadline={task.task_end_date}
+        status={task.task_status}
+        subTitle={task.task_subtitle}
+        taskUUID={task.task_uuid}
+        title={task.task_title}
+        priority={task.task_priority}
       />
     );
   });
@@ -138,12 +137,9 @@ const Hub = () => {
           >
             <div className="flex flex-row gap-2 items-center justify-center">
               <p className="text-4xl font-medium">
-                {tasksCount.ongoingMainTasksCount +
-                  tasksCount.doneMainTasksCount +
-                  tasksCount.lateMainTasksCount +
-                  tasksCount.ongoingSubTasksCount +
-                  tasksCount.doneSubTasksCount +
-                  tasksCount.lateSubTasksCount}
+                {tasksCount.ongoingTasksCount +
+                  tasksCount.doneTasksCount +
+                  tasksCount.lateTasksCount}
               </p>
               <p className="text-xs font-semibold">Total Tasks</p>
             </div>

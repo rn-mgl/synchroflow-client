@@ -4,12 +4,9 @@ import { useSession } from "next-auth/react";
 import React from "react";
 
 interface TasksCountStateProps {
-  ongoingMainTasksCount: number;
-  doneMainTasksCount: number;
-  lateMainTasksCount: number;
-  ongoingSubTasksCount: number;
-  doneSubTasksCount: number;
-  lateSubTasksCount: number;
+  ongoingTasksCount: number;
+  doneTasksCount: number;
+  lateTasksCount: number;
 }
 
 interface WeekTasksCountStateProps {
@@ -19,12 +16,9 @@ interface WeekTasksCountStateProps {
 
 export default function useDashboard() {
   const [tasksCount, setTasksCount] = React.useState<TasksCountStateProps>({
-    ongoingMainTasksCount: 0,
-    doneMainTasksCount: 0,
-    lateMainTasksCount: 0,
-    ongoingSubTasksCount: 0,
-    doneSubTasksCount: 0,
-    lateSubTasksCount: 0,
+    ongoingTasksCount: 0,
+    doneTasksCount: 0,
+    lateTasksCount: 0,
   });
   const [weekTasksCount, setWeekTasksCount] = React.useState<
     Array<WeekTasksCountStateProps>
