@@ -19,13 +19,13 @@ interface CreateSubTaskProps {
 }
 
 const CreateSubTask: React.FC<CreateSubTaskProps> = (props) => {
-  const [subTaskData, setSubTaskData] = React.useState({
-    subTaskTitle: "",
-    subTaskSubtitle: "",
-    subTaskDescription: "",
-    subTaskPriority: "important",
-    subTaskStartDate: undefined,
-    subTaskEndDate: undefined,
+  const [taskData, setTaskData] = React.useState({
+    taskTitle: "",
+    taskSubtitle: "",
+    taskDescription: "",
+    taskPriority: "none",
+    taskStartDate: "",
+    taskEndDate: "",
   });
   const { isLoading, handleLoader } = useLoader();
   const params = useParams();
@@ -43,7 +43,7 @@ const CreateSubTask: React.FC<CreateSubTaskProps> = (props) => {
     const name = e.target.name;
     const value = e.target.value;
 
-    setSubTaskData((prev) => {
+    setTaskData((prev) => {
       return {
         ...prev,
         [name]: value,
@@ -57,7 +57,7 @@ const CreateSubTask: React.FC<CreateSubTaskProps> = (props) => {
     try {
       const { data } = await axios.post(
         `${url}/tasks`,
-        { subTaskData, taskUUID: params?.task_uuid },
+        { taskData, parentTask: params?.task_uuid ?? null },
         { headers: { Authorization: user?.token } },
       );
       if (data) {
@@ -95,10 +95,10 @@ const CreateSubTask: React.FC<CreateSubTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Title</p>
           <TextComp
-            name="subTaskTitle"
+            name="taskTitle"
             placeholder="Task Title..."
             required={true}
-            value={subTaskData.subTaskTitle}
+            value={taskData.taskTitle}
             onChange={handleTaskData}
             Icon={MdTitle}
           />
@@ -107,10 +107,10 @@ const CreateSubTask: React.FC<CreateSubTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Sub Title</p>
           <TextComp
-            name="subTaskSubtitle"
+            name="taskSubtitle"
             placeholder="Task Sub Title..."
             required={true}
-            value={subTaskData.subTaskSubtitle}
+            value={taskData.taskSubtitle}
             onChange={handleTaskData}
             Icon={MdSubtitles}
           />
@@ -119,9 +119,9 @@ const CreateSubTask: React.FC<CreateSubTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Description</p>
           <TextAreaComp
-            name="subTaskDescription"
+            name="taskDescription"
             placeholder="Task Description..."
-            value={subTaskData.subTaskDescription}
+            value={taskData.taskDescription}
             rows={5}
             required={true}
             onChange={handleTaskData}
@@ -131,8 +131,8 @@ const CreateSubTask: React.FC<CreateSubTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Priority</p>
           <SelectComp
-            name="subTaskPriority"
-            value={subTaskData.subTaskPriority}
+            name="taskPriority"
+            value={taskData.taskPriority}
             onChange={handleTaskData}
             labelValuePair={[
               { label: "Critical Task", value: "critical" },
@@ -145,9 +145,9 @@ const CreateSubTask: React.FC<CreateSubTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Start Date</p>
           <DateComp
-            name="subTaskStartDate"
+            name="taskStartDate"
             required={true}
-            value={subTaskData.subTaskStartDate}
+            value={taskData.taskStartDate}
             onChange={handleTaskData}
           />
         </div>
@@ -155,9 +155,9 @@ const CreateSubTask: React.FC<CreateSubTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">End Date</p>
           <DateComp
-            name="subTaskEndDate"
+            name="taskEndDate"
             required={true}
-            value={subTaskData.subTaskEndDate}
+            value={taskData.taskEndDate}
             onChange={handleTaskData}
           />
         </div>

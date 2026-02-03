@@ -11,7 +11,7 @@ import { PRIORITY_STYLE } from "../../utils/taskUtils";
 interface TaskCardProps {
   title: string;
   banner: string;
-  subTitle: string;
+  subtitle: string;
   status: string;
   taskUUID: string;
   deadline: string;
@@ -119,7 +119,7 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
           >
             {props.priority}
           </p>
-          <p className="font-light text-right max-w-[12ch] truncate text-sm italic capitalize">
+          <p className="font-light text-right max-w-[12ch] truncate text-sm capitalize">
             {props.status}
           </p>
         </div>

@@ -22,7 +22,7 @@ interface SubTaskDataStateProps {
   date_created: string;
   task_uuid: string;
   title: string;
-  task_subtitle: string;
+  subtitle: string;
   description: string;
   status: string;
   start_date: string;
@@ -45,7 +45,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
     date_created: "",
     task_uuid: "",
     title: "",
-    task_subtitle: "",
+    subtitle: "",
     description: "",
     status: "",
     start_date: "",
@@ -89,7 +89,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
     try {
       const { data } = await axios.post(
         `${url}/task_collaborators`,
-        { subTaskUUID: props.selectedSubTask, collaboratorUUID },
+        { taskUUID: props.selectedSubTask, collaboratorUUID },
         { headers: { Authorization: user?.token } },
       );
       if (data) {
@@ -110,8 +110,12 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
         `${url}/task_collaborators/${collaboratorUUID}`,
         {
           headers: { Authorization: user?.token },
+          params: {
+            type: "delete",
+          },
         },
       );
+      console.log(data);
       if (data) {
         await getAllTaskCollaborators();
         socket?.emit("revoke_task", { room: collaboratorUserUUID });
@@ -129,6 +133,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
           params: {
             subTaskUUID: props.selectedSubTask,
             taskUUID: params?.task_uuid,
+            type: "sub",
           },
         });
 
@@ -329,7 +334,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
               selectedSubTask={props.selectedSubTask}
               date_created={subTaskData.date_created}
               title={subTaskData.title}
-              task_subtitle={subTaskData.task_subtitle}
+              subtitle={subTaskData.subtitle}
               description={subTaskData.description}
               status={subTaskData.status}
               start_date={subTaskData.start_date}

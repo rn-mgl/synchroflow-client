@@ -14,11 +14,11 @@ import TextComp from "../input/TextComp";
 import { dateTimeForInput } from "../../utils/dateUtils";
 import { useParams } from "next/navigation";
 
-interface SubTaskDataStateProps {
+interface TaskDataStateProps {
   date_created: string;
   task_uuid: string;
   title: string;
-  task_subtitle: string;
+  subtitle: string;
   description: string;
   status: string;
   start_date: string;
@@ -26,22 +26,22 @@ interface SubTaskDataStateProps {
   priority: string;
 }
 
-interface EditSubTaskProps {
-  subTaskData: SubTaskDataStateProps;
+interface EditTaskProps {
+  subTaskData: TaskDataStateProps;
   toggleCanEditSubTask: () => void;
   getSubTask: () => Promise<void>;
   getCreatedSubTasks: () => Promise<void>;
 }
 
-const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
-  const [subTaskData, setSubTaskData] = React.useState({
-    subTaskTitle: props.subTaskData.title,
-    subTaskSubtitle: props.subTaskData.task_subtitle,
-    subTaskDescription: props.subTaskData.description,
-    subTaskPriority: props.subTaskData.priority,
-    subTaskStatus: props.subTaskData.status,
-    subTaskStartDate: props.subTaskData.start_date,
-    subTaskEndDate: props.subTaskData.end_date,
+const EditTask: React.FC<EditTaskProps> = (props) => {
+  const [taskData, setTaskData] = React.useState({
+    taskTitle: props.subTaskData.title,
+    taskSubtitle: props.subTaskData.subtitle,
+    taskDescription: props.subTaskData.description,
+    taskPriority: props.subTaskData.priority,
+    taskStatus: props.subTaskData.status,
+    taskStartDate: props.subTaskData.start_date,
+    taskEndDate: props.subTaskData.end_date,
   });
   const { isLoading, handleLoader } = useLoader();
 
@@ -59,7 +59,7 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
     const name = e.target.name;
     const value = e.target.value;
 
-    setSubTaskData((prev) => {
+    setTaskData((prev) => {
       return {
         ...prev,
         [name]: value,
@@ -67,19 +67,19 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
     });
   };
 
-  const editSubTask = async (e: React.SubmitEvent<HTMLFormElement>) => {
+  const editTask = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleLoader(true);
     try {
       const { data } = await axios.patch(
         `${url}/tasks/${props.subTaskData.task_uuid}`,
-        { subTaskData },
+        { taskData },
         {
           headers: { Authorization: user?.token },
           params: { taskUUID: params?.task_uuid },
         },
       );
-      if (data.updateSubTask) {
+      if (data.updateTask) {
         await props.getSubTask();
         await props.getCreatedSubTasks();
         props.toggleCanEditSubTask();
@@ -100,7 +100,7 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
       {isLoading ? <Loading /> : null}
 
       <form
-        onSubmit={(e) => editSubTask(e)}
+        onSubmit={(e) => editTask(e)}
         className="w-full bg-white h-fit rounded-lg flex flex-col p-4 t:p-10 gap-4 my-auto
                   max-w-screen-l-s overflow-y-auto cstm-scrollbar items-center justify-start"
       >
@@ -116,10 +116,10 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Title</p>
           <TextComp
-            name="subTaskTitle"
+            name="taskTitle"
             placeholder="Task Title..."
             required={true}
-            value={subTaskData.subTaskTitle}
+            value={taskData.taskTitle}
             onChange={handleTaskData}
             Icon={MdTitle}
           />
@@ -128,10 +128,10 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Sub Title</p>
           <TextComp
-            name="subTaskSubtitle"
+            name="taskSubtitle"
             placeholder="Task Sub Title..."
             required={true}
-            value={subTaskData.subTaskSubtitle}
+            value={taskData.taskSubtitle}
             onChange={handleTaskData}
             Icon={MdSubtitles}
           />
@@ -140,9 +140,9 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Description</p>
           <TextAreaComp
-            name="subTaskDescription"
+            name="taskDescription"
             placeholder="Task Description..."
-            value={subTaskData.subTaskDescription}
+            value={taskData.taskDescription}
             rows={5}
             required={true}
             onChange={handleTaskData}
@@ -152,8 +152,8 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Priority</p>
           <SelectComp
-            name="subTaskPriority"
-            value={subTaskData.subTaskPriority}
+            name="taskPriority"
+            value={taskData.taskPriority}
             onChange={handleTaskData}
             labelValuePair={[
               { label: "Critical Task", value: "critical" },
@@ -166,8 +166,8 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Status</p>
           <SelectComp
-            name="subTaskStatus"
-            value={subTaskData.subTaskStatus}
+            name="taskStatus"
+            value={taskData.taskStatus}
             onChange={handleTaskData}
             labelValuePair={[
               { label: "Ongoing", value: "ongoing" },
@@ -180,9 +180,9 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Start Date</p>
           <DateComp
-            name="subTaskStartDate"
+            name="taskStartDate"
             required={true}
-            value={dateTimeForInput(subTaskData.subTaskStartDate)}
+            value={dateTimeForInput(taskData.taskStartDate)}
             onChange={handleTaskData}
           />
         </div>
@@ -190,9 +190,9 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">End Date</p>
           <DateComp
-            name="subTaskEndDate"
+            name="taskEndDate"
             required={true}
-            value={dateTimeForInput(subTaskData.subTaskEndDate)}
+            value={dateTimeForInput(taskData.taskEndDate)}
             onChange={handleTaskData}
           />
         </div>
@@ -209,4 +209,4 @@ const EditSubTask: React.FC<EditSubTaskProps> = (props) => {
   );
 };
 
-export default EditSubTask;
+export default EditTask;

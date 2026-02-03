@@ -219,7 +219,7 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
           <p className="text-xs">Priority</p>
           <SelectComp
             name="taskPriority"
-            value={taskData.taskPriority}
+            value={taskData.taskPriority ?? "none"}
             onChange={handleTaskData}
             labelValuePair={[
               { label: "Critical Task", value: "critical" },
@@ -233,7 +233,7 @@ const EditTask: React.FC<EditTaskProps> = (props) => {
           <p className="text-xs">Status</p>
           <SelectComp
             name="taskStatus"
-            value={taskData.taskStatus}
+            value={taskData.taskStatus ?? "ongoing"}
             onChange={handleTaskData}
             labelValuePair={[
               { label: "Ongoing", value: "ongoing" },

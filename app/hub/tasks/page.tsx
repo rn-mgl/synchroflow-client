@@ -60,7 +60,7 @@ const Tasks = () => {
         key={task.task_uuid}
         banner={task.banner}
         title={task.title}
-        subTitle={task.subtitle}
+        subtitle={task.subtitle}
         status={task.status}
         deadline={task.end_date}
         taskUUID={task.task_uuid}
@@ -76,7 +76,7 @@ const Tasks = () => {
           key={task.task_uuid}
           banner={task.banner}
           title={task.title}
-          subTitle={task.subtitle}
+          subtitle={task.subtitle}
           status={task.status}
           deadline={task.end_date}
           taskUUID={task.task_uuid}
@@ -92,7 +92,7 @@ const Tasks = () => {
         key={task.task_uuid}
         banner={task.banner}
         title={task.title}
-        subTitle={task.subtitle}
+        subtitle={task.subtitle}
         status={task.status}
         deadline={task.end_date}
         taskUUID={task.task_uuid}
@@ -107,7 +107,7 @@ const Tasks = () => {
         key={task.task_uuid}
         banner={task.banner}
         title={task.title}
-        subTitle={task.subtitle}
+        subtitle={task.subtitle}
         status={task.status}
         deadline={task.end_date}
         taskUUID={task.task_uuid}

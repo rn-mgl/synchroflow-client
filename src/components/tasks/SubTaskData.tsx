@@ -6,7 +6,7 @@ interface SubTaskDataProps {
   selectedSubTask: string;
   date_created: string;
   title: string;
-  task_subtitle: string;
+  subtitle: string;
   description: string;
   status: string;
   start_date: string;
@@ -27,7 +27,7 @@ const SubTaskData: React.FC<SubTaskDataProps> = (props) => {
 
       <div className="w-full gap-2 flex flex-col border-b-2 border-primary-500 p-2">
         <p className="text-xs font-light">Sub Title</p>
-        <p className="capitalize">{props.task_subtitle}</p>
+        <p className="capitalize">{props.subtitle}</p>
       </div>
 
       <div className="w-full gap-2 flex flex-col min-h-[10rem] max-h-80 overflow-y-auto cstm-scrollbar-2 border-b-2 border-primary-500 p-2">

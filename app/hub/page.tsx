@@ -74,7 +74,7 @@ const Hub = () => {
         banner={task.banner}
         deadline={task.end_date}
         status={task.status}
-        subTitle={task.subtitle}
+        subtitle={task.subtitle}
         taskUUID={task.task_uuid}
         title={task.title}
         priority={task.priority}
@@ -89,7 +89,7 @@ const Hub = () => {
         banner={task.banner}
         deadline={task.end_date}
         status={task.status}
-        subTitle={task.subtitle}
+        subtitle={task.subtitle}
         taskUUID={task.task_uuid}
         title={task.title}
         priority={task.priority}

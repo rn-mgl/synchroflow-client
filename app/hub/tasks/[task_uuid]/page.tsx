@@ -145,7 +145,7 @@ const SingleTask = () => {
       try {
         const { data } = await axios.get(`${url}/task_collaborators`, {
           headers: { Authorization: user?.token },
-          params: { taskUUID: params?.task_uuid },
+          params: { taskUUID: params?.task_uuid, type: "main" },
         });
 
         if (data) {
@@ -162,7 +162,7 @@ const SingleTask = () => {
       try {
         const { data } = await axios.get(`${url}/tasks`, {
           headers: { Authorization: user?.token },
-          params: { type: "main task", taskUUID: params?.task_uuid },
+          params: { type: "subs", taskUUID: params?.task_uuid },
         });
         if (data) {
           setCreatedSubTasks(data);
