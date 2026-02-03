@@ -178,7 +178,7 @@ const SingleTask = () => {
       try {
         const { data } = await axios.get(`${url}/tasks`, {
           headers: { Authorization: user?.token },
-          params: { type: "collaborated", taskUUID: params?.task_uuid },
+          params: { type: "assigned", taskUUID: params?.task_uuid },
         });
         if (data) {
           setAssignedSubTasks(data);
