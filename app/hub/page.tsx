@@ -106,8 +106,8 @@ const Hub = () => {
   }, [getRecentAssociates, searchFilter]);
 
   React.useEffect(() => {
-    getMyTasksToday("title", searchFilter, "title");
-  }, [getMyTasksToday, searchFilter]);
+    getMyTasksToday();
+  }, [getMyTasksToday]);
 
   React.useEffect(() => {
     getMyUpcomingTasks();
