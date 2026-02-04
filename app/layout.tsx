@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <AppProvider>
       <html lang="en">
-        <SessionProvider>
+        <SessionProvider refetchOnWindowFocus={false}>
           <body className={`${poppins.variable} font-body cstm-scrollbar`}>
             {children}
           </body>
