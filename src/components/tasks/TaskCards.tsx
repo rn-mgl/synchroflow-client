@@ -40,7 +40,7 @@ const TaskCards: React.FC<TaskCardProps> = (props) => {
       try {
         const { data } = await axios.get(`${url}/task_collaborators`, {
           headers: { Authorization: user?.token },
-          params: { taskUUID: props.taskUUID },
+          params: { taskUUID: props.taskUUID, type: "main" },
         });
         if (data) {
           setCollaborators(data);

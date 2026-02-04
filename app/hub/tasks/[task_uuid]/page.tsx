@@ -468,7 +468,7 @@ const SingleTask = () => {
           <Link
             href="/hub/tasks"
             className="mr-auto hover:bg-secondary-500 transition-all
-                      hover:bg-opacity-10 p-2 rounded-full pt-0"
+                      hover:bg-opacity-10 p-2 w-8 h-8 rounded-full flex flex-col items-center justify-center"
           >
             <BsArrowLeft className="text-lg" />
           </Link>
