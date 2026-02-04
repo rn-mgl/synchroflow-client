@@ -1,11 +1,11 @@
 "use client";
 import { useGlobalContext } from "@/base/src/contexts/context";
+import { localizeDate, localizeTime } from "@/src/utils/dateUtils";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
 import React from "react";
 import { AiOutlineClose, AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
-import SubTaskData from "./SubTaskData";
 import DeleteConfirmation from "../global/DeleteConfirmation";
 import EditSubTask from "./EditSubTask";
 
@@ -290,15 +290,15 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
       ) : null}
 
       <div
-        className="w-full bg-white h-full  rounded-lg flex flex-col t:p-10 gap-4 my-auto
+        className="w-full bg-white h-full  rounded-lg flex flex-col t:p-10 my-auto
                   max-w-screen-l-s items-center justify-start"
       >
-        <div className="w-full sticky flex flex-col items-center justify-end border-b-[1px] border-b-secondary-200 p-4">
+        <div className="w-full sticky flex flex-col items-center justify-end border-b-[1px] border-b-secondary-200 p-4 t:p-0">
           <button
             onClick={() => props.handleSelectedSubTask(props.selectedSubTask)}
             type="button"
             className="ml-auto hover:bg-primary-500 rounded-full 
-                    hover:bg-opacity-20 transition-all p-2"
+                    hover:bg-opacity-20 transition-all p-4"
           >
             <AiOutlineClose className="text-secondary-500" />
           </button>
@@ -330,20 +330,74 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
           ) : null}
 
           {activePage === "details" ? (
-            <SubTaskData
-              selectedSubTask={props.selectedSubTask}
-              date_created={subTaskData.date_created}
-              title={subTaskData.title}
-              subtitle={subTaskData.subtitle}
-              description={subTaskData.description}
-              status={subTaskData.status}
-              start_date={subTaskData.start_date}
-              end_date={subTaskData.end_date}
-              priority={subTaskData.priority}
-              isTaskCreator={props.isTaskCreator}
-              toggleCanDeleteSubTask={toggleCanDeleteSubTask}
-              toggleCanEditSubTask={toggleCanEditSubTask}
-            />
+            <div className="flex flex-col gap-4 w-full items-center justify-start animate-fadeIn h-full">
+              <div className="w-full gap-2 flex flex-col border-b-2 border-primary-500 p-2">
+                <p className="text-xs font-light">Title</p>
+                <p className="capitalize">{subTaskData.title}</p>
+              </div>
+
+              <div className="w-full gap-2 flex flex-col border-b-2 border-primary-500 p-2">
+                <p className="text-xs font-light">Sub Title</p>
+                <p className="capitalize">{subTaskData.subtitle}</p>
+              </div>
+
+              <div className="w-full gap-2 flex flex-col min-h-[10rem] max-h-80 overflow-y-auto cstm-scrollbar-2 border-b-2 border-primary-500 p-2">
+                <p className="text-xs font-light">Description</p>
+                <p className="capitalize whitespace-pre-wrap break-words">
+                  {subTaskData.description}
+                </p>
+              </div>
+
+              <div className="flex flex-row w-full gap-4 items-center">
+                <div className="w-full gap-2 flex flex-col border-b-2 border-primary-500 p-2">
+                  <p className="text-xs font-light">Status</p>
+                  <p className="capitalize">{subTaskData.status}</p>
+                </div>
+
+                <div className="w-full gap-2 flex flex-col border-b-2 border-primary-500 p-2">
+                  <p className="text-xs font-light">Priority</p>
+                  <p className="capitalize">{subTaskData.priority}</p>
+                </div>
+              </div>
+
+              <div className="flex flex-col w-full gap-4 items-center t:flex-row">
+                <div className="w-full gap-2 flex flex-col border-b-2 border-primary-500 p-2">
+                  <p className="text-xs font-light">Start Date</p>
+                  <p className="capitalize">
+                    {localizeDate(subTaskData.start_date, false)} |{" "}
+                    {localizeTime(subTaskData.start_date)}
+                  </p>
+                </div>
+
+                <div className="w-full gap-2 flex flex-col border-b-2 border-primary-500 p-2">
+                  <p className="text-xs font-light">End Date</p>
+                  <p className="capitalize">
+                    {localizeDate(subTaskData.end_date, false)} |{" "}
+                    {localizeTime(subTaskData.end_date)}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-4 items-center justify-center w-full t:flex-row mt-auto">
+                {props.isTaskCreator ? (
+                  <>
+                    <button
+                      onClick={toggleCanEditSubTask}
+                      className="bg-primary-500 border-2 border-primary-500 rounded-lg text-white 
+        font-bold p-2 w-full"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={toggleCanDeleteSubTask}
+                      className="border-2 border-primary-500 rounded-lg text-primary-500 font-bold p-2 w-full"
+                    >
+                      Delete
+                    </button>
+                  </>
+                ) : null}
+              </div>
+            </div>
           ) : (
             <div className="flex flex-col w-full gap-4 animate-fadeIn">
               {mappedCollaborators}
