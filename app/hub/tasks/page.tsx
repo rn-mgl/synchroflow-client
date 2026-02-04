@@ -116,27 +116,27 @@ const Tasks = () => {
   });
 
   React.useEffect(() => {
-    getMyTasks(sortFilter, searchFilter, searchCategory);
-  }, [getMyTasks, sortFilter, searchFilter, searchCategory]);
+    getMyTasks();
+  }, [getMyTasks]);
 
   React.useEffect(() => {
-    getCollaboratedTasks(sortFilter, searchFilter, searchCategory);
-  }, [getCollaboratedTasks, sortFilter, searchFilter, searchCategory]);
+    getCollaboratedTasks();
+  }, [getCollaboratedTasks]);
 
   React.useEffect(() => {
-    getMyTasksToday(sortFilter, searchFilter, searchCategory);
-  }, [getMyTasksToday, sortFilter, searchFilter, searchCategory]);
+    getMyTasksToday();
+  }, [getMyTasksToday]);
 
   React.useEffect(() => {
-    getCollaboratedTasksToday(sortFilter, searchFilter, searchCategory);
-  }, [getCollaboratedTasksToday, sortFilter, searchFilter, searchCategory]);
+    getCollaboratedTasksToday();
+  }, [getCollaboratedTasksToday]);
 
   React.useEffect(() => {
     const handle = async () => {
-      await getMyTasks(sortFilter, searchFilter, searchCategory);
-      await getCollaboratedTasks(sortFilter, searchFilter, searchCategory);
-      await getMyTasksToday(sortFilter, searchFilter, searchCategory);
-      await getCollaboratedTasksToday(sortFilter, searchFilter, searchCategory);
+      await getMyTasks();
+      await getCollaboratedTasks();
+      await getMyTasksToday();
+      await getCollaboratedTasksToday();
     };
 
     socket?.on("reflect_delete_task", handle);
@@ -157,9 +157,9 @@ const Tasks = () => {
 
   React.useEffect(() => {
     const handle = async () => {
-      await getCollaboratedTasks(sortFilter, searchFilter, searchCategory);
-      await getMyTasksToday(sortFilter, searchFilter, searchCategory);
-      await getCollaboratedTasksToday(sortFilter, searchFilter, searchCategory);
+      await getCollaboratedTasks();
+      await getMyTasksToday();
+      await getCollaboratedTasksToday();
     };
 
     socket?.on("reflect_remove_collaborator", handle);
@@ -179,10 +179,10 @@ const Tasks = () => {
 
   React.useEffect(() => {
     const handle = async () => {
-      await getMyTasks(sortFilter, searchFilter, searchCategory);
-      await getCollaboratedTasks(sortFilter, searchFilter, searchCategory);
-      await getMyTasksToday(sortFilter, searchFilter, searchCategory);
-      await getCollaboratedTasksToday(sortFilter, searchFilter, searchCategory);
+      await getMyTasks();
+      await getCollaboratedTasks();
+      await getMyTasksToday();
+      await getCollaboratedTasksToday();
     };
 
     socket?.on("reflect_update_task", handle);
@@ -208,12 +208,8 @@ const Tasks = () => {
           {canCreateTask ? (
             <CreateTask
               toggleCanCreateTask={toggleCanCreateTask}
-              getMyTasks={() =>
-                getMyTasks(sortFilter, searchFilter, searchCategory)
-              }
-              getCollaboratedTasks={() =>
-                getCollaboratedTasks(sortFilter, searchFilter, searchCategory)
-              }
+              getMyTasks={() => getMyTasks()}
+              getCollaboratedTasks={() => getCollaboratedTasks()}
             />
           ) : null}
 
