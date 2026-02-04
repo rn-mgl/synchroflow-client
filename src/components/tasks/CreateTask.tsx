@@ -30,7 +30,7 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
     taskBanner: null,
     taskSubtitle: "",
     taskDescription: "",
-    maintTaskPriority: "important",
+    taskPriority: "important",
     taskStartDate: "",
     taskEndDate: "",
   });
@@ -188,8 +188,8 @@ const CreateTask: React.FC<CreateTaskProps> = (props) => {
         <div className="w-full flex flex-col items-start justify-center gap-2">
           <p className="text-xs">Priority</p>
           <SelectComp
-            name="maintTaskPriority"
-            value={taskData.maintTaskPriority}
+            name="taskPriority"
+            value={taskData.taskPriority}
             onChange={handleTaskData}
             labelValuePair={[
               { label: "Critical Task", value: "critical" },
