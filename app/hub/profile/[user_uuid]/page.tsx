@@ -124,8 +124,7 @@ const Profile = () => {
               <div className="w-full flex flex-row items-center justify-around">
                 <p className="flex flex-col items-center justify-center text-white">
                   <span className="text-lg font-extrabold t:text-2xl">
-                    {tasksCount.ongoingTasksCount +
-                      tasksCount.ongoingSubTasksCount}
+                    {tasksCount.ongoingTasksCount}
                   </span>
                   <span className="text-xs ">Ongoing Tasks</span>
                 </p>
@@ -134,7 +133,7 @@ const Profile = () => {
 
                 <p className="flex flex-col items-center justify-center text-white">
                   <span className="text-lg font-extrabold t:text-2xl">
-                    {tasksCount.doneTasksCount + tasksCount.doneSubTasksCount}
+                    {tasksCount.doneTasksCount}
                   </span>
                   <span className="text-xs ">Done Tasks</span>
                 </p>
@@ -143,7 +142,7 @@ const Profile = () => {
 
                 <p className="flex flex-col items-center justify-center text-white">
                   <span className="text-lg font-extrabold t:text-2xl">
-                    {tasksCount.lateTasksCount + tasksCount.lateSubTasksCount}
+                    {tasksCount.lateTasksCount}
                   </span>
                   <span className="text-xs ">Late Tasks</span>
                 </p>
