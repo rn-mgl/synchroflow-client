@@ -30,7 +30,8 @@ const Tasks = () => {
     getMyTasks,
     getCollaboratedTasks,
   } = useTasks();
-  const { activeFilterOptions, toggleActiveFilterOptions } = useFilter();
+  const { activeFilterOptions, toggleActiveFilterOptions, applyFilters } =
+    useFilter();
   const {
     activeSortOptions,
     sortFilter,
@@ -53,7 +54,12 @@ const Tasks = () => {
     setCanCreateTask((prev) => !prev);
   };
 
-  const mappedMyTaskCardsToday = myTasksToday.map((task, index) => {
+  const mappedMyTaskCardsToday = applyFilters(
+    searchFilter,
+    searchCategory,
+    sortFilter,
+    myTasksToday,
+  ).map((task, index) => {
     return (
       <TaskCards
         priority={task.priority}
@@ -68,24 +74,12 @@ const Tasks = () => {
     );
   });
 
-  const mappedCollaboratedTaskCardsToday = collaboratedTasksToday.map(
-    (task, index) => {
-      return (
-        <TaskCards
-          priority={task.priority}
-          key={task.task_uuid}
-          banner={task.banner}
-          title={task.title}
-          subtitle={task.subtitle}
-          status={task.status}
-          deadline={task.end_date}
-          taskUUID={task.task_uuid}
-        />
-      );
-    },
-  );
-
-  const mappedMyTaskCards = myTasks.map((task, index) => {
+  const mappedCollaboratedTaskCardsToday = applyFilters(
+    searchFilter,
+    searchCategory,
+    sortFilter,
+    collaboratedTasksToday,
+  ).map((task, index) => {
     return (
       <TaskCards
         priority={task.priority}
@@ -100,7 +94,32 @@ const Tasks = () => {
     );
   });
 
-  const mappedCollaboratedTaskCards = collaboratedTasks.map((task, index) => {
+  const mappedMyTaskCards = applyFilters(
+    searchFilter,
+    searchCategory,
+    sortFilter,
+    myTasks,
+  ).map((task, index) => {
+    return (
+      <TaskCards
+        priority={task.priority}
+        key={task.task_uuid}
+        banner={task.banner}
+        title={task.title}
+        subtitle={task.subtitle}
+        status={task.status}
+        deadline={task.end_date}
+        taskUUID={task.task_uuid}
+      />
+    );
+  });
+
+  const mappedCollaboratedTaskCards = applyFilters(
+    searchFilter,
+    searchCategory,
+    sortFilter,
+    collaboratedTasks,
+  ).map((task, index) => {
     return (
       <TaskCards
         priority={task.priority}
@@ -250,7 +269,7 @@ const Tasks = () => {
                   activeFilterOptions={activeFilterOptions}
                   handleSearchCategory={handleSearchCategory}
                   toggleActiveSearchOptions={toggleActiveSearchOptions}
-                  searchCategories={["title", "sub title"]}
+                  searchCategories={["title", "subtitle"]}
                 />
 
                 <SortFilter
@@ -259,7 +278,7 @@ const Tasks = () => {
                   activeFilterOptions={activeFilterOptions}
                   handleSortFilter={handleSortFilter}
                   toggleActiveSortOptions={toggleActiveSortOptions}
-                  sortKeys={["title", "start", "deadline"]}
+                  sortKeys={["title", "start_date", "end_date"]}
                 />
               </div>
             </div>

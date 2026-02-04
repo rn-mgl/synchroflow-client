@@ -26,7 +26,7 @@ const SortFilter: React.FC<SortFilterProps> = (props) => {
                       : "bg-white"
                   } shadow-md`}
       >
-        {sortKey}
+        {sortKey.replaceAll("_", " ")}
       </button>
     );
   });
@@ -48,7 +48,7 @@ const SortFilter: React.FC<SortFilterProps> = (props) => {
             <BsFilter className="text-base text-secondary-300 t:text-lg l-s:text-xl " />
           </div>
           <p className="text-xs capitalize whitespace-nowrap">
-            Sort by: {props.sortFilter}
+            Sort by: {props.sortFilter.replaceAll("_", " ")}
           </p>
         </button>
       </div>
