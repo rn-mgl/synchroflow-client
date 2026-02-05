@@ -55,19 +55,13 @@ const Hub = () => {
     ],
   };
 
-  const mappedRecentAssociateCards = recentAssociates.map(
-    (associate, index) => {
-      return (
-        <AssociateCards
-          key={associate.associate_uuid}
-          associate={associate}
-          targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
-        />
-      );
-    },
-  );
+  const mappedRecentAssociateCards = recentAssociates.map((associate) => {
+    return (
+      <AssociateCards key={associate.associate_uuid} associate={associate} />
+    );
+  });
 
-  const mappedTasksToday = myTasksToday.map((task, index) => {
+  const mappedTasksToday = myTasksToday.map((task) => {
     return (
       <TaskCards
         key={task.task_uuid}
@@ -82,7 +76,7 @@ const Hub = () => {
     );
   });
 
-  const mappedUpcomingTasks = myUpcomingTasks.map((task, index) => {
+  const mappedUpcomingTasks = myUpcomingTasks.map((task) => {
     return (
       <TaskCards
         key={task.task_uuid}
@@ -102,8 +96,8 @@ const Hub = () => {
   }, [getTasksCount]);
 
   React.useEffect(() => {
-    getRecentAssociates("name", searchFilter, "name");
-  }, [getRecentAssociates, searchFilter]);
+    getRecentAssociates();
+  }, [getRecentAssociates]);
 
   React.useEffect(() => {
     getMyTasksToday();
