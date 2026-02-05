@@ -10,6 +10,7 @@ import {
   AiOutlineClose,
   AiOutlineFileText,
   AiOutlineSearch,
+  AiOutlineTool,
 } from "react-icons/ai";
 import SearchFilter from "../filter/SearchFilter";
 import Loading from "../global/Loading";
@@ -19,6 +20,9 @@ import useLoader from "../../hooks/useLoading";
 import usePopUpMessage from "../../hooks/usePopUpMessage";
 import useSearchFilter from "../../hooks/useSearchFilter";
 import TextAreaComp from "../input/TextAreaComp";
+import SearchOptions from "../filter/SearchOptions";
+import SortFilter from "../filter/SortFilter";
+import useSortFilter from "@/src/hooks/useSortFilter";
 
 interface SendTaskInviteProps {
   taskUUID: string;
@@ -44,8 +48,25 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
   >([
     { name: "", surname: "", user_uuid: "", status: "", role: "", image: "" },
   ]);
-  const { activeFilterOptions } = useFilter();
-  const { searchFilter, handleSearchFilter } = useSearchFilter("name");
+  const { activeFilterOptions, toggleActiveFilterOptions, applyFilters } =
+    useFilter();
+
+  const {
+    searchFilter,
+    activeSearchOptions,
+    searchCategory,
+    handleSearchCategory,
+    toggleActiveSearchOptions,
+    handleSearchFilter,
+  } = useSearchFilter("name");
+
+  const {
+    sortFilter,
+    activeSortOptions,
+    handleSortFilter,
+    toggleActiveSortOptions,
+  } = useSortFilter("name");
+
   const { isLoading, handleLoader } = useLoader();
   const { message, handleMessages } = usePopUpMessage();
 
@@ -77,7 +98,6 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
           params: {
             type: "invite associates",
             taskUUID: params?.task_uuid,
-            searchFilter,
           },
         });
 
@@ -88,9 +108,14 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
         console.log(error);
       }
     }
-  }, [url, user, params, searchFilter]);
+  }, [url, user, params]);
 
-  const mappedAssociates = associates.map((associate, index) => {
+  const mappedAssociates = applyFilters(
+    searchFilter,
+    searchCategory,
+    sortFilter,
+    associates,
+  ).map((associate) => {
     return (
       <button
         type="button"
@@ -206,17 +231,54 @@ const SendTaskInvite: React.FC<SendTaskInviteProps> = (props) => {
           <AiOutlineClose className="text-secondary-500" />
         </button>
 
-        <div className="w-full flex flex-col items-start justify-center gap-2">
+        <div className="w-full flex flex-col items-start justify-center gap-4">
           <p className="text-xs">Associates</p>
-          <SearchFilter
-            placeholder="Search Name"
-            name="searchInput"
-            onChange={handleSearchFilter}
-            required={false}
-            value={searchFilter}
-            Icon={AiOutlineSearch}
-            activeFilterOptions={activeFilterOptions}
-          />
+          <div
+            className={`flex flex-row gap-4 h-fit w-full ${
+              activeFilterOptions && "m-s:flex-wrap t:flex-nowrap"
+            }`}
+          >
+            <SearchFilter
+              placeholder="Search Name"
+              name="searchInput"
+              onChange={handleSearchFilter}
+              required={false}
+              value={searchFilter}
+              Icon={AiOutlineSearch}
+              activeFilterOptions={activeFilterOptions}
+            />
+
+            <button
+              type="button"
+              onClick={toggleActiveFilterOptions}
+              className="p-2 rounded-lg border-[1px] w-12 min-w-[3rem] flex flex-col items-center justify-center
+                                    t:hidden"
+            >
+              {activeFilterOptions ? (
+                <AiOutlineClose className="text-base text-secondary-300 t:text-lg l-s:text-xl animate-fadeIn" />
+              ) : (
+                <AiOutlineTool className="text-base text-secondary-300 t:text-lg l-s:text-xl animate-fadeIn" />
+              )}
+            </button>
+
+            <SearchOptions
+              activeSearchOptions={activeSearchOptions}
+              searchCategory={searchCategory}
+              activeFilterOptions={activeFilterOptions}
+              handleSearchCategory={handleSearchCategory}
+              toggleActiveSearchOptions={toggleActiveSearchOptions}
+              searchCategories={["name", "surname"]}
+            />
+
+            <SortFilter
+              activeSortOptions={activeSortOptions}
+              sortFilter={sortFilter}
+              activeFilterOptions={activeFilterOptions}
+              handleSortFilter={handleSortFilter}
+              toggleActiveSortOptions={toggleActiveSortOptions}
+              sortKeys={["name", "surname"]}
+            />
+          </div>
 
           <div
             className="w-full flex flex-row justify-start items-center overflow-x-auto 

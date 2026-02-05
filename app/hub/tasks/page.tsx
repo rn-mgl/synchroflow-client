@@ -59,7 +59,7 @@ const Tasks = () => {
     searchCategory,
     sortFilter,
     myTasksToday,
-  ).map((task, index) => {
+  ).map((task) => {
     return (
       <TaskCards
         priority={task.priority}
@@ -79,7 +79,7 @@ const Tasks = () => {
     searchCategory,
     sortFilter,
     collaboratedTasksToday,
-  ).map((task, index) => {
+  ).map((task) => {
     return (
       <TaskCards
         priority={task.priority}
@@ -99,7 +99,7 @@ const Tasks = () => {
     searchCategory,
     sortFilter,
     myTasks,
-  ).map((task, index) => {
+  ).map((task) => {
     return (
       <TaskCards
         priority={task.priority}
@@ -119,7 +119,7 @@ const Tasks = () => {
     searchCategory,
     sortFilter,
     collaboratedTasks,
-  ).map((task, index) => {
+  ).map((task) => {
     return (
       <TaskCards
         priority={task.priority}

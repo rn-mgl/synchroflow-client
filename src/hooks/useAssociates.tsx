@@ -4,20 +4,13 @@ import { useSession } from "next-auth/react";
 import React from "react";
 
 export interface AssociatesProps {
-  of_uuid: string;
-  of_name: string;
-  of_surname: string;
-  of_email: string;
-  of_image: string;
-  of_status: string;
-  of_role: string;
-  is_uuid: string;
-  is_name: string;
-  is_surname: string;
-  is_email: string;
-  is_image: string;
-  is_status: string;
-  is_role: string;
+  uuid: string;
+  name: string;
+  surname: string;
+  email: string;
+  image: string;
+  status: string;
+  role: string;
   associate_uuid: string;
   associate_of: number;
   associate_is: number;
@@ -35,56 +28,39 @@ export default function useAssociates() {
   const { data: session } = useSession({ required: true });
   const user = session?.user;
 
-  const getAllAssociates = React.useCallback(
-    async (
-      sortFilter: string,
-      searchFilter: string,
-      searchCategory: string,
-    ) => {
-      if (user?.token) {
-        try {
-          const { data } = await axios.get(`${url}/associates`, {
-            headers: { Authorization: user?.token },
-            params: { type: "all", sortFilter, searchFilter, searchCategory },
-          });
-          if (data) {
-            setAllAssociates(data);
-          }
-        } catch (error) {
-          console.log(error);
+  const getAllAssociates = React.useCallback(async () => {
+    if (user?.token) {
+      try {
+        const { data } = await axios.get(`${url}/associates`, {
+          headers: { Authorization: user?.token },
+          params: { type: "all" },
+        });
+        if (data) {
+          setAllAssociates(data);
         }
+      } catch (error) {
+        console.log(error);
       }
-    },
-    [url, user],
-  );
+    }
+  }, [url, user]);
 
-  const getRecentAssociates = React.useCallback(
-    async (
-      sortFilter: string,
-      searchFilter: string,
-      searchCategory: string,
-    ) => {
-      if (user?.token) {
-        try {
-          const { data } = await axios.get(`${url}/associates`, {
-            headers: { Authorization: user?.token },
-            params: {
-              type: "recent",
-              sortFilter,
-              searchFilter,
-              searchCategory,
-            },
-          });
-          if (data) {
-            setRecentAssociates(data);
-          }
-        } catch (error) {
-          console.log(error);
+  const getRecentAssociates = React.useCallback(async () => {
+    if (user?.token) {
+      try {
+        const { data } = await axios.get(`${url}/associates`, {
+          headers: { Authorization: user?.token },
+          params: {
+            type: "recent",
+          },
+        });
+        if (data) {
+          setRecentAssociates(data);
         }
+      } catch (error) {
+        console.log(error);
       }
-    },
-    [url, user],
-  );
+    }
+  }, [url, user]);
 
   return {
     allAssociates,

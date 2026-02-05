@@ -14,6 +14,7 @@ const SortFilter: React.FC<SortFilterProps> = (props) => {
   const mappedSortKeys = props.sortKeys.map((sortKey) => {
     return (
       <button
+        type="button"
         key={sortKey}
         onClick={() => {
           props.handleSortFilter(sortKey);
@@ -41,6 +42,7 @@ const SortFilter: React.FC<SortFilterProps> = (props) => {
               items-center justify-center font-medium px-6 w-auto"
       >
         <button
+          type="button"
           onClick={props.toggleActiveSortOptions}
           className="flex flex-row gap-2 items-center justify-between p-2 w-full"
         >

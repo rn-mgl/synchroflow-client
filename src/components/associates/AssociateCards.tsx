@@ -3,16 +3,15 @@ import { AssociatesProps } from "../../hooks/useAssociates";
 
 interface AssociateCardsProps {
   associate: AssociatesProps;
-  targetIdentity: "of" | "is";
   handleDisconnectFromAssociate?: () => void;
 }
 
 const AssociateCards: React.FC<AssociateCardsProps> = (props) => {
-  const image = props.associate[`${props.targetIdentity}_image`];
-  const name = props.associate[`${props.targetIdentity}_name`];
-  const surname = props.associate[`${props.targetIdentity}_surname`];
-  const role = props.associate[`${props.targetIdentity}_role`];
-  const status = props.associate[`${props.targetIdentity}_status`];
+  const image = props.associate.image;
+  const name = props.associate.name;
+  const surname = props.associate.surname;
+  const role = props.associate.role;
+  const status = props.associate.status;
 
   return (
     <div

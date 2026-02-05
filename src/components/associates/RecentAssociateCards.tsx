@@ -3,14 +3,13 @@ import { AssociatesProps } from "../../hooks/useAssociates";
 
 interface RecentAssociateCardsProps {
   associate: AssociatesProps;
-  targetIdentity: "of" | "is";
 }
 
 const RecentAssociateCards: React.FC<RecentAssociateCardsProps> = (props) => {
-  const image = props.associate[`${props.targetIdentity}_image`];
-  const name = props.associate[`${props.targetIdentity}_name`];
-  const surname = props.associate[`${props.targetIdentity}_surname`];
-  const role = props.associate[`${props.targetIdentity}_role`];
+  const image = props.associate.image;
+  const name = props.associate.name;
+  const surname = props.associate.surname;
+  const role = props.associate.role;
 
   return (
     <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 h-fit select-none ">

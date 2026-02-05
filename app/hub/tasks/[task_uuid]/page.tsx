@@ -451,8 +451,8 @@ const SingleTask = () => {
             }
             customDelete={removeCollaborator}
             redirectLink="/hub/tasks"
-            title="Leave Task"
-            message="are you sure you want to leave this task?"
+            title="Remove Collaborator"
+            message="are you sure you want to remove this collaborator?"
           />
         ) : null}
 

@@ -24,7 +24,8 @@ const Associates = () => {
   const [disconnectFromAssociate, setDisconnectFromAssociate] =
     React.useState("");
   const [canAddAssociate, setCanAddAssociate] = React.useState(false);
-  const { activeFilterOptions, toggleActiveFilterOptions } = useFilter();
+  const { activeFilterOptions, applyFilters, toggleActiveFilterOptions } =
+    useFilter();
   const {
     activeSortOptions,
     sortFilter,
@@ -56,10 +57,10 @@ const Associates = () => {
       (associate) => associate.associate_uuid === disconnectFromAssociate,
     );
     socket?.emit("disconnect_associate", {
-      room: associate?.of_uuid,
+      room: associate?.uuid,
     });
     socket?.emit("disconnect_associate", {
-      room: associate?.is_uuid,
+      room: associate?.uuid,
     });
   };
 
@@ -73,24 +74,30 @@ const Associates = () => {
     );
   };
 
-  const mappedRecentAssociateCards = recentAssociates.map(
-    (associate, index) => {
-      return (
-        <RecentAssociateCards
-          key={associate.associate_uuid}
-          associate={associate}
-          targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
-        />
-      );
-    },
-  );
+  const mappedRecentAssociateCards = applyFilters(
+    searchFilter,
+    searchCategory,
+    sortFilter,
+    recentAssociates,
+  ).map((associate) => {
+    return (
+      <RecentAssociateCards
+        key={associate.associate_uuid}
+        associate={associate}
+      />
+    );
+  });
 
-  const mappedAssociateCards = allAssociates.map((associate, index) => {
+  const mappedAssociateCards = applyFilters(
+    searchFilter,
+    searchCategory,
+    sortFilter,
+    allAssociates,
+  ).map((associate) => {
     return (
       <AssociateCards
         key={associate.associate_uuid}
         associate={associate}
-        targetIdentity={associate.of_uuid !== user?.uuid ? "of" : "is"}
         handleDisconnectFromAssociate={() =>
           handleDisconnectFromAssociate(associate.associate_uuid)
         }
@@ -99,17 +106,17 @@ const Associates = () => {
   });
 
   React.useEffect(() => {
-    getAllAssociates(sortFilter, searchFilter, searchCategory);
-  }, [getAllAssociates, sortFilter, searchFilter, searchCategory]);
+    getAllAssociates();
+  }, [getAllAssociates]);
 
   React.useEffect(() => {
-    getRecentAssociates(sortFilter, searchFilter, searchCategory);
-  }, [getRecentAssociates, sortFilter, searchFilter, searchCategory]);
+    getRecentAssociates();
+  }, [getRecentAssociates]);
 
   React.useEffect(() => {
     const handle = async () => {
-      await getAllAssociates(sortFilter, searchFilter, searchCategory);
-      await getRecentAssociates(sortFilter, searchFilter, searchCategory);
+      await getAllAssociates();
+      await getRecentAssociates();
     };
 
     socket?.on("refetch_associates", handle);
@@ -117,14 +124,7 @@ const Associates = () => {
     return () => {
       socket?.off("refetch_associates", handle);
     };
-  }, [
-    socket,
-    sortFilter,
-    searchFilter,
-    searchCategory,
-    getAllAssociates,
-    getRecentAssociates,
-  ]);
+  }, [socket, getAllAssociates, getRecentAssociates]);
 
   return (
     <div className="flex flex-col items-center justify-start w-full h-auto">
@@ -141,8 +141,8 @@ const Associates = () => {
               handleDisconnectFromAssociate(disconnectFromAssociate)
             }
             refetchData={async () => {
-              getAllAssociates(sortFilter, searchFilter, searchCategory);
-              getRecentAssociates(sortFilter, searchFilter, searchCategory);
+              getAllAssociates();
+              getRecentAssociates();
               socketDisconnectAssociate();
             }}
           />
@@ -198,7 +198,7 @@ const Associates = () => {
                   activeFilterOptions={activeFilterOptions}
                   handleSortFilter={handleSortFilter}
                   toggleActiveSortOptions={toggleActiveSortOptions}
-                  sortKeys={["name", "surname", "date added"]}
+                  sortKeys={["name", "surname", "role", "status"]}
                 />
               </div>
             </div>

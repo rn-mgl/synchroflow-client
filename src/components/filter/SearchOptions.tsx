@@ -15,6 +15,7 @@ const SearchOptions: React.FC<SearchOptionsProps> = (props) => {
     (category, index) => {
       return (
         <button
+          type="button"
           key={category}
           onClick={() => {
             props.handleSearchCategory(category);
@@ -30,7 +31,7 @@ const SearchOptions: React.FC<SearchOptionsProps> = (props) => {
           {category}
         </button>
       );
-    }
+    },
   );
 
   return (
@@ -43,6 +44,7 @@ const SearchOptions: React.FC<SearchOptionsProps> = (props) => {
               items-center justify-center font-medium px-6 w-auto"
       >
         <button
+          type="button"
           onClick={props.toggleActiveSearchOptions}
           className="flex flex-row gap-2 items-center justify-between p-2 w-full"
         >

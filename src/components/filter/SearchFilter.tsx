@@ -14,12 +14,12 @@ interface Props {
 const SearchFilter: React.FC<Props> = (props) => {
   return (
     <div
-      className={`w-full relative flex-row items-center justify-between mr-auto h-fit t:flex
+      className={`w-full relative flex-row items-center justify-between mr-auto h-full t:flex
                 ${props.activeFilterOptions ? "hidden" : "flex"}`}
     >
       <input
         type="text"
-        className="p-4 t:px-6 border-[1px] rounded-md  text-xs
+        className="p-4 t:px-6 border-[1px] rounded-md h-full text-xs
             border-secondary-100 w-full focus:outline-none
             focus:border-b-4 transition-all"
         placeholder={props.placeholder}
