@@ -38,10 +38,7 @@ interface MessageContextInterface {
   canSeeRoomMembers: boolean;
   canAddRoomMember: boolean;
   canLeaveGroup: boolean;
-  getAllMessageRooms: (
-    searchFilter: string,
-    roomType: "private" | "group",
-  ) => Promise<void>;
+  getAllMessageRooms: (roomType: "private" | "group") => Promise<void>;
   getRoomMessages: (
     roomType: "private" | "group",
     roomUUID: string,
@@ -163,12 +160,12 @@ const MessageProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const getAllMessageRooms = React.useCallback(
-    async (searchFilter: string, roomType: "private" | "group") => {
+    async (roomType: "private" | "group") => {
       if (user?.token) {
         try {
           const { data } = await axios.get(`${url}/message_rooms`, {
             headers: { Authorization: user?.token },
-            params: { searchFilter, roomType },
+            params: { roomType },
           });
           if (data) {
             setMessageRooms(data);

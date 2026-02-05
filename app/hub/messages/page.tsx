@@ -68,7 +68,7 @@ const Messages = () => {
     toggleCanAddRoomMember,
     toggleCanLeaveGroup,
   } = useMessageContext();
-  const { activeFilterOptions } = useFilter();
+  const { activeFilterOptions, applyFilters } = useFilter();
   const { searchFilter, handleSearchFilter } = useSearchFilter("name");
   const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } =
     useFile();
@@ -120,7 +120,7 @@ const Messages = () => {
         }
 
         await getRoomMessages(roomType, activeRoom.message_room);
-        await getAllMessageRooms(searchFilter, roomType);
+        await getAllMessageRooms(roomType);
 
         if (socket) {
           socket?.emit("send_message", { rooms: data.rooms });
@@ -141,7 +141,7 @@ const Messages = () => {
         },
       );
       if (data.deletedRoom) {
-        getAllMessageRooms(searchFilter, "group");
+        getAllMessageRooms("group");
         toggleCanDeleteRoom();
         socket?.emit("delete_group_room", { rooms: data.rooms });
       }
@@ -174,7 +174,7 @@ const Messages = () => {
 
         if (data) {
           socket?.emit("leave_group", { rooms: data.members });
-          getAllMessageRooms(searchFilter, "group");
+          getAllMessageRooms("group");
           clearActiveRoom();
         }
       }
@@ -186,7 +186,12 @@ const Messages = () => {
     }
   };
 
-  const mappedMessageRooms = messageRooms.map((room) => {
+  const mappedMessageRooms = applyFilters(
+    searchFilter,
+    "room_name",
+    "room_name",
+    messageRooms,
+  ).map((room) => {
     return (
       <React.Fragment key={room.message_room}>
         <MessagePreview
@@ -256,12 +261,12 @@ const Messages = () => {
   });
 
   React.useEffect(() => {
-    getAllMessageRooms(searchFilter, roomType);
-  }, [getAllMessageRooms, searchFilter, roomType]);
+    getAllMessageRooms(roomType);
+  }, [getAllMessageRooms, roomType]);
 
   React.useEffect(() => {
     const handle = async () => {
-      await getAllMessageRooms(searchFilter, "group");
+      await getAllMessageRooms("group");
       await getNotifications();
     };
 
@@ -270,11 +275,11 @@ const Messages = () => {
     return () => {
       socket?.off("reflect_add_group_member", handle);
     };
-  }, [socket, searchFilter, getAllMessageRooms, getNotifications]);
+  }, [socket, getAllMessageRooms, getNotifications]);
 
   React.useEffect(() => {
     const handle = async () => {
-      await getAllMessageRooms(searchFilter, "group");
+      await getAllMessageRooms("group");
       await getRoom("group", activeRoom.message_room);
     };
 
@@ -283,17 +288,11 @@ const Messages = () => {
     return () => {
       socket?.off("reflect_update_group_room", handle);
     };
-  }, [
-    socket,
-    searchFilter,
-    getAllMessageRooms,
-    getRoom,
-    activeRoom.message_room,
-  ]);
+  }, [socket, getAllMessageRooms, getRoom, activeRoom.message_room]);
 
   React.useEffect(() => {
     const handle = async () => {
-      await getAllMessageRooms(searchFilter, "group");
+      await getAllMessageRooms("group");
     };
 
     socket?.on("reflect_remove_group_member", handle);
@@ -301,18 +300,18 @@ const Messages = () => {
     return () => {
       socket?.off("reflect_remove_group_member", handle);
     };
-  }, [socket, searchFilter, getAllMessageRooms]);
+  }, [socket, getAllMessageRooms]);
 
   React.useEffect(() => {
     const handle = async () => {
-      await getAllMessageRooms(searchFilter, "group");
+      await getAllMessageRooms("group");
     };
     socket?.on("reflect_delete_group_room", handle);
 
     return () => {
       socket?.off("reflect_delete_group_room", handle);
     };
-  }, [socket, searchFilter, getAllMessageRooms]);
+  }, [socket, getAllMessageRooms]);
 
   React.useEffect(() => {
     const handle = async (args: { room: string }) => {
@@ -333,7 +332,6 @@ const Messages = () => {
   }, [
     activeRoom,
     socket,
-    searchFilter,
     roomType,
     audioRef,
     user?.uuid,
@@ -348,8 +346,6 @@ const Messages = () => {
     return <Loading />;
   }
 
-  console.log(activeRoom);
-
   return (
     <div
       className="flex flex-col items-center justify-start w-full h-full
@@ -358,14 +354,14 @@ const Messages = () => {
       {canCreateRoom ? (
         <CreateRoom
           toggleCanCreateRoom={toggleCanCreateRoom}
-          getAllMessageRooms={() => getAllMessageRooms(searchFilter, "group")}
+          getAllMessageRooms={() => getAllMessageRooms("group")}
         />
       ) : null}
 
       {canEditRoom ? (
         <EditRoom
           roomData={activeRoom}
-          getAllMessageRooms={() => getAllMessageRooms(searchFilter, "group")}
+          getAllMessageRooms={() => getAllMessageRooms("group")}
           toggleCanEditRoom={toggleCanEditRoom}
           getRoom={() => getRoom("group", activeRoom.message_room)}
         />
@@ -398,7 +394,7 @@ const Messages = () => {
           toggleConfirmation={toggleCanDeleteRoom}
           customDelete={deleteGroupRoom}
           refetchData={() => {
-            getAllMessageRooms(searchFilter, "group");
+            getAllMessageRooms("group");
             clearActiveRoom();
           }}
         />
