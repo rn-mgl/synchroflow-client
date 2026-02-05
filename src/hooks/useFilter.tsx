@@ -23,7 +23,9 @@ export default function useFilter() {
 
         if (typeof item !== "string") return true;
 
-        return item.toString().toLowerCase().includes(searchValue);
+        return String(item ?? "")
+          .toLowerCase()
+          .includes(searchValue);
       })
       .sort((a, b) => {
         if (a[sortFilter as keyof T] < b[sortFilter as keyof T]) {
