@@ -81,7 +81,7 @@ const EditRoom: React.FC<EditRoomProps> = (props) => {
         await props.getRoom();
         await props.getAllMessageRooms();
         props.toggleCanEditRoom();
-        socket?.emit("update_room_room", { rooms: data.rooms });
+        socket?.emit("update_group_room", { rooms: data.rooms });
       }
     } catch (error) {
       console.log(error);

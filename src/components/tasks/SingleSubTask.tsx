@@ -94,7 +94,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
       );
       if (data) {
         await getAllTaskCollaborators();
-        socket?.emit("assign_task", { room: collaboratorUUID });
+        socket?.emit("assign_sub_task", { room: collaboratorUUID });
       }
     } catch (error) {
       console.log(error);
@@ -118,7 +118,7 @@ const SingleSubTask: React.FC<SingleSubTaskProps> = (props) => {
       console.log(data);
       if (data) {
         await getAllTaskCollaborators();
-        socket?.emit("revoke_task", { room: collaboratorUserUUID });
+        socket?.emit("revoke_sub_task", { room: collaboratorUserUUID });
       }
     } catch (error) {
       console.log(error);

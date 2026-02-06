@@ -312,10 +312,10 @@ const Invites = () => {
       await getReceivedTaskInvites();
     };
 
-    socket?.on("reflect_send_invite", handle);
+    socket?.on("reflect_send_task_invite", handle);
 
     return () => {
-      socket?.off("reflect_send_invite", handle);
+      socket?.off("reflect_send_task_invite", handle);
     };
   }, [socket, getReceivedTaskInvites]);
 
