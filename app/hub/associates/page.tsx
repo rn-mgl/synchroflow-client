@@ -222,7 +222,7 @@ const Associates = () => {
             </div>
 
             <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-3 items-center justify-start gap-4 
+              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-center justify-start gap-4 
                          overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
             >
               {mappedRecentAssociateCards}
@@ -235,7 +235,7 @@ const Associates = () => {
             </div>
 
             <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-3 items-center justify-start gap-4 
+              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-center justify-start gap-4 
                          overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
             >
               {mappedAssociateCards}

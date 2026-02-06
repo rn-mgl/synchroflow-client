@@ -382,7 +382,7 @@ const Invites = () => {
             </div>
 
             <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-3 items-start justify-start gap-4 
+              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-start justify-start gap-4 
                          overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-4"
             >
               {mappedSentTaskInvites}
@@ -395,7 +395,7 @@ const Invites = () => {
             </div>
 
             <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-3 items-start justify-start gap-4 
+              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-start justify-start gap-4 
                          overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-4"
             >
               {mappedReceivedTaskInvites}
@@ -408,7 +408,7 @@ const Invites = () => {
             </div>
 
             <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-3 items-start justify-start gap-4 
+              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-start justify-start gap-4 
                          overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-4"
             >
               {mappedSentAssociateInvites}
@@ -421,7 +421,7 @@ const Invites = () => {
             </div>
 
             <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-3 items-start justify-start gap-4 
+              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-start justify-start gap-4 
                          overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-4"
             >
               {mappedReceivedAssociateInvites}
