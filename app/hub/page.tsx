@@ -6,11 +6,9 @@ import AssociateCards from "@/components//associates/AssociateCards";
 import TaskCards from "@/components/tasks/TaskCards";
 import useAssociates from "@/src/hooks/useAssociates";
 import useDashboard from "@/src/hooks/useDashboard";
-import useSearchFilter from "@/src/hooks/useSearchFilter";
 import useTasks from "@/src/hooks/useTasks";
 import { ArcElement, Chart } from "chart.js/auto";
 import { Line, Pie } from "react-chartjs-2";
-import { useNotificationContext } from "@/src/contexts/notificationContext";
 
 const Hub = () => {
   const { tasksCount, weekTasksCount, getTasksCount } = useDashboard();

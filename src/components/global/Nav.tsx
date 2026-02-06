@@ -50,6 +50,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
     notifications,
     checkedNotifications,
     scrollRef,
+    notificationAudio,
     toggleNotificationIsVisible,
     toggleCheckedNotifications,
     getNotifications,
@@ -474,6 +475,12 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
           {children}
         </div>
       </div>
+
+      <audio ref={notificationAudio}>
+        <source
+          src={`${process.env.NEXT_PUBLIC_SITE_URL}/music/NotificationSound.mp3`}
+        />
+      </audio>
     </div>
   );
 };

@@ -1,12 +1,11 @@
 "use client";
 
 import { useGlobalContext } from "@/base/src/contexts/context";
-import { useNotificationContext } from "@/base/src/contexts/notificationContext";
-import useInvites from "@/src/hooks/useInvites";
 import ReceivedAssociateInvitesCard from "@/components/invites/ReceivedAssociateInvitesCard";
 import ReceivedTaskInvitesCard from "@/components/invites/ReceivedTaskInvitesCard";
 import SentAssociateInvitesCard from "@/components/invites/SentAssociateInvitesCard";
 import SentTaskInvitesCard from "@/components/invites/SentTaskInvitesCard";
+import useInvites from "@/src/hooks/useInvites";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
@@ -22,8 +21,6 @@ const Invites = () => {
     getSentAssociateInvites,
     getReceivedAssociateInvites,
   } = useInvites();
-
-  const { getNotifications } = useNotificationContext();
 
   const { socket } = useGlobalContext();
   const { data: session } = useSession({ required: true });
@@ -322,7 +319,6 @@ const Invites = () => {
   React.useEffect(() => {
     const handle = async () => {
       await getReceivedAssociateInvites();
-      await getNotifications();
     };
 
     socket?.on("reflect_send_associate_invite", handle);
@@ -330,7 +326,7 @@ const Invites = () => {
     return () => {
       socket?.off("reflect_send_associate_invite", handle);
     };
-  }, [socket, getReceivedAssociateInvites, getNotifications]);
+  }, [socket, getReceivedAssociateInvites]);
 
   React.useEffect(() => {
     const handle = async (args: {

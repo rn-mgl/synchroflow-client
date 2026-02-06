@@ -16,6 +16,7 @@ interface NotificationsStateProps {
 interface NotificationContextInterface {
   notificationIsVisible: boolean;
   notifications: NotificationsStateProps[];
+  notificationAudio: RefObject<HTMLAudioElement | null>;
   checkedNotifications: boolean;
   scrollRef: RefObject<HTMLDivElement | null>;
   toggleNotificationIsVisible: () => void;
@@ -34,11 +35,13 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
   const [notificationIsVisible, setNotificationIsVisible] =
     React.useState(false);
 
-  const [checkedNotifications, setCheckedNotifications] = React.useState(false);
+  const [checkedNotifications, setCheckedNotifications] = React.useState(true);
 
   const [notificationLimit, setNotificationLimit] = React.useState(10);
 
   const scrollRef = React.useRef<HTMLDivElement | null>(null);
+
+  const notificationAudio = React.useRef<HTMLAudioElement | null>(null);
 
   const { isLoading, handleLoader } = useLoader();
 
@@ -100,6 +103,30 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, [getNotifications]);
 
+  React.useEffect(() => {
+    const LISTEN_TO = [
+      "reflect_send_task_invite",
+      "reflect_send_associate_invite",
+      "receive_messages",
+      "reflect_add_group_member",
+      "reflect_assign_sub_task",
+    ];
+
+    const handle = () => {
+      toggleCheckedNotifications(false);
+
+      if (notificationAudio.current) {
+        notificationAudio.current.play();
+      }
+    };
+
+    LISTEN_TO.forEach((listen) => socket?.on(listen, handle));
+
+    return () => {
+      LISTEN_TO.forEach((listen) => socket?.off(listen, handle));
+    };
+  }, [socket, toggleCheckedNotifications]);
+
   return (
     <NotificationContext.Provider
       value={{
@@ -107,6 +134,7 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
         notifications,
         checkedNotifications,
         scrollRef,
+        notificationAudio,
         toggleNotificationIsVisible,
         toggleCheckedNotifications,
         getNotifications,

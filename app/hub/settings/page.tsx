@@ -1,12 +1,10 @@
 "use client";
-import { useGlobalContext } from "@/base/src/contexts/context";
 import General from "@/components/settings/General";
 import Notification from "@/components/settings/Notification";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
 // import notificationSound from "@/public/music/NotificationSound.mp3";
-import useAudio from "@/src/hooks/useAudio";
 import { useSettings } from "@/base/src/contexts/settingsContext";
 
 const Settings = () => {
@@ -21,7 +19,7 @@ const Settings = () => {
     handleUserNotificationSettings,
   } = useSettings();
 
-  const { audioRef } = useAudio();
+  const settingsAudio = React.useRef<HTMLAudioElement | null>(null);
 
   const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession({ required: true });
@@ -85,7 +83,7 @@ const Settings = () => {
               notificationSound={settings.notification_sound}
               handleUserGeneralSettings={handleUserGeneralSettings}
               updateUserSettings={updateUserSettings}
-              audioRef={audioRef}
+              audioRef={settingsAudio}
             />
           ) : activeNav === "notification" ? (
             <Notification
@@ -100,7 +98,7 @@ const Settings = () => {
         </div>
       </div>
 
-      <audio ref={audioRef}>
+      <audio ref={settingsAudio}>
         <source
           src={`${process.env.NEXT_PUBLIC_SITE_URL}/music/NotificationSound.mp3`}
         />

@@ -2,20 +2,17 @@
 
 import { useGlobalContext } from "@/base/src/contexts/context";
 import { useMessageContext } from "@/base/src/contexts/messageContext";
-import { useNotificationContext } from "@/base/src/contexts/notificationContext";
-import { useSettings } from "@/base/src/contexts/settingsContext";
 import SearchFilter from "@/components/filter/SearchFilter";
 import DeleteConfirmation from "@/components/global/DeleteConfirmation";
 import Loading from "@/components/global/Loading";
 import AddRoomMember from "@/components/messages/AddRoomMember";
 import CreateRoom from "@/components/messages/CreateRoom";
 import EditRoom from "@/components/messages/EditRoom";
-import RoomMembers from "@/components/messages/RoomMembers";
 import MessagePreview from "@/components/messages/MessagePreview";
+import RoomMembers from "@/components/messages/RoomMembers";
 import StandByMessagePanel from "@/components/messages/StandByMessagePanel";
 import FilePreview from "@/src/components/global/FilePreview";
 import FileViewer from "@/src/components/global/FileViewer";
-import useAudio from "@/src/hooks/useAudio";
 import useFile from "@/src/hooks/useFile";
 import useFilter from "@/src/hooks/useFilter";
 import useLoader from "@/src/hooks/useLoading";
@@ -72,11 +69,8 @@ const Messages = () => {
   const { searchFilter, handleSearchFilter } = useSearchFilter("name");
   const { rawFile, fileData, removeRawFile, selectedFileViewer, uploadFile } =
     useFile();
-  const { settings } = useSettings();
-  const { audioRef } = useAudio();
+
   const { isLoading, handleLoader } = useLoader();
-  const { getNotifications, toggleCheckedNotifications } =
-    useNotificationContext();
 
   const { data: session } = useSession({ required: true });
   const user = session?.user;
@@ -267,7 +261,6 @@ const Messages = () => {
   React.useEffect(() => {
     const handle = async () => {
       await getAllMessageRooms("group");
-      await getNotifications();
     };
 
     socket?.on("reflect_add_group_member", handle);
@@ -275,7 +268,7 @@ const Messages = () => {
     return () => {
       socket?.off("reflect_add_group_member", handle);
     };
-  }, [socket, getAllMessageRooms, getNotifications]);
+  }, [socket, getAllMessageRooms]);
 
   React.useEffect(() => {
     const handle = async () => {
@@ -316,12 +309,6 @@ const Messages = () => {
   React.useEffect(() => {
     const handle = async (args: { room: string }) => {
       await getRoomMessages(roomType, activeRoom.message_room);
-      await getNotifications();
-      toggleCheckedNotifications(false);
-
-      if (settings.message_notification) {
-        audioRef.current?.play();
-      }
     };
 
     socket?.on("get_messages", handle);
@@ -329,18 +316,7 @@ const Messages = () => {
     return () => {
       socket?.off("get_messages", handle);
     };
-  }, [
-    activeRoom,
-    socket,
-    roomType,
-    audioRef,
-    user?.uuid,
-    settings.message_notification,
-    settings.notification_sound,
-    getRoomMessages,
-    getNotifications,
-    toggleCheckedNotifications,
-  ]);
+  }, [activeRoom, socket, roomType, user?.uuid, getRoomMessages]);
 
   if (isLoading) {
     return <Loading />;
@@ -629,12 +605,6 @@ const Messages = () => {
               </div>
             </div>
           )}
-
-          <audio ref={audioRef}>
-            <source
-              src={`${process.env.NEXT_PUBLIC_SITE_URL}/music/NotificationSound.mp3`}
-            />
-          </audio>
         </div>
       </div>
     </div>
