@@ -194,18 +194,18 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
   }, [socket, user?.uuid]);
 
   return (
-    <div className="flex flex-row h-full">
+    <div className="flex flex-row h-full w-full">
       {message.active ? (
         <Message message={message} handleMessages={handleMessages} />
       ) : null}
 
       <div
-        className={`fixed  top-0 left-0 w-full h-full z-20 l-s:z-0 bg-white px-4 py-7 flex 
+        className={`fixed top-0 left-0 w-full h-full z-20 l-s:z-0 bg-white px-4 py-7 flex 
                     flex-col gap-8 t:w-6/12 l-s:border-r-[1px] l-s:static animate-fadeIn transition-all 
-                    duration-75 overflow-y-auto cstm-scrollbar overflow-x-clip ${
+                    duration-75 overflow-y-auto cstm-scrollbar ${
                       navIsVisible
-                        ? "flex l-s:w-72 l-s:min-w-[18rem]"
-                        : "hidden l-s:flex l-s:w-[6rem] l-s:min-w-[6rem]"
+                        ? "flex l-s:w-72 l-s:min-w-[18rem] l-s:max-w-[18rem]"
+                        : "hidden l-s:flex l-s:w-[6rem] l-s:min-w-[6rem] l-s:max-w-[6rem]"
                     } `}
       >
         <div className="flex flex-row gap-2 items-center justify-center relative px-2.5">
@@ -396,7 +396,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
                 ${navIsVisible ? "fixed" : "hidden"}`}
       />
 
-      <div className="flex flex-col flex-1 w-full relative z-0">
+      <div className="flex flex-col w-full relative z-0">
         <div
           className="w-full p-4 border-b-[1px] border-b-secondary-100  
                   flex flex-row items-center justify-center gap-4 bg-white transition-all"

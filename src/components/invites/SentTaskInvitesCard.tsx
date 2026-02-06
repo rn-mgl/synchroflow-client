@@ -16,7 +16,7 @@ interface SendTaskInvitesProps {
 
 const SentTaskInvitesCard: React.FC<SendTaskInvitesProps> = (props) => {
   return (
-    <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 select-none min-h-[16rem] h-auto">
+    <div className="flex flex-row gap-4 justify-center w-full select-none min-h-[18rem] h-72">
       <div
         className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md
                     transition-all"

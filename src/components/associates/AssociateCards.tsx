@@ -15,8 +15,8 @@ const AssociateCards: React.FC<AssociateCardsProps> = (props) => {
 
   return (
     <div
-      className="bg-white p-4 rounded-lg h-full flex flex-col gap-2 
-              hover:shadow-md overflow-y-auto items-start min-w-[20rem] w-80 max-h-[20rem]"
+      className="bg-white p-4 rounded-lg h-72 min-h-[18rem] flex flex-col gap-2 
+              hover:shadow-md overflow-y-auto items-start w-full max-h-[18rem]"
     >
       <div className="w-full h-full flex flex-col gap-2">
         <div className="flex flex-row gap-1 items-center justify-center">

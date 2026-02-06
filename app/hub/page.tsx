@@ -176,8 +176,8 @@ const Hub = () => {
             </div>
 
             <div
-              className="w-full h-full flex flex-row items-center justify-start gap-4 
-                         overflow-x-auto cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
+              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-3 items-center justify-start gap-4 
+                         overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
             >
               {mappedTasksToday}
             </div>
@@ -189,8 +189,8 @@ const Hub = () => {
             </div>
 
             <div
-              className="w-full h-full flex flex-row items-center justify-start gap-4 
-                         overflow-x-auto cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
+              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-3 items-center justify-start gap-4 
+                         overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
             >
               {mappedUpcomingTasks}
             </div>
@@ -205,8 +205,8 @@ const Hub = () => {
             </div>
 
             <div
-              className="w-auto h-full flex flex-row gap-4 items-start justify-start 
-                  transition-all min-w-full bg-neutral-100 rounded-lg p-2 task-scroller overflow-x-auto cstm-scrollbar-2"
+              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-3 items-center justify-start gap-4 
+                         overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
             >
               {mappedRecentAssociateCards}
             </div>
