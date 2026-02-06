@@ -2,6 +2,7 @@ import useLoader from "@/src/hooks/useLoading";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React, { RefObject } from "react";
+import { useGlobalContext } from "./context";
 
 interface NotificationsStateProps {
   from_image: string;
@@ -40,6 +41,8 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
   const scrollRef = React.useRef<HTMLDivElement | null>(null);
 
   const { isLoading, handleLoader } = useLoader();
+
+  const { socket } = useGlobalContext();
 
   const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession({ required: true });

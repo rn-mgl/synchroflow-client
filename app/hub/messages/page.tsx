@@ -591,6 +591,8 @@ const Messages = () => {
                 <div className="flex flex-row w-full gap-4">
                   <div className="flex flex-row items-center justify-center rounded-md w-full gap-4 bg-neutral-100 p-2">
                     <div
+                      data-placeholder="Enter message..."
+                      id="messageInput"
                       onKeyDown={(e) => handleMessagePanelKeys(e)}
                       contentEditable={true}
                       ref={messageRef as RefObject<HTMLDivElement>}

@@ -10,13 +10,14 @@ import useSearchFilter from "@/src/hooks/useSearchFilter";
 import useTasks from "@/src/hooks/useTasks";
 import { ArcElement, Chart } from "chart.js/auto";
 import { Line, Pie } from "react-chartjs-2";
+import { useNotificationContext } from "@/src/contexts/notificationContext";
 
 const Hub = () => {
   const { tasksCount, weekTasksCount, getTasksCount } = useDashboard();
   const { recentAssociates, getRecentAssociates } = useAssociates();
   const { myTasksToday, myUpcomingTasks, getMyTasksToday, getMyUpcomingTasks } =
     useTasks();
-  const { searchFilter } = useSearchFilter("title");
+
   const { data: session } = useSession({ required: true });
   const user = session?.user;
 

@@ -187,7 +187,7 @@ input[type="range"]::-moz-range-thumb {
 }
 
 [contenteditable="true"]:empty:before {
-  content: attr(placeholder);
+  content: attr(data-placeholder);
   pointer-events: none;
   display: block; /* For Firefox */
   opacity: 0.5;
