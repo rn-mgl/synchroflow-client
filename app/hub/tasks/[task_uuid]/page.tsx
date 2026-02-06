@@ -464,7 +464,7 @@ const SingleTask = () => {
           />
         ) : null}
 
-        <div className="flex flex-col p-4 items-center justify-start w-full h-auto l-s:h-full t:p-10 gap-4 l-s:overflow-hidden">
+        <div className="flex flex-col p-4 items-center justify-start w-full h-auto l-l:h-full t:p-10 gap-4 l-l:overflow-hidden">
           <Link
             href="/hub/tasks"
             className="mr-auto hover:bg-secondary-500 transition-all
@@ -473,8 +473,8 @@ const SingleTask = () => {
             <BsArrowLeft className="text-lg" />
           </Link>
 
-          <div className="grid grid-cols-1 items-center justify-start w-full h-auto l-s:h-full gap-8 l-s:grid-cols-3 l-s:overflow-hidden">
-            <div className="flex flex-col items-center justify-start w-full h-auto l-s:h-full gap-8 col-span-1 l-s:col-span-2 l-s:overflow-hidden">
+          <div className="grid grid-cols-1 items-center justify-start w-full h-auto l-l:h-full gap-8 l-l:grid-cols-3 l-l:overflow-hidden">
+            <div className="flex flex-col items-center justify-start w-full h-auto l-l:h-full gap-8 col-span-1 l-l:col-span-2 l-l:overflow-hidden">
               <div className="flex flex-col gap-2 w-full items-start justify-start">
                 <div className="flex flex-row w-full justify-between items-center">
                   <p className="text-2xl font-medium text-secondary-500">
@@ -538,7 +538,7 @@ const SingleTask = () => {
                   style={{
                     backgroundImage: `url(${taskData.banner})`,
                   }}
-                  className="w-full rounded-2xl h-48 bg-primary-300 bg-center  bg-cover l-s:h-56 p-4 flex flex-col"
+                  className="w-full rounded-2xl h-48 bg-primary-300 bg-center  bg-cover l-l:h-56 p-4 flex flex-col"
                 />
 
                 <div className="flex flex-row gap-2 text-secondary-400 text-sm">
@@ -586,8 +586,8 @@ const SingleTask = () => {
                 <p className="text-xl font-medium ">Description</p>
 
                 <div
-                  className="flex flex-col w-full rounded-md overflow-y-auto max-h-[16rem] h-[16rem] l-s:h-full l-s:max-h-none bg-neutral-150 p-2 cstm-scrollbar
-                            l-s:p-4"
+                  className="flex flex-col w-full rounded-md overflow-y-auto max-h-[16rem] h-[16rem] l-l:h-full l-l:max-h-none bg-neutral-150 p-2 cstm-scrollbar
+                            l-l:p-4"
                 >
                   <p className="leading-relaxed text-xs">
                     {taskData.description}
@@ -596,10 +596,10 @@ const SingleTask = () => {
               </div>
             </div>
 
-            <div className="flex flex-col items-center justify-start w-full h-auto gap-8 col-span-1 l-s:h-full overflow-hidden">
+            <div className="flex flex-col items-center justify-start w-full h-auto gap-8 col-span-1 l-l:h-full overflow-hidden">
               <div
                 className="flex flex-col items-center justify-start w-full gap-2 col-span-1 min-h-[20rem] max-h-[20rem] h-80 overflow-y-auto
-                          l-s:max-h-none l-s:h-full"
+                          l-l:max-h-none l-l:h-full"
               >
                 <div className="flex flex-row w-full items-center justify-between">
                   <p className="text-xl font-medium mr-auto">
@@ -634,7 +634,7 @@ const SingleTask = () => {
 
               <div
                 className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500 min-h-[20rem] max-h-[20rem] h-80 
-                          l-s:max-h-none l-s:h-full"
+                          l-l:max-h-none l-l:h-full"
               >
                 <p className="font-medium text-xl">
                   {collaborators.length > 1 ? "Collaborators" : "Collaborator"}
