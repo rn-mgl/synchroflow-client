@@ -128,7 +128,7 @@ const Nav = ({ children }: { children: React.ReactNode }) => {
 
     return (
       <div
-        key={`${notification.name}-${notification.notif_date}-${notification.title}`}
+        key={`${notification.name}-${notification.notif_date}-${notification.title}-${index}`}
         className="w-full p-2 rounded-md bg-neutral-50 flex flex-col items-center justify-center gap-2"
       >
         <div className="flex flex-row w-full items-center justify-between gap-4">

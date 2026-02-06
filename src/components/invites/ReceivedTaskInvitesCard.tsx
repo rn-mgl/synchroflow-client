@@ -17,7 +17,7 @@ interface ReceivedTaskInvitesProps {
 
 const ReceivedTaskInvitesCard: React.FC<ReceivedTaskInvitesProps> = (props) => {
   return (
-    <div className="flex flex-row gap-4 justify-center min-w-[20rem] w-80 select-none min-h-[16rem] h-auto">
+    <div className="flex flex-row gap-4 justify-center w-full select-none min-h-[18rem] h-auto">
       <div
         className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md
                     transition-all"
