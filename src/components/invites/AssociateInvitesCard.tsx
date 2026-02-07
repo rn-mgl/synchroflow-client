@@ -14,18 +14,20 @@ interface AssociateInvitesProps {
 
 const AssociateInvitesCard: React.FC<AssociateInvitesProps> = (props) => {
   return (
-    <div className="flex flex-row gap-4 justify-center w-full select-none min-h-[18rem] h-72">
+    <div className="flex flex-row gap-4 justify-center w-full select-none min-h-fit max-h-[18rem]">
       <div
         className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md
-                    transition-all"
+                    transition-all items-center justify-center"
       >
-        <div
-          style={{ backgroundImage: `url(${props.image})` }}
-          className="aspect-square h-40 bg-cover bg-no-repeat bg-primary-100 rounded-md 
-                overflow-hidden flex flex-col items-center justify-center group bg-center"
-        />
+        <div className="bg-primary-300 w-full flex flex-col items-center justify-center p-4 rounded-md">
+          <div
+            style={{ backgroundImage: `url(${props.image})` }}
+            className="aspect-square bg-cover bg-no-repeat bg-primary-100 w-40 rounded-full
+                 flex flex-col items-center justify-center group bg-center"
+          />
+        </div>
 
-        <div className="w-full flex flex-row justify-between gap-4">
+        <div className="w-full flex flex-col items-center justify-center gap-2">
           <p className=" truncate font-bold text-xs">
             {props.name} {props.surname}
           </p>

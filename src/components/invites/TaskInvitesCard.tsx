@@ -43,7 +43,7 @@ const TaskInvitesCard: React.FC<TaskInvitesProps> = (props) => {
 
         <div
           style={{ backgroundImage: `url(${props.banner})` }}
-          className="w-full h-40 bg-center bg-cover bg-no-repeat rounded-md 
+          className="w-full h-40 bg-center bg-cover bg-no-repeat rounded-md aspect-square
                     overflow-hidden group p-2 text-xs bg-neutral-200 overflow-y-auto cstm-scrollbar"
         >
           {props.message}
