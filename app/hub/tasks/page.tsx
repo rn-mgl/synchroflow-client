@@ -4,7 +4,7 @@ import SearchFilter from "@/components/filter/SearchFilter";
 import SearchOptions from "@/components/filter/SearchOptions";
 import SortFilter from "@/components/filter/SortFilter";
 import CreateTask from "@/components/tasks/CreateTask";
-import TaskCards from "@/components/tasks/TaskCards";
+import TasksSection from "@/src/components/tasks/TasksSection";
 import useFilter from "@/src/hooks/useFilter";
 import useSearchFilter from "@/src/hooks/useSearchFilter";
 import useSortFilter from "@/src/hooks/useSortFilter";
@@ -51,86 +51,6 @@ const Tasks = () => {
   const toggleCanCreateTask = () => {
     setCanCreateTask((prev) => !prev);
   };
-
-  const mappedMyTaskCardsToday = applyFilters(
-    searchFilter,
-    searchCategory,
-    sortFilter,
-    myTasksToday,
-  ).map((task) => {
-    return (
-      <TaskCards
-        priority={task.priority}
-        key={task.task_uuid}
-        banner={task.banner}
-        title={task.title}
-        subtitle={task.subtitle}
-        status={task.status}
-        deadline={task.end_date}
-        taskUUID={task.task_uuid}
-      />
-    );
-  });
-
-  const mappedCollaboratedTaskCardsToday = applyFilters(
-    searchFilter,
-    searchCategory,
-    sortFilter,
-    collaboratedTasksToday,
-  ).map((task) => {
-    return (
-      <TaskCards
-        priority={task.priority}
-        key={task.task_uuid}
-        banner={task.banner}
-        title={task.title}
-        subtitle={task.subtitle}
-        status={task.status}
-        deadline={task.end_date}
-        taskUUID={task.task_uuid}
-      />
-    );
-  });
-
-  const mappedMyTaskCards = applyFilters(
-    searchFilter,
-    searchCategory,
-    sortFilter,
-    myTasks,
-  ).map((task) => {
-    return (
-      <TaskCards
-        priority={task.priority}
-        key={task.task_uuid}
-        banner={task.banner}
-        title={task.title}
-        subtitle={task.subtitle}
-        status={task.status}
-        deadline={task.end_date}
-        taskUUID={task.task_uuid}
-      />
-    );
-  });
-
-  const mappedCollaboratedTaskCards = applyFilters(
-    searchFilter,
-    searchCategory,
-    sortFilter,
-    collaboratedTasks,
-  ).map((task) => {
-    return (
-      <TaskCards
-        priority={task.priority}
-        key={task.task_uuid}
-        banner={task.banner}
-        title={task.title}
-        subtitle={task.subtitle}
-        status={task.status}
-        deadline={task.end_date}
-        taskUUID={task.task_uuid}
-      />
-    );
-  });
 
   React.useEffect(() => {
     getMyTasks();
@@ -294,57 +214,45 @@ const Tasks = () => {
             Create Task
           </button>
 
-          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[20rem] h-auto">
-            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
-              <p>My Tasks</p>
-            </div>
+          <TasksSection
+            label="My Tasks"
+            tasks={applyFilters(
+              searchFilter,
+              searchCategory,
+              sortFilter,
+              myTasks,
+            )}
+          />
 
-            <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-center justify-start gap-4 
-                         overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
-            >
-              {mappedMyTaskCards}
-            </div>
-          </div>
+          <TasksSection
+            label="Tasks Today"
+            tasks={applyFilters(
+              searchFilter,
+              searchCategory,
+              sortFilter,
+              myTasksToday,
+            )}
+          />
 
-          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[20rem] h-auto">
-            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
-              <p>Tasks Today</p>
-            </div>
+          <TasksSection
+            label="Today's Collaboration"
+            tasks={applyFilters(
+              searchFilter,
+              searchCategory,
+              sortFilter,
+              collaboratedTasksToday,
+            )}
+          />
 
-            <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-center justify-start gap-4 
-                         overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
-            >
-              {mappedMyTaskCardsToday}
-            </div>
-          </div>
-
-          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[20rem] h-auto">
-            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
-              <p>Today&apos;s Collaboration</p>
-            </div>
-
-            <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-center justify-start gap-4 
-                         overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
-            >
-              {mappedCollaboratedTaskCardsToday}
-            </div>
-          </div>
-
-          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[20rem] h-auto">
-            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
-              <p>My Collaborations</p>
-            </div>
-
-            <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-center justify-start gap-4 
-                         overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
-            >
-              {mappedCollaboratedTaskCards}
-            </div>
-          </div>
+          <TasksSection
+            label="Today's Collaboration"
+            tasks={applyFilters(
+              searchFilter,
+              searchCategory,
+              sortFilter,
+              collaboratedTasks,
+            )}
+          />
         </div>
       </div>
     </div>

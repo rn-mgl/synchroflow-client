@@ -21,7 +21,7 @@ const TasksSection: React.FC<{ tasks: TasksProps[]; label: string }> = (
   });
 
   return (
-    <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[16rem] h-auto ">
+    <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[20rem] h-auto">
       <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
         <p>{props.label}</p>
       </div>

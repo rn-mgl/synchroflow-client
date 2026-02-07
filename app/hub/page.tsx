@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import React from "react";
 
 import AssociatesSection from "@/src/components/dashboard/AssociatesSection";
-import TasksSection from "@/src/components/dashboard/TasksSection";
+import TasksSection from "@/src/components/tasks/TasksSection";
 import TotalTasksWidget from "@/src/components/dashboard/TotalTasksWidget";
 import WeeklyTasksWidget from "@/src/components/dashboard/WeeklyTasksWidget";
 import useAssociates from "@/src/hooks/useAssociates";

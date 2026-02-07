@@ -2,59 +2,29 @@
 import { useGlobalContext } from "@/base/src/contexts/context";
 import DeleteConfirmation from "@/components/global/DeleteConfirmation";
 import SendTaskInvite from "@/components/invites/SendTaskInvite";
-import AsssignedSubTasks from "@/components/tasks/AsssignedSubTasks";
 import CreateSubTask from "@/components/tasks/CreateSubTask";
-import CreatedSubTasks from "@/components/tasks/CreatedSubTasks";
 import EditTask from "@/components/tasks/EditTask";
 import SingleSubTask from "@/components/tasks/SingleSubTask";
-import { localizeDate } from "@/src/utils/dateUtils";
+import CollaboratorsSection from "@/src/components/tasks/CollaboratorsSection";
+import SubTasksSection from "@/src/components/tasks/SubTasksSection";
+import TaskBaseData from "@/src/components/tasks/TaskBaseData";
+import {
+  CollaboratorsStateProps,
+  SingleTaskDataStateProps,
+  SubTasksStateProps,
+} from "@/src/interface/Tasks";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
-import {
-  AiOutlineClockCircle,
-  AiOutlineClose,
-  AiOutlineDelete,
-  AiOutlineEdit,
-  AiOutlineEllipsis,
-  AiOutlinePlus,
-  AiOutlineUser,
-} from "react-icons/ai";
+import { AiOutlineDelete } from "react-icons/ai";
 import { BsArrowLeft } from "react-icons/bs";
-
-interface SingleTaskDataStateProps {
-  banner: string | null;
-  task_by: number;
-  description: string;
-  priority: string;
-  start_date: string;
-  end_date: string;
-  status: string;
-  subtitle: string;
-  title: string;
-  task_uuid: string;
-}
-
-interface SubTasksStateProps {
-  title: string;
-  subtitle: string;
-  task_uuid: string;
-}
-
-interface CollaboratorsStateProps {
-  name: string;
-  surname: string;
-  image: string;
-  task_collaborator_uuid: string;
-  user_uuid: string;
-}
 
 const SingleTask = () => {
   const [taskData, setTaskData] = React.useState<SingleTaskDataStateProps>({
     banner: "",
-    task_by: -1,
+    task_by: 0,
     description: "",
     priority: "",
     start_date: "",
@@ -124,22 +94,6 @@ const SingleTask = () => {
     setSelectedSubTask((prev) => (prev === subTaskUUID ? "" : subTaskUUID));
   };
 
-  const getSingleTask = React.useCallback(async () => {
-    if (user?.token) {
-      try {
-        const { data } = await axios.get(`${url}/tasks/${params?.task_uuid}`, {
-          headers: { Authorization: user?.token },
-        });
-
-        if (data) {
-          setTaskData(data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }, [url, user, params]);
-
   const getSingleTaskCollborators = React.useCallback(async () => {
     if (user?.token) {
       try {
@@ -157,37 +111,50 @@ const SingleTask = () => {
     }
   }, [url, user, params]);
 
-  const getCreatedSubTasks = React.useCallback(async () => {
-    if (isTaskCreator && user?.token) {
+  const getSubTasks = React.useCallback(
+    async (type: "assigned" | "created") => {
       try {
-        const { data } = await axios.get(`${url}/tasks`, {
-          headers: { Authorization: user?.token },
-          params: { type: "subs", taskUUID: params?.task_uuid },
-        });
-        if (data) {
-          setCreatedSubTasks(data);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  }, [url, user, params, isTaskCreator]);
+        if (!user?.token) return;
 
-  const getAssignedSubTasks = React.useCallback(async () => {
-    if (!isTaskCreator && user?.token) {
-      try {
+        if (type === "created" && !isTaskCreator) return;
+
+        if (type === "assigned" && isTaskCreator) return;
+
         const { data } = await axios.get(`${url}/tasks`, {
-          headers: { Authorization: user?.token },
-          params: { type: "assigned", taskUUID: params?.task_uuid },
+          headers: { Authorization: user.token },
+          params: { type, taskUUID: params?.task_uuid },
         });
-        if (data) {
+
+        if (!data) return;
+
+        if (type === "created") {
+          setCreatedSubTasks(data);
+        } else if (type === "assigned") {
           setAssignedSubTasks(data);
         }
       } catch (error) {
         console.log(error);
       }
+    },
+    [isTaskCreator, user, params, url],
+  );
+
+  const getSingleTask = React.useCallback(async () => {
+    if (user?.token) {
+      try {
+        const { data } = await axios.get(`${url}/tasks/${params?.task_uuid}`, {
+          headers: { Authorization: user?.token },
+        });
+
+        if (data) {
+          setTaskData(data);
+          getSubTasks(data.task_by === user.id ? "created" : "assigned");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }, [url, user, isTaskCreator, params]);
+  }, [url, user, params, getSubTasks]);
 
   const deleteTask = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -276,7 +243,9 @@ const SingleTask = () => {
             {isTaskCreator && (
               <button
                 onClick={() =>
-                  setCollaboratorToRemove(collaborator.task_collaborator_uuid)
+                  handleCollaboratorToRemove(
+                    collaborator.task_collaborator_uuid,
+                  )
                 }
                 className="p-2 rounded-full hover:bg-primary-500  
                         text-primary-500 hover:text-white transition-all"
@@ -329,7 +298,7 @@ const SingleTask = () => {
 
   React.useEffect(() => {
     const handle = async () => {
-      await getAssignedSubTasks();
+      await getSubTasks("assigned");
     };
 
     socket?.on("refetch_assigned_subtask", handle);
@@ -337,11 +306,11 @@ const SingleTask = () => {
     return () => {
       socket?.off("refetch_assigned_subtask", handle);
     };
-  }, [socket, getAssignedSubTasks]);
+  }, [socket, getSubTasks]);
 
   React.useEffect(() => {
     const handle = async () => {
-      await getAssignedSubTasks();
+      await getSubTasks("assigned");
     };
 
     socket?.on("reflect_update_subtask", handle);
@@ -349,11 +318,11 @@ const SingleTask = () => {
     return () => {
       socket?.off("reflect_update_subtask", handle);
     };
-  }, [socket, getAssignedSubTasks]);
+  }, [socket, getSubTasks]);
 
   React.useEffect(() => {
     const handle = async () => {
-      await getAssignedSubTasks();
+      await getSubTasks("assigned");
       handleSelectedSubTask("");
     };
 
@@ -362,7 +331,7 @@ const SingleTask = () => {
     return () => {
       socket?.off("reflect_delete_subtask", handle);
     };
-  }, [socket, getAssignedSubTasks]);
+  }, [socket, getSubTasks]);
 
   React.useEffect(() => {
     const handle = async (args: { taskUUID: string }) => {
@@ -408,7 +377,7 @@ const SingleTask = () => {
         {canCreateSubTask ? (
           <CreateSubTask
             toggleCanCreateSubTask={toggleCanCreateSubTask}
-            getCreatedSubTasks={getCreatedSubTasks}
+            getCreatedSubTasks={() => getSubTasks("created")}
           />
         ) : null}
 
@@ -417,7 +386,7 @@ const SingleTask = () => {
             isTaskCreator={isTaskCreator}
             selectedSubTask={selectedSubTask}
             handleSelectedSubTask={handleSelectedSubTask}
-            getCreatedSubTasks={getCreatedSubTasks}
+            getCreatedSubTasks={() => getSubTasks("created")}
           />
         ) : null}
 
@@ -475,175 +444,31 @@ const SingleTask = () => {
 
           <div className="grid grid-cols-1 items-center justify-start w-full h-auto l-l:h-full gap-8 l-l:grid-cols-3 l-l:overflow-hidden">
             <div className="flex flex-col items-center justify-start w-full h-auto l-l:h-full gap-8 col-span-1 l-l:col-span-2 l-l:overflow-hidden">
-              <div className="flex flex-col gap-2 w-full items-start justify-start">
-                <div className="flex flex-row w-full justify-between items-center">
-                  <p className="text-2xl font-medium text-secondary-500">
-                    {taskData.title}
-                  </p>
-
-                  <div className="relative flex self-end ">
-                    <button
-                      onClick={toggleActiveToolTip}
-                      className="hover:bg-secondary-100 p-2 
-                      rounded-full transition-all"
-                    >
-                      {activeToolTip ? (
-                        <AiOutlineClose />
-                      ) : (
-                        <AiOutlineEllipsis className="text-lg" />
-                      )}
-                    </button>
-
-                    {activeToolTip ? (
-                      <div
-                        className="w-40 absolute animate-fadeIn flex flex-col items-start justify-center gap-2 
-                                -translate-x-full bg-secondary-300 p-1 rounded-lg transition-all delay-200 
-                                font-medium shadow-lg text-white text-xs"
-                      >
-                        {isTaskCreator ? (
-                          <>
-                            <button
-                              onClick={toggleCanEditTask}
-                              className="flex flex-row w-full items-center gap-2 hover:bg-secondary-400 p-2 rounded-md transition-all"
-                            >
-                              <AiOutlineEdit />
-                              Edit
-                            </button>
-                            <div className=" w-full min-h-[1px] h-[1px] bg-secondary-400" />
-                            <button
-                              onClick={toggleCanDeleteTask}
-                              className="flex flex-row w-full items-center gap-2 hover:bg-secondary-400 p-2 rounded-md transition-all"
-                            >
-                              <AiOutlineDelete />
-                              Delete
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <button
-                              onClick={toggleCanLeaveTask}
-                              className="flex flex-row w-full items-center gap-2 hover:bg-secondary-400 p-2 rounded-md transition-all"
-                            >
-                              <AiOutlineEdit />
-                              Leave
-                            </button>
-                          </>
-                        )}
-                      </div>
-                    ) : null}
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    backgroundImage: `url(${taskData.banner})`,
-                  }}
-                  className="w-full rounded-2xl h-48 bg-primary-300 bg-center  bg-cover l-l:h-56 p-4 flex flex-col"
-                />
-
-                <div className="flex flex-row gap-2 text-secondary-400 text-sm">
-                  <p>{taskData.subtitle}</p>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-2 items-start justify-start w-full">
-                <div className="flex flex-row gap-2 text-sm">
-                  <div className="flex flex-row items-center justify-center gap-1">
-                    <div>
-                      <AiOutlineUser className="text-lg text-secondary-400" />
-                    </div>
-                    {collaborators.length}{" "}
-                    {collaborators.length > 1
-                      ? "Collaborators"
-                      : "Collaborator"}
-                  </div>
-                  {isTaskCreator ? (
-                    <>
-                      |
-                      <button
-                        onClick={toggleCanInvite}
-                        className="text-primary-500 flex flex-row items-center justify-center gap-1 hover:underline underline-offset-2"
-                      >
-                        <AiOutlinePlus className="text-xs" />
-                        Invite
-                      </button>
-                    </>
-                  ) : null}
-                </div>
-
-                <div className="flex flex-row gap-2 items-center text-sm">
-                  <div>
-                    <AiOutlineClockCircle className="text-lg text-secondary-400" />
-                  </div>
-                  <p>
-                    {localizeDate(taskData.start_date, true)} -{" "}
-                    {localizeDate(taskData.end_date, true)}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500 h-full overflow-y-hidden">
-                <p className="text-xl font-medium ">Description</p>
-
-                <div
-                  className="flex flex-col w-full rounded-md overflow-y-auto max-h-[16rem] h-[16rem] l-l:h-full l-l:max-h-none bg-neutral-150 p-2 cstm-scrollbar
-                            l-l:p-4"
-                >
-                  <p className="leading-relaxed text-xs">
-                    {taskData.description}
-                  </p>
-                </div>
-              </div>
+              <TaskBaseData
+                activeToolTip={activeToolTip}
+                isTaskCreator={isTaskCreator}
+                taskData={taskData}
+                toggleActiveToolTip={toggleActiveToolTip}
+                toggleCanDeleteTask={toggleCanDeleteTask}
+                toggleCanEditTask={toggleCanEditTask}
+                toggleCanLeaveTask={toggleCanLeaveTask}
+              />
             </div>
 
             <div className="flex flex-col items-center justify-start w-full h-auto gap-8 col-span-1 l-l:h-full overflow-hidden">
-              <div
-                className="flex flex-col items-center justify-start w-full gap-2 col-span-1 min-h-[20rem] max-h-[20rem] h-80 overflow-y-auto
-                          l-l:max-h-none l-l:h-full"
-              >
-                <div className="flex flex-row w-full items-center justify-between">
-                  <p className="text-xl font-medium mr-auto">
-                    {isTaskCreator ? "Created Sub Tasks" : "Your Sub Tasks"}
-                  </p>
+              <SubTasksSection
+                isTaskCreator={isTaskCreator}
+                subTasks={isTaskCreator ? createdSubTasks : assignedSubTasks}
+                toggleCanCreateSubTask={toggleCanCreateSubTask}
+                handleSelectedSubTask={handleSelectedSubTask}
+              />
 
-                  {isTaskCreator ? (
-                    <button
-                      onClick={toggleCanCreateSubTask}
-                      className="flex flex-row gap-1 items-center text-xs text-primary-500
-                      hover:underline hover:underline-offset-2 whitespace-nowrap"
-                    >
-                      <AiOutlinePlus /> Sub Task
-                    </button>
-                  ) : null}
-                </div>
-
-                {isTaskCreator ? (
-                  <CreatedSubTasks
-                    getCreatedSubTasks={getCreatedSubTasks}
-                    handleSelectedSubTask={handleSelectedSubTask}
-                    createdSubTasks={createdSubTasks}
-                  />
-                ) : (
-                  <AsssignedSubTasks
-                    getAssignedSubTasks={getAssignedSubTasks}
-                    handleSelectedSubTask={handleSelectedSubTask}
-                    assignedSubTasks={assignedSubTasks}
-                  />
-                )}
-              </div>
-
-              <div
-                className="flex flex-col gap-2 items-start justify-start w-full text-secondary-500 min-h-[20rem] max-h-[20rem] h-80 
-                          l-l:max-h-none l-l:h-full"
-              >
-                <p className="font-medium text-xl">
-                  {collaborators.length > 1 ? "Collaborators" : "Collaborator"}
-                </p>
-
-                <div className="flex flex-col gap-2 w-full bg-neutral-150 overflow-y-auto h-full rounded-md p-2">
-                  {mappedCollaborators}
-                </div>
-              </div>
+              <CollaboratorsSection
+                collaborators={collaborators}
+                isTaskCreator={isTaskCreator}
+                toggleCanInvite={toggleCanInvite}
+                handleCollaboratorToRemove={handleCollaboratorToRemove}
+              />
             </div>
           </div>
         </div>
