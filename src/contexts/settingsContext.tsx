@@ -32,11 +32,11 @@ const SettingsContext = React.createContext<SettingsContextInterface | null>(
 
 const SettingsProvider = ({ children }: { children: React.ReactNode }) => {
   const [settings, setSettings] = React.useState<SettingsStateProps>({
-    notification_sound: 50,
-    associate_invite: true,
-    message_notification: true,
-    task_deadline: true,
-    task_update: true,
+    notification_sound: 0,
+    associate_invite: false,
+    message_notification: false,
+    task_deadline: false,
+    task_update: false,
   });
 
   const url = process.env.NEXT_PUBLIC_API_URL;

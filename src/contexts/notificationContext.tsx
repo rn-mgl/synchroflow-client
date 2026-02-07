@@ -3,6 +3,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import React, { RefObject } from "react";
 import { useGlobalContext } from "./context";
+import { useSettings } from "./settingsContext";
 
 interface NotificationsStateProps {
   from_image: string;
@@ -46,6 +47,8 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
   const { isLoading, handleLoader } = useLoader();
 
   const { socket } = useGlobalContext();
+
+  const { settings } = useSettings();
 
   const url = process.env.NEXT_PUBLIC_API_URL;
   const { data: session } = useSession({ required: true });
@@ -105,27 +108,49 @@ const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
 
   React.useEffect(() => {
     const LISTEN_TO = [
-      "reflect_send_task_invite",
-      "reflect_send_associate_invite",
-      "receive_messages",
-      "reflect_add_group_member",
-      "reflect_assign_sub_task",
+      {
+        event: "reflect_send_task_invite",
+        setting: "task_update",
+      },
+      {
+        event: "reflect_send_associate_invite",
+        setting: "task_update",
+      },
+      {
+        event: "receive_messages",
+        setting: "message_notification",
+      },
+      {
+        event: "reflect_add_group_member",
+        setting: "associate_invite",
+      },
+      {
+        event: "reflect_assign_sub_task",
+        setting: "task_update",
+      },
     ];
 
-    const handle = () => {
+    const handle = (setting: string) => {
       toggleCheckedNotifications(false);
 
-      if (notificationAudio.current) {
+      if (
+        notificationAudio.current &&
+        settings[setting as keyof object] == true
+      ) {
         notificationAudio.current.play();
       }
     };
 
-    LISTEN_TO.forEach((listen) => socket?.on(listen, handle));
+    LISTEN_TO.forEach((listen) =>
+      socket?.on(listen.event, () => handle(listen.setting)),
+    );
 
     return () => {
-      LISTEN_TO.forEach((listen) => socket?.off(listen, handle));
+      LISTEN_TO.forEach((listen) =>
+        socket?.off(listen.event, () => handle(listen.setting)),
+      );
     };
-  }, [socket, toggleCheckedNotifications]);
+  }, [socket, settings, toggleCheckedNotifications]);
 
   return (
     <NotificationContext.Provider
