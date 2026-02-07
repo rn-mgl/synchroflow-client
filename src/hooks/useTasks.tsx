@@ -2,17 +2,7 @@ import { useGlobalContext } from "@/base/src/contexts/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
-
-interface TasksProps {
-  banner: string;
-  title: string;
-  subtitle: string;
-  status: string;
-  end_date: string;
-  task_uuid: string;
-  priority: string;
-  description?: string;
-}
+import { TasksProps } from "../interface/Tasks";
 
 export default function useTasks() {
   const [myTasksToday, setMyTasksToday] = React.useState<Array<TasksProps>>([]);

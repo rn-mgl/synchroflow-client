@@ -2,17 +2,10 @@ import { useGlobalContext } from "@/base/src/contexts/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
-
-interface TasksCountStateProps {
-  ongoingTasksCount: number;
-  doneTasksCount: number;
-  lateTasksCount: number;
-}
-
-interface WeekTasksCountStateProps {
-  day: number;
-  taskCount: number;
-}
+import {
+  TasksCountStateProps,
+  WeekTasksCountStateProps,
+} from "../interface/Dashboard";
 
 export default function useDashboard() {
   const [tasksCount, setTasksCount] = React.useState<TasksCountStateProps>({
@@ -21,7 +14,7 @@ export default function useDashboard() {
     lateTasksCount: 0,
   });
   const [weekTasksCount, setWeekTasksCount] = React.useState<
-    Array<WeekTasksCountStateProps>
+    WeekTasksCountStateProps[]
   >([]);
 
   const url = process.env.NEXT_PUBLIC_API_URL;

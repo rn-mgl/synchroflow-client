@@ -2,13 +2,14 @@
 import { useSession } from "next-auth/react";
 import React from "react";
 
-import AssociateCards from "@/components//associates/AssociateCards";
-import TaskCards from "@/components/tasks/TaskCards";
+import AssociatesSection from "@/src/components/dashboard/AssociatesSection";
+import TasksSection from "@/src/components/dashboard/TasksSection";
+import TotalTasksWidget from "@/src/components/dashboard/TotalTasksWidget";
+import WeeklyTasksWidget from "@/src/components/dashboard/WeeklyTasksWidget";
 import useAssociates from "@/src/hooks/useAssociates";
 import useDashboard from "@/src/hooks/useDashboard";
 import useTasks from "@/src/hooks/useTasks";
 import { ArcElement, Chart } from "chart.js/auto";
-import { Line, Pie } from "react-chartjs-2";
 
 const Hub = () => {
   const { tasksCount, weekTasksCount, getTasksCount } = useDashboard();
@@ -18,77 +19,6 @@ const Hub = () => {
 
   const { data: session } = useSession({ required: true });
   const user = session?.user;
-
-  Chart.register(ArcElement);
-
-  const pieData = {
-    labels: ["Ongoing", "Done", "Late"],
-    datasets: [
-      {
-        label: "Tasks",
-        data: [
-          tasksCount.ongoingTasksCount,
-          tasksCount.doneTasksCount,
-          tasksCount.lateTasksCount,
-        ],
-        backgroundColor: ["#546FFFBD", "#9F84FDBD", "#BAC8FFBD"],
-        borderColor: ["#546FFF", "#9F84FD", "#BAC8FF"],
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const lineData = {
-    labels: ["S", "M", "T", "W", "T", "F", "S"],
-    datasets: [
-      {
-        label: "Task",
-        data: Array.from({ length: 7 }, (_, index) => {
-          const task = weekTasksCount.find((task) => task.day === index + 1);
-          return task ? task.taskCount : null;
-        }),
-        fill: false,
-        borderColor: "#141522",
-        tension: 0.4,
-      },
-    ],
-  };
-
-  const mappedRecentAssociateCards = recentAssociates.map((associate) => {
-    return (
-      <AssociateCards key={associate.associate_uuid} associate={associate} />
-    );
-  });
-
-  const mappedTasksToday = myTasksToday.map((task) => {
-    return (
-      <TaskCards
-        key={task.task_uuid}
-        banner={task.banner}
-        deadline={task.end_date}
-        status={task.status}
-        subtitle={task.subtitle}
-        taskUUID={task.task_uuid}
-        title={task.title}
-        priority={task.priority}
-      />
-    );
-  });
-
-  const mappedUpcomingTasks = myUpcomingTasks.map((task) => {
-    return (
-      <TaskCards
-        key={task.task_uuid}
-        banner={task.banner}
-        deadline={task.end_date}
-        status={task.status}
-        subtitle={task.subtitle}
-        taskUUID={task.task_uuid}
-        title={task.title}
-        priority={task.priority}
-      />
-    );
-  });
 
   React.useEffect(() => {
     getTasksCount();
@@ -107,6 +37,8 @@ const Hub = () => {
   }, [getMyUpcomingTasks]);
 
   React.useEffect(() => {
+    Chart.register(ArcElement);
+
     if (Chart.defaults) {
       Chart.defaults.font.family = "Poppins, sans-serif";
       Chart.defaults.font.weight = "bold";
@@ -124,92 +56,18 @@ const Hub = () => {
           className="grid grid-cols-1 t:grid-cols-2 gap-4 p-4 t:p-10 w-full h-auto
                     l-s:grid-cols-2"
         >
-          <div
-            className="w-full rounded-lg bg-secondary-500 flex flex-col h-fit
-                    p-4 text-white gap-2"
-          >
-            <div className="flex flex-row gap-2 items-center justify-center">
-              <p className="text-4xl font-medium">
-                {tasksCount.ongoingTasksCount +
-                  tasksCount.doneTasksCount +
-                  tasksCount.lateTasksCount}
-              </p>
-              <p className="text-xs font-semibold">Total Tasks</p>
-            </div>
+          <TotalTasksWidget tasksCount={tasksCount} />
 
-            <div className="h-[12.5rem] flex flex-row items-center justify-center">
-              <Pie data={pieData} updateMode="active" />
-            </div>
-          </div>
+          <WeeklyTasksWidget weekTasksCount={weekTasksCount} />
 
-          <div
-            className="w-full rounded-lg bg-neutral-150 flex flex-col h-fit
-                    p-4 text-secondary-500 gap-2"
-          >
-            <div className="flex flex-row gap-2 items-center justify-between text-xs font-semibold">
-              <p>This week&apos;s tasks</p>
-            </div>
+          <TasksSection label="Tasks Today" tasks={myTasksToday} />
 
-            <div
-              className="h-full flex flex-col items-center justify-center p-4 
-                    bg-neutral-50 rounded-md"
-            >
-              <div className="w-full h-48 mt-auto">
-                <Line
-                  data={lineData}
-                  updateMode="active"
-                  options={{
-                    maintainAspectRatio: false,
-                    scales: {
-                      y: { beginAtZero: true, ticks: { precision: 0 } },
-                    },
-                  }}
-                />
-              </div>
-            </div>
-          </div>
+          <TasksSection label="Upcoming Tasks" tasks={myUpcomingTasks} />
 
-          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[16rem] h-auto ">
-            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
-              <p>Tasks Today</p>
-            </div>
-
-            <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-center justify-start gap-4 
-                         overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
-            >
-              {mappedTasksToday}
-            </div>
-          </div>
-
-          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[16rem] h-auto ">
-            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
-              <p>Upcoming Tasks</p>
-            </div>
-
-            <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-center justify-start gap-4 
-                         overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
-            >
-              {mappedUpcomingTasks}
-            </div>
-          </div>
-
-          <div
-            className="w-full rounded-lg flex flex-col text-secondary-500 gap-2
-                      t:col-span-2 min-h-[16rem] bg"
-          >
-            <div className="flex flex-row justify-between w-full">
-              <p className="font-semibold text-xl">Recent Associates</p>
-            </div>
-
-            <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-center justify-start gap-4 
-                         overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
-            >
-              {mappedRecentAssociateCards}
-            </div>
-          </div>
+          <AssociatesSection
+            label="Recent Associates"
+            associates={recentAssociates}
+          />
         </div>
       </div>
     </div>

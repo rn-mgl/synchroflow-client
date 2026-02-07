@@ -2,19 +2,7 @@ import { useGlobalContext } from "@/base/src/contexts/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
-
-export interface AssociatesProps {
-  uuid: string;
-  name: string;
-  surname: string;
-  email: string;
-  image: string;
-  status: string;
-  role: string;
-  associate_uuid: string;
-  associate_of: number;
-  associate_is: number;
-}
+import { AssociatesProps } from "../interface/Associates";
 
 export default function useAssociates() {
   const [recentAssociates, setRecentAssociates] = React.useState<
