@@ -18,7 +18,6 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
-import { AiOutlineDelete } from "react-icons/ai";
 import { BsArrowLeft } from "react-icons/bs";
 
 const SingleTask = () => {
@@ -223,44 +222,6 @@ const SingleTask = () => {
       console.log(error);
     }
   };
-
-  const mappedCollaborators = collaborators.map((collaborator, index) => {
-    return (
-      <div
-        key={collaborator.user_uuid}
-        className="flex flex-col gap-2 items-center justify-start w-full"
-      >
-        <div className="flex flex-row gap-2 items-center justify-start w-full">
-          <div
-            style={{ backgroundImage: `url(${collaborator.image})` }}
-            className="w-8 h-8 min-w-[2rem] min-h-[2rem] bg-primary-200 rounded-full bg-center bg-cover"
-          />
-          <div className="flex flex-row w-full items-center justify-between">
-            <p className="max-w-[20ch] truncate">
-              {collaborator.name} {collaborator.surname}
-            </p>
-
-            {isTaskCreator && (
-              <button
-                onClick={() =>
-                  handleCollaboratorToRemove(
-                    collaborator.task_collaborator_uuid,
-                  )
-                }
-                className="p-2 rounded-full hover:bg-primary-500  
-                        text-primary-500 hover:text-white transition-all"
-              >
-                <AiOutlineDelete />
-              </button>
-            )}
-          </div>
-        </div>
-        {index !== collaborators.length - 1 ? (
-          <div className="w-full h-[1px] bg-secondary-200" />
-        ) : null}
-      </div>
-    );
-  });
 
   React.useEffect(() => {
     getSingleTask();
