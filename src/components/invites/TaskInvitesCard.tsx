@@ -1,23 +1,24 @@
 import React from "react";
 import { PRIORITY_STYLE } from "../../utils/taskUtils";
-import Image from "next/image";
 
-interface ReceivedTaskInvitesProps {
+interface TaskInvitesProps {
   name: string;
   surname: string;
   email: string;
-  task_invite_uuid: string;
+  invite_uuid: string;
   title: string;
   banner: string;
   priority: "critical" | "important" | "none";
   message: string;
-  acceptReceivedTaskInvites: () => Promise<void>;
-  declineReceivedTaskInvites: () => Promise<void>;
+  type: "received" | "sent";
+  removeSentTaskInvites?: () => Promise<void>;
+  acceptReceivedTaskInvites?: () => Promise<void>;
+  declineReceivedTaskInvites?: () => Promise<void>;
 }
 
-const ReceivedTaskInvitesCard: React.FC<ReceivedTaskInvitesProps> = (props) => {
+const TaskInvitesCard: React.FC<TaskInvitesProps> = (props) => {
   return (
-    <div className="flex flex-row gap-4 justify-center w-full select-none min-h-[18rem] h-auto">
+    <div className="flex flex-row gap-4 justify-center w-full select-none min-h-[18rem] h-72">
       <div
         className="bg-white w-full p-4 rounded-lg h-full flex flex-col gap-2 hover:shadow-md
                     transition-all"
@@ -49,24 +50,36 @@ const ReceivedTaskInvitesCard: React.FC<ReceivedTaskInvitesProps> = (props) => {
         </div>
 
         <div className="flex flex-col gap-2 w-full items-center justify-center mt-auto">
-          <button
-            onClick={props.acceptReceivedTaskInvites}
-            className="w-full p-2 rounded-lg bg-primary-500 text-white font-bold 
+          {props.type === "received" ? (
+            <>
+              <button
+                onClick={props.acceptReceivedTaskInvites}
+                className="w-full p-2 rounded-lg bg-primary-500 text-white font-bold 
                       hover:shadow-md transition-all"
-          >
-            Accept
-          </button>
-          <button
-            onClick={props.declineReceivedTaskInvites}
-            className="w-full p-2 rounded-lg bg-secondary-100 text-secondary-600 font-bold 
+              >
+                Accept
+              </button>
+              <button
+                onClick={props.declineReceivedTaskInvites}
+                className="w-full p-2 rounded-lg bg-secondary-100 text-secondary-600 font-bold 
                       hover:shadow-md transition-all"
-          >
-            Decline
-          </button>
+              >
+                Decline
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={props.removeSentTaskInvites}
+              className="w-full p-2 rounded-lg bg-secondary-100 text-secondary-600 
+                      font-bold hover:shadow-md transition-all"
+            >
+              Remove
+            </button>
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default ReceivedTaskInvitesCard;
+export default TaskInvitesCard;

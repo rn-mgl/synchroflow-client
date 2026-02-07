@@ -1,10 +1,8 @@
 "use client";
 
 import { useGlobalContext } from "@/base/src/contexts/context";
-import ReceivedAssociateInvitesCard from "@/components/invites/ReceivedAssociateInvitesCard";
-import ReceivedTaskInvitesCard from "@/components/invites/ReceivedTaskInvitesCard";
-import SentAssociateInvitesCard from "@/components/invites/SentAssociateInvitesCard";
-import SentTaskInvitesCard from "@/components/invites/SentTaskInvitesCard";
+import AssociateInvitesCard from "@/src/components/invites/AssociateInvitesCard";
+import TaskInvitesCard from "@/src/components/invites/TaskInvitesCard";
 import useInvites from "@/src/hooks/useInvites";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -168,7 +166,8 @@ const Invites = () => {
     const email = taskInvite[`${targetIdentity}_email`];
 
     return (
-      <SentTaskInvitesCard
+      <TaskInvitesCard
+        type="sent"
         key={taskInvite.invited_user_uuid}
         name={name}
         surname={surname}
@@ -197,12 +196,13 @@ const Invites = () => {
       const surname = taskInvite[`${targetIdentity}_surname`];
       const email = taskInvite[`${targetIdentity}_email`];
       return (
-        <ReceivedTaskInvitesCard
+        <TaskInvitesCard
           key={taskInvite.from_user_uuid}
+          type="received"
           name={name}
           surname={surname}
           email={email}
-          task_invite_uuid={taskInvite.task_invite_uuid}
+          invite_uuid={taskInvite.task_invite_uuid}
           title={taskInvite.title}
           banner={taskInvite.banner}
           priority={taskInvite.priority}
@@ -236,8 +236,9 @@ const Invites = () => {
       const surname = associateInvite[`${targetIdentity}_surname`];
       const email = associateInvite[`${targetIdentity}_email`];
       return (
-        <SentAssociateInvitesCard
+        <AssociateInvitesCard
           key={associateInvite.invited_user_uuid}
+          type="sent"
           image={image}
           name={name}
           surname={surname}
@@ -263,8 +264,9 @@ const Invites = () => {
       const surname = associateInvite[`${targetIdentity}_surname`];
       const email = associateInvite[`${targetIdentity}_email`];
       return (
-        <ReceivedAssociateInvitesCard
+        <AssociateInvitesCard
           key={associateInvite.from_user_uuid}
+          type="received"
           image={image}
           name={name}
           surname={surname}
