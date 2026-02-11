@@ -1,12 +1,11 @@
 "use client";
 import { useGlobalContext } from "@/base/src/contexts/context";
 import AddAssociate from "@/components/associates/AddAssociate";
-import AssociateCards from "@/components/associates/AssociateCards";
-import RecentAssociateCards from "@/components/associates/RecentAssociateCards";
 import SearchFilter from "@/components/filter/SearchFilter";
 import SearchOptions from "@/components/filter/SearchOptions";
 import SortFilter from "@/components/filter/SortFilter";
 import DeleteConfirmation from "@/components/global/DeleteConfirmation";
+import AssociatesSection from "@/src/components/associates/AssociatesSection";
 import useAssociates from "@/src/hooks/useAssociates";
 import useFilter from "@/src/hooks/useFilter";
 import useSearchFilter from "@/src/hooks/useSearchFilter";
@@ -73,37 +72,6 @@ const Associates = () => {
       prev === associateUUID ? "" : associateUUID,
     );
   };
-
-  const mappedRecentAssociateCards = applyFilters(
-    searchFilter,
-    searchCategory,
-    sortFilter,
-    recentAssociates,
-  ).map((associate) => {
-    return (
-      <RecentAssociateCards
-        key={associate.associate_uuid}
-        associate={associate}
-      />
-    );
-  });
-
-  const mappedAssociateCards = applyFilters(
-    searchFilter,
-    searchCategory,
-    sortFilter,
-    allAssociates,
-  ).map((associate) => {
-    return (
-      <AssociateCards
-        key={associate.associate_uuid}
-        associate={associate}
-        handleDisconnectFromAssociate={() =>
-          handleDisconnectFromAssociate(associate.associate_uuid)
-        }
-      />
-    );
-  });
 
   React.useEffect(() => {
     getAllAssociates();
@@ -216,31 +184,27 @@ const Associates = () => {
             Add Associates
           </button>
 
-          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[8rem] h-auto">
-            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
-              <p>Recent Associates</p>
-            </div>
+          <AssociatesSection
+            associates={applyFilters(
+              searchFilter,
+              searchCategory,
+              sortFilter,
+              recentAssociates,
+            )}
+            label="Recent Associates"
+            type="recent"
+          />
 
-            <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-center justify-start gap-4 
-                         overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
-            >
-              {mappedRecentAssociateCards}
-            </div>
-          </div>
-
-          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[20rem] h-auto">
-            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
-              <p>Associates</p>
-            </div>
-
-            <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-center justify-start gap-4 
-                         overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-2"
-            >
-              {mappedAssociateCards}
-            </div>
-          </div>
+          <AssociatesSection
+            associates={applyFilters(
+              searchFilter,
+              searchCategory,
+              sortFilter,
+              allAssociates,
+            )}
+            label="Associates"
+            type="all"
+          />
         </div>
       </div>
     </div>

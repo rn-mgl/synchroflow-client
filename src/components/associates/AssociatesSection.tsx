@@ -1,21 +1,22 @@
 import { AssociatesProps } from "@/src/interface/Associates";
 import React, { JSX } from "react";
 import AssociateCards from "../associates/AssociateCards";
+import RecentAssociateCards from "../associates/RecentAssociateCards";
 
 const AssociatesSection: React.FC<{
   associates: AssociatesProps[];
   label: string;
+  type: "recent" | "all";
 }> = (props) => {
+  const Card = props.type === "recent" ? RecentAssociateCards : AssociateCards;
+
   const mappedAssociates = props.associates.map((associate) => {
-    return (
-      <AssociateCards key={associate.associate_uuid} associate={associate} />
-    );
+    return <Card key={associate.associate_uuid} associate={associate} />;
   });
 
   return (
     <div
-      className="w-full rounded-lg flex flex-col text-secondary-500 gap-2
-                      t:col-span-2 min-h-[16rem] bg"
+      className={`w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 min-h-[${props.type === "recent" ? "8rem" : "20rem"}] h-auto`}
     >
       <div className="flex flex-row justify-between w-full">
         <p className="font-semibold text-xl">{props.label}</p>

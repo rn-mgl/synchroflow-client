@@ -2,7 +2,7 @@
 import { useSession } from "next-auth/react";
 import React from "react";
 
-import AssociatesSection from "@/src/components/dashboard/AssociatesSection";
+import AssociatesSection from "@/src/components/associates/AssociatesSection";
 import TasksSection from "@/src/components/tasks/TasksSection";
 import TotalTasksWidget from "@/src/components/dashboard/TotalTasksWidget";
 import WeeklyTasksWidget from "@/src/components/dashboard/WeeklyTasksWidget";
@@ -65,6 +65,7 @@ const Hub = () => {
           <TasksSection label="Upcoming Tasks" tasks={myUpcomingTasks} />
 
           <AssociatesSection
+            type="all"
             label="Recent Associates"
             associates={recentAssociates}
           />
