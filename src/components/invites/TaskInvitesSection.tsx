@@ -31,7 +31,7 @@ const TaskInvitesSection: React.FC<TaskInvitesSectionProps> = (props) => {
     return (
       <TaskInvitesCard
         type="sent"
-        key={taskInvite.invited_user_uuid}
+        key={taskInvite.task_invite_uuid}
         name={name}
         surname={surname}
         email={email}
