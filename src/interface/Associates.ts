@@ -1,5 +1,5 @@
 export interface AssociatesProps {
-  uuid: string;
+  user_uuid: string;
   name: string;
   surname: string;
   email: string;

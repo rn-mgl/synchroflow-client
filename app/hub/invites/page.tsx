@@ -1,8 +1,8 @@
 "use client";
 
 import { useGlobalContext } from "@/base/src/contexts/context";
-import AssociateInvitesCard from "@/src/components/invites/AssociateInvitesCard";
-import TaskInvitesCard from "@/src/components/invites/TaskInvitesCard";
+import AssociateInvitesSection from "@/src/components/invites/AssociateInvitesSection";
+import TaskInvitesSection from "@/src/components/invites/TaskInvitesSection";
 import useInvites from "@/src/hooks/useInvites";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -158,138 +158,6 @@ const Invites = () => {
     [socket, url, user, removeSentAssociateInvites],
   );
 
-  const mappedSentTaskInvites = sentTaskInvites.map((taskInvite, index) => {
-    const targetIdentity =
-      parseInt(taskInvite.from_user) === user?.id ? "invited" : "from"; // check if im the sender and use the other user's data
-    const name = taskInvite[`${targetIdentity}_name`];
-    const surname = taskInvite[`${targetIdentity}_surname`];
-    const email = taskInvite[`${targetIdentity}_email`];
-
-    return (
-      <TaskInvitesCard
-        type="sent"
-        key={taskInvite.invited_user_uuid}
-        name={name}
-        surname={surname}
-        email={email}
-        invite_uuid={taskInvite.task_invite_uuid}
-        title={taskInvite.title}
-        banner={taskInvite.banner}
-        priority={taskInvite.priority}
-        message={taskInvite.message}
-        removeSentTaskInvites={() =>
-          removeSentTaskInvites(
-            taskInvite.task_invite_uuid,
-            taskInvite.invited_user_uuid,
-            taskInvite.from_user_uuid,
-          )
-        }
-      />
-    );
-  });
-
-  const mappedReceivedTaskInvites = receivedTaskInvites.map(
-    (taskInvite, index) => {
-      const targetIdentity =
-        parseInt(taskInvite.from_user) == user?.id ? "invited" : "from"; // check if im the invited and use my data
-      const name = taskInvite[`${targetIdentity}_name`];
-      const surname = taskInvite[`${targetIdentity}_surname`];
-      const email = taskInvite[`${targetIdentity}_email`];
-      return (
-        <TaskInvitesCard
-          key={taskInvite.from_user_uuid}
-          type="received"
-          name={name}
-          surname={surname}
-          email={email}
-          invite_uuid={taskInvite.task_invite_uuid}
-          title={taskInvite.title}
-          banner={taskInvite.banner}
-          priority={taskInvite.priority}
-          message={taskInvite.message}
-          declineReceivedTaskInvites={() =>
-            removeSentTaskInvites(
-              taskInvite.task_invite_uuid,
-              taskInvite.invited_user_uuid,
-              taskInvite.from_user_uuid,
-            )
-          }
-          acceptReceivedTaskInvites={() =>
-            acceptReceivedTaskInvites(
-              taskInvite.task_uuid,
-              taskInvite.invited_user_uuid,
-              taskInvite.task_invite_uuid,
-              taskInvite.from_user_uuid,
-            )
-          }
-        />
-      );
-    },
-  );
-
-  const mappedSentAssociateInvites = sentAssociateInvites.map(
-    (associateInvite, index) => {
-      const targetIdentity =
-        parseInt(associateInvite.from_user) == user?.id ? "invited" : "from"; // check if im the invited and use my data
-      const image = associateInvite[`${targetIdentity}_image`];
-      const name = associateInvite[`${targetIdentity}_name`];
-      const surname = associateInvite[`${targetIdentity}_surname`];
-      const email = associateInvite[`${targetIdentity}_email`];
-      return (
-        <AssociateInvitesCard
-          key={associateInvite.invited_user_uuid}
-          type="sent"
-          image={image}
-          name={name}
-          surname={surname}
-          email={email}
-          removeSentAssociateInvites={() =>
-            removeSentAssociateInvites(
-              associateInvite.associate_invite_uuid,
-              associateInvite.invited_user_uuid,
-              associateInvite.from_user_uuid,
-            )
-          }
-        />
-      );
-    },
-  );
-
-  const mappedReceivedAssociateInvites = receivedAssociateInvites.map(
-    (associateInvite, index) => {
-      const targetIdentity =
-        parseInt(associateInvite.from_user) == user?.id ? "invited" : "from"; // check if im the invited and use my data
-      const image = associateInvite[`${targetIdentity}_image`];
-      const name = associateInvite[`${targetIdentity}_name`];
-      const surname = associateInvite[`${targetIdentity}_surname`];
-      const email = associateInvite[`${targetIdentity}_email`];
-      return (
-        <AssociateInvitesCard
-          key={associateInvite.from_user_uuid}
-          type="received"
-          image={image}
-          name={name}
-          surname={surname}
-          email={email}
-          declineReceivedAssociateInvites={() =>
-            removeSentAssociateInvites(
-              associateInvite.associate_invite_uuid,
-              associateInvite.invited_user_uuid,
-              associateInvite.from_user_uuid,
-            )
-          }
-          acceptReceivedAssociateInvites={() =>
-            acceptReceivedAssociateInvites(
-              associateInvite.associate_invite_uuid,
-              associateInvite.invited_user_uuid,
-              associateInvite.from_user_uuid,
-            )
-          }
-        />
-      );
-    },
-  );
-
   React.useEffect(() => {
     getSentTaskInvites();
   }, [getSentTaskInvites]);
@@ -374,57 +242,41 @@ const Invites = () => {
     <div className="flex flex-col items-center justify-start w-full h-auto">
       <div className="max-w-screen-2xl flex flex-col justify-start items-center w-full h-auto">
         <div className="flex flex-col w-full items-center justify-start p-4 t:p-10 gap-4 h-auto">
-          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 h-auto min-h-[20rem]">
-            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
-              <p>Sent Task Invites</p>
-            </div>
+          <TaskInvitesSection
+            invites={sentTaskInvites}
+            type="sent"
+            userId={user?.id ?? 0}
+            label="Sent Task Invites"
+            acceptReceivedTaskInvites={acceptReceivedTaskInvites}
+            removeSentTaskInvites={removeSentTaskInvites}
+          />
 
-            <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-start justify-start gap-4 
-                         overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-4"
-            >
-              {mappedSentTaskInvites}
-            </div>
-          </div>
+          <TaskInvitesSection
+            invites={receivedTaskInvites}
+            type="received"
+            userId={user?.id ?? 0}
+            label="Received Task Invites"
+            acceptReceivedTaskInvites={acceptReceivedTaskInvites}
+            removeSentTaskInvites={removeSentTaskInvites}
+          />
 
-          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 h-auto min-h-[20rem]">
-            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
-              <p>Received Task Invites</p>
-            </div>
+          <AssociateInvitesSection
+            acceptReceivedAssociateInvites={acceptReceivedAssociateInvites}
+            removeSentAssociateInvites={removeSentAssociateInvites}
+            invites={sentAssociateInvites}
+            label="Sent Associate Invites"
+            type="sent"
+            userId={user?.id ?? 0}
+          />
 
-            <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-start justify-start gap-4 
-                         overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-4"
-            >
-              {mappedReceivedTaskInvites}
-            </div>
-          </div>
-
-          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 h-auto min-h-[20rem]">
-            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
-              <p>Sent Associate Invites</p>
-            </div>
-
-            <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-start justify-start gap-4 
-                         overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-4"
-            >
-              {mappedSentAssociateInvites}
-            </div>
-          </div>
-
-          <div className="w-full rounded-lg flex flex-col text-secondary-500 gap-2 t:col-span-2 h-auto min-h-[20rem]">
-            <div className="flex flex-row gap-2 items-center justify-between font-semibold text-xl">
-              <p>Received Associate Invites</p>
-            </div>
-
-            <div
-              className="w-full h-full grid grid-cols-1 t:grid-cols-2 l-l:grid-cols-4 items-start justify-start gap-4 
-                         overflow-x-hidden overflow-y-auto max-h-screen cstm-scrollbar-2 bg-neutral-100 rounded-lg p-4"
-            >
-              {mappedReceivedAssociateInvites}
-            </div>
-          </div>
+          <AssociateInvitesSection
+            acceptReceivedAssociateInvites={acceptReceivedAssociateInvites}
+            removeSentAssociateInvites={removeSentAssociateInvites}
+            invites={receivedAssociateInvites}
+            label="Received Associate Invites"
+            type="received"
+            userId={user?.id ?? 0}
+          />
         </div>
       </div>
     </div>

@@ -1,35 +1,10 @@
-import { useGlobalContext } from "@/base/src/contexts/context";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
-
-interface InvitesStateProps {
-  from_image: string;
-  from_name: string;
-  from_surname: string;
-  from_email: string;
-  from_user: string;
-  from_user_uuid: string;
-  invited_user_id: string;
-  invited_image: string;
-  invited_name: string;
-  invited_surname: string;
-  invited_email: string;
-  invited_user_uuid: string;
-}
-
-interface TaskInvitesStateProps extends InvitesStateProps {
-  banner: string;
-  title: string;
-  task_invite_uuid: string;
-  priority: "critical" | "important" | "none";
-  task_uuid: string;
-  message: string;
-}
-
-interface AssociateInvitesStateProps extends InvitesStateProps {
-  associate_invite_uuid: string;
-}
+import {
+  AssociateInvitesStateProps,
+  TaskInvitesStateProps,
+} from "../interface/Invites";
 
 export default function useInvites() {
   const [sentTaskInvites, setSentTaskInvites] = React.useState<

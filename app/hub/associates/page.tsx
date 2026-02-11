@@ -56,10 +56,10 @@ const Associates = () => {
       (associate) => associate.associate_uuid === disconnectFromAssociate,
     );
     socket?.emit("disconnect_associate", {
-      room: associate?.uuid,
+      room: associate?.user_uuid,
     });
     socket?.emit("disconnect_associate", {
-      room: associate?.uuid,
+      room: associate?.user_uuid,
     });
   };
 
@@ -204,6 +204,7 @@ const Associates = () => {
             )}
             label="Associates"
             type="all"
+            handleDisconnectFromAssociate={handleDisconnectFromAssociate}
           />
         </div>
       </div>

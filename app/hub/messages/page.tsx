@@ -413,6 +413,7 @@ const Messages = () => {
                   <BsArrowLeft className="text-primary-500" />
                 </button>
 
+                {/* room name and image */}
                 <div className="flex flex-row items-center justify-center gap-2">
                   <div
                     style={{ backgroundImage: `url(${activeRoom.room_image})` }}
@@ -439,6 +440,7 @@ const Messages = () => {
                 ) : null}
               </div>
 
+              {/* messages */}
               <div
                 ref={scrollRef}
                 className="flex flex-col-reverse w-full h-full p-4 items-center justify-start
