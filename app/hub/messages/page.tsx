@@ -12,28 +12,19 @@ import MessagePreview from "@/components/messages/MessagePreview";
 import RoomMembers from "@/components/messages/RoomMembers";
 import StandByMessagePanel from "@/components/messages/StandByMessagePanel";
 import FilePreview from "@/src/components/global/FilePreview";
-import FileViewer from "@/src/components/global/FileViewer";
+import GroupMessageToolTip from "@/src/components/messages/GroupMessageToolTip";
+import MessageBlock from "@/src/components/messages/MessageBlock";
+import MessageInput from "@/src/components/messages/MessageInput";
+import MessageRoomsSection from "@/src/components/messages/MessageRoomsSection";
 import useFile from "@/src/hooks/useFile";
 import useFilter from "@/src/hooks/useFilter";
 import useLoader from "@/src/hooks/useLoading";
 import useSearchFilter from "@/src/hooks/useSearchFilter";
-import { localizeDate, localizeTime } from "@/src/utils/dateUtils";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import React, { RefObject } from "react";
-import {
-  AiOutlineClose,
-  AiOutlineDelete,
-  AiOutlineEdit,
-  AiOutlineEllipsis,
-  AiOutlinePaperClip,
-  AiOutlinePlus,
-  AiOutlineSearch,
-  AiOutlineTeam,
-  AiOutlineUserAdd,
-  AiOutlineUserDelete,
-} from "react-icons/ai";
-import { BsArrowLeft, BsFillSendFill } from "react-icons/bs";
+import React from "react";
+import { AiOutlineSearch } from "react-icons/ai";
+import { BsArrowLeft } from "react-icons/bs";
 
 const Messages = () => {
   const {
@@ -206,51 +197,13 @@ const Messages = () => {
     const isSender = message.sender == user?.id;
 
     return (
-      <div
+      <MessageBlock
         key={message.message_uuid}
-        onClick={() => handleSelectedMessage(message.message_uuid)}
-        className={`w-fit max-w-[80%] rounded-md t:max-w-[60%] flex  ustify-center
-                   group relative flex-col ${isSender ? "ml-auto" : "mr-auto"}`}
-      >
-        <div
-          className={`w-fit flex relative ${
-            isSender ? "flex-row-reverse ml-auto" : "flex-row mr-auto"
-          }`}
-        >
-          <div
-            className={`rounded-md p-2 gap-4 flex flex-col items-center justify-center w-full ${
-              isSender ? " bg-primary-500" : " bg-secondary-500"
-            } `}
-          >
-            {message.message ? (
-              <p
-                className={`text-white ${
-                  isSender ? "text-right ml-auto" : "text-left mr-auto"
-                } break-word break-words`}
-              >
-                {message.message}
-              </p>
-            ) : null}
-
-            {message.message_file ? (
-              <FileViewer
-                file={message.message_file}
-                type={message.message_file_type}
-              />
-            ) : null}
-          </div>
-        </div>
-
-        {selectedMessage === message.message_uuid ? (
-          <p
-            className={`whitespace-nowrap text-xs font-light 
-                    ${isSender ? "text-right ml-auto" : "text-left mr-auto"}`}
-          >
-            Sent {localizeDate(message.date_sent, true)} |{" "}
-            {localizeTime(message.date_sent)}
-          </p>
-        ) : null}
-      </div>
+        handleSelectedMessage={handleSelectedMessage}
+        isSender={isSender}
+        message={message}
+        selectedMessage={selectedMessage}
+      />
     );
   });
 
@@ -430,22 +383,18 @@ const Messages = () => {
               </div>
             </div>
 
-            <div
-              className="bg-white w-full flex flex-col gap-4 p-4 rounded-lg 
-                        h-full l-s:col-span-1 overflow-y-auto cstm-scrollbar"
-            >
-              {roomType === "group" ? (
-                <button
-                  onClick={toggleCanCreateRoom}
-                  className="w-full p-2 bg-primary-500 text-white font-bold rounded-md flex 
-                          flex-row items-center justify-center gap-2"
-                >
-                  <p>Create Group</p> <AiOutlinePlus className="text-lg" />
-                </button>
-              ) : null}
-
-              {mappedMessageRooms}
-            </div>
+            <MessageRoomsSection
+              activeRoom={activeRoom}
+              getRoom={getRoom}
+              roomType={roomType}
+              toggleCanCreateRoom={toggleCanCreateRoom}
+              messageRooms={applyFilters(
+                searchFilter,
+                "room_name",
+                "room_name",
+                messageRooms,
+              )}
+            />
           </div>
 
           {!activeRoom.message_room ? (
@@ -477,78 +426,25 @@ const Messages = () => {
                 </div>
 
                 {roomType === "group" ? (
-                  <div className="ml-auto flex flex-row gap-4 text-sm">
-                    {activePanelToolTip ? (
-                      <React.Fragment>
-                        <button
-                          onClick={toggleCanSeeRoomMembers}
-                          className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
-                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-full"
-                        >
-                          <AiOutlineTeam />
-                        </button>
-
-                        <button
-                          onClick={toggleCanLeaveGroup}
-                          className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
-                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-full"
-                        >
-                          <AiOutlineUserDelete />
-                        </button>
-
-                        {activeRoom.created_by == user?.id ? (
-                          <React.Fragment>
-                            <button
-                              onClick={toggleCanEditRoom}
-                              className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
-                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-full"
-                            >
-                              <AiOutlineEdit />
-                            </button>
-                            <button
-                              onClick={toggleCanAddRoomMember}
-                              className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
-                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-full"
-                            >
-                              <AiOutlineUserAdd />
-                            </button>
-                            <button
-                              onClick={toggleCanDeleteRoom}
-                              className="flex flex-row w-full items-center justify-between animate-fadeIn p-2
-                            hover:bg-primary-500 hover:text-white text-primary-500 transition-all rounded-full"
-                            >
-                              <AiOutlineDelete />
-                            </button>
-                          </React.Fragment>
-                        ) : null}
-                      </React.Fragment>
-                    ) : null}
-
-                    {activePanelToolTip ? (
-                      <button
-                        onClick={toggleActivePanelToolTip}
-                        className="p-2 rounded-full hover:bg-secondary-100 animate-fadeIn"
-                      >
-                        <AiOutlineClose />
-                      </button>
-                    ) : (
-                      <button
-                        onClick={toggleActivePanelToolTip}
-                        className="p-2 rounded-full hover:bg-secondary-100 animate-fadeIn"
-                      >
-                        <AiOutlineEllipsis />
-                      </button>
-                    )}
-                  </div>
+                  <GroupMessageToolTip
+                    activePanelToolTip={activePanelToolTip}
+                    roomCreator={activeRoom.created_by === user?.id}
+                    toggleActivePanelToolTip={toggleActivePanelToolTip}
+                    toggleCanAddRoomMember={toggleCanAddRoomMember}
+                    toggleCanDeleteRoom={toggleCanDeleteRoom}
+                    toggleCanEditRoom={toggleCanEditRoom}
+                    toggleCanLeaveGroup={toggleCanLeaveGroup}
+                    toggleCanSeeRoomMembers={toggleCanSeeRoomMembers}
+                  />
                 ) : null}
               </div>
 
               <div
-                ref={scrollRef as RefObject<HTMLDivElement>}
+                ref={scrollRef}
                 className="flex flex-col-reverse w-full h-full p-4 items-center justify-start
                   gap-4 overflow-y-auto cstm-scrollbar whitespace-pre-wrap"
               >
-                {rawFile.current?.value ? (
+                {fileData.url ? (
                   <FilePreview
                     file={fileData.url}
                     name={fileData.name}
@@ -560,49 +456,13 @@ const Messages = () => {
                 {mappedMessages}
               </div>
 
-              <div
-                className=" l-s:col-span-2 w-full l-s:flex p-4 flex
-                flex-col-reverse gap-4 top-0 z-10"
-              >
-                <div className="flex flex-row w-full gap-4">
-                  <div className="flex flex-row items-center justify-center rounded-md w-full gap-4 bg-neutral-100 p-2">
-                    <div
-                      data-placeholder="Enter message..."
-                      id="messageInput"
-                      onKeyDown={(e) => handleMessagePanelKeys(e)}
-                      contentEditable={true}
-                      ref={messageRef as RefObject<HTMLDivElement>}
-                      className="border-none outline-none cstm-scrollbar h-auto w-full max-h-[12rem] overflow-y-auto 
-                        relative whitespace-pre-wrap break-words"
-                    ></div>
-                  </div>
-
-                  <div className="flex flex-row gap-2 items-center justify-center mt-auto t:gap-4">
-                    <label>
-                      <input
-                        ref={rawFile as React.RefObject<HTMLInputElement>}
-                        onChange={(e) => selectedFileViewer(e)}
-                        type="file"
-                        className="hidden"
-                      />
-                      <div
-                        className="p-2.5 hover:bg-primary-100 transition-all outline-none
-                rounded-lg flex flex-col items-center justify-center t:p-4"
-                      >
-                        <AiOutlinePaperClip className="text-secondary-500 text-lg" />
-                      </div>
-                    </label>
-
-                    <button
-                      onClick={sendMessage}
-                      className="p-2.5 bg-primary-500 transition-all outline-none
-                rounded-lg flex flex-col items-center justify-center t:p-4"
-                    >
-                      <BsFillSendFill className="text-white text-lg" />
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <MessageInput
+                handleMessagePanelKeys={handleMessagePanelKeys}
+                messageRef={messageRef}
+                rawFile={rawFile}
+                selectedFileViewer={selectedFileViewer}
+                sendMessage={sendMessage}
+              />
             </div>
           )}
         </div>
