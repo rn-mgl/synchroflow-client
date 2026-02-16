@@ -4,26 +4,10 @@ import { useSession } from "next-auth/react";
 import React, { RefObject } from "react";
 import { useGlobalContext } from "./context";
 import { useSettings } from "./settingsContext";
-
-interface NotificationsStateProps {
-  from_image: string;
-  name: string;
-  purpose: string;
-  surname: string;
-  title: string;
-  notif_date: string;
-}
-
-interface NotificationContextInterface {
-  notificationIsVisible: boolean;
-  notifications: NotificationsStateProps[];
-  notificationAudio: RefObject<HTMLAudioElement | null>;
-  checkedNotifications: boolean;
-  scrollRef: RefObject<HTMLDivElement | null>;
-  toggleNotificationIsVisible: () => void;
-  toggleCheckedNotifications: (checked: boolean) => void;
-  getNotifications: () => Promise<void>;
-}
+import {
+  NotificationContextInterface,
+  NotificationsStateProps,
+} from "../interface/Notification";
 
 const NotificationContext =
   React.createContext<NotificationContextInterface | null>(null);

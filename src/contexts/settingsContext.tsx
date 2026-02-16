@@ -1,30 +1,10 @@
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import React from "react";
-
-interface SettingsStateProps {
-  notification_sound: number;
-  message_notification: boolean;
-  task_update: boolean;
-  task_deadline: boolean;
-  associate_invite: boolean;
-}
-
-interface SettingsContextInterface {
-  settings: SettingsStateProps;
-  handleUserGeneralSettings: (
-    e: React.ChangeEvent<HTMLInputElement>,
-    audioRef: React.RefObject<HTMLAudioElement | null>,
-  ) => void;
-  handleUserNotificationSettings: (
-    name:
-      | "message_notification"
-      | "task_update"
-      | "task_deadline"
-      | "associate_invite",
-  ) => void;
-  getUserSettings: () => Promise<void>;
-}
+import {
+  SettingsContextInterface,
+  SettingsStateProps,
+} from "../interface/Settings";
 
 const SettingsContext = React.createContext<SettingsContextInterface | null>(
   null,
